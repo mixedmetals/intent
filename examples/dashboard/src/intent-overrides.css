@@ -1,0 +1,135 @@
+/* ============================================
+   Button Interactive States
+   ============================================ */
+/* All buttons: focus ring */
+.intent-button:focus-visible {
+  outline: 2px solid var(--intent-color-brand-primary);
+  outline-offset: 2px;
+}
+/* Primary hover */
+.intent-button[data-importance="primary"]:not(:disabled):hover {
+  background: var(--intent-color-brand-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+.intent-button[data-importance="primary"]:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+/* Secondary hover */
+.intent-button[data-importance="secondary"]:not(:disabled):hover {
+  background: var(--intent-color-surface-subtle);
+  border-color: var(--intent-color-brand-primary);
+}
+/* Ghost hover */
+.intent-button[data-importance="ghost"]:not(:disabled):hover {
+  background: var(--intent-color-surface-subtle);
+}
+/* Danger hover */
+.intent-button[data-importance="danger"]:not(:disabled):hover {
+  background: #DC2626;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+.intent-button[data-importance="danger"]:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+/* ============================================
+   Surface Enhancements
+   ============================================ */
+/* Smooth border color */
+.intent-surface {
+  border-color: var(--intent-color-border-default);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+/* ============================================
+   Badge Pill Shape
+   ============================================ */
+.intent-badge {
+  white-space: nowrap;
+  line-height: 1;
+}
+/* ============================================
+   Divider Component (not in schema yet)
+   ============================================ */
+.intent-divider {
+  border: none;
+  height: 1px;
+  background: var(--intent-color-border-default);
+  width: 100%;
+}
+.intent-divider[data-orientation="vertical"] {
+  width: 1px;
+  height: auto;
+  align-self: stretch;
+}
+.intent-divider[data-weight="thin"] { height: 1px; }
+.intent-divider[data-weight="normal"] { height: 2px; }
+.intent-divider[data-weight="thick"] { height: 3px; }
+/* ============================================
+   Input Component (not in schema yet)
+   ============================================ */
+.intent-input {
+  display: block;
+  width: 100%;
+  font-family: var(--intent-typography-font-sans);
+  font-size: var(--intent-typography-size-md);
+  line-height: 1.5;
+  color: var(--intent-color-text-default);
+  background: var(--intent-color-surface-default);
+  border: 1px solid var(--intent-color-border-default);
+  border-radius: var(--intent-radius-md);
+  padding: var(--intent-space-compact) var(--intent-space-normal);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.intent-input:focus {
+  outline: none;
+  border-color: var(--intent-color-brand-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+.intent-input[data-state="error"] {
+  border-color: var(--intent-color-feedback-error);
+}
+.intent-input[data-state="error"]:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+.intent-input[data-state="success"] {
+  border-color: var(--intent-color-feedback-success);
+}
+.intent-input[data-size="sm"] {
+  font-size: var(--intent-typography-size-sm);
+  padding: var(--intent-space-tight) var(--intent-space-compact);
+}
+.intent-input[data-size="lg"] {
+  font-size: var(--intent-typography-size-lg);
+  padding: var(--intent-space-normal) var(--intent-space-relaxed);
+}
+.intent-input:disabled {
+  background: var(--intent-color-surface-subtle);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--intent-color-border-default);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--intent-color-text-muted);
+}
+
+:root.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+:root.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748B;
+}

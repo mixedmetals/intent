@@ -1,0 +1,56 @@
+{
+  "name": "intent-cli",
+  "version": "0.1.0",
+  "description": "CLI tools for Intent styling framework",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mixedmetals/intent-framework",
+    "directory": "packages/cli"
+  },
+  "keywords": [
+    "intent",
+    "cli",
+    "css",
+    "design-system",
+    "compiler"
+  ],
+  "bin": {
+    "intent": "./dist/bin/intent.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "intent-core": "workspace:^",
+    "commander": "^11.0.0",
+    "chalk": "^5.3.0",
+    "globby": "^14.0.0",
+    "chokidar": "^3.5.3",
+    "jiti": "^1.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

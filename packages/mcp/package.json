@@ -1,0 +1,53 @@
+{
+  "name": "intent-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for AI integration with Intent styling framework",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mixedmetals/intent-framework",
+    "directory": "packages/mcp"
+  },
+  "keywords": [
+    "intent",
+    "mcp",
+    "ai",
+    "model-context-protocol",
+    "design-system"
+  ],
+  "bin": {
+    "intent-mcp": "./dist/bin/mcp-server.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "intent-core": "workspace:^",
+    "intent-cli": "workspace:^",
+    "@modelcontextprotocol/sdk": "^1.26.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
