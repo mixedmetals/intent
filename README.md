@@ -30,7 +30,7 @@ Intent treats styling as a **type system** with compile-time validation. Instead
 ```bash
 # Install
 npm install intent-core intent-react
-npm install -D intent-cli
+npm install -D intentcss-cli
 
 # Initialize (creates intent.config.ts with full design system)
 npx intent init
@@ -135,7 +135,7 @@ export default defineSystem({
 |---------|-------------|
 | `intent-core` | Schema definition, compiler, CSS generator, validator |
 | `intent-react` | React components with TypeScript props |
-| `intent-cli` | CLI for compile, validate, init, migrate, generate |
+| `intentcss-cli` | CLI for compile, validate, init, migrate, generate |
 | `intent-mcp` | MCP server for AI integration |
 
 ## Architecture

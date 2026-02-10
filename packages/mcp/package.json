@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "intent-core": "workspace:^",
-    "intent-cli": "workspace:^",
+    "intentcss-cli": "workspace:^",
     "@modelcontextprotocol/sdk": "^1.26.0"
   },
   "devDependencies": {

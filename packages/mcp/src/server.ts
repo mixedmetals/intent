@@ -21,7 +21,7 @@ import {
   type DesignSystemConfig,
 } from 'intent-core';
 
-import { loadConfig } from 'intent-cli';
+import { loadConfig } from 'intentcss-cli';
 
 // ============================================================================
 // Tool Definitions

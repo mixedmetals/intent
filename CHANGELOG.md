@@ -23,7 +23,7 @@ Initial release of the Intent Framework — a schema-first, AI-native styling sy
 - **TypeScript**: Full prop types matching schema enum values
 - **Type Coherence**: Runtime tests verifying React types match canonical schema
 
-### intent-cli
+### intentcss-cli
 
 - `intent init` — Scaffold project with complete 5-component design system
 - `intent compile` — Generate static CSS from schema (with dark mode support)

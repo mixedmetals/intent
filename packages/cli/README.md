@@ -1,11 +1,11 @@
-# intent-cli
+# intentcss-cli
 
 CLI tools for the [Intent](https://github.com/mixedmetals/intent-framework) styling framework.
 
 ## Installation
 
 ```bash
-npm install -D intent-cli
+npm install -D intentcss-cli
 ```
 
 ## Commands

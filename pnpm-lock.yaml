@@ -42,7 +42,7 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.2.0
         version: 4.7.0(vite@6.4.1)
-      intent-cli:
+      intentcss-cli:
         specifier: workspace:^
         version: link:../../packages/cli
       jiti:
@@ -100,12 +100,12 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.26.0
         version: 1.26.0(zod@4.3.6)
-      intent-cli:
-        specifier: workspace:^
-        version: link:../cli
       intent-core:
         specifier: workspace:^
         version: link:../core
+      intentcss-cli:
+        specifier: workspace:^
+        version: link:../cli
     devDependencies:
       '@types/node':
         specifier: ^20.10.0

@@ -1,5 +1,5 @@
 {
-  "name": "intent-cli",
+  "name": "intentcss-cli",
   "version": "0.1.0",
   "description": "CLI tools for Intent styling framework",
   "type": "module",
