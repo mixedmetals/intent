@@ -5,6 +5,7 @@
  */
 
 import path from 'node:path';
+import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import type { DesignSystemConfig } from 'intent-core';
 
@@ -12,16 +13,30 @@ const require = createRequire(import.meta.url);
 
 export function loadConfigSync(configPath: string): DesignSystemConfig {
   const absolutePath = path.resolve(configPath);
-  
+
   // Try jiti first (fast, handles TS well)
   try {
-    const jiti = require('jiti')(import.meta.url, { interopDefault: true });
+    // Build alias map for workspace packages so jiti can resolve them
+    // through pnpm symlinks (which don't expose package.json "exports" to jiti)
+    const alias: Record<string, string> = {};
+    const configDir = path.dirname(absolutePath);
+    const coreLink = path.join(configDir, 'node_modules', 'intent-core');
+    try {
+      if (fs.existsSync(coreLink)) {
+        const realPath = fs.realpathSync(coreLink);
+        alias['intent-core'] = path.join(realPath, 'dist', 'index.js');
+      }
+    } catch {
+      // Failed to resolve symlink, will try normal resolution
+    }
+
+    const jiti = require('jiti')(import.meta.url, { interopDefault: true, alias });
     const imported = jiti(absolutePath);
     const config = imported?.default || imported;
     if (isValidConfig(config)) return config;
   } catch (error) {
     const errMsg = (error as Error).message;
-    
+
     // Check if jiti is not installed
     if (errMsg.includes('Cannot find module') && errMsg.includes('jiti')) {
       throw new Error(
@@ -32,11 +47,11 @@ export function loadConfigSync(configPath: string): DesignSystemConfig {
         `  intent.config.js`
       );
     }
-    
+
     // Other error - rethrow with context
     throw new Error(`Failed to load config: ${errMsg}`);
   }
-  
+
   throw new Error('Config loader failed');
 }
 
