@@ -181,5 +181,22 @@ export type {
   ResolvedTheme,
 } from './plugin/types.js';
 
+// Source Maps
+export {
+  SourceMapBuilder,
+  createComponentSourceMap,
+  createInlineSourceMapComment,
+  generateDebugReport,
+} from './sourcemap/index.js';
+
+export type {
+  SourceMapping,
+  ComponentSourceMap,
+  CSSRuleDebugInfo,
+  CompilationTrace,
+  SourceMapOptions,
+  CompilationSourceMap,
+} from './sourcemap/types.js';
+
 // Version
 export const VERSION = '0.1.0';

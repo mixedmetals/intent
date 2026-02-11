@@ -13,6 +13,8 @@ import type {
   TokenRegistry,
   CompiledStyles,
 } from '../types/index.js';
+import { SourceMapBuilder } from '../sourcemap/generator.js';
+import type { CompilationTrace } from '../sourcemap/types.js';
 
 // ============================================================================
 // CSS Variable Generation
@@ -201,23 +203,53 @@ function isConditionalMappingArray(value: unknown): value is ConditionalMapping[
     'condition' in value[0] && 'styles' in value[0];
 }
 
+export interface CompileComponentOptions {
+  sourceMap?: boolean;
+  sourceFile?: string;
+}
+
 export function compileComponent(
   schema: ComponentSchema,
-  config: DesignSystemConfig
-): CompiledStyles {
+  config: DesignSystemConfig,
+  options: CompileComponentOptions = {}
+): CompiledStyles & { sourceMap?: string; trace?: CompilationTrace[] } {
   const lines: string[] = [];
   const classes: string[] = [];
   const prefix = config.settings?.cssPrefix || 'intent';
   const tokens = config.tokens;
   const baseClass = `${prefix}-${schema.name.toLowerCase()}`;
   
+  // Initialize source map builder if requested
+  const sourceMapBuilder = options.sourceMap 
+    ? new SourceMapBuilder({ includeSources: true })
+    : null;
+  
+  if (sourceMapBuilder) {
+    sourceMapBuilder.startComponent(schema.name, options.sourceFile);
+  }
+  
+  let currentLine = 1;
+  
   // Generate base styles
   if (schema.baseStyles) {
     const baseSelector = `.${baseClass}`;
+    const baseDeclarations = Object.entries(schema.baseStyles).map(([prop, value]) => ({
+      property: prop.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase(),
+      value: resolveStyleValue(value, tokens, {}, prefix),
+    }));
     const baseRule = generateCSSRule(baseSelector, schema.baseStyles, tokens, {}, prefix);
     if (baseRule) {
       lines.push(baseRule);
       classes.push(baseClass);
+      
+      if (sourceMapBuilder) {
+        sourceMapBuilder.trackCSSGeneration(
+          baseSelector,
+          baseDeclarations,
+          { component: schema.name, property: 'baseStyles', value: 'default' }
+        );
+        currentLine += baseRule.split('\n').length + 1;
+      }
     }
   }
   
@@ -243,6 +275,10 @@ export function compileComponent(
         );
         
         const compoundSelector = selector + additionalSelectors.join('');
+        const conditionalDeclarations = Object.entries(conditional.styles).map(([prop, value]) => ({
+          property: prop.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase(),
+          value: resolveStyleValue(value, tokens, { [mapProp]: mapValue, ...conditional.condition }, prefix),
+        }));
         const rule = generateCSSRule(
           compoundSelector,
           conditional.styles,
@@ -252,10 +288,29 @@ export function compileComponent(
         );
         if (rule) {
           lines.push(rule);
+          
+          if (sourceMapBuilder) {
+            sourceMapBuilder.trackCSSGeneration(
+              compoundSelector,
+              conditionalDeclarations,
+              { 
+                component: schema.name, 
+                property: mapProp, 
+                value: mapValue,
+                condition: Object.entries(conditional.condition)
+                  .map(([k, v]) => `${k}=${v}`).join(',')
+              }
+            );
+            currentLine += rule.split('\n').length + 1;
+          }
         }
       }
     } else {
       // Simple mapping or responsive object - one rule per prop=value
+      const simpleDeclarations = Object.entries(mappingValue as VisualMapping).map(([prop, value]) => ({
+        property: prop.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase(),
+        value: resolveStyleValue(value, tokens, { [mapProp]: mapValue }, prefix),
+      }));
       const rule = generateCSSRule(
         selector,
         mappingValue as VisualMapping,
@@ -265,14 +320,30 @@ export function compileComponent(
       );
       if (rule) {
         lines.push(rule);
+        
+        if (sourceMapBuilder) {
+          sourceMapBuilder.trackCSSGeneration(
+            selector,
+            simpleDeclarations,
+            { component: schema.name, property: mapProp, value: mapValue }
+          );
+          currentLine += rule.split('\n').length + 1;
+        }
       }
     }
   }
   
-  return {
+  const result: CompiledStyles & { sourceMap?: string; trace?: CompilationTrace[] } = {
     css: lines.join('\n\n'),
     classes,
   };
+  
+  if (sourceMapBuilder) {
+    result.sourceMap = JSON.stringify(sourceMapBuilder.build());
+    result.trace = sourceMapBuilder.getTrace();
+  }
+  
+  return result;
 }
 
 // ============================================================================
