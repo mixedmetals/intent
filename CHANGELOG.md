@@ -85,4 +85,33 @@ Initial release of the Intent Framework — a schema-first, AI-native styling sy
 - Trend analysis with warning (10%) and error (25%) thresholds
 - Interactive HTML dashboard with Chart.js
 - Recommendations engine based on bundle analysis
+
+## Phase 2: Layout System (v0.3.0)
+
+### Layout Props (intent-core/schema)
+- Position: `position`, `inset`, `zIndex`, `overflow`
+- Display: `display`, `flexDirection`, `flexWrap`, `flexGrow`, `flexShrink`
+- Sizing: `width`, `height`, `minWidth`, `maxWidth`, `minHeight`, `maxHeight`
+- Grid: `gridColumns`, `gridRows`, `gridFlow`, `gap`, `gapX`, `gapY`
+- Alignment: `justifyContent`, `alignContent`, `alignItems`, `alignSelf`
+- Media: `aspectRatio`, `objectFit`, `objectPosition`
+- Visibility: `visibility`, responsive breakpoints
+
+### Layout Components
+- **Container**: Max-width wrapper with xs/sm/md/lg/xl/2xl/full breakpoints
+- **Grid**: 12-column grid with configurable columns, rows, gaps, alignment
+- **GridItem**: Grid child with colSpan, rowSpan, positioning controls
+- **Box**: Generic layout primitive with display, position, sizing
+- **AspectRatio**: Maintains consistent ratios (square, video, portrait, landscape)
+- **Center**: Flexbox centering helper (horizontal, vertical, or both)
+- **Spacer**: Flexible spacing element with size and grow options
+- **Show/Hide**: Responsive visibility toggles by breakpoint
+- `compareBundleSizes()` - Intent vs Tailwind
+- `runBenchmarks()` full suite with reporting
+
+### Bundle Size Dashboard
+- Historical snapshot tracking with git metadata
+- Trend analysis with warning (10%) and error (25%) thresholds
+- Interactive HTML dashboard with Chart.js
+- Recommendations engine based on bundle analysis
 - `generateHTMLDashboard()`, `saveHTMLDashboard()`

@@ -36,28 +36,60 @@ Intent Framework v1.0.0 will provide **complete component parity with Tailwind C
 
 ---
 
-## Phase 2: Layout System (v0.3.0) - Q1 2026
+## Phase 2: Layout System (v0.3.0) - ✅ COMPLETE
 
 ### Layout Components
-| Component | Priority | Description |
-|-----------|----------|-------------|
-| `Container` | P0 | Max-width wrapper with responsive breakpoints |
-| `Grid` | P0 | CSS Grid with gap, columns, rows, areas |
-| `Box` | P0 | Generic layout primitive (display, position, sizing) |
-| `AspectRatio` | P0 | Consistent media aspect ratios |
-| `Center` | P1 | Flexbox centering helper |
-| `Spacer` | P1 | Fixed/grow spacing element |
-| `Hide/Show` | P1 | Responsive visibility toggle |
-| `ScrollArea` | P2 | Custom scrollable container |
-| `Resizable` | P2 | Split-pane layout component |
+| Component | Status | Priority | Description |
+|-----------|--------|----------|-------------|
+| `Container` | ✅ | P0 | Max-width wrapper with xs/sm/md/lg/xl/2xl/full breakpoints |
+| `Grid` | ✅ | P0 | CSS Grid with gap, columns, rows, areas |
+| `GridItem` | ✅ | P0 | Grid child with colSpan, rowSpan, positioning |
+| `Box` | ✅ | P0 | Generic layout primitive (display, position, sizing) |
+| `AspectRatio` | ✅ | P0 | Consistent media aspect ratios |
+| `Center` | ✅ | P1 | Flexbox centering helper |
+| `Spacer` | ✅ | P1 | Fixed/grow spacing element |
+| `Show` | ✅ | P1 | Responsive visibility (show at breakpoint+) |
+| `Hide` | ✅ | P1 | Responsive visibility (hide at breakpoint+) |
+| `ScrollArea` | ⏳ | P2 | Custom scrollable container (v0.4.0) |
+| `Resizable` | ⏳ | P2 | Split-pane layout component (v0.4.0) |
 
-### Layout Props (Schema Additions)
+### Layout Props (Schema Additions) - ✅ Complete
 ```typescript
-// New prop types for layout
+// Position & Layout
 prop('position', enum('static', 'relative', 'absolute', 'fixed', 'sticky'))
-prop('inset', enum('0', 'auto', '1/2', 'full'))  // top/right/bottom/left
+prop('inset', enum('0', 'auto', '1/2', 'full'))
 prop('zIndex', enum('auto', '0', '10', '20', '30', '40', '50'))
 prop('overflow', enum('visible', 'hidden', 'scroll', 'auto'))
+prop('display', enum('block', 'inline', 'flex', 'grid', 'none'))
+
+// Sizing
+prop('width', enum('auto', 'full', 'screen', '1/2', '1/3', '2/3', '1/4', '1/5', '1/6', '1/12'))
+prop('height', enum('auto', 'full', 'screen', '1/2', '1/3', '2/3'))
+prop('minWidth', enum('0', 'full', 'min', 'max', 'fit'))
+prop('maxWidth', enum('none', 'full', 'prose'))
+prop('minHeight', enum('0', 'full', 'screen'))
+prop('maxHeight', enum('none', 'full', 'screen'))
+
+// Grid
+prop('columns', enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'none'))
+prop('rows', enum('1', '2', '3', '4', '5', '6', 'none'))
+prop('colSpan', enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'full'))
+prop('rowSpan', enum('1', '2', '3', '4', '5', '6', 'full'))
+prop('gap', enum('0', '1', '2', '3', '4', '5', '6', '8', '10', '12', '16'))
+
+// Flexbox
+prop('flexDirection', enum('row', 'column', 'row-reverse', 'column-reverse'))
+prop('flexWrap', enum('nowrap', 'wrap', 'wrap-reverse'))
+prop('flexGrow', enum('0', '1'))
+prop('flexShrink', enum('0', '1'))
+prop('justifyContent', enum('start', 'end', 'center', 'between', 'around', 'evenly'))
+prop('alignContent', enum('start', 'end', 'center', 'between', 'around', 'evenly'))
+prop('alignItems', enum('start', 'end', 'center', 'baseline', 'stretch'))
+prop('alignSelf', enum('auto', 'start', 'end', 'center', 'baseline', 'stretch'))
+
+// Media
+prop('aspectRatio', enum('auto', 'square', 'video', 'portrait', 'landscape'))
+prop('objectFit', enum('contain', 'cover', 'fill', 'none'))
 prop('display', enum('block', 'inline', 'inline-block', 'flex', 'grid', 'none'))
 prop('width', enum('auto', 'full', 'screen', '1/2', '1/3', '1/4', '3/4'))
 prop('height', enum('auto', 'full', 'screen', 'min', 'max', 'fit'))
