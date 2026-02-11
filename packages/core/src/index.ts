@@ -147,5 +147,39 @@ export type {
   BatchUsage,
 } from './validator/index.js';
 
+// Plugin System
+export {
+  // Plugin registry
+  PluginManager,
+  getPluginManager,
+  resetPluginManager,
+  usePlugin,
+  hasPlugin,
+  definePlugin,
+  definePreset,
+  
+  // Theme system
+  registerTheme,
+  getTheme,
+  hasTheme,
+  unregisterTheme,
+  getAllThemes,
+  clearThemes,
+  resolveTheme,
+  composeThemes,
+  createTheme,
+  extendTheme,
+  generateThemeCSSVariables,
+  getTokenVariableName,
+  defaultTheme,
+} from './plugin/index.js';
+
+export type {
+  IntentPlugin,
+  PluginContext,
+  Theme,
+  ResolvedTheme,
+} from './plugin/types.js';
+
 // Version
 export const VERSION = '0.1.0';
