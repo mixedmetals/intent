@@ -208,6 +208,19 @@ export {
   runBenchmarks,
   formatBenchmarkReport,
   printBenchmarkResults,
+  // Dashboard
+  createDashboardConfig,
+  loadSnapshots,
+  saveSnapshots,
+  addSnapshot,
+  getLatestSnapshot,
+  calculateTrend,
+  generateRecommendations,
+  generateReport,
+  formatDashboardReport,
+  generateHTMLDashboard,
+  printDashboard,
+  saveHTMLDashboard,
 } from './benchmarks/index.js';
 
 export type {
@@ -215,6 +228,11 @@ export type {
   BenchmarkResult,
   BenchmarkSuite,
   BundleAnalysis,
+  // Dashboard types
+  SizeSnapshot,
+  DashboardConfig,
+  SizeTrend,
+  DashboardReport,
 } from './benchmarks/index.js';
 
 // Version
