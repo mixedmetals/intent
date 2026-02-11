@@ -48,7 +48,41 @@ Initial release of the Intent Framework — a schema-first, AI-native styling sy
 - Added comprehensive roadmap to v1.0.0 with Tailwind component parity (~70 components)
 - See [ROADMAP.md](./ROADMAP.md) for full details
 
-### Phase 1 In Progress
-- CSS Variable Optimization: Tree-shaking unused CSS custom properties
-- Build Performance: Parallel compilation, incremental builds
-- Website deployment via GitHub Actions
+### Plugin System
+- `PluginManager` for registering/unregistering plugins with lifecycle hooks
+- Hooks: `tokens`, `component`, `beforeValidate`, `afterValidate`, `beforeGenerate`, `afterGenerate`
+- Custom validators and generators support
+- `usePlugin()`, `definePlugin()`, `definePreset()` helpers
+
+### Theme Inheritance
+- Theme registration and resolution with parent themes via `extends`
+- Deep merging of tokens, darkTokens, and componentOverrides
+- `composeThemes()` for ad-hoc theme composition
+- `extendTheme()` for creating theme variants
+- `defaultTheme` with essential tokens (colors, space, elevation, radius, typography)
+
+### Source Maps
+- `SourceMapBuilder` for tracking CSS generation from schema
+- VLQ encoding for compact mappings
+- Debug info: component, property, value, condition
+- Compilation trace for auditing CSS generation
+- `generateDebugReport()` for markdown reports
+
+### Visual Regression Testing
+- `generateTestHTML()` for isolated component testing
+- `intentVisualTest()` Playwright integration
+- Automatic baseline management and comparison
+- Accessibility checks (color contrast, ARIA)
+
+### Performance Benchmarks
+- `benchmarkIntentSystem()` and `benchmarkIntentComponent()`
+- `analyzeBundle()` - CSS metrics (rules, selectors, variables)
+- `compareBundleSizes()` - Intent vs Tailwind
+- `runBenchmarks()` full suite with reporting
+
+### Bundle Size Dashboard
+- Historical snapshot tracking with git metadata
+- Trend analysis with warning (10%) and error (25%) thresholds
+- Interactive HTML dashboard with Chart.js
+- Recommendations engine based on bundle analysis
+- `generateHTMLDashboard()`, `saveHTMLDashboard()`
