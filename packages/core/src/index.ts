@@ -198,5 +198,24 @@ export type {
   CompilationSourceMap,
 } from './sourcemap/types.js';
 
+// Benchmarks
+export {
+  benchmarkIntentSystem,
+  benchmarkIntentComponent,
+  benchmarkTailwind,
+  analyzeBundle,
+  compareBundleSizes,
+  runBenchmarks,
+  formatBenchmarkReport,
+  printBenchmarkResults,
+} from './benchmarks/index.js';
+
+export type {
+  BenchmarkOptions,
+  BenchmarkResult,
+  BenchmarkSuite,
+  BundleAnalysis,
+} from './benchmarks/index.js';
+
 // Version
 export const VERSION = '0.1.0';
