@@ -36,3 +36,8 @@ Initial release of the Intent Framework — a schema-first, AI-native styling sy
 
 - MCP (Model Context Protocol) server for AI assistant integration
 - Tools: `get_component_schema`, `validate_component_usage`, `suggest_component_props`, `get_design_tokens`, `generate_ai_prompt`
+
+### Infrastructure
+
+- GitHub Actions workflow for website deployment
+- Website uses published npm packages (`intent-core`, `intent-react`, `intentcss-cli`) instead of workspace references
