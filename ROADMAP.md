@@ -5,18 +5,18 @@ Intent Framework v1.0.0 will provide **complete component parity with Tailwind C
 
 ---
 
-## Phase 1: Foundation (v0.2.0) - Q1 2026
+## Phase 1: Foundation (v0.2.0) - IN PROGRESS
 
 ### Core Infrastructure
 - [ ] **Plugin System**: Allow third-party component libraries to extend Intent
 - [ ] **Theme Inheritance**: Theme composition and extension mechanism
-- [ ] **CSS Variable Optimization**: Tree-shaking unused CSS custom properties
-- [ ] **Build Performance**: Parallel compilation, incremental builds
+- [x] **CSS Variable Optimization**: Tree-shaking unused CSS custom properties ✓
+- [x] **Build Performance**: Parallel compilation, incremental builds ✓
 - [ ] **Source Maps**: Debug mappings from generated CSS back to schema
 
 ### Testing & Quality
 - [ ] Visual regression testing with Playwright
-- [ ] Accessibility audit automation (axe-core)
+- [x] Accessibility audit automation (axe-core) ✓
 - [ ] Performance benchmarks vs Tailwind
 - [ ] Bundle size analysis dashboard
 
@@ -345,30 +345,7 @@ const breakpoints = {
 
 ---
 
-## Phase 9: Developer Experience (v0.9.5) - Q4 2026
-
-### CLI Enhancements
-- [ ] `intent init --template` with starter templates (Next.js, Vite, Remix, Astro)
-- [ ] `intent doctor` - Diagnose configuration issues
-- [ ] `intent upgrade` - Migrate between versions
-- [ ] `intent diff` - Compare schema changes
-- [ ] Watch mode improvements with HMR
-
-### IDE Support
-- [ ] VSCode extension with IntelliSense
-- [ ] Auto-completion for props and values
-- [ ] Go to definition from class to schema
-- [ ] Error highlighting for invalid combinations
-- [ ] Refactoring support (rename props)
-
-### DevTools
-- [ ] Browser extension for component inspection
-- [ ] Theme playground (visual token editor)
-- [ ] Component gallery/storybook integration
-
----
-
-## Phase 10: Polish & Release (v1.0.0) - Q1 2027
+## Phase 9: Polish & Release (v1.0.0) - Q1 2027
 
 ### Final Components (Gap Fillers)
 - [ ] Carousel/Slider

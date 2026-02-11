@@ -41,3 +41,14 @@ Initial release of the Intent Framework — a schema-first, AI-native styling sy
 
 - GitHub Actions workflow for website deployment
 - Website uses published npm packages (`intent-core`, `intent-react`, `intentcss-cli`) instead of workspace references
+
+## [Unreleased] - Phase 1: Foundation (v0.2.0)
+
+### Roadmap
+- Added comprehensive roadmap to v1.0.0 with Tailwind component parity (~70 components)
+- See [ROADMAP.md](./ROADMAP.md) for full details
+
+### Phase 1 In Progress
+- CSS Variable Optimization: Tree-shaking unused CSS custom properties
+- Build Performance: Parallel compilation, incremental builds
+- Website deployment via GitHub Actions
