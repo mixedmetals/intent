@@ -1,0 +1,127 @@
+---
+sidebar_position: 2
+---
+
+import { Stack, Button, Card, Text } from 'intent-react'
+
+# Stack
+
+The foundation of Intent layouts. Stack provides vertical and horizontal spacing with consistent, theme-aware gaps.
+
+## Overview
+
+Stack is the most fundamental layout component in Intent. It handles spacing between child elements consistently across your application.
+
+## Examples
+
+### Vertical Stack (Default)
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <div style={{ padding: 12, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8 }}>Item 1</div>
+  <div style={{ padding: 12, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8 }}>Item 2</div>
+  <div style={{ padding: 12, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8 }}>Item 3</div>
+</Stack>
+
+```tsx
+<Stack gap="normal">
+  <Card>Card 1</Card>
+  <Card>Card 2</Card>
+  <Card>Card 3</Card>
+</Stack>
+```
+
+### Horizontal Stack
+
+<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
+  <Button importance="secondary">Cancel</Button>
+  <Button importance="primary">Submit</Button>
+</Stack>
+
+```tsx
+<Stack direction="row" gap="normal">
+  <Button importance="secondary">Cancel</Button>
+  <Button importance="primary">Submit</Button>
+</Stack>
+```
+
+### Gap Sizes
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Stack direction="row" gap="compact">
+    <Button size="small">Compact</Button>
+    <Button size="small">Gap</Button>
+  </Stack>
+  <Stack direction="row" gap="normal">
+    <Button size="small">Normal</Button>
+    <Button size="small">Gap</Button>
+  </Stack>
+  <Stack direction="row" gap="relaxed">
+    <Button size="small">Relaxed</Button>
+    <Button size="small">Gap</Button>
+  </Stack>
+  <Stack direction="row" gap="loose">
+    <Button size="small">Loose</Button>
+    <Button size="small">Gap</Button>
+  </Stack>
+</Stack>
+
+```tsx
+<Stack direction="row" gap="compact">...</Stack>
+<Stack direction="row" gap="normal">...</Stack>
+<Stack direction="row" gap="relaxed">...</Stack>
+<Stack direction="row" gap="loose">...</Stack>
+```
+
+### Alignment
+
+<Stack direction="row" gap="normal" justify="between" style={{ 
+  padding: 16, 
+  background: 'var(--ifm-color-emphasis-100)',
+  borderRadius: 8,
+  marginBottom: 24 
+}}>
+  <Button size="small">Left</Button>
+  <Button size="small">Center</Button>
+  <Button size="small">Right</Button>
+</Stack>
+
+```tsx
+<Stack direction="row" gap="normal" justify="between">
+  <Button>Left</Button>
+  <Button>Center</Button>
+  <Button>Right</Button>
+</Stack>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `direction` | `'column'` \| `'row'` | `'column'` | Stack direction |
+| `gap` | `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'normal'` | Space between items |
+| `padding` | `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` \| `'none'` | `'none'` | Inner padding |
+| `align` | `'start'` \| `'center'` \| `'end'` \| `'stretch'` | `'stretch'` | Cross-axis alignment |
+| `justify` | `'start'` \| `'center'` \| `'end'` \| `'between'` \| `'around'` | `'start'` | Main-axis distribution |
+| `wrap` | `boolean` | `false` | Allow items to wrap |
+
+## Gap Values
+
+| Value | Pixels | Usage |
+|-------|--------|-------|
+| `compact` | 4px | Tight groupings, icon buttons |
+| `normal` | 8px | Standard spacing |
+| `relaxed` | 16px | Form sections |
+| `loose` | 24px | Page sections |
+
+## Best Practices
+
+1. **Use Stack for spacing** - Prefer Stack over manual margins
+2. **Nest intentionally** - Deep nesting can impact performance
+3. **Choose appropriate gaps** - Use consistent spacing tokens
+4. **Consider responsive needs** - Stack works with responsive props
+
+## Related
+
+- Box - Single element wrapper (coming soon)
+- Container - Max-width wrapper (coming soon)
+- Grid - Two-dimensional layouts (coming soon)

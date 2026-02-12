@@ -1,0 +1,61 @@
+---
+sidebar_position: 4
+---
+
+import { Stack, Spinner, Button } from 'intent-react'
+
+# Spinner
+
+Loading indicator with multiple sizes.
+
+## Examples
+
+### Sizes
+
+<Stack direction="row" gap="normal" align="center" style={{ marginBottom: 24 }}>
+  <Spinner size="small" />
+  <Spinner size="medium" />
+  <Spinner size="large" />
+</Stack>
+
+```tsx
+<Spinner size="small" />
+<Spinner size="medium" />
+<Spinner size="large" />
+```
+
+### Inside Button
+
+<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
+  <Button disabled>
+    <Spinner size="small" color="secondary" />
+    <span style={{ marginLeft: 8 }}>Loading...</span>
+  </Button>
+</Stack>
+
+```tsx
+<Button disabled>
+  <Spinner size="small" color="secondary" />
+  Loading...
+</Button>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Spinner size |
+| `color` | `'primary'` \| `'secondary'` \| `'muted'` | `'primary'` | Color variant |
+
+## Accessibility
+
+- Includes `aria-label="Loading"` by default
+- Set `aria-busy="true"` on parent container
+- Provide text alternative when visible
+
+```tsx
+<div aria-busy="true" aria-live="polite">
+  <Spinner aria-label="Loading posts" />
+  <span className="sr-only">Loading posts...</span>
+</div>
+```

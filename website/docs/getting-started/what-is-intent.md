@@ -1,212 +1,144 @@
+---
+sidebar_position: 1
+---
+
 # What is Intent?
 
-Intent is a **schema-first, AI-native CSS framework** that generates 74× smaller CSS than Tailwind CSS by using per-property attribute selectors instead of combinatorial utility classes.
+Intent is a **schema-first, AI-native CSS framework** that bridges the gap between design intent and implementation.
 
-## Core Philosophy
+## The Problem
+
+Traditional CSS frameworks force you to write styles manually. You translate design intent into CSS classes, property values, and media queries. This process is:
+
+- **Error-prone** - Typos in class names, inconsistent values
+- **Time-consuming** - Endless back-and-forth between design and code
+- **Hard to maintain** - Refactoring CSS is painful
+- **Not AI-friendly** - LLMs struggle with arbitrary class names
+
+## The Intent Solution
+
+Intent flips the model. Instead of writing CSS, you define **schemas** that describe what a component *is* and what it *can do*. The framework generates everything else.
+
+```tsx
+// Define once
+const buttonSchema = {
+  importance: {
+    type: 'enum',
+    values: ['primary', 'secondary', 'tertiary'],
+    default: 'secondary'
+  },
+  size: {
+    type: 'enum', 
+    values: ['small', 'medium', 'large'],
+    default: 'medium'
+  }
+}
+
+// Use everywhere
+<Button importance="primary" size="large">
+  Get Started
+</Button>
+```
+
+## Key Concepts
 
 ### Schema-First Design
 
-Traditional CSS frameworks use utility classes (Tailwind) or pre-built components (Bootstrap). Intent takes a different approach:
+Every component in Intent is defined by a schema. This schema:
+- Declares all possible states
+- Specifies valid values for each property
+- Defines relationships between properties
+- Generates TypeScript types automatically
 
-1. **Define your component schema** with TypeScript
-2. **Intent generates optimized CSS** from the schema
-3. **Use semantic props** in your components
-4. **AI understands your design system** via schemas
+### AI-Native
 
-### Why This Matters
+The schema format is designed for LLMs:
+- **Structured** - Easy to parse and understand
+- **Constrained** - AI can't generate invalid values
+- **Semantic** - Properties describe intent, not implementation
 
-| Problem | Traditional Solution | Intent Solution |
-|---------|---------------------|-----------------|
-| CSS bloat | PurgeCSS (imperfect) | Per-property selectors (perfect) |
-| Type safety | None (className strings) | Full TypeScript validation |
-| AI code generation | Unreliable (class guessing) | Reliable (semantic props) |
-| Design consistency | Documentation | Enforced by schema |
+### Type-Safe
 
-## Key Features
+Full TypeScript support with autocomplete for all component props. No more guessing at class names.
 
-### 🎯 Schema-First Components
+### Zero Runtime
 
-```typescript
-// Define once
-const ButtonSchema = defineComponent({
-  name: 'Button',
-  properties: {
-    importance: {
-      type: 'enum',
-      values: ['primary', 'secondary', 'ghost'],
-      default: 'secondary'
-    }
-  }
-})
+Intent generates static CSS at build time. No runtime overhead, no JavaScript in the browser for styling.
 
-// Use everywhere
-<Button importance="primary">Click me</Button>
+## Architecture
+
+```
+┌─────────────────┐
+│  Schema Definition │  ← You write this
+└────────┬────────┘
+         │
+    ┌────▼────┐
+    │  Intent   │  ← Schema validation
+    │  Compiler │  ← CSS generation
+    └────┬────┘
+         │
+    ┌────▼────┐
+    │  Output   │
+    │  - CSS    │
+    │  - Types  │
+    │  - Docs   │
+    └─────────┘
 ```
 
-### 🤖 AI-Native
+## Philosophy
 
-Intent schemas provide complete context for AI assistants:
+### Design Intent Over Implementation
 
-```tsx
-// AI sees the schema and generates valid code
-<Card elevation="low" padding="normal">
-  <Text size="lg" weight="bold">Title</Text>
-  <Text color="muted">Description</Text>
-</Card>
-```
+Intent cares about *what* you want to achieve, not *how* it's implemented. You say "this button is primary and large" - Intent figures out the colors, padding, typography, and interactions.
 
-### ⚡ 74× Smaller CSS
+### Constraints Liberate
 
-| Framework | CSS Size | Approach |
-|-----------|----------|----------|
-| Tailwind CSS | ~588KB | 50,000+ utility classes |
-| Intent | **~8KB** | Per-property selectors |
+By constraining the possible values, Intent:
+- Prevents design drift
+- Ensures accessibility
+- Makes code review easier
+- Enables AI assistance
 
-### 🔒 Type-Safe
+### Progressive Enhancement
 
-Catch errors at build time:
+Start with defaults, customize when needed. Intent provides sensible defaults for everything.
 
-```tsx
-// ❌ TypeScript error: 'variant' is not a valid prop
-<Button variant="primary">Text</Button>
-
-// ✅ Valid
-<Button importance="primary">Text</Button>
-```
-
-### 🎨 Complete Theme System
-
-```typescript
-import { defaultTheme, extendTheme } from 'intent-core'
-
-const myTheme = extendTheme('default', {
-  tokens: {
-    color: {
-      primary: { 500: '#your-brand-color' }
-    }
-  }
-})
-```
-
-## How It Works
-
-### 1. Schema Definition
-
-```typescript
-// my-button.schema.ts
-import { defineComponent } from 'intent-core'
-
-export const ButtonSchema = defineComponent({
-  name: 'Button',
-  properties: {
-    importance: {
-      type: 'enum',
-      values: ['primary', 'secondary', 'ghost'],
-      default: 'secondary'
-    },
-    size: {
-      type: 'enum',
-      values: ['sm', 'md', 'lg'],
-      default: 'md'
-    }
-  },
-  mappings: {
-    'importance=primary': {
-      backgroundColor: 'var(--intent-color-primary-600)',
-      color: 'white'
-    },
-    'size=lg': {
-      padding: '1rem 2rem',
-      fontSize: '1.125rem'
-    }
-  }
-})
-```
-
-### 2. CSS Generation
-
-Intent compiles schemas to efficient CSS:
-
-```css
-/* Generated CSS */
-.intent-button[data-importance="primary"] {
-  background-color: var(--intent-color-primary-600);
-  color: white;
-}
-
-.intent-button[data-size="lg"] {
-  padding: 1rem 2rem;
-  font-size: 1.125rem;
-}
-```
-
-### 3. React Component
-
-```tsx
-// Button.tsx
-import { ButtonSchema } from './my-button.schema'
-
-export const Button = (props) => {
-  return (
-    <button
-      className="intent-button"
-      data-importance={props.importance}
-      data-size={props.size}
-    >
-      {props.children}
-    </button>
-  )
-}
-```
-
-## Comparison with Other Frameworks
+## Comparison
 
 ### vs Tailwind CSS
 
-| | Tailwind CSS | Intent |
-|---|---|---|
-| **Approach** | Utility classes | Schema-generated selectors |
-| **CSS Size** | ~588KB | ~8KB |
-| **Type Safety** | ❌ | ✅ Full TS |
-| **AI-Friendly** | ❌ | ✅ |
-| **Learning Curve** | Memorize classes | Learn props |
+| Aspect | Tailwind | Intent |
+|--------|----------|--------|
+| Approach | Utility classes | Schema-driven |
+| Learning Curve | Hundreds of classes | Semantic properties |
+| Type Safety | None | Full |
+| AI Friendly | Poor | Excellent |
+| Runtime | Zero | Zero |
 
-### vs Bootstrap
+### vs CSS-in-JS
 
-| | Bootstrap | Intent |
-|---|---|---|
-| **Approach** | Pre-built components | Schema-defined components |
-| **Customization** | Override CSS | Theme tokens |
-| **Bundle Size** | ~200KB | ~8KB |
-| **Modern** | ❌ jQuery era | ✅ Modern React |
-
-### vs Chakra UI
-
-| | Chakra UI | Intent |
-|---|---|---|
-| **Approach** | Style props | Schema props |
-| **CSS-in-JS** | Emotion/Styled | Generated CSS |
-| **Runtime** | Runtime overhead | Zero runtime |
-| **AI-Friendly** | ⚠️ Partial | ✅ Full schema |
+| Aspect | Styled Components | Intent |
+|--------|-------------------|--------|
+| Runtime | Heavy | None |
+| Bundle Size | Large | Minimal |
+| Type Safety | Limited | Full |
+| Performance | Runtime overhead | Build-time only |
 
 ## When to Use Intent
 
-### ✅ Perfect For
+Intent shines when:
+- Building design systems
+- Working with AI coding assistants
+- Maintaining large applications
+- Prioritizing type safety
+- Reducing CSS bundle sizes
 
-- **Design systems** that need consistency
-- **AI-assisted development** workflows
-- **Performance-critical** applications
-- **TypeScript-first** projects
-- **Component libraries**
+## Getting Started
 
-### ⚠️ Consider Alternatives When
+Ready to try Intent?
 
-- **Prototyping quickly** (Tailwind might be faster)
-- **Small projects** without design system needs
-- **Non-React projects** (Vue/Svelte support coming)
+→ [Installation Guide](./installation)
 
-## Next Steps
+→ [Quick Start Tutorial](./quick-start)
 
-- [Installation Guide](/docs/getting-started/installation)
-- [All Components](/docs/components/)
-- [Component Documentation](/docs/components/button)
+→ [Component Library](../components)

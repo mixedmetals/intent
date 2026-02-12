@@ -1,223 +1,221 @@
-# Schema Definition API
+---
+sidebar_position: 1
+---
 
-Intent uses schemas to define components, their properties, and visual mappings.
+# Schema Definition
 
-## defineComponent
+Define components with schemas. Intent validates props, generates TypeScript types, and creates optimized CSS.
 
-Creates a component schema.
+## Overview
 
-```typescript
+Schemas are the heart of Intent. They describe:
+- What properties a component accepts
+- What values each property can have
+- How properties relate to each other
+- What CSS to generate
+
+## Basic Schema
+
+```tsx
 import { defineComponent } from 'intent-core'
 
 const Button = defineComponent({
   name: 'Button',
-  description: 'Clickable button element',
-  properties: {
+  
+  props: {
     importance: {
       type: 'enum',
-      values: ['primary', 'secondary', 'ghost'],
+      values: ['primary', 'secondary', 'tertiary'],
       default: 'secondary'
+    },
+    size: {
+      type: 'enum',
+      values: ['small', 'medium', 'large'],
+      default: 'medium'
+    },
+    disabled: {
+      type: 'boolean',
+      default: false
     }
   },
+  
   mappings: {
-    'importance=primary': {
-      backgroundColor: '#3b82f6',
-      color: 'white'
+    base: 'display: inline-flex; align-items: center;',
+    importance: {
+      primary: 'background: blue; color: white;',
+      secondary: 'background: gray; color: black;',
+      tertiary: 'background: transparent; border: 1px solid gray;'
+    },
+    size: {
+      small: 'padding: 4px 8px; font-size: 12px;',
+      medium: 'padding: 8px 16px; font-size: 14px;',
+      large: 'padding: 12px 24px; font-size: 16px;'
     }
   }
 })
 ```
 
-## Schema Options
+## Property Types
 
-### name
+### Enum
 
-**Type:** `string` (required)
+Fixed set of values:
 
-The component name. Used for CSS class generation.
-
-```typescript
-name: 'Button' // Generates .intent-button
+```tsx
+variant: {
+  type: 'enum',
+  values: ['solid', 'outline', 'ghost'],
+  default: 'solid'
+}
 ```
 
-### description
+### Boolean
 
-**Type:** `string`
+True/false toggle:
 
-Human-readable description for documentation.
-
-```typescript
-description: 'Clickable button element'
+```tsx
+disabled: {
+  type: 'boolean',
+  default: false
+}
 ```
 
-### properties
+### String
 
-**Type:** `Record<string, PropertyDefinition>`
+Freeform text:
 
-Define the component's props.
+```tsx
+placeholder: {
+  type: 'string',
+  default: ''
+}
+```
 
-#### Enum Property
+### Number
 
-```typescript
-properties: {
-  size: {
-    type: 'enum',
-    values: ['sm', 'md', 'lg'],
-    default: 'md',      // Optional
-    required: false     // Optional
+Numeric values:
+
+```tsx
+maxLength: {
+  type: 'number'
+}
+```
+
+## Constraints
+
+### When
+
+Apply CSS only when conditions are met:
+
+```tsx
+constraints: {
+  when: {
+    'importance:primary AND size:large': {
+      // Extra styles for large primary buttons
+      padding: '16px 32px'
+    }
   }
 }
 ```
 
-#### Boolean Property
+### Forbid
 
-```typescript
-properties: {
-  disabled: {
-    type: 'boolean',
-    default: false
-  }
+Prevent invalid combinations:
+
+```tsx
+constraints: {
+  forbid: [
+    { importance: 'tertiary', variant: 'ghost' }
+    // Can't have ghost tertiary buttons
+  ]
 }
 ```
 
-#### String Property
+### Require
 
-```typescript
-properties: {
-  placeholder: {
-    type: 'string',
-    default: ''
-  }
+Ensure properties are used together:
+
+```tsx
+constraints: {
+  require: [
+    { when: 'icon', then: 'iconPosition' }
+    // If icon is set, iconPosition must also be set
+  ]
 }
 ```
 
-#### Number Property
+## Mappings
 
-```typescript
-properties: {
-  maxLength: {
-    type: 'number',
-    default: 100
-  }
-}
-```
+Maps property values to CSS output:
 
-### constraints
-
-**Type:** `Constraint[]`
-
-Prevent invalid prop combinations.
-
-```typescript
-constraints: [
-  // Forbid loading on ghost buttons
-  {
-    when: { importance: 'ghost' },
-    forbid: ['loading'],
-    message: 'Ghost buttons cannot show loading state'
-  },
-  
-  // Require icon when circular
-  {
-    when: { shape: 'circle' },
-    require: { icon: [] },
-    message: 'Circular buttons must have an icon'
-  }
-]
-```
-
-### mappings
-
-**Type:** `Record<string, CSSProperties>`
-
-Map property values to CSS styles.
-
-```typescript
+```tsx
 mappings: {
-  // Single property
-  'importance=primary': {
-    backgroundColor: 'var(--intent-color-primary-600)',
-    color: 'white'
+  // Always applied
+  base: `
+    display: flex;
+    align-items: center;
+  `,
+  
+  // Property-based
+  direction: {
+    row: 'flex-direction: row;',
+    column: 'flex-direction: column;'
   },
   
-  // Multiple properties (AND)
-  'importance=primary,size=lg': {
-    padding: '1rem 2rem'
-  },
-  
-  // Responsive (if supported)
-  'size=lg,md:': {  // md: prefix = at medium breakpoint
-    fontSize: '1.25rem'
+  // Theme token reference
+  gap: {
+    compact: 'gap: var(--intent-spacing-1);',
+    normal: 'gap: var(--intent-spacing-2);',
+    relaxed: 'gap: var(--intent-spacing-4);'
   }
 }
 ```
 
-### baseStyles
+## TypeScript Generation
 
-**Type:** `CSSProperties`
+Intent automatically generates types from schemas:
 
-Styles applied regardless of props.
-
-```typescript
-baseStyles: {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '0.5rem',
-  borderRadius: '0.375rem',
-  cursor: 'pointer'
+```tsx
+// Generated automatically
+type ButtonProps = {
+  importance?: 'primary' | 'secondary' | 'tertiary'
+  size?: 'small' | 'medium' | 'large'
+  disabled?: boolean
 }
 ```
 
-## Constraint Helpers
+Use them in your React components:
 
-### when
+```tsx
+import type { ButtonProps } from 'intent-react'
 
-Create conditional constraints.
-
-```typescript
-import { when, forbid, require } from 'intent-core'
-
-constraints: [
-  when({ importance: 'ghost' }).forbid(['loading']),
-  when({ size: 'sm' }).suggest({ padding: 'compact' }),
-  when({ variant: 'solid' }).require({ color: [] })
-]
+function MyButton(props: ButtonProps) {
+  return <button className={Button.getClasses(props)} {...props} />
+}
 ```
 
-### forbid
+## CSS Generation
 
-Prevent certain prop combinations.
+Intent generates atomic CSS classes:
 
-```typescript
-forbid(['prop1', 'prop2'])
-```
-
-### require
-
-Require certain props.
-
-```typescript
-require({ icon: [], label: [] })
-```
-
-### suggest
-
-Provide default suggestions (not enforced).
-
-```typescript
-suggest({ size: 'md', importance: 'secondary' })
+```css
+/* Button component */
+.button--importance-primary { background: blue; color: white; }
+.button--importance-secondary { background: gray; color: black; }
+.button--size-small { padding: 4px 8px; font-size: 12px; }
+.button--size-medium { padding: 8px 16px; font-size: 14px; }
+.button--size-large { padding: 12px 24px; font-size: 16px; }
 ```
 
 ## Complete Example
 
-```typescript
-import { defineComponent, when } from 'intent-core'
+```tsx
+import { defineComponent } from 'intent-core'
 
-export const CardSchema = defineComponent({
+const Card = defineComponent({
   name: 'Card',
-  description: 'Container for grouped content',
   
-  properties: {
+  props: {
     elevation: {
       type: 'enum',
       values: ['none', 'low', 'medium', 'high'],
@@ -225,13 +223,8 @@ export const CardSchema = defineComponent({
     },
     padding: {
       type: 'enum',
-      values: ['none', 'sm', 'md', 'lg'],
-      default: 'md'
-    },
-    radius: {
-      type: 'enum',
-      values: ['none', 'sm', 'md', 'lg'],
-      default: 'md'
+      values: ['none', 'compact', 'normal', 'relaxed'],
+      default: 'normal'
     },
     interactive: {
       type: 'boolean',
@@ -239,53 +232,81 @@ export const CardSchema = defineComponent({
     }
   },
   
-  constraints: [
-    // High elevation suggests interactivity
-    when({ elevation: 'high' })
-      .suggest({ interactive: true }),
-    
-    // Non-interactive cards shouldn't have high elevation
-    when({ interactive: false, elevation: 'high' })
-      .suggest({ elevation: 'medium' })
-  ],
-  
-  mappings: {
-    // Elevation shadows
-    'elevation=none': { boxShadow: 'none' },
-    'elevation=low': { boxShadow: '0 1px 3px rgba(0,0,0,0.1)' },
-    'elevation=medium': { boxShadow: '0 4px 6px rgba(0,0,0,0.1)' },
-    'elevation=high': { boxShadow: '0 10px 25px rgba(0,0,0,0.15)' },
-    
-    // Padding
-    'padding=sm': { padding: '0.5rem' },
-    'padding=md': { padding: '1rem' },
-    'padding=lg': { padding: '1.5rem' },
-    
-    // Radius
-    'radius=sm': { borderRadius: '0.25rem' },
-    'radius=md': { borderRadius: '0.5rem' },
-    'radius=lg': { borderRadius: '1rem' }
+  constraints: {
+    when: {
+      'interactive:true': {
+        cursor: 'pointer',
+        transition: 'box-shadow 150ms ease'
+      }
+    }
   },
   
-  baseStyles: {
-    backgroundColor: 'white',
-    border: '1px solid var(--intent-color-neutral-200)'
+  mappings: {
+    base: `
+      background: var(--intent-color-surface);
+      border-radius: var(--intent-radius-lg);
+    `,
+    elevation: {
+      none: 'box-shadow: none;',
+      low: 'box-shadow: var(--intent-shadow-sm);',
+      medium: 'box-shadow: var(--intent-shadow-md);',
+      high: 'box-shadow: var(--intent-shadow-lg);'
+    },
+    padding: {
+      none: 'padding: 0;',
+      compact: 'padding: var(--intent-spacing-2);',
+      normal: 'padding: var(--intent-spacing-4);',
+      relaxed: 'padding: var(--intent-spacing-6);'
+    }
   }
 })
 ```
 
-## Type Generation
+## Design Systems
 
-Generate TypeScript types from schemas:
+Define multiple components together:
 
-```bash
-npx intentcss-cli types --input ./src/schemas --output ./src/types/intent.d.ts
+```tsx
+import { defineSystem } from 'intent-core'
+
+const MyDesignSystem = defineSystem({
+  name: 'MyDesignSystem',
+  
+  components: [
+    Button,
+    Card,
+    Stack,
+    // ...
+  ],
+  
+  theme: {
+    colors: {
+      primary: '#3b82f6',
+      secondary: '#6b7280',
+      // ...
+    },
+    spacing: {
+      1: '4px',
+      2: '8px',
+      4: '16px',
+      // ...
+    }
+  }
+})
+
+// Generate everything
+const { css, types } = MyDesignSystem.build()
 ```
 
 ## Best Practices
 
 1. **Use semantic names** - `importance` not `color`
 2. **Provide defaults** - Every prop should have a default
-3. **Add constraints** - Prevent invalid combinations
-4. **Document with description** - Helps AI and developers
-5. **Use CSS variables** - Enable theming
+3. **Constrain values** - Enums over freeform strings
+4. **Document constraints** - Explain why combinations are forbidden
+5. **Test edge cases** - Validate all prop combinations
+
+## Related
+
+- [Theme API](./theme) - Customizing design tokens
+- Component documentation for real-world examples

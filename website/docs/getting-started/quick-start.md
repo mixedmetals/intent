@@ -1,183 +1,241 @@
+---
+sidebar_position: 3
+---
+
 # Quick Start
 
-Get up and running with Intent Framework in minutes.
+Build your first Intent screen in 5 minutes.
 
 ## Prerequisites
 
-- Node.js 18+ 
-- React 18+ (for React components)
-- TypeScript 5+ (recommended)
+- Node.js 18+
+- React 18+ project set up
+- Intent installed ([Installation Guide](./installation))
 
-## 1. Create a Project
+## Create a Login Form
 
-### With Vite
+Let's build a complete login form using Intent components.
 
-```bash
-npm create vite@latest my-app -- --template react-ts
-cd my-app
-npm install
-```
-
-### With Next.js
-
-```bash
-npx create-next-app@latest my-app --typescript
-cd my-app
-```
-
-## 2. Install Intent
-
-```bash
-npm install intent-core intent-react
-```
-
-## 3. Add Styles
-
-### Option A: Import CSS (Recommended)
+### 1. Import Components
 
 ```tsx
-// main.tsx or App.tsx
-import 'intent-core/theme.css'
+import { 
+  Stack, 
+  Card, 
+  Text, 
+  Input, 
+  Button,
+  Field 
+} from 'intent-react'
 ```
 
-### Option B: Custom Build
-
-```bash
-npx intentcss-cli init
-npx intentcss-cli build
-```
-
-Then import the generated CSS:
+### 2. Build the Layout
 
 ```tsx
-import './intent.css'
-```
-
-## 4. Use Components
-
-```tsx
-// App.tsx
-import { Stack, Button, Text, Card } from 'intent-react'
-
-function App() {
+function LoginForm() {
   return (
-    <Stack direction="column" gap="relaxed" padding="normal">
-      <Text size="2xl" weight="bold">
-        Welcome to Intent!
-      </Text>
-      
-      <Card elevation="low">
-        <Text color="muted">
-          Start building with schema-first components.
-        </Text>
+    <Stack align="center" justify="center" padding="loose">
+      <Card elevation="medium" padding="relaxed">
+        {/* Content goes here */}
       </Card>
-      
-      <Stack direction="row" gap="normal">
-        <Button importance="primary">Get Started</Button>
-        <Button importance="secondary">Learn More</Button>
-      </Stack>
     </Stack>
   )
 }
-
-export default App
 ```
 
-## 5. Run Your App
-
-```bash
-npm run dev
-```
-
-Visit `http://localhost:5173` to see your app.
-
-## What's Next?
-
-### Learn the Basics
-
-- [Component Documentation](/docs/components/) - Browse all 72 components
-- [Schema Definition](/docs/api/schema) - Define custom components
-- [Theming](/docs/api/theme) - Customize the design
-
-### Try Examples
+### 3. Add Form Fields
 
 ```tsx
-// Form example
-import { Form, Field, Input, Button } from 'intent-react'
+<Stack gap="relaxed">
+  <Text size="2xl" weight="bold" align="center">
+    Welcome Back
+  </Text>
+  
+  <Stack gap="normal">
+    <Field label="Email">
+      <Input 
+        type="email" 
+        placeholder="you@example.com"
+        icon="mail"
+      />
+    </Field>
+    
+    <Field label="Password">
+      <Input 
+        type="password"
+        placeholder="••••••••"
+        icon="lock"
+      />
+    </Field>
+  </Stack>
+  
+  <Button importance="primary" fullWidth>
+    Sign In
+  </Button>
+</Stack>
+```
+
+### 4. Complete Component
+
+```tsx
+import { useState } from 'react'
+import { 
+  Stack, Card, Text, Input, 
+  Button, Field, Spinner 
+} from 'intent-react'
 
 function LoginForm() {
-  return (
-    <Form onSubmit={handleSubmit}>
-      <Field label="Email">
-        <Input type="email" placeholder="you@example.com" />
-      </Field>
-      <Field label="Password">
-        <Input type="password" />
-      </Field>
-      <Button importance="primary" fullWidth>
-        Sign In
-      </Button>
-    </Form>
-  )
-}
-```
-
-```tsx
-// Modal example
-import { useState } from 'react'
-import { Button, Modal, Text } from 'intent-react'
-
-function ConfirmDialog() {
-  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    // Handle login...
+    setLoading(false)
+  }
   
   return (
-    <>
-      <Button onClick={() => setOpen(true)}>Delete</Button>
-      
-      <Modal open={open} onOpenChange={setOpen}>
-        <Text weight="bold">Are you sure?</Text>
-        <Text color="muted">This action cannot be undone.</Text>
-        <Button importance="danger" onClick={handleDelete}>
-          Delete
-        </Button>
-      </Modal>
-    </>
+    <Stack 
+      direction="column"
+      align="center" 
+      justify="center" 
+      padding="loose"
+      style={{ minHeight: '100vh' }}
+    >
+      <Card elevation="medium" padding="relaxed" style={{ width: 360 }}>
+        <form onSubmit={handleSubmit}>
+          <Stack gap="relaxed">
+            <Text size="2xl" weight="bold" align="center">
+              Welcome Back
+            </Text>
+            
+            <Stack gap="normal">
+              <Field label="Email">
+                <Input 
+                  type="email" 
+                  placeholder="you@example.com"
+                  icon="mail"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
+              </Field>
+              
+              <Field label="Password">
+                <Input 
+                  type="password"
+                  placeholder="••••••••"
+                  icon="lock"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
+              </Field>
+            </Stack>
+            
+            <Button 
+              importance="primary" 
+              fullWidth
+              disabled={loading}
+            >
+              {loading ? <Spinner size="small" /> : 'Sign In'}
+            </Button>
+          </Stack>
+        </form>
+      </Card>
+    </Stack>
   )
 }
 ```
 
-## Common Issues
+## Key Patterns
 
-### Styles not loading?
+### 1. Stack for Layout
 
-Make sure you've imported the theme CSS:
+Always use `Stack` for spacing:
 
 ```tsx
-import 'intent-core/theme.css'
+{/* Vertical spacing */}
+<Stack direction="column" gap="normal">
+  <Item />
+  <Item />
+</Stack>
+
+{/* Horizontal spacing */}
+<Stack direction="row" gap="normal">
+  <Button>Cancel</Button>
+  <Button importance="primary">Save</Button>
+</Stack>
 ```
 
-### TypeScript errors?
+### 2. Cards for Grouping
 
-Ensure TypeScript is configured correctly:
+Use `Card` to visually group related content:
 
-```json
-// tsconfig.json
-{
-  "compilerOptions": {
-    "moduleResolution": "bundler",
-    "esModuleInterop": true
-  }
+```tsx
+<Card elevation="low" padding="normal">
+  <Text weight="bold">Section Title</Text>
+  <Text color="muted">Section content...</Text>
+</Card>
+```
+
+### 3. Field + Input Pattern
+
+Always wrap inputs with Field for labels:
+
+```tsx
+<Field label="Username" error={errors.username}>
+  <Input 
+    validation={errors.username ? 'invalid' : 'none'}
+  />
+</Field>
+```
+
+## Next Steps
+
+- Browse all [Components](../components)
+- Learn [Schema Definition](../api/schema)
+- Customize the [Theme](../api/theme)
+
+## Complete Example
+
+Here's a dashboard layout combining multiple components:
+
+```tsx
+import { 
+  Stack, Card, Text, Button, 
+  Badge, Tabs, Table, Avatar 
+} from 'intent-react'
+
+function Dashboard() {
+  return (
+    <Stack gap="relaxed" padding="normal">
+      {/* Header */}
+      <Stack direction="row" justify="between" align="center">
+        <Text size="2xl" weight="bold">Dashboard</Text>
+        <Button importance="primary">New Project</Button>
+      </Stack>
+      
+      {/* Stats */}
+      <Stack direction="row" gap="normal">
+        <StatCard label="Users" value="1,234" trend="up" />
+        <StatCard label="Revenue" value="$12.5k" trend="up" />
+        <StatCard label="Churn" value="2.3%" trend="down" />
+      </Stack>
+      
+      {/* Content */}
+      <Tabs defaultValue="projects">
+        <Tabs.List>
+          <Tabs.Trigger value="projects">Projects</Tabs.Trigger>
+          <Tabs.Trigger value="team">Team</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="projects">
+          <ProjectsTable />
+        </Tabs.Content>
+      </Tabs>
+    </Stack>
+  )
 }
 ```
-
-### Components look unstyled?
-
-Check that the CSS file path is correct and the file exists in your build output.
-
-## Getting Help
-
-- [GitHub Discussions](https://github.com/mixedmetals/intent/discussions)
-- [GitHub Issues](https://github.com/mixedmetals/intent/issues)
-- Documentation: [intentcss.dev](https://intentcss.dev)
 
 Happy building! 🚀

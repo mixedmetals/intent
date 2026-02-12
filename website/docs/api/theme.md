@@ -1,314 +1,247 @@
+---
+sidebar_position: 2
+---
+
 # Theming
 
-Intent provides a comprehensive theme system with dark mode support.
+Customize Intent's design tokens to match your brand.
+
+## Overview
+
+Intent uses a theme system based on design tokens. These tokens control:
+- Colors (primary, secondary, success, danger, etc.)
+- Typography (font families, sizes, weights)
+- Spacing (margins, padding, gaps)
+- Shadows (elevation levels)
+- Border radius
 
 ## Default Theme
 
-Intent includes a complete default theme out of the box:
+```tsx
+import { defaultTheme, generateThemeCSS } from 'intent-core/theme'
 
-```typescript
-import { defaultTheme, generateThemeCSS } from 'intent-core'
-
-// Generate CSS variables
+// Use the default theme
 const css = generateThemeCSS(defaultTheme)
 ```
 
 ## Theme Structure
 
-```typescript
-interface Theme {
-  name: string
-  tokens: {
-    color: ColorPalette
-    spacing: SpacingScale
-    shadows: ShadowScale
-    radius: RadiusScale
-    typography: TypographyScale
-    // ... more
+```tsx
+type Theme = {
+  colors: {
+    // Brand colors
+    primary: string
+    primaryHover: string
+    primaryActive: string
+    
+    // Semantic colors
+    success: string
+    warning: string
+    danger: string
+    info: string
+    
+    // Neutral scale
+    background: string
+    surface: string
+    surfaceElevated: string
+    border: string
+    text: string
+    textMuted: string
   }
-  darkTokens?: Partial<TokenRegistry>
-  settings?: {
-    prefix?: string
-    darkMode?: 'class' | 'media' | false
+  
+  spacing: {
+    // Based on 4px grid
+    0: string
+    1: string  // 4px
+    2: string  // 8px
+    3: string  // 12px
+    4: string  // 16px
+    5: string  // 20px
+    6: string  // 24px
+    8: string  // 32px
+    10: string // 40px
+    12: string // 48px
+    16: string // 64px
+  }
+  
+  fontFamily: {
+    sans: string
+    mono: string
+  }
+  
+  fontSize: {
+    xs: string
+    sm: string
+    base: string
+    lg: string
+    xl: string
+    '2xl': string
+    '3xl': string
+    '4xl': string
+  }
+  
+  fontWeight: {
+    normal: number
+    medium: number
+    semibold: number
+    bold: number
+  }
+  
+  radius: {
+    none: string
+    sm: string
+    md: string
+    lg: string
+    xl: string
+    full: string
+  }
+  
+  shadow: {
+    none: string
+    sm: string
+    md: string
+    lg: string
+    xl: string
   }
 }
 ```
 
-## Using the Default Theme
+## Custom Theme
 
-### CSS Import
-
-```css
-/* In your main CSS file */
-@import 'intent-core/theme.css';
-```
-
-### JavaScript Import
-
-```typescript
-import 'intent-core/theme.css'
-```
-
-### Custom Build
-
-```typescript
-import { defaultTheme, generateThemeCSS } from 'intent-core'
-import fs from 'fs'
-
-const css = generateThemeCSS(defaultTheme)
-fs.writeFileSync('intent-theme.css', css)
-```
-
-## Customizing Themes
-
-### extendTheme
-
-Create a theme based on the default:
-
-```typescript
-import { extendTheme, registerTheme } from 'intent-core'
-
-const myTheme = extendTheme('default', {
-  tokens: {
-    color: {
-      primary: {
-        500: '#FF6B6B',  // Your brand color
-        600: '#EE5A5A'
-      }
-    }
-  }
-})
-
-registerTheme(myTheme)
-```
-
-### Custom Theme
-
-Create a theme from scratch:
-
-```typescript
-import { createTheme, registerTheme } from 'intent-core'
-
-const customTheme = createTheme('my-theme', {
-  tokens: {
-    color: {
-      primary: {
-        50: '#eff6ff',
-        100: '#dbeafe',
-        // ... all shades
-        900: '#1e3a8a'
-      }
-    },
-    spacing: {
-      '1': '0.25rem',
-      '2': '0.5rem',
-      '4': '1rem'
-    }
-  },
-  darkTokens: {
-    color: {
-      primary: {
-        500: '#60a5fa'  // Lighter in dark mode
-      }
-    }
-  }
-})
-
-registerTheme(customTheme)
-```
-
-## Color Palette
-
-The default theme includes 9 color palettes:
-
-| Palette | Usage |
-|---------|-------|
-| `primary` | Brand color, actions |
-| `neutral` | Grays, text, borders |
-| `success` | Success states |
-| `warning` | Warning states |
-| `error` | Error states |
-| `info` | Info states |
-| `purple` | Accents |
-| `pink` | Accents |
-| `orange` | Accents |
-
-Each palette has 11 shades: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
-
-### Using Colors
-
-```css
-.my-component {
-  background-color: var(--intent-color-primary-500);
-  color: var(--intent-color-neutral-900);
-  border-color: var(--intent-color-neutral-200);
-}
-```
+### Method 1: Extend Default
 
 ```tsx
-// In component mappings
-mappings: {
-  'variant=primary': {
-    backgroundColor: 'var(--intent-color-primary-600)',
-    color: 'white'
+import { defaultTheme, generateThemeCSS } from 'intent-core/theme'
+
+const myTheme = {
+  ...defaultTheme,
+  colors: {
+    ...defaultTheme.colors,
+    primary: '#e11d48',     // Your brand color
+    primaryHover: '#be123c',
+  }
+}
+
+const css = generateThemeCSS(myTheme)
+```
+
+### Method 2: From Scratch
+
+```tsx
+import { defineTheme } from 'intent-core/theme'
+
+const myTheme = defineTheme({
+  colors: {
+    primary: '#3b82f6',
+    primaryHover: '#2563eb',
+    success: '#10b981',
+    warning: '#f59e0b',
+    danger: '#ef4444',
+    background: '#ffffff',
+    surface: '#f8fafc',
+    border: '#e2e8f0',
+    text: '#0f172a',
+    textMuted: '#64748b',
+  },
+  spacing: {
+    1: '4px',
+    2: '8px',
+    4: '16px',
+    8: '32px',
+  },
+  // ... other tokens
+})
+```
+
+### Method 3: CLI Configuration
+
+```js
+// intent.config.js
+module.exports = {
+  theme: {
+    colors: {
+      primary: '#3b82f6',
+    },
+    spacing: {
+      scale: 4, // 4px base grid
+    }
   }
 }
 ```
-
-## Spacing Scale
-
-| Token | Value | Pixels |
-|-------|-------|--------|
-| `0` | 0 | 0px |
-| `1` | 0.25rem | 4px |
-| `2` | 0.5rem | 8px |
-| `4` | 1rem | 16px |
-| `8` | 2rem | 32px |
-| `16` | 4rem | 64px |
-
-Full scale: 0, px, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 72, 80, 96
-
-## Shadows
-
-| Token | Value |
-|-------|-------|
-| `none` | none |
-| `sm` | 0 1px 2px 0 rgb(0 0 0 / 0.05) |
-| `md` | 0 4px 6px -1px rgb(0 0 0 / 0.1) |
-| `lg` | 0 10px 15px -3px rgb(0 0 0 / 0.1) |
-| `xl` | 0 20px 25px -5px rgb(0 0 0 / 0.1) |
-
-## Border Radius
-
-| Token | Value |
-|-------|-------|
-| `none` | 0 |
-| `sm` | 0.125rem |
-| `md` | 0.375rem |
-| `lg` | 0.5rem |
-| `xl` | 0.75rem |
-| `full` | 9999px |
-
-## Typography
-
-### Font Sizes
-
-| Token | Value |
-|-------|-------|
-| `xs` | 0.75rem |
-| `sm` | 0.875rem |
-| `base` | 1rem |
-| `lg` | 1.125rem |
-| `xl` | 1.25rem |
-| `2xl` | 1.5rem |
-| `3xl` | 1.875rem |
-| `4xl` | 2.25rem |
-
-### Font Weights
-
-| Token | Value |
-|-------|-------|
-| `normal` | 400 |
-| `medium` | 500 |
-| `semibold` | 600 |
-| `bold` | 700 |
 
 ## Dark Mode
 
 Intent supports automatic dark mode:
 
-### Class-based (default)
-
-```html
-<html class="dark">
-  <!-- Dark mode styles applied -->
-</html>
-```
-
-```typescript
+```tsx
 const theme = {
-  settings: {
-    darkMode: 'class'
-  }
-}
-```
-
-### Media Query
-
-```typescript
-const theme = {
-  settings: {
-    darkMode: 'media'  // Uses prefers-color-scheme
-  }
-}
-```
-
-### Manual Dark Tokens
-
-```typescript
-const theme = {
-  tokens: {
-    color: {
-      neutral: {
-        900: '#0a0a0a'  // Light: very dark
-      }
-    }
-  },
-  darkTokens: {
-    color: {
-      neutral: {
-        900: '#fafafa'  // Dark: very light
-      }
+  ...defaultTheme,
+  darkMode: {
+    selector: '[data-theme="dark"]',
+    colors: {
+      background: '#0f172a',
+      surface: '#1e293b',
+      text: '#f1f5f9',
     }
   }
 }
 ```
 
-## Component Tokens
+Generated CSS:
 
-Define component-specific tokens:
-
-```typescript
-const theme = {
-  tokens: {
-    component: {
-      button: {
-        'primary-bg': '#3b82f6',
-        'primary-bg-hover': '#2563eb',
-        'primary-text': '#ffffff'
-      }
-    }
-  }
-}
-```
-
-Usage:
 ```css
-.intent-button[data-importance="primary"] {
-  background-color: var(--intent-component-button-primary-bg);
+:root {
+  --intent-color-background: #ffffff;
+  --intent-color-text: #0f172a;
+}
+
+[data-theme="dark"] {
+  --intent-color-background: #0f172a;
+  --intent-color-text: #f1f5f9;
 }
 ```
 
-## Switching Themes
+## CSS Variables
 
-```typescript
-import { useTheme } from 'intent-react'
+Intent generates CSS custom properties:
 
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
+```css
+:root {
+  /* Colors */
+  --intent-color-primary: #3b82f6;
+  --intent-color-primary-hover: #2563eb;
+  --intent-color-success: #10b981;
+  --intent-color-danger: #ef4444;
   
-  return (
-    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-      Toggle Theme
-    </button>
-  )
+  /* Spacing */
+  --intent-spacing-1: 4px;
+  --intent-spacing-2: 8px;
+  --intent-spacing-4: 16px;
+  
+  /* Typography */
+  --intent-font-sans: system-ui, sans-serif;
+  --intent-font-mono: monospace;
+  --intent-font-size-base: 1rem;
+  
+  /* Radius */
+  --intent-radius-md: 0.5rem;
+  --intent-radius-lg: 0.75rem;
+  
+  /* Shadows */
+  --intent-shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --intent-shadow-md: 0 4px 6px rgba(0,0,0,0.1);
 }
 ```
 
 ## Best Practices
 
-1. **Extend the default theme** - Don't start from scratch
-2. **Use semantic tokens** - `primary` not `blue`
-3. **Test in both modes** - Light and dark
-4. **Maintain contrast ratios** - WCAG AA minimum
-5. **Document custom tokens** - For your team
+1. **Use semantic tokens** - `primary` not `blue`
+2. **Maintain contrast ratios** - All text should be WCAG compliant
+3. **Test in both modes** - If supporting dark mode, test thoroughly
+4. **Document custom tokens** - Add your brand colors to the theme
+5. **Use the scale** - Don't add one-off values, extend the scale
+
+## Related
+
+- [Schema Definition](./schema) - Using theme tokens in components
+- Design tokens documentation
