@@ -229,35 +229,46 @@ table td {
   overflow: hidden;
 }
 
-/* Inner light reflection */
+/* Hairline border mask - 0.5px precision */
 .intent-button::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(180deg, oklch(100% 0 0 / 0.08), transparent);
+  inset: 0;
+  border-radius: inherit;
+  padding: 0.5px;
+  background: linear-gradient(
+    var(--intent-light-angle, 145deg),
+    oklch(100% 0 0 / 0.20) 0%,
+    oklch(100% 0 0 / 0.08) 50%,
+    oklch(0% 0 0 / 0.20) 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   pointer-events: none;
 }
 
-/* Hover state */
+/* Hover state - Directional light from 145° */
 .intent-button:hover:not(:disabled) {
   background: 
-    radial-gradient(120% 80% at 50% 0%, oklch(100% 0 0 / 0.16), transparent 70%),
-    oklch(30% 0.01 260);
+    linear-gradient(var(--intent-light-angle, 145deg), oklch(100% 0 0 / 0.10) 0%, transparent 50%),
+    radial-gradient(120% 80% at 30% 0%, oklch(100% 0 0 / 0.12) 0%, transparent 60%),
+    oklch(30% 0.008 275);
   transform: translateY(-1px);
   box-shadow: 
-    inset 0 1px 0 oklch(100% 0 0 / 0.15),
-    0 4px 8px oklch(0% 0 0 / 0.25);
+    inset 0 0.5px 0 oklch(100% 0 0 / 0.12),
+    2px 4px 8px -1px oklch(0% 0 0 / 0.25),
+    0 1px 2px oklch(0% 0 0 / 0.15);
 }
 
-/* Active state */
+/* Active state - Light from bottom-right (pressed) */
 .intent-button:active:not(:disabled) {
   transform: translateY(0);
   box-shadow: 
-    inset 0 2px 4px oklch(0% 0 0 / 0.3),
-    inset 0 1px 0 oklch(100% 0 0 / 0.05);
+    inset 1px 2px 4px oklch(0% 0 0 / 0.30),
+    inset 0 1px 1px oklch(0% 0 0 / 0.15);
 }
 
 /* Focus state */
@@ -284,19 +295,21 @@ table td {
   border-radius: var(--intent-radius-lg);
 }
 
-/* Importance levels */
+/* Primary - Reduced chroma (0.12) for matte/metallic look */
 .intent-button--importance-primary {
   background: 
-    radial-gradient(120% 80% at 50% 0%, oklch(70% 0.15 250 / 0.3), transparent 70%),
-    oklch(60% 0.15 250);
-  border-color: oklch(70% 0.15 250 / 0.5);
+    linear-gradient(var(--intent-light-angle, 145deg), oklch(100% 0 0 / 0.10) 0%, transparent 50%),
+    radial-gradient(120% 80% at 30% 0%, oklch(100% 0 0 / 0.12) 0%, transparent 60%),
+    oklch(65% 0.12 275);
+  border-color: oklch(70% 0.12 275 / 0.4);
   color: white;
 }
 
 .intent-button--importance-primary:hover:not(:disabled) {
   background: 
-    radial-gradient(120% 80% at 50% 0%, oklch(75% 0.15 250 / 0.4), transparent 70%),
-    oklch(65% 0.15 250);
+    linear-gradient(var(--intent-light-angle, 145deg), oklch(100% 0 0 / 0.14) 0%, transparent 50%),
+    radial-gradient(120% 80% at 30% 0%, oklch(100% 0 0 / 0.16) 0%, transparent 60%),
+    oklch(70% 0.13 275);
 }
 
 .intent-button--importance-secondary {
