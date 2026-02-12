@@ -39,6 +39,10 @@ const sidebars: SidebarsConfig = {
           label: 'Forms',
           items: [
             'components/input',
+            'components/textarea',
+            'components/select',
+            'components/checkbox',
+            'components/switch',
           ],
         },
         {
@@ -47,6 +51,7 @@ const sidebars: SidebarsConfig = {
           items: [
             'components/alert',
             'components/spinner',
+            'components/progress',
           ],
         },
         {

@@ -1,0 +1,147 @@
+---
+sidebar_position: 15
+---
+
+import { Stack, Progress } from 'intent-react'
+
+# Progress
+
+Visual indicator for completion percentage.
+
+## Examples
+
+### Basic Progress
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Progress value={0} label="0%" />
+  <Progress value={25} label="25%" />
+  <Progress value={50} label="50%" />
+  <Progress value={75} label="75%" />
+  <Progress value={100} label="100%" />
+</Stack>
+
+```tsx
+<Progress value={0} label="0%" />
+<Progress value={25} label="25%" />
+<Progress value={50} label="50%" />
+<Progress value={75} label="75%" />
+<Progress value={100} label="100%" />
+```
+
+### Sizes
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Progress size="small" value={60} />
+  <Progress size="medium" value={60} />
+  <Progress size="large" value={60} />
+</Stack>
+
+```tsx
+<Progress size="small" value={60} />
+<Progress size="medium" value={60} />
+<Progress size="large" value={60} />
+```
+
+### Variants
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Progress variant="default" value={70} />
+  <Progress variant="success" value={80} />
+  <Progress variant="warning" value={50} />
+  <Progress variant="danger" value={30} />
+</Stack>
+
+```tsx
+<Progress variant="default" value={70} />
+<Progress variant="success" value={80} />
+<Progress variant="warning" value={50} />
+<Progress variant="danger" value={30} />
+```
+
+### Indeterminate
+
+<div style={{ marginBottom: 24 }}>
+  <Progress indeterminate label="Loading..." />
+</div>
+
+```tsx
+<Progress indeterminate label="Loading..." />
+```
+
+### Without Label
+
+<div style={{ marginBottom: 24 }}>
+  <Progress value={65} showLabel={false} />
+</div>
+
+```tsx
+<Progress value={65} showLabel={false} />
+```
+
+### With Value Label
+
+<div style={{ marginBottom: 24 }}>
+  <Progress 
+    value={8} 
+    max={12} 
+    label="8 of 12 tasks completed"
+  />
+</div>
+
+```tsx
+<Progress 
+  value={8} 
+  max={12} 
+  label="8 of 12 tasks completed"
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | `0` | Current value |
+| `max` | `number` | `100` | Maximum value |
+| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Progress height |
+| `variant` | `'default'` \| `'success'` \| `'warning'` \| `'danger'` | `'default'` | Color variant |
+| `indeterminate` | `boolean` | `false` | Loading animation |
+| `label` | `string` | - | Text label |
+| `showLabel` | `boolean` | `true` | Show percentage label |
+
+## Accessibility
+
+- Uses `role="progressbar"`
+- Includes `aria-valuenow`, `aria-valuemin`, `aria-valuemax`
+- Label announced by screen readers
+
+## CSS Output
+
+```css
+.progress {
+  width: 100%;
+}
+
+.progress__track {
+  height: 0.5rem;
+  background: var(--intent-color-border);
+  border-radius: var(--intent-radius-full);
+  overflow: hidden;
+}
+
+.progress__bar {
+  height: 100%;
+  background: var(--intent-color-primary);
+  border-radius: var(--intent-radius-full);
+  transition: width 150ms ease;
+}
+
+.progress__bar--indeterminate {
+  animation: progress-indeterminate 1.5s ease-in-out infinite;
+}
+
+@keyframes progress-indeterminate {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+```

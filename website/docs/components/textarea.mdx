@@ -1,0 +1,149 @@
+---
+sidebar_position: 11
+---
+
+import { Stack, Textarea, Field } from 'intent-react'
+
+# Textarea
+
+Multi-line text input for longer content.
+
+## Examples
+
+### Basic Textarea
+
+<div style={{ marginBottom: 24 }}>
+  <Textarea placeholder="Enter your message..." rows={4} />
+</div>
+
+```tsx
+<Textarea placeholder="Enter your message..." rows={4} />
+```
+
+### With Field Wrapper
+
+<div style={{ marginBottom: 24 }}>
+  <Field label="Description" hint="Briefly describe your project">
+    <Textarea 
+      placeholder="Project description..."
+      rows={3}
+    />
+  </Field>
+</div>
+
+```tsx
+<Field label="Description" hint="Briefly describe your project">
+  <Textarea 
+    placeholder="Project description..."
+    rows={3}
+  />
+</Field>
+```
+
+### Sizes
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Textarea size="small" placeholder="Small textarea" rows={2} />
+  <Textarea size="medium" placeholder="Medium textarea" rows={3} />
+  <Textarea size="large" placeholder="Large textarea" rows={4} />
+</Stack>
+
+```tsx
+<Textarea size="small" rows={2} />
+<Textarea size="medium" rows={3} />
+<Textarea size="large" rows={4} />
+```
+
+### Validation States
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Textarea 
+    validation="valid" 
+    value="This content looks good!"
+    rows={2}
+  />
+  <Textarea 
+    validation="invalid" 
+    value="Too short"
+    rows={2}
+  />
+</Stack>
+
+```tsx
+<Textarea validation="valid" value="This content looks good!" />
+<Textarea validation="invalid" value="Too short" />
+```
+
+### Auto-resize
+
+<div style={{ marginBottom: 24 }}>
+  <Textarea 
+    autoResize 
+    placeholder="This textarea grows as you type..."
+    minRows={2}
+    maxRows={6}
+  />
+</div>
+
+```tsx
+<Textarea 
+  autoResize 
+  placeholder="This textarea grows as you type..."
+  minRows={2}
+  maxRows={6}
+/>
+```
+
+### Disabled
+
+<div style={{ marginBottom: 24 }}>
+  <Textarea 
+    disabled 
+    value="This textarea is disabled"
+    rows={2}
+  />
+</div>
+
+```tsx
+<Textarea disabled value="This textarea is disabled" />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Textarea size |
+| `validation` | `'valid'` \| `'invalid'` \| `'none'` | `'none'` | Validation state |
+| `rows` | `number` | `3` | Number of visible rows |
+| `autoResize` | `boolean` | `false` | Auto-grow with content |
+| `minRows` | `number` | - | Minimum rows when auto-resizing |
+| `maxRows` | `number` | - | Maximum rows when auto-resizing |
+| `disabled` | `boolean` | `false` | Disable textarea |
+| `placeholder` | `string` | - | Placeholder text |
+
+## CSS Output
+
+```css
+.textarea {
+  width: 100%;
+  padding: var(--intent-spacing-3);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+  font-family: inherit;
+  resize: vertical;
+}
+
+.textarea:focus {
+  border-color: var(--intent-color-primary);
+  box-shadow: 0 0 0 2px var(--intent-color-primary-alpha);
+}
+
+.textarea--valid {
+  border-color: var(--intent-color-success);
+}
+
+.textarea--invalid {
+  border-color: var(--intent-color-danger);
+}
+```

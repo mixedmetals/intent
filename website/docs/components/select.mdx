@@ -1,0 +1,148 @@
+---
+sidebar_position: 12
+---
+
+import { Stack, Select, Field } from 'intent-react'
+
+# Select
+
+Dropdown for selecting from a list of options.
+
+## Examples
+
+### Basic Select
+
+<div style={{ marginBottom: 24 }}>
+  <Select 
+    options={[
+      { value: 'react', label: 'React' },
+      { value: 'vue', label: 'Vue' },
+      { value: 'angular', label: 'Angular' },
+    ]}
+    placeholder="Choose a framework"
+  />
+</div>
+
+```tsx
+<Select 
+  options={[
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'angular', label: 'Angular' },
+  ]}
+  placeholder="Choose a framework"
+/>
+```
+
+### With Field Wrapper
+
+<div style={{ marginBottom: 24 }}>
+  <Field label="Country">
+    <Select 
+      options={[
+        { value: 'us', label: 'United States' },
+        { value: 'uk', label: 'United Kingdom' },
+        { value: 'ca', label: 'Canada' },
+      ]}
+    />
+  </Field>
+</div>
+
+```tsx
+<Field label="Country">
+  <Select 
+    options={[
+      { value: 'us', label: 'United States' },
+      { value: 'uk', label: 'United Kingdom' },
+    ]}
+  />
+</Field>
+```
+
+### Sizes
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Select 
+    size="small"
+    options={[{ value: '1', label: 'Small' }]}
+  />
+  <Select 
+    size="medium"
+    options={[{ value: '1', label: 'Medium' }]}
+  />
+  <Select 
+    size="large"
+    options={[{ value: '1', label: 'Large' }]}
+  />
+</Stack>
+
+```tsx
+<Select size="small" options={...} />
+<Select size="medium" options={...} />
+<Select size="large" options={...} />
+```
+
+### Validation States
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Select 
+    validation="valid"
+    options={[{ value: 'valid', label: 'Valid selection' }]}
+  />
+  <Select 
+    validation="invalid"
+    options={[{ value: '', label: 'Invalid selection' }]}
+  />
+</Stack>
+
+```tsx
+<Select validation="valid" options={...} />
+<Select validation="invalid" options={...} />
+```
+
+### Disabled
+
+<div style={{ marginBottom: 24 }}>
+  <Select 
+    disabled
+    options={[{ value: '1', label: 'Disabled select' }]}
+  />
+</div>
+
+```tsx
+<Select disabled options={...} />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `options` | `Array<{value: string, label: string}>` | `[]` | Select options |
+| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Select size |
+| `validation` | `'valid'` \| `'invalid'` \| `'none'` | `'none'` | Validation state |
+| `placeholder` | `string` | - | Default placeholder |
+| `disabled` | `boolean` | `false` | Disable select |
+| `value` | `string` | - | Controlled value |
+| `onChange` | `(value: string) => void` | - | Change handler |
+
+## CSS Output
+
+```css
+.select {
+  width: 100%;
+  padding: var(--intent-spacing-3);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+  cursor: pointer;
+}
+
+.select:focus {
+  border-color: var(--intent-color-primary);
+  outline: none;
+}
+
+.select--valid {
+  border-color: var(--intent-color-success);
+}
+```

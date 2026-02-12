@@ -1,0 +1,135 @@
+---
+sidebar_position: 13
+---
+
+import { Stack, Checkbox, Field } from 'intent-react'
+
+# Checkbox
+
+Boolean toggle for multiple selections.
+
+## Examples
+
+### Basic Checkbox
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Checkbox label="Accept terms and conditions" />
+  <Checkbox label="Subscribe to newsletter" />
+</Stack>
+
+```tsx
+<Checkbox label="Accept terms and conditions" />
+<Checkbox label="Subscribe to newsletter" />
+```
+
+### Checked State
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Checkbox label="Checked by default" defaultChecked />
+  <Checkbox label="Unchecked" />
+</Stack>
+
+```tsx
+<Checkbox label="Checked by default" defaultChecked />
+<Checkbox label="Unchecked" />
+```
+
+### Sizes
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Checkbox size="small" label="Small checkbox" />
+  <Checkbox size="medium" label="Medium checkbox" />
+  <Checkbox size="large" label="Large checkbox" />
+</Stack>
+
+```tsx
+<Checkbox size="small" label="Small checkbox" />
+<Checkbox size="medium" label="Medium checkbox" />
+<Checkbox size="large" label="Large checkbox" />
+```
+
+### Disabled
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Checkbox disabled label="Disabled unchecked" />
+  <Checkbox disabled checked label="Disabled checked" />
+</Stack>
+
+```tsx
+<Checkbox disabled label="Disabled unchecked" />
+<Checkbox disabled checked label="Disabled checked" />
+```
+
+### Indeterminate
+
+<div style={{ marginBottom: 24 }}>
+  <Checkbox 
+    indeterminate 
+    label="Some items selected (indeterminate)"
+  />
+</div>
+
+```tsx
+<Checkbox 
+  indeterminate 
+  label="Some items selected"
+/>
+```
+
+### Description
+
+<div style={{ marginBottom: 24 }}>
+  <Checkbox 
+    label="Enable notifications"
+    description="Receive updates about your account activity"
+  />
+</div>
+
+```tsx
+<Checkbox 
+  label="Enable notifications"
+  description="Receive updates about your account activity"
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | Checkbox label |
+| `description` | `string` | - | Helper text below label |
+| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Checkbox size |
+| `checked` | `boolean` | - | Controlled checked state |
+| `defaultChecked` | `boolean` | `false` | Initial checked state |
+| `indeterminate` | `boolean` | `false` | Indeterminate state |
+| `disabled` | `boolean` | `false` | Disable checkbox |
+| `onChange` | `(checked: boolean) => void` | - | Change handler |
+
+## CSS Output
+
+```css
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--intent-spacing-2);
+  cursor: pointer;
+}
+
+.checkbox__input {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-sm);
+  cursor: pointer;
+}
+
+.checkbox__input:checked {
+  background: var(--intent-color-primary);
+  border-color: var(--intent-color-primary);
+}
+
+.checkbox__input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+```
