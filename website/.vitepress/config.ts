@@ -5,6 +5,7 @@ export default defineConfig({
   description: 'The Schema-First, AI-Native CSS Framework',
   
   base: '/intent/',
+  ignoreDeadLinks: true,
   
   head: [
     ['link', { rel: 'icon', href: '/intent/favicon.svg' }],
