@@ -1,130 +1,102 @@
 ---
 sidebar_position: 87
 ---
-import React from 'react';
+
+import { Breadcrumbs, BreadcrumbItem } from 'intent-react/components/navigation';
 
 # Breadcrumbs
 
-Navigation breadcrumbs with enhanced styling.
-
-export const Breadcrumbs = ({ items, separator = '>' }) => (
-  <nav aria-label="Breadcrumb">
-    <ol style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', listStyle: 'none', padding: 0, margin: 0 }}>
-      {items.map((item, i) => (
-        <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {i > 0 && (
-            <span style={{ color: 'var(--intent-color-muted)', fontSize: '0.875rem' }}>{separator}</span>
-          )}
-          {item.href ? (
-            <a 
-              href={item.href} 
-              style={{ 
-                color: 'var(--intent-color-primary)', 
-                textDecoration: 'none',
-                fontSize: '0.875rem',
-                fontWeight: 500
-              }}
-            >
-              {item.icon && <span style={{ marginRight: '4px' }}>{item.icon}</span>}
-              {item.label}
-            </a>
-          ) : (
-            <span style={{ color: 'var(--intent-color-muted)', fontSize: '0.875rem', fontWeight: 500 }}>
-              {item.icon && <span style={{ marginRight: '4px' }}>{item.icon}</span>}
-              {item.label}
-            </span>
-          )}
-        </li>
-      ))}
-    </ol>
-  </nav>
-)
+Navigation breadcrumbs with enhanced styling. Shows the current page location within a hierarchy.
 
 ## Examples
 
 ### Basic Breadcrumbs
 
 <div className="intent-demo">
-  <Breadcrumbs 
-    items={[
-      { label: 'Home', href: '/', icon: '🏠' },
-      { label: 'Products', href: '/products' },
-      { label: 'Electronics', href: '/products/electronics' },
-      { label: 'Laptops' }
-    ]}
-  />
+  <Breadcrumbs>
+    <BreadcrumbItem href="/">Home</BreadcrumbItem>
+    <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
+    <BreadcrumbItem current>Components</BreadcrumbItem>
+  </Breadcrumbs>
 </div>
 
 ```tsx
-<Breadcrumbs 
-  items={[
-    { label: 'Home', href: '/', icon: '🏠' },
-    { label: 'Products', href: '/products' },
-    { label: 'Laptops' }
-  ]}
-/>
+import { Breadcrumbs, BreadcrumbItem } from 'intent-react/components/navigation';
+
+<Breadcrumbs>
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
+  <BreadcrumbItem current>Components</BreadcrumbItem>
+</Breadcrumbs>
 ```
 
-### Custom Separator
+### Separator Styles
 
 <div className="intent-demo">
-  <Breadcrumbs 
-    items={[
-      { label: 'Home', href: '/' },
-      { label: 'Settings', href: '/settings' },
-      { label: 'Profile' }
-    ]}
-    separator="→"
-  />
+  <Breadcrumbs separator="chevron">
+    <BreadcrumbItem href="/">Home</BreadcrumbItem>
+    <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
+    <BreadcrumbItem current>Chevron</BreadcrumbItem>
+  </Breadcrumbs>
+  <Breadcrumbs separator="slash">
+    <BreadcrumbItem href="/">Home</BreadcrumbItem>
+    <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
+    <BreadcrumbItem current>Slash</BreadcrumbItem>
+  </Breadcrumbs>
+  <Breadcrumbs separator="arrow">
+    <BreadcrumbItem href="/">Home</BreadcrumbItem>
+    <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
+    <BreadcrumbItem current>Arrow</BreadcrumbItem>
+  </Breadcrumbs>
+  <Breadcrumbs separator="dot">
+    <BreadcrumbItem href="/">Home</BreadcrumbItem>
+    <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
+    <BreadcrumbItem current>Dot</BreadcrumbItem>
+  </Breadcrumbs>
 </div>
 
 ```tsx
-<Breadcrumbs 
-  items={[...]}
-  separator="→"
-/>
+<Breadcrumbs separator="chevron">...</Breadcrumbs>
+<Breadcrumbs separator="slash">...</Breadcrumbs>
+<Breadcrumbs separator="arrow">...</Breadcrumbs>
+<Breadcrumbs separator="dot">...</Breadcrumbs>
+```
+
+### Sizes
+
+<div className="intent-demo">
+  <Breadcrumbs size="sm">
+    <BreadcrumbItem href="/">Home</BreadcrumbItem>
+    <BreadcrumbItem current>Small</BreadcrumbItem>
+  </Breadcrumbs>
+  <Breadcrumbs size="md">
+    <BreadcrumbItem href="/">Home</BreadcrumbItem>
+    <BreadcrumbItem current>Medium (default)</BreadcrumbItem>
+  </Breadcrumbs>
+  <Breadcrumbs size="lg">
+    <BreadcrumbItem href="/">Home</BreadcrumbItem>
+    <BreadcrumbItem current>Large</BreadcrumbItem>
+  </Breadcrumbs>
+</div>
+
+```tsx
+<Breadcrumbs size="sm">...</Breadcrumbs>
+<Breadcrumbs size="md">...</Breadcrumbs>
+<Breadcrumbs size="lg">...</Breadcrumbs>
 ```
 
 ## Props
 
+### Breadcrumbs
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `Array<{label: string, href?: string, icon?: ReactNode}>` | `[]` | Breadcrumb items |
-| `separator` | `ReactNode` | `'>'` | Custom separator |
+| `separator` | `'chevron' \| 'slash' \| 'arrow' \| 'dot'` | `'chevron'` | Separator style |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Breadcrumb size |
 
-## CSS Output
+### BreadcrumbItem
 
-```css
-.intent-breadcrumbs {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  list-style: none;
-}
-
-.intent-breadcrumbs__link {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--intent-color-primary);
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.intent-breadcrumbs__link:hover {
-  text-decoration: underline;
-}
-
-.intent-breadcrumbs__current {
-  color: var(--intent-color-muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.intent-breadcrumbs__separator {
-  color: var(--intent-color-muted);
-  font-size: 0.875rem;
-}
-```
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `href` | `string` | - | Link URL (omit for current page) |
+| `current` | `boolean` | `false` | Mark as current/active page |

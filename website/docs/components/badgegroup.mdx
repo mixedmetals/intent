@@ -2,221 +2,104 @@
 sidebar_position: 70
 ---
 
-import React from 'react';
+import { Badge } from 'intent-react';
+import { HStack } from 'intent-react';
 
 # BadgeGroup
 
-Group of badges with overflow handling.
+Group of badges with overflow handling. Uses the **Flat** archetype.
 
-export const BadgeGroup = ({ badges, limit, removable, onRemove }) => {
-  const [removed, setRemoved] = React.useState(new Set())
-  
-  const visibleBadges = badges
-    .filter(b => !removed.has(b.id))
-    .slice(0, limit || badges.length)
-  
-  const remaining = badges.length - visibleBadges.length
-  
-  const handleRemove = (id) => {
-    setRemoved(prev => new Set([...prev, id]))
-    onRemove?.(id)
-  }
-  
-  const variantStyles = {
-    primary: { bg: 'var(--intent-color-primary)', color: 'white' },
-    success: { bg: 'var(--intent-color-success, #22c55e)', color: 'white' },
-    warning: { bg: 'var(--intent-color-warning, #f59e0b)', color: 'white' },
-    error: { bg: 'var(--intent-color-error, #ef4444)', color: 'white' },
-    secondary: { bg: 'var(--intent-color-surface-elevated)', color: 'var(--intent-color-foreground)' }
-  }
-  
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
-      {visibleBadges.map(badge => {
-        const style = variantStyles[badge.variant] || variantStyles.secondary
-        return (
-          <span
-            key={badge.id}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '4px 12px',
-              borderRadius: '9999px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              background: style.bg,
-              color: style.color
-            }}
-          >
-            {badge.label}
-            {removable && (
-              <button
-                onClick={() => handleRemove(badge.id)}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '14px',
-                  height: '14px',
-                  marginLeft: '2px',
-                  border: 'none',
-                  borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.3)',
-                  color: 'inherit',
-                  cursor: 'pointer',
-                  fontSize: '10px'
-                }}
-              >
-                ×
-              </button>
-            )}
-          </span>
-        )
-      })}
-      {remaining > 0 && (
-        <span style={{
-          padding: '4px 12px',
-          borderRadius: '9999px',
-          fontSize: '0.75rem',
-          fontWeight: 600,
-          background: 'var(--intent-color-surface-elevated)',
-          color: 'var(--intent-color-muted)'
-        }}>
-          +{remaining}
-        </span>
-      )}
-    </div>
-  )
-}
+:::tip
+For simple badge groups, use `HStack` with multiple `Badge` components.
+:::
 
 ## Examples
 
-### Basic BadgeGroup
+### Basic Group
 
 <div className="intent-demo">
-  <BadgeGroup 
-    badges={[
-      { id: '1', label: 'React', variant: 'primary' },
-      { id: '2', label: 'TypeScript', variant: 'secondary' },
-      { id: '3', label: 'Node.js', variant: 'success' },
-      { id: '4', label: 'Warning', variant: 'warning' }
-    ]}
-  />
+  <HStack gap="compact" wrap>
+    <Badge>Design</Badge>
+    <Badge variant="success">Ready</Badge>
+    <Badge variant="warning">Review</Badge>
+    <Badge variant="error">Blocked</Badge>
+  </HStack>
 </div>
 
 ```tsx
-<BadgeGroup 
-  badges={[
-    { id: '1', label: 'React', variant: 'primary' },
-    { id: '2', label: 'TypeScript', variant: 'secondary' }
-  ]}
-/>
+import { Badge, HStack } from 'intent-react';
+
+<HStack gap="compact" wrap>
+  <Badge>Design</Badge>
+  <Badge variant="success">Ready</Badge>
+  <Badge variant="warning">Review</Badge>
+  <Badge variant="error">Blocked</Badge>
+</HStack>
 ```
 
 ### With Limit
 
 <div className="intent-demo">
-  <BadgeGroup 
-    limit={3}
-    badges={[
-      { id: '1', label: 'React', variant: 'primary' },
-      { id: '2', label: 'TypeScript', variant: 'secondary' },
-      { id: '3', label: 'Node.js', variant: 'success' },
-      { id: '4', label: 'GraphQL', variant: 'primary' },
-      { id: '5', label: 'Docker', variant: 'secondary' }
-    ]}
-  />
+  <HStack gap="compact" wrap>
+    <Badge>React</Badge>
+    <Badge>TypeScript</Badge>
+    <Badge>CSS</Badge>
+    <Badge>+3 more</Badge>
+  </HStack>
 </div>
 
 ```tsx
-<BadgeGroup 
-  limit={3}
-  badges={[...]}
-/>
+const tags = ['React', 'TypeScript', 'CSS', 'Node.js', 'GraphQL', 'PostgreSQL'];
+const visible = tags.slice(0, 3);
+
+<HStack gap="compact" wrap>
+  {visible.map(tag => <Badge key={tag}>{tag}</Badge>)}
+  {tags.length > 3 && <Badge>+{tags.length - 3} more</Badge>}
+</HStack>
 ```
 
-### Removable
+### Removable Badges
 
 <div className="intent-demo">
-  <BadgeGroup 
-    removable
-    badges={[
-      { id: '1', label: 'React', variant: 'primary' },
-      { id: '2', label: 'TypeScript', variant: 'secondary' },
-      { id: '3', label: 'Node.js', variant: 'success' }
-    ]}
-    onRemove={(id) => console.log('Removed:', id)}
-  />
+  <HStack gap="compact" wrap>
+    <Badge>JavaScript <button style={{ marginLeft: '4px', cursor: 'pointer' }}>×</button></Badge>
+    <Badge>Python <button style={{ marginLeft: '4px', cursor: 'pointer' }}>×</button></Badge>
+    <Badge>Rust <button style={{ marginLeft: '4px', cursor: 'pointer' }}>×</button></Badge>
+  </HStack>
 </div>
 
 ```tsx
-<BadgeGroup 
-  badges={tags}
-  removable
-  onRemove={(id) => setTags(tags.filter(t => t.id !== id))}
-/>
+const [badges, setBadges] = useState(['JavaScript', 'Python', 'Rust']);
+
+const removeBadge = (badge) => {
+  setBadges(badges.filter(b => b !== badge));
+};
+
+<HStack gap="compact" wrap>
+  {badges.map(badge => (
+    <Badge key={badge}>
+      {badge}
+      <button onClick={() => removeBadge(badge)}>×</button>
+    </Badge>
+  ))}
+</HStack>
 ```
 
 ## Props
 
+### BadgeGroup
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `badges` | `Array<{id: string, label: string, variant?: string}>` | `[]` | Array of badges |
-| `limit` | `number` | - | Max badges to show |
-| `removable` | `boolean` | `false` | Show remove button |
-| `onRemove` | `(id: string) => void` | - | Remove handler |
+| `badges` | `Array<{id: string, label: string, variant?: string}>` | `[]` | Badge items |
+| `limit` | `number` | - | Maximum badges to show |
+| `removable` | `boolean` | `false` | Allow removing badges |
+| `onRemove` | `(id: string) => void` | - | Remove callback |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-badge-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-
-.intent-badge-group__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 12px;
-  border-radius: var(--intent-radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.intent-badge-group__badge--primary {
-  background: var(--intent-color-primary);
-  color: white;
-}
-
-.intent-badge-group__badge--secondary {
-  background: var(--intent-color-surface-elevated);
-  color: var(--intent-color-foreground);
-}
-
-.intent-badge-group__remove {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 14px;
-  height: 14px;
-  margin-left: 2px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  font-size: 10px;
-}
-
-.intent-badge-group__overflow {
-  padding: 4px 12px;
-  border-radius: var(--intent-radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: var(--intent-color-surface-elevated);
-  color: var(--intent-color-muted);
-}
-```
+- Uses **Flat** archetype for badges
+- Consistent spacing between badges
+- Overflow with "+N more" indicator
+- Close button for removable badges
+- Wraps to multiple lines if needed

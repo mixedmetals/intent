@@ -1,100 +1,139 @@
 ---
 sidebar_position: 27
 ---
-import React from 'react';
+
+import { 
+  Table, TableHeader, TableBody, TableRow, TableCell 
+} from 'intent-react/components/data';
+import { Badge } from 'intent-react';
 
 # Table
 
-Display tabular data with sorting and selection.
-
-export const Table = ({ columns, data }) => (
-  <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid var(--intent-color-border)', borderRadius: '8px', overflow: 'hidden' }}>
-    <thead>
-      <tr style={{ background: 'var(--intent-color-surface-elevated)' }}>
-        {columns.map((col) => (
-          <th key={col.key} style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 600, borderBottom: '1px solid var(--intent-color-border)' }}>
-            {col.title}
-          </th>
-        ))}
-      </tr>
-    </thead>
-    <tbody>
-      {data.map((row, i) => (
-        <tr key={i} style={{ borderBottom: '1px solid var(--intent-color-border)' }}>
-          {columns.map((col) => (
-            <td key={col.key} style={{ padding: '12px 16px' }}>
-              {col.render ? col.render(row[col.key], row) : row[col.key]}
-            </td>
-          ))}
-        </tr>
-      ))}
-    </tbody>
-  </table>
-)
-
-export const Badge = ({ children, variant = 'default' }) => (
-  <span className={`intent-badge intent-badge--variant-${variant} intent-badge--size-medium`}>{children}</span>
-)
+Display tabular data with sorting and selection. Uses the **Flat** archetype with subtle borders.
 
 ## Examples
 
 ### Basic Table
 
 <div className="intent-demo">
-  <Table 
-    columns={[
-      { key: 'name', title: 'Name' },
-      { key: 'email', title: 'Email' },
-      { key: 'role', title: 'Role' },
-      { key: 'status', title: 'Status', render: (v) => <Badge variant={v === 'Active' ? 'success' : 'default'}>{v}</Badge> }
-    ]}
-    data={[
-      { name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active' },
-      { name: 'Jane Smith', email: 'jane@example.com', role: 'Editor', status: 'Active' },
-      { name: 'Bob Johnson', email: 'bob@example.com', role: 'Viewer', status: 'Inactive' }
-    ]}
-  />
+  <Table>
+    <TableHeader>
+      <TableRow>
+        <TableCell as="th">Name</TableCell>
+        <TableCell as="th">Email</TableCell>
+        <TableCell as="th">Role</TableCell>
+        <TableCell as="th">Status</TableCell>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      <TableRow>
+        <TableCell>John Doe</TableCell>
+        <TableCell>john@example.com</TableCell>
+        <TableCell>Admin</TableCell>
+        <TableCell><Badge variant="success">Active</Badge></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Jane Smith</TableCell>
+        <TableCell>jane@example.com</TableCell>
+        <TableCell>Editor</TableCell>
+        <TableCell><Badge variant="success">Active</Badge></TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Bob Johnson</TableCell>
+        <TableCell>bob@example.com</TableCell>
+        <TableCell>Viewer</TableCell>
+        <TableCell><Badge>Inactive</Badge></TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
 </div>
 
 ```tsx
+import { 
+  Table, TableHeader, TableBody, TableRow, TableCell 
+} from 'intent-react/components/data';
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableCell as="th">Name</TableCell>
+      <TableCell as="th">Email</TableCell>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>John Doe</TableCell>
+      <TableCell>john@example.com</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+### Striped Rows
+
+```tsx
+<Table variant="striped">
+  <TableHeader>...</TableHeader>
+  <TableBody>...</TableBody>
+</Table>
+```
+
+### With Selection
+
+```tsx
 <Table 
-  columns={[
-    { key: 'name', title: 'Name' },
-    { key: 'email', title: 'Email' },
-    { key: 'role', title: 'Role' }
-  ]}
-  data={[...]}
-/>
+  selectable
+  selectedRows={selected}
+  onSelectionChange={setSelected}
+>
+  ...
+</Table>
+```
+
+### Sortable
+
+```tsx
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableCell as="th" sortable sortDirection="asc" onSort={handleSort}>
+        Name
+      </TableCell>
+    </TableRow>
+  </TableHeader>
+</Table>
 ```
 
 ## Props
 
+### Table
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `columns` | `Array<{key: string, title: string, render?: (value, row) => ReactNode}>` | `[]` | Column definitions |
-| `data` | `Array<object>` | `[]` | Table data |
+| `variant` | `'default' \| 'striped'` | `'default'` | Table style |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Table size |
+| `selectable` | `boolean` | `false` | Enable row selection |
+| `selectedRows` | `string[]` | - | Selected row IDs |
 
-## CSS Output
+### TableRow
 
-```css
-.intent-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `selected` | `boolean` | `false` | Selected state |
+| `disabled` | `boolean` | `false` | Disabled state |
 
-.intent-table__head {
-  background: var(--intent-color-surface-elevated);
-}
+### TableCell
 
-.intent-table__th {
-  padding: 12px 16px;
-  text-align: left;
-  font-weight: 600;
-  border-bottom: 1px solid var(--intent-color-border);
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `as` | `'td' \| 'th'` | `'td'` | Cell element type |
+| `align` | `'left' \| 'center' \| 'right'` | `'left'` | Cell alignment |
+| `colSpan` | `number` | - | Column span |
 
-.intent-table__td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--intent-color-border);
-}
-```
+## Design Notes
+
+- Header uses **Elevated** background for distinction
+- Cells use **Flat** archetype
+- Borders use 1px `var(--intent-color-border)`
+- Hover state on rows for better interaction
+- Striped variant alternates row backgrounds

@@ -2,82 +2,25 @@
 sidebar_position: 51
 ---
 import React from 'react';
+import { Drawer, Button } from 'intent-react';
 
 # Drawer
 
-Slide-out panels for navigation or forms.
-
-export const Drawer = ({ title, children, isOpen, onClose, placement = 'right', footer }) => {
-  if (!isOpen) return null
-  return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 50 }}>
-      {/* Backdrop */}
-      <div 
-        style={{ 
-          position: 'absolute', 
-          inset: 0, 
-          background: 'rgba(0,0,0,0.5)', 
-          backdropFilter: 'blur(4px)' 
-        }} 
-        onClick={onClose}
-      />
-      {/* Drawer */}
-      <div style={{ 
-        position: 'absolute', 
-        top: 0,
-        bottom: 0,
-        [placement]: 0,
-        width: '100%',
-        maxWidth: '400px',
-        background: 'var(--intent-color-surface)', 
-        boxShadow: placement === 'right' ? '-4px 0 25px rgba(0,0,0,0.1)' : '4px 0 25px rgba(0,0,0,0.1)',
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        {/* Header */}
-        <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>{title}</h3>
-          <button 
-            onClick={onClose}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              fontSize: '1.5rem', 
-              cursor: 'pointer',
-              color: 'var(--intent-color-muted)'
-            }}
-          >
-            ×
-          </button>
-        </div>
-        {/* Body */}
-        <div style={{ padding: '24px', flex: 1, overflow: 'auto' }}>
-          {children}
-        </div>
-        {/* Footer */}
-        {footer && (
-          <div style={{ padding: '16px 24px', borderTop: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-            {footer}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
+Slide-out panels for navigation or forms. Uses the **Elevated** archetype for the panel and **Milled** for header/footer elements.
 
 export const DrawerDemo = () => {
   const [isOpen, setIsOpen] = React.useState(false)
   return (
     <>
-      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(true)}>Open Drawer</button>
+      <Button importance="secondary" onClick={() => setIsOpen(true)}>Open Drawer</Button>
       <Drawer 
         isOpen={isOpen} 
         onClose={() => setIsOpen(false)}
         title="Settings"
         footer={
           <>
-            <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Cancel</button>
-            <button className="intent-btn intent-btn--variant-primary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Save</button>
+            <Button importance="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
+            <Button onClick={() => setIsOpen(false)}>Save</Button>
           </>
         }
       >
@@ -89,12 +32,6 @@ export const DrawerDemo = () => {
           <div>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>Email</label>
             <input type="email" placeholder="Enter email" style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px' }} />
-          </div>
-          <div>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-              <input type="checkbox" />
-              <span>Enable notifications</span>
-            </label>
           </div>
         </div>
       </Drawer>
@@ -111,6 +48,8 @@ export const DrawerDemo = () => {
 </div>
 
 ```tsx
+import { Drawer } from 'intent-react';
+
 const [isOpen, setIsOpen] = useState(false)
 
 <Button onClick={() => setIsOpen(true)}>Open Drawer</Button>
@@ -121,7 +60,7 @@ const [isOpen, setIsOpen] = useState(false)
   title="Settings"
   footer={
     <>
-      <Button variant="secondary">Cancel</Button>
+      <Button importance="secondary">Cancel</Button>
       <Button>Save</Button>
     </>
   }
@@ -141,33 +80,9 @@ const [isOpen, setIsOpen] = useState(false)
 | `children` | `ReactNode` | - | Drawer content |
 | `footer` | `ReactNode` | - | Footer content |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-drawer__overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  z-index: 50;
-}
-
-.intent-drawer {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  max-width: 400px;
-  background: var(--intent-color-surface);
-  box-shadow: -4px 0 25px rgba(0, 0, 0, 0.1);
-  z-index: 51;
-}
-
-.intent-drawer--left {
-  left: 0;
-}
-
-.intent-drawer--right {
-  right: 0;
-}
-```
+- Drawer panel uses **Elevated** archetype (floating above content)
+- Backdrop uses `rgba(0,0,0,0.5)` with `backdrop-filter: blur(4px)`
+- Header/footer have 1px borders
+- Shadow direction respects placement (left/right)

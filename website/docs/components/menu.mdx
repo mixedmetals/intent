@@ -5,81 +5,99 @@ import React from 'react';
 
 # Menu
 
-Dropdown menus for actions and navigation.
+Dropdown menus for actions and navigation. Uses the **Elevated** archetype.
 
-export const Menu = ({ children }) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
-      <button 
-        className="intent-btn intent-btn--variant-secondary intent-btn--size-medium"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        Actions ▼
-      </button>
-      {isOpen && (
-        <div 
-          style={{ 
-            position: 'absolute', 
-            top: '100%', 
-            left: 0, 
-            marginTop: '4px',
-            minWidth: '200px',
-            background: 'var(--intent-color-surface)', 
-            border: '1px solid var(--intent-color-border)',
-            borderRadius: '8px',
-            boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-            zIndex: 50
-          }}
-        >
-          <div onClick={() => setIsOpen(false)}>
-            {children}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
-export const MenuItem = ({ children, icon, onClick }) => (
-  <button
-    onClick={onClick}
-    style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: '12px', 
-      width: '100%',
-      padding: '10px 16px',
-      textAlign: 'left',
-      background: 'none',
-      border: 'none',
-      cursor: 'pointer',
-      fontSize: '0.875rem',
-      transition: 'background 150ms'
-    }}
-    onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
-    onMouseLeave={(e) => e.target.style.background = 'none'}
-  >
-    {icon && <span style={{ width: '16px', textAlign: 'center' }}>{icon}</span>}
-    <span>{children}</span>
-  </button>
-)
-
-export const MenuDivider = () => (
-  <div style={{ height: '1px', background: 'var(--intent-color-border)', margin: '4px 0' }} />
-)
+:::tip
+For more complex menus with submenus, use `DropdownMenu`.
+:::
 
 export const MenuDemo = () => {
+  const [isOpen, setIsOpen] = React.useState(false)
   const [lastAction, setLastAction] = React.useState(null)
+  
   return (
     <div>
-      <Menu>
-        <MenuItem icon="✏️" onClick={() => setLastAction('Edit')}>Edit</MenuItem>
-        <MenuItem icon="📋" onClick={() => setLastAction('Duplicate')}>Duplicate</MenuItem>
-        <MenuItem icon="🔗" onClick={() => setLastAction('Copy link')}>Copy link</MenuItem>
-        <MenuDivider />
-        <MenuItem icon="🗑️" onClick={() => setLastAction('Delete')}>Delete</MenuItem>
-      </Menu>
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        <button 
+          className="intent-button intent-button--importance-secondary intent-button--size-medium"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          Actions ▼
+        </button>
+        {isOpen && (
+          <div 
+            style={{ 
+              position: 'absolute', 
+              top: '100%', 
+              left: 0, 
+              marginTop: '4px',
+              minWidth: '200px',
+              background: 'var(--intent-color-surface)', 
+              border: '1px solid var(--intent-color-border)',
+              borderRadius: '8px',
+              boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+              zIndex: 50
+            }}
+          >
+            <button
+              onClick={() => { setLastAction('Edit'); setIsOpen(false); }}
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '12px', 
+                width: '100%',
+                padding: '10px 16px',
+                textAlign: 'left',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              <span>✏️</span>
+              <span>Edit</span>
+            </button>
+            <button
+              onClick={() => { setLastAction('Duplicate'); setIsOpen(false); }}
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '12px', 
+                width: '100%',
+                padding: '10px 16px',
+                textAlign: 'left',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              <span>📋</span>
+              <span>Duplicate</span>
+            </button>
+            <div style={{ height: '1px', background: 'var(--intent-color-border)', margin: '4px 0' }} />
+            <button
+              onClick={() => { setLastAction('Delete'); setIsOpen(false); }}
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '12px', 
+                width: '100%',
+                padding: '10px 16px',
+                textAlign: 'left',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '0.875rem',
+                color: 'var(--intent-color-error)'
+              }}
+            >
+              <span>🗑️</span>
+              <span>Delete</span>
+            </button>
+          </div>
+        )}
+      </div>
       {lastAction && <p style={{ marginTop: '12px', fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Last action: <strong>{lastAction}</strong></p>}
     </div>
   )
@@ -94,67 +112,44 @@ export const MenuDemo = () => {
 </div>
 
 ```tsx
+import { Menu, MenuItem, MenuDivider } from 'intent-react';
+
 <Menu>
   <MenuItem icon="✏️">Edit</MenuItem>
   <MenuItem icon="📋">Duplicate</MenuItem>
   <MenuDivider />
-  <MenuItem icon="🗑️">Delete</MenuItem>
+  <MenuItem icon="🗑️" destructive>Delete</MenuItem>
 </Menu>
 ```
 
 ## Props
 
 ### Menu
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `trigger` | `ReactNode` | - | Menu trigger element |
 | `children` | `ReactNode` | - | Menu items |
 
 ### MenuItem
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `icon` | `ReactNode` | - | Optional icon |
+| `destructive` | `boolean` | `false` | Error color styling |
 | `onClick` | `() => void` | - | Click handler |
 | `children` | `ReactNode` | - | Item label |
 
 ### MenuDivider
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | - | - | - | Visual separator |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-menu {
-  position: absolute;
-  min-width: 200px;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-}
-
-.intent-menu__item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 10px 16px;
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 150ms;
-}
-
-.intent-menu__item:hover {
-  background: var(--intent-color-surface-hover);
-}
-
-.intent-menu__divider {
-  height: 1px;
-  background: var(--intent-color-border);
-  margin: 4px 0;
-}
-```
+- Menu uses **Elevated** archetype
+- Items use **Flat** archetype with hover state
+- Divider uses 1px border color
+- Destructive items use error color
+- Icons are optional but recommended

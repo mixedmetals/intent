@@ -1,60 +1,67 @@
 ---
 sidebar_position: 97
 ---
-import React from 'react';
 
 # Portal
 
 Render content outside the component tree.
 
-export const Portal = ({ children }) => {
-  // Portal implementation would use ReactDOM.createPortal
-  // This is a simplified demo
-  return (
-    <div style={{ 
-      position: 'fixed', 
-      bottom: '20px', 
-      right: '20px', 
-      padding: '16px 24px',
-      background: 'var(--intent-color-surface)',
-      border: '1px solid var(--intent-color-border)',
-      borderRadius: '8px',
-      boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-      zIndex: 9999
-    }}>
-      <div style={{ fontWeight: 600, marginBottom: '4px' }}>Portal Content</div>
-      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>
-        Rendered outside parent tree
-      </div>
-    </div>
-  )
-}
+## Overview
+
+Portals provide a way to render children into a DOM node that exists outside the hierarchy of the parent component. This is useful for modals, tooltips, and overlays.
 
 ## Examples
 
 ### Basic Portal
 
+```tsx
+import { Portal } from 'intent-react';
+
+<Portal>
+  <Modal />
+</Portal>
+```
+
+### To Specific Container
+
+```tsx
+<Portal container={document.getElementById('modal-root')}>
+  <Tooltip />
+</Portal>
+```
+
+### Demo
+
 <div className="intent-demo" style={{ minHeight: '100px' }}>
   <div style={{ padding: '16px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px' }}>
     <div>Parent container content</div>
     <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)', marginTop: '8px' }}>
-      Portal content appears fixed at bottom-right
+      Portal would render content outside this container
     </div>
   </div>
-  <Portal>
-    <div>Portal Content</div>
-  </Portal>
+  <div style={{ 
+    position: 'fixed', 
+    bottom: '20px', 
+    right: '20px', 
+    padding: '16px 24px',
+    background: 'var(--intent-color-surface)',
+    border: '1px solid var(--intent-color-border)',
+    borderRadius: '8px',
+    boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+    zIndex: 9999
+  }}>
+    <div style={{ fontWeight: 600, marginBottom: '4px' }}>Portal Content</div>
+    <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>
+      Rendered outside parent tree
+    </div>
+  </div>
 </div>
 
 ```tsx
-// Portal renders children to document.body
 <Portal>
-  <Modal />
-</Portal>
-
-// Or to a specific container
-<Portal container={document.getElementById('modal-root')}>
-  <Tooltip />
+  <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
+    Toast notification
+  </div>
 </Portal>
 ```
 
@@ -65,8 +72,10 @@ export const Portal = ({ children }) => {
 | `children` | `ReactNode` | - | Content to portal |
 | `container` | `Element` | `document.body` | Target container |
 
-## CSS Output
+## Design Notes
 
-```css
-/* Portal doesn't generate CSS - it moves DOM elements */
-```
+- Portal doesn't generate CSS
+- It moves DOM elements to the specified container
+- Useful for escaping overflow:hidden parents
+- Required for modals and overlays
+- Preserves React event bubbling

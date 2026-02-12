@@ -1,35 +1,12 @@
 ---
 sidebar_position: 99
 ---
-import React from 'react';
+
+import { Spacer } from 'intent-react/components/layout';
 
 # Spacer
 
 Flexible spacing component for layouts.
-
-export const Spacer = ({ size = 4 }) => {
-  const sizes = {
-    1: '4px',
-    2: '8px',
-    3: '12px',
-    4: '16px',
-    5: '20px',
-    6: '24px',
-    8: '32px',
-    10: '40px',
-    12: '48px',
-    16: '64px'
-  }
-  
-  return (
-    <div style={{ 
-      height: sizes[size] || `${size * 4}px`,
-      background: 'repeating-linear-gradient(45deg, transparent, transparent 5px, var(--intent-color-border) 5px, var(--intent-color-border) 6px)',
-      borderRadius: '4px',
-      opacity: 0.3
-    }} />
-  )
-}
 
 ## Examples
 
@@ -37,16 +14,20 @@ export const Spacer = ({ size = 4 }) => {
 
 <div className="intent-demo">
   <div>Content above</div>
-  <Spacer size={4} />
+  <div style={{ height: '16px', background: 'repeating-linear-gradient(45deg, transparent, transparent 5px, var(--intent-color-border) 5px, var(--intent-color-border) 6px)', borderRadius: '4px', opacity: 0.3, margin: '8px 0' }} />
   <div>Content below (16px gap)</div>
-  <Spacer size={8} />
+  <div style={{ height: '32px', background: 'repeating-linear-gradient(45deg, transparent, transparent 5px, var(--intent-color-border) 5px, var(--intent-color-border) 6px)', borderRadius: '4px', opacity: 0.3, margin: '8px 0' }} />
   <div>More content (32px gap)</div>
 </div>
 
 ```tsx
+import { Spacer } from 'intent-react/components/layout';
+
 <div>Content A</div>
 <Spacer size={4} />
 <div>Content B</div>
+<Spacer size={8} />
+<div>Content C</div>
 ```
 
 ### Horizontal Spacer
@@ -73,28 +54,24 @@ export const Spacer = ({ size = 4 }) => {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `number` | `4` | Spacer size (1-16) |
-| `flex` | `number` | - | Flex grow value |
+| `size` | `number` | `4` | Spacer size (1-16, multiples of 4px) |
+| `flex` | `number` | - | Flex grow value for horizontal spacing |
 
-## CSS Output
+## Size Scale
 
-```css
-.intent-spacer {
-  height: 16px; /* size-4 default */
-}
+| Size | Height |
+|------|--------|
+| 1 | 4px |
+| 2 | 8px |
+| 4 | 16px |
+| 6 | 24px |
+| 8 | 32px |
+| 12 | 48px |
+| 16 | 64px |
 
-.intent-spacer--size-1 { height: 4px; }
-.intent-spacer--size-2 { height: 8px; }
-.intent-spacer--size-3 { height: 12px; }
-.intent-spacer--size-4 { height: 16px; }
-.intent-spacer--size-5 { height: 20px; }
-.intent-spacer--size-6 { height: 24px; }
-.intent-spacer--size-8 { height: 32px; }
-.intent-spacer--size-10 { height: 40px; }
-.intent-spacer--size-12 { height: 48px; }
-.intent-spacer--size-16 { height: 64px; }
+## Design Notes
 
-.intent-spacer--flex {
-  flex: 1;
-}
-```
+- Uses **Flat** archetype (no bevel)
+- Size follows 4px grid system
+- Use `flex` prop for horizontal spacing in flex containers
+- Invisible by default (no background)

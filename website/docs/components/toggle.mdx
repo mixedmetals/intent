@@ -2,12 +2,21 @@
 sidebar_position: 74
 ---
 import React from 'react';
+import { Switch } from 'intent-react';
 
 # Toggle
 
-Two-state buttons that can be on or off.
+Two-state buttons that can be on or off. Uses the **Milled** archetype.
 
-export const Toggle = ({ children, defaultPressed = false, variant = 'default', disabled = false }) => {
+:::tip
+For boolean toggles, use the `Switch` component. For button groups, use `ToggleGroup`.
+:::
+
+export const ToggleDemo = (props) => {
+  const children = props.children
+  const defaultPressed = props.defaultPressed || false
+  const variant = props.variant || 'default'
+  const disabled = props.disabled || false
   const [pressed, setPressed] = React.useState(defaultPressed)
   
   const variants = {
@@ -18,7 +27,7 @@ export const Toggle = ({ children, defaultPressed = false, variant = 'default', 
     outline: {
       background: pressed ? 'var(--intent-color-primary)' : 'transparent',
       color: pressed ? 'white' : 'var(--intent-color-foreground)',
-      border: `1px solid ${pressed ? 'var(--intent-color-primary)' : 'var(--intent-color-border)'}`
+      border: '1px solid ' + (pressed ? 'var(--intent-color-primary)' : 'var(--intent-color-border)')
     }
   }
   
@@ -27,7 +36,7 @@ export const Toggle = ({ children, defaultPressed = false, variant = 'default', 
       aria-pressed={pressed}
       onClick={() => setPressed(!pressed)}
       disabled={disabled}
-      style={{
+      style={Object.assign({
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -38,9 +47,8 @@ export const Toggle = ({ children, defaultPressed = false, variant = 'default', 
         fontWeight: 500,
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.5 : 1,
-        transition: 'all 150ms',
-        ...variants[variant]
-      }}
+        transition: 'all 150ms'
+      }, variants[variant])}
     >
       {children}
     </button>
@@ -52,83 +60,56 @@ export const Toggle = ({ children, defaultPressed = false, variant = 'default', 
 ### Default Toggle
 
 <div className="intent-demo">
-  <Toggle>Italic</Toggle>
+  <ToggleDemo>Italic</ToggleDemo>
 </div>
 
 ```tsx
+import { Toggle } from 'intent-react';
+
 <Toggle>Italic</Toggle>
 ```
 
 ### Outline Variant
 
 <div className="intent-demo">
-  <Toggle variant="outline" defaultPressed>
-    Bold
-  </Toggle>
+  <ToggleDemo variant="outline">Bold</ToggleDemo>
 </div>
 
 ```tsx
-<Toggle variant="outline" defaultPressed>
-  Bold
-</Toggle>
+<Toggle variant="outline">Bold</Toggle>
 ```
 
-### With Icon
+### Use Switch for Boolean State
 
 <div className="intent-demo">
-  <Toggle defaultPressed>
-    <span>🔔</span>
-    <span>Notifications</span>
-  </Toggle>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+    <Switch />
+    <span>Enable notifications</span>
+  </div>
 </div>
 
 ```tsx
-<Toggle>
-  <BellIcon />
-  <span>Notifications</span>
-</Toggle>
+import { Switch } from 'intent-react';
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+  <Switch />
+  <span>Enable notifications</span>
+</div>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `defaultPressed` | `boolean` | `false` | Initial pressed state |
 | `pressed` | `boolean` | - | Controlled pressed state |
-| `defaultPressed` | `boolean` | `false` | Default pressed state |
-| `variant` | `'default' \| 'outline'` | `'default'` | Toggle style |
-| `disabled` | `boolean` | `false` | Disable toggle |
-| `onPressedChange` | `(pressed: boolean) => void` | - | State change handler |
-| `children` | `ReactNode` | - | Toggle content |
+| `onPressedChange` | `(pressed: boolean) => void` | - | State change callback |
+| `variant` | `'default' \| 'outline'` | `'default'` | Visual style |
+| `disabled` | `boolean` | `false` | Disabled state |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: var(--intent-radius-md);
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 150ms;
-  background: transparent;
-  border: 1px solid var(--intent-color-border);
-}
-
-.intent-toggle[data-state="on"] {
-  background: var(--intent-color-surface-elevated);
-}
-
-.intent-toggle--outline[data-state="on"] {
-  background: var(--intent-color-primary);
-  color: white;
-  border-color: var(--intent-color-primary);
-}
-
-.intent-toggle:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-```
+- Uses **Milled** archetype (slight bevel for tactile feel)
+- `aria-pressed` attribute for accessibility
+- Clear visual distinction between pressed/unpressed states
+- Works as standalone button or in ToggleGroup

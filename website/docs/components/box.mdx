@@ -4,106 +4,97 @@ sidebar_position: 31
 
 # Box
 
-Single element wrapper for spacing, borders, and backgrounds.
-
-export const Box = ({ children, padding, background, border, borderRadius, style }) => {
-  const paddingMap = { compact: '4px', normal: '8px', relaxed: '16px', loose: '24px' }
-  const bgMap = { 
-    surface: 'var(--intent-color-surface)', 
-    'surface-elevated': 'var(--intent-color-surface-elevated)',
-    transparent: 'transparent'
-  }
-  
-  return (
-    <div style={{
-      padding: padding ? paddingMap[padding] : undefined,
-      background: background ? bgMap[background] : undefined,
-      border: border ? '1px solid var(--intent-color-border)' : undefined,
-      borderRadius: borderRadius === 'sm' ? '4px' : borderRadius === 'md' ? '8px' : borderRadius === 'lg' ? '12px' : undefined,
-      ...style
-    }}>
-      {children}
-    </div>
-  )
-}
-
-export const Text = ({ children }) => <span className="intent-text">{children}</span>
+Single element wrapper for spacing, borders, and backgrounds. Generic layout primitive. Uses the **Flat** archetype.
 
 ## Examples
 
 ### Basic Box
 
 <div className="intent-demo">
-  <Box padding="normal" border>
-    <Text>Box provides a simple container with padding.</Text>
-  </Box>
+  <div style={{ padding: '16px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
+    Box provides a simple container with padding.
+  </div>
 </div>
 
 ```tsx
+import { Box } from 'intent-react/components/layout';
+
 <Box padding="normal" border>
-  <Text>Content goes here</Text>
+  Content goes here
 </Box>
 ```
 
-### With Background
+### Display Variants
 
 <div className="intent-demo">
-  <Box padding="relaxed" background="surface-elevated" border borderRadius="lg">
-    <Text>Surface elevated background</Text>
-  </Box>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ padding: '16px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px' }}>
+      Block display (default)
+    </div>
+    <div style={{ padding: '16px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px', display: 'flex' }}>
+      Flex display
+    </div>
+    <div style={{ padding: '16px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px', display: 'inline-block' }}>
+      Inline block
+    </div>
+  </div>
 </div>
 
 ```tsx
-<Box padding="relaxed" background="surface-elevated" border borderRadius="lg">
-  <Text>Surface elevated background</Text>
-</Box>
+<Box display="block">Block display</Box>
+<Box display="flex">Flex display</Box>
+<Box display="inline-block">Inline block</Box>
 ```
 
-### Padding Sizes
+### Width Options
 
 <div className="intent-demo">
-  <Box padding="compact" border style={{ marginBottom: '8px' }}>
-    <Text size="sm">Compact padding (4px)</Text>
-  </Box>
-  <Box padding="normal" border style={{ marginBottom: '8px' }}>
-    <Text size="sm">Normal padding (8px)</Text>
-  </Box>
-  <Box padding="relaxed" border>
-    <Text size="sm">Relaxed padding (16px)</Text>
-  </Box>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ width: '100%', padding: '16px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px' }}>
+      Full width
+    </div>
+    <div style={{ width: '50%', padding: '16px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px' }}>
+      Half width
+    </div>
+  </div>
 </div>
 
 ```tsx
-<Box padding="compact" border>...</Box>
-<Box padding="normal" border>...</Box>
-<Box padding="relaxed" border>...</Box>
+<Box width="full">Full width</Box>
+<Box width="1/2">Half width</Box>
+<Box width="1/3">Third width</Box>
+```
+
+### Positioning
+
+<div className="intent-demo" style={{ position: 'relative', height: '150px' }}>
+  <div style={{ position: 'absolute', inset: 0, background: 'var(--intent-color-surface-elevated)', borderRadius: '8px', padding: '16px' }}>
+    Absolute positioned, filling container
+  </div>
+</div>
+
+```tsx
+<Box position="absolute" inset="0">
+  Absolute positioned content
+</Box>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `padding` | `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | - | Inner padding |
-| `background` | `'surface'` \| `'surface-elevated'` \| `'transparent'` | - | Background color |
-| `border` | `boolean` | `false` | Show border |
-| `borderRadius` | `'sm'` \| `'md'` \| `'lg'` | - | Border radius |
+| `display` | `'block' \| 'inline' \| 'inline-block' \| 'flex' \| 'inline-flex' \| 'grid' \| 'none'` | `'block'` | Display type |
+| `position` | `'static' \| 'relative' \| 'absolute' \| 'fixed' \| 'sticky'` | `'static'` | Position type |
+| `width` | `'auto' \| 'full' \| 'screen' \| '1/2' \| '1/3' \| '1/4' \| ...` | `'auto'` | Width |
+| `height` | `'auto' \| 'full' \| 'screen' \| '1/2' \| '1/3' \| ...` | `'auto'` | Height |
+| `padding` | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'none'` | Padding |
+| `overflow` | `'visible' \| 'hidden' \| 'scroll' \| 'auto'` | `'visible'` | Overflow behavior |
+| `zIndex` | `'auto' \| '0' \| '10' \| '20' \| '30' \| '40' \| '50'` | `'auto'` | Z-index |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-box {
-  box-sizing: border-box;
-}
-
-.intent-box--padding-normal {
-  padding: var(--intent-spacing-normal);
-}
-
-.intent-box--background-surface {
-  background: var(--intent-color-surface);
-}
-
-.intent-box--border {
-  border: 1px solid var(--intent-color-border);
-}
-```
+- Uses **Flat** archetype (no bevel)
+- Generic layout primitive
+- All CSS properties available as props
+- Supports responsive values
+- No opinionated styling

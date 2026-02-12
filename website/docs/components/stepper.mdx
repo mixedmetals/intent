@@ -5,9 +5,9 @@ import React from 'react';
 
 # Stepper
 
-Multi-step process indicator.
+Multi-step process indicator. Uses the **Flat** archetype for step indicators.
 
-export const Stepper = ({ steps, currentStep = 0 }) => (
+export const StepperDemo = ({ steps, currentStep = 0 }) => (
   <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
     {steps.map((step, i) => {
       const isActive = i === currentStep
@@ -59,100 +59,69 @@ export const Stepper = ({ steps, currentStep = 0 }) => (
 
 ## Examples
 
-### Basic Stepper
+### Horizontal Stepper
 
 <div className="intent-demo">
-  <Stepper 
-    steps={['Account', 'Personal', 'Billing', 'Review']}
+  <StepperDemo 
+    steps={['Account', 'Profile', 'Review', 'Complete']} 
     currentStep={1}
   />
 </div>
 
 ```tsx
-<Stepper 
-  steps={['Account', 'Personal', 'Billing', 'Review']}
-  currentStep={1}
-/>
+import { Stepper, Step } from 'intent-react';
+
+<Stepper activeStep={1}>
+  <Step label="Account" />
+  <Step label="Profile" />
+  <Step label="Review" />
+  <Step label="Complete" />
+</Stepper>
 ```
 
-### Completed Steps
-
-<div className="intent-demo">
-  <Stepper 
-    steps={['Cart', 'Shipping', 'Payment', 'Confirm']}
-    currentStep={3}
-  />
-</div>
+### Vertical Stepper
 
 ```tsx
-<Stepper 
-  steps={['Cart', 'Shipping', 'Payment', 'Confirm']}
-  currentStep={3}
-/>
+<Stepper orientation="vertical" activeStep={1}>
+  <Step label="Select campaign settings" description="Step 1" />
+  <Step label="Create an ad group" description="Step 2" />
+  <Step label="Create an ad" description="Step 3" />
+</Stepper>
+```
+
+### With Error State
+
+```tsx
+<Stepper activeStep={1}>
+  <Step label="Account" completed />
+  <Step label="Profile" error />
+  <Step label="Review" />
+</Stepper>
 ```
 
 ## Props
 
+### Stepper
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `steps` | `string[]` | `[]` | Step labels |
-| `currentStep` | `number` | `0` | Active step index |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Stepper orientation |
+| `activeStep` | `number` | `0` | Current active step index |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Stepper direction |
+| `alternativeLabel` | `boolean` | `false` | Labels below steps |
 
-## CSS Output
+### Step
 
-```css
-.intent-stepper {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | Step label |
+| `description` | `string` | - | Step description |
+| `completed` | `boolean` | `false` | Completed state |
+| `error` | `boolean` | `false` | Error state |
 
-.intent-stepper__step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+## Design Notes
 
-.intent-stepper__indicator {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border: 2px solid var(--intent-color-border);
-  transition: all 200ms;
-}
-
-.intent-stepper__indicator--active {
-  background: var(--intent-color-primary);
-  border-color: var(--intent-color-primary);
-  color: white;
-}
-
-.intent-stepper__indicator--completed {
-  background: var(--intent-color-success);
-  border-color: var(--intent-color-success);
-  color: white;
-}
-
-.intent-stepper__label {
-  margin-top: 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.intent-stepper__connector {
-  flex: 1;
-  height: 2px;
-  background: var(--intent-color-border);
-  margin: 0 8px;
-}
-
-.intent-stepper__connector--completed {
-  background: var(--intent-color-success);
-}
-```
+- Step indicators use **Flat** archetype
+- Active step uses primary color
+- Completed steps use success color
+- Connecting lines show progress
+- Checkmark icon for completed steps

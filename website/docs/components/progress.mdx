@@ -2,48 +2,30 @@
 sidebar_position: 16
 ---
 
+import { Progress } from 'intent-react';
+import { VStack } from 'intent-react';
+
 # Progress
 
-Visual indicator for completion percentage.
-
-export const Progress = ({ value = 0, size = 'medium', label }) => {
-  const height = size === 'small' ? 4 : size === 'large' ? 12 : 8
-  return (
-    <div style={{ width: '100%' }}>
-      {label && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
-          <span>{label}</span>
-          <span>{value}%</span>
-        </div>
-      )}
-      <div style={{ width: '100%', height, background: 'var(--intent-color-border)', borderRadius: '9999px', overflow: 'hidden' }}>
-        <div style={{ width: `${value}%`, height: '100%', background: 'var(--intent-color-primary)', borderRadius: '9999px', transition: 'width 150ms ease' }} />
-      </div>
-    </div>
-  )
-}
-
-export const Stack = ({ children, gap = 'normal' }) => (
-  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`}>
-    {children}
-  </div>
-)
+Visual indicator for completion percentage. Uses the **Flat** archetype for the track and fill.
 
 ## Examples
 
 ### Basic Progress
 
 <div className="intent-demo">
-  <Stack gap="normal">
+  <VStack gap="normal">
     <Progress value={0} />
     <Progress value={25} />
     <Progress value={50} />
     <Progress value={75} />
     <Progress value={100} />
-  </Stack>
+  </VStack>
 </div>
 
 ```tsx
+import { Progress } from 'intent-react';
+
 <Progress value={0} />
 <Progress value={25} />
 <Progress value={50} />
@@ -64,43 +46,41 @@ export const Stack = ({ children, gap = 'normal' }) => (
 ### Sizes
 
 <div className="intent-demo">
-  <Stack gap="normal">
-    <Progress size="small" value={60} />
-    <Progress size="medium" value={60} />
-    <Progress size="large" value={60} />
-  </Stack>
+  <VStack gap="normal">
+    <Progress value={60} size="sm" />
+    <Progress value={60} size="md" />
+    <Progress value={60} size="lg" />
+  </VStack>
 </div>
 
 ```tsx
-<Progress size="small" value={60} />
-<Progress size="medium" value={60} />
-<Progress size="large" value={60} />
+<Progress value={60} size="sm" />
+<Progress value={60} size="md" />
+<Progress value={60} size="lg" />
+```
+
+### Indeterminate
+
+<div className="intent-demo">
+  <Progress indeterminate />
+</div>
+
+```tsx
+<Progress indeterminate />
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number` | `0` | Current progress (0-100) |
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Progress height |
-| `label` | `string` | - | Optional label text |
-| `variant` | `'default'` \| `'success'` \| `'warning'` \| `'danger'` | `'default'` | Color variant |
+| `value` | `number` | `0` | Current value (0-100) |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Progress bar height |
+| `label` | `string` | - | Label text |
+| `indeterminate` | `boolean` | `false` | Indeterminate animation |
 
-## CSS Output
+## Design Notes
 
-```css
-.progress__track {
-  width: 100%;
-  height: 8px;
-  background: var(--intent-color-border);
-  border-radius: 9999px;
-  overflow: hidden;
-}
-
-.progress__bar {
-  height: 100%;
-  background: var(--intent-color-primary);
-  border-radius: 9999px;
-  transition: width 150ms ease;
-}
-```
+- Track uses `var(--intent-color-surface-elevated)` for subtle background
+- Fill uses `var(--intent-color-primary)` for brand consistency
+- Smooth width transition on value change (150ms ease)
+- Border radius is fully rounded (`9999px`)

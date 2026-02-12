@@ -1,112 +1,110 @@
 ---
 sidebar_position: 30
 ---
-import React from 'react';
+
+import { Stat, StatLabel, StatValue, StatHelpText, StatGroup } from 'intent-react/components/data';
 
 # Stat
 
-Display statistics and metrics.
-
-export const Stat = ({ label, value, helpText, trend }) => (
-  <div style={{ padding: '16px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
-    <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginBottom: '4px' }}>{label}</div>
-    <div style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '4px' }}>{value}</div>
-    {helpText && <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{helpText}</div>}
-    {trend && (
-      <div style={{ 
-        fontSize: '0.875rem', 
-        color: trend > 0 ? 'var(--intent-color-success)' : 'var(--intent-color-error)',
-        marginTop: '4px',
-        fontWeight: 500
-      }}>
-        {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
-      </div>
-    )}
-  </div>
-)
-
-export const StatGroup = ({ children }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px' }}>
-    {children}
-  </div>
-)
+Display statistics and metrics. Uses the **Elevated** archetype.
 
 ## Examples
 
 ### Basic Stat
 
 <div className="intent-demo">
-  <Stat label="Total Users" value="2,543" helpText="All time registered users" trend={12.5} />
+  <div style={{ padding: '16px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
+    <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginBottom: '4px' }}>Total Users</div>
+    <div style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '4px' }}>2,543</div>
+    <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>All time registered users</div>
+    <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-success)', marginTop: '4px', fontWeight: 500 }}>↑ 12.5%</div>
+  </div>
 </div>
 
 ```tsx
-<Stat label="Total Users" value="2,543" trend={12.5} />
+import { Stat, StatLabel, StatValue, StatHelpText } from 'intent-react/components/data';
+
+<Stat>
+  <StatLabel>Total Users</StatLabel>
+  <StatValue>2,543</StatValue>
+  <StatHelpText>All time registered users</StatHelpText>
+</Stat>
 ```
 
 ### Stat Group
 
 <div className="intent-demo">
-  <StatGroup>
-    <Stat label="Revenue" value="$45,231" trend={8.2} />
-    <Stat label="Orders" value="1,234" trend={-3.1} />
-    <Stat label="Customers" value="892" trend={15.7} />
-    <Stat label="Conversion" value="3.2%" trend={0.5} />
-  </StatGroup>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px' }}>
+    <div style={{ padding: '16px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginBottom: '4px' }}>Revenue</div>
+      <div style={{ fontSize: '1.5rem', fontWeight: 600 }}>$45,231</div>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-success)', marginTop: '4px' }}>↑ 8.2%</div>
+    </div>
+    <div style={{ padding: '16px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginBottom: '4px' }}>Orders</div>
+      <div style={{ fontSize: '1.5rem', fontWeight: 600 }}>1,234</div>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-error)', marginTop: '4px' }}>↓ 3.1%</div>
+    </div>
+    <div style={{ padding: '16px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginBottom: '4px' }}>Customers</div>
+      <div style={{ fontSize: '1.5rem', fontWeight: 600 }}>892</div>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-success)', marginTop: '4px' }}>↑ 15.7%</div>
+    </div>
+  </div>
 </div>
 
 ```tsx
+import { StatGroup, Stat, StatLabel, StatValue } from 'intent-react/components/data';
+
 <StatGroup>
-  <Stat label="Revenue" value="$45,231" trend={8.2} />
-  <Stat label="Orders" value="1,234" trend={-3.1} />
-  <Stat label="Customers" value="892" trend={15.7} />
+  <Stat>
+    <StatLabel>Revenue</StatLabel>
+    <StatValue>$45,231</StatValue>
+  </Stat>
+  <Stat>
+    <StatLabel>Orders</StatLabel>
+    <StatValue>1,234</StatValue>
+  </Stat>
 </StatGroup>
 ```
 
 ## Props
 
 ### Stat
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `string` | - | Stat label |
-| `value` | `string \| number` | - | Stat value |
-| `helpText` | `string` | - | Help text below value |
-| `trend` | `number` | - | Trend percentage (positive/negative) |
+| `children` | `ReactNode` | - | Stat content |
+
+### StatLabel
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Label text |
+
+### StatValue
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Value text |
+
+### StatHelpText
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Help text |
 
 ### StatGroup
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `children` | `ReactNode` | - | Stat components |
+| `columns` | `number` | - | Number of columns |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-stat {
-  padding: 16px;
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  background: var(--intent-color-surface);
-}
-
-.intent-stat__label {
-  font-size: 0.875rem;
-  color: var(--intent-color-muted);
-}
-
-.intent-stat__value {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.intent-stat__trend {
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.intent-stat__trend--positive {
-  color: var(--intent-color-success);
-}
-
-.intent-stat__trend--negative {
-  color: var(--intent-color-error);
-}
-```
+- Uses **Elevated** archetype (subtle border)
+- Label uses muted color
+- Value uses large, bold text
+- Trend indicators use success/error colors
+- StatGroup uses auto-fit grid

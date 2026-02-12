@@ -1,15 +1,34 @@
 ---
 sidebar_position: 68
 ---
-
 import React from 'react';
 
 # NavigationMenu
 
-Top-level navigation with dropdowns.
+Top-level navigation with dropdowns. Uses the **Flat** archetype.
 
-export const NavigationMenu = ({ items }) => {
+export const NavigationMenuDemo = () => {
   const [activeMenu, setActiveMenu] = React.useState(null)
+  
+  const items = [
+    { 
+      label: 'Products', 
+      children: [
+        { label: 'Overview', description: 'Learn about our products' },
+        { label: 'Features', description: 'Explore capabilities' },
+        { label: 'Pricing', description: 'View plans and pricing' }
+      ] 
+    },
+    { 
+      label: 'Resources', 
+      children: [
+        { label: 'Documentation' },
+        { label: 'Tutorials' },
+        { label: 'Blog' }
+      ] 
+    },
+    { label: 'Pricing' }
+  ]
   
   return (
     <nav style={{ display: 'flex', gap: '4px' }}>
@@ -57,7 +76,7 @@ export const NavigationMenu = ({ items }) => {
                   {item.children.map((child, j) => (
                     <a
                       key={j}
-                      href={child.href}
+                      href="#"
                       style={{
                         display: 'block',
                         padding: '8px 12px',
@@ -79,22 +98,20 @@ export const NavigationMenu = ({ items }) => {
               )}
             </>
           ) : (
-            <a 
-              href={item.href} 
+            <button 
               style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '4px', 
                 padding: '8px 12px', 
                 borderRadius: '6px', 
-                textDecoration: 'none', 
+                border: 'none',
+                background: 'transparent',
                 color: 'var(--intent-color-foreground)',
+                cursor: 'pointer',
                 fontSize: '0.875rem',
                 fontWeight: 500
               }}
             >
               {item.label}
-            </a>
+            </button>
           )}
         </div>
       ))}
@@ -104,101 +121,44 @@ export const NavigationMenu = ({ items }) => {
 
 ## Examples
 
-### Navigation with Dropdowns
+### Basic Navigation
 
 <div className="intent-demo">
-  <NavigationMenu 
-    items={[
-      { label: 'Home', href: '/' },
-      { label: 'Products', href: '/products' },
-      { 
-        label: 'Resources', 
-        children: [
-          { label: 'Documentation', href: '/docs', description: 'Learn how to use Intent' },
-          { label: 'API Reference', href: '/api', description: 'Browse the API' },
-          { label: 'Examples', href: '/examples', description: 'See real-world usage' }
-        ]
-      },
-      { 
-        label: 'Company', 
-        children: [
-          { label: 'About', href: '/about' },
-          { label: 'Blog', href: '/blog' },
-          { label: 'Careers', href: '/careers' }
-        ]
-      }
-    ]}
-  />
+  <NavigationMenuDemo />
 </div>
 
 ```tsx
-<NavigationMenu 
-  items={[
-    { label: 'Home', href: '/' },
-    { 
-      label: 'Products', 
-      children: [
-        { label: 'Features', href: '/features', description: '...' },
-        { label: 'Pricing', href: '/pricing' }
-      ]
-    }
-  ]}
-/>
+import { NavigationMenu, NavigationMenuItem } from 'intent-react';
+
+<NavigationMenu>
+  <NavigationMenuItem label="Products">
+    <a href="/overview">Overview</a>
+    <a href="/features">Features</a>
+  </NavigationMenuItem>
+  <NavigationMenuItem label="Pricing" href="/pricing" />
+</NavigationMenu>
 ```
 
 ## Props
 
+### NavigationMenu
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `Array<{label: string, href?: string, children?: Array<{label: string, href: string, description?: string}>}>` | `[]` | Navigation items |
+| `children` | `ReactNode` | - | Navigation items |
 
-## CSS Output
+### NavigationMenuItem
 
-```css
-.intent-navigation-menu {
-  display: flex;
-  gap: 4px;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | Item label |
+| `href` | `string` | - | Link URL (if no children) |
+| `children` | `ReactNode` | - | Dropdown content |
 
-.intent-navigation-menu__link {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  border-radius: var(--intent-radius-md);
-  text-decoration: none;
-  color: var(--intent-color-foreground);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
+## Design Notes
 
-.intent-navigation-menu__dropdown {
-  position: absolute;
-  top: 100%;
-  min-width: 200px;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-  padding: 8px;
-}
-
-.intent-navigation-menu__dropdown-item {
-  display: block;
-  padding: 8px 12px;
-  border-radius: var(--intent-radius-md);
-  text-decoration: none;
-  color: var(--intent-color-foreground);
-  font-size: 0.875rem;
-}
-
-.intent-navigation-menu__dropdown-item:hover {
-  background: var(--intent-color-surface-hover);
-}
-
-.intent-navigation-menu__dropdown-description {
-  font-size: 0.75rem;
-  color: var(--intent-color-muted);
-}
-```
+- Uses **Flat** archetype
+- Dropdown uses **Elevated** with shadow
+- Hover state shows dropdown
+- Supports links with descriptions
+- Responsive on mobile

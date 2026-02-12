@@ -2,94 +2,73 @@
 sidebar_position: 4
 ---
 
+import { Spinner } from 'intent-react';
+import { Button } from 'intent-react';
+import { HStack } from 'intent-react';
+
 # Spinner
 
-Loading indicator with multiple sizes.
-
-export const Spinner = ({ size = 'medium', color = 'primary' }) => (
-  <span className={`intent-spinner intent-spinner--size-${size} intent-spinner--color-${color}`} role="status" aria-label="Loading" />
-)
-
-export const Stack = ({ children, direction = 'row', gap = 'normal', align, style }) => (
-  <div className={`intent-stack intent-stack--direction-${direction} intent-stack--gap-${gap} ${align ? `intent-stack--align-${align}` : ''}`} style={style}>
-    {children}
-  </div>
-)
-
-export const Button = ({ children, importance = 'secondary', size = 'medium', disabled, ...props }) => (
-  <button className={`intent-button intent-button--importance-${importance} intent-button--size-${size}`} disabled={disabled} {...props}>
-    {children}
-  </button>
-)
+Loading indicator with multiple sizes. Uses the **Flat** archetype (no bevel).
 
 ## Examples
 
 ### Sizes
 
 <div className="intent-demo">
-  <Stack direction="row" gap="normal" align="center">
-    <Spinner size="small" />
-    <Spinner size="medium" />
-    <Spinner size="large" />
-  </Stack>
+  <HStack gap="normal" align="center">
+    <Spinner size="sm" />
+    <Spinner size="md" />
+    <Spinner size="lg" />
+  </HStack>
 </div>
 
 ```tsx
-<Spinner size="small" />
-<Spinner size="medium" />
-<Spinner size="large" />
+import { Spinner } from 'intent-react';
+
+<Spinner size="sm" />
+<Spinner size="md" />
+<Spinner size="lg" />
 ```
 
 ### Inside Button
 
 <div className="intent-demo">
-  <Stack direction="row" gap="normal">
-    <Button disabled>
-      <Spinner size="small" color="secondary" />
+  <HStack gap="normal">
+    <Button importance="secondary" disabled>
+      <Spinner size="sm" />
       <span style={{ marginLeft: 8 }}>Loading...</span>
     </Button>
-  </Stack>
+  </HStack>
 </div>
 
 ```tsx
 <Button disabled>
-  <Spinner size="small" color="secondary" />
+  <Spinner size="sm" />
   Loading...
 </Button>
+```
+
+### Colors
+
+<div className="intent-demo">
+  <HStack gap="normal" align="center">
+    <Spinner color="primary" />
+    <Spinner color="secondary" />
+    <div style={{ background: 'var(--intent-color-primary)', padding: '8px', borderRadius: '4px' }}>
+      <Spinner color="white" />
+    </div>
+  </HStack>
+</div>
+
+```tsx
+<Spinner color="primary" />
+<Spinner color="secondary" />
+<Spinner color="white" />
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Spinner size |
-| `color` | `'primary'` \| `'secondary'` \| `'muted'` | `'primary'` | Color variant |
-
-## Accessibility
-
-- Includes `aria-label="Loading"` by default
-- Set `aria-busy="true"` on parent container
-- Provide text alternative when visible
-
-```tsx
-<div aria-busy="true" aria-live="polite">
-  <Spinner aria-label="Loading posts" />
-  <span className="sr-only">Loading posts...</span>
-</div>
-```
-
-## CSS Output
-
-```css
-.intent-spinner {
-  display: inline-block;
-  border: 2px solid var(--intent-color-border);
-  border-top-color: var(--intent-color-primary);
-  border-radius: 50%;
-  animation: intent-spinner-spin 1s linear infinite;
-}
-
-@keyframes intent-spinner-spin {
-  to { transform: rotate(360deg); }
-}
-```
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Spinner size |
+| `color` | `'primary' \| 'secondary' \| 'white'` | `'primary'` | Spinner color |

@@ -5,11 +5,19 @@ import React from 'react';
 
 # Search
 
-Search input with autocomplete.
+Search input with autocomplete. Uses the **Milled** archetype for the input.
 
-export const Search = ({ placeholder = "Search...", suggestions = [] }) => {
+export const SearchDemo = ({ placeholder = "Search..." }) => {
   const [query, setQuery] = React.useState('')
   const [isOpen, setIsOpen] = React.useState(false)
+  
+  const suggestions = [
+    'Button component',
+    'Card layout',
+    'Modal dialog',
+    'Form validation',
+    'Toast notifications'
+  ]
   
   const filtered = suggestions.filter(s => 
     s.toLowerCase().includes(query.toLowerCase())
@@ -86,8 +94,8 @@ export const Search = ({ placeholder = "Search...", suggestions = [] }) => {
                 cursor: 'pointer',
                 fontSize: '0.875rem'
               }}
-              onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
-              onMouseLeave={(e) => e.target.style.background = 'none'}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'var(--intent-color-surface-hover)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
             >
               <span>🔍</span>
               <span>{suggestion}</span>
@@ -104,24 +112,25 @@ export const Search = ({ placeholder = "Search...", suggestions = [] }) => {
 ### Search with Suggestions
 
 <div className="intent-demo">
-  <Search 
-    placeholder="Search components..."
-    suggestions={[
-      'Button component',
-      'Card layout',
-      'Modal dialog',
-      'Form validation',
-      'Toast notifications',
-      'Dropdown menu',
-      'Tabs navigation'
-    ]}
-  />
+  <SearchDemo placeholder="Search components..." />
 </div>
 
 ```tsx
+import { Search } from 'intent-react';
+
 <Search 
   placeholder="Search..."
   suggestions={['Item 1', 'Item 2', 'Item 3']}
+/>
+```
+
+### Command Palette Style
+
+```tsx
+<Search 
+  placeholder="Search commands..."
+  shortcut="⌘K"
+  onSearch={handleSearch}
 />
 ```
 
@@ -134,54 +143,12 @@ export const Search = ({ placeholder = "Search...", suggestions = [] }) => {
 | `suggestions` | `string[]` | `[]` | Autocomplete suggestions |
 | `onSearch` | `(query: string) => void` | - | Search handler |
 | `onSelect` | `(value: string) => void` | - | Selection handler |
+| `shortcut` | `string` | - | Keyboard shortcut hint |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-search {
-  position: relative;
-  width: 100%;
-}
-
-.intent-search__input {
-  width: 100%;
-  padding: 10px 12px 10px 40px;
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  font-size: 0.875rem;
-  background: var(--intent-color-surface);
-}
-
-.intent-search__icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--intent-color-muted);
-}
-
-.intent-search__shortcut {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: var(--intent-color-muted);
-  padding: 2px 6px;
-  background: var(--intent-color-surface-elevated);
-  border-radius: var(--intent-radius-sm);
-}
-
-.intent-search__suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: 8px;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-}
-```
+- Input uses **Milled** archetype
+- Search icon positioned absolutely on left
+- Shortcut hint on right side
+- Dropdown uses **Elevated** archetype
+- Hover state on suggestions

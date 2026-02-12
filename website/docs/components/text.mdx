@@ -2,45 +2,31 @@
 sidebar_position: 7
 ---
 
+import { Text } from 'intent-react';
+import { VStack, HStack } from 'intent-react';
+
 # Text
 
 Typography component for consistent text styling.
-
-export const Text = ({ children, size = 'base', weight, color = 'default', align, truncate }) => {
-  const className = [
-    'intent-text',
-    `intent-text--size-${size}`,
-    `intent-text--color-${color}`,
-    weight && `intent-text--weight-${weight}`,
-    align && `intent-text--align-${align}`,
-    truncate && 'intent-text--truncate'
-  ].filter(Boolean).join(' ')
-  
-  return <span className={className}>{children}</span>
-}
-
-export const Stack = ({ children, gap = 'normal' }) => (
-  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`}>
-    {children}
-  </div>
-)
 
 ## Examples
 
 ### Sizes
 
 <div className="intent-demo">
-  <Stack gap="normal">
+  <VStack gap="normal">
     <Text size="xs">Extra Small - Fine print, captions</Text>
     <Text size="sm">Small - Secondary information</Text>
     <Text size="base">Base - Body text (default)</Text>
     <Text size="lg">Large - Lead paragraphs</Text>
     <Text size="xl">Extra Large - Subheadings</Text>
     <Text size="2xl">2XL - Section titles</Text>
-  </Stack>
+  </VStack>
 </div>
 
 ```tsx
+import { Text } from 'intent-react';
+
 <Text size="xs">Extra Small</Text>
 <Text size="sm">Small</Text>
 <Text size="base">Base (default)</Text>
@@ -52,12 +38,12 @@ export const Stack = ({ children, gap = 'normal' }) => (
 ### Weights
 
 <div className="intent-demo">
-  <Stack direction="row" gap="relaxed">
+  <HStack gap="relaxed">
     <Text weight="normal">Normal</Text>
     <Text weight="medium">Medium</Text>
     <Text weight="semibold">Semibold</Text>
     <Text weight="bold">Bold</Text>
-  </Stack>
+  </HStack>
 </div>
 
 ```tsx
@@ -70,14 +56,14 @@ export const Stack = ({ children, gap = 'normal' }) => (
 ### Colors
 
 <div className="intent-demo">
-  <Stack gap="normal">
-    <Text color="default">Default text color</Text>
-    <Text color="muted">Muted text for secondary content</Text>
-    <Text color="primary">Primary brand color</Text>
-    <Text color="success">Success state</Text>
-    <Text color="warning">Warning state</Text>
-    <Text color="danger">Danger/error state</Text>
-  </Stack>
+  <VStack gap="normal">
+    <Text color="default">Default text</Text>
+    <Text color="muted">Muted text</Text>
+    <Text color="primary">Primary text</Text>
+    <Text color="success">Success text</Text>
+    <Text color="warning">Warning text</Text>
+    <Text color="error">Error text</Text>
+  </VStack>
 </div>
 
 ```tsx
@@ -86,73 +72,28 @@ export const Stack = ({ children, gap = 'normal' }) => (
 <Text color="primary">Primary</Text>
 <Text color="success">Success</Text>
 <Text color="warning">Warning</Text>
-<Text color="danger">Danger</Text>
-```
-
-### Alignment
-
-<div className="intent-demo">
-  <Stack gap="normal">
-    <Text align="left">Left aligned (default)</Text>
-    <Text align="center">Center aligned</Text>
-    <Text align="right">Right aligned</Text>
-  </Stack>
-</div>
-
-```tsx
-<Text align="left">Left aligned</Text>
-<Text align="center">Center aligned</Text>
-<Text align="right">Right aligned</Text>
+<Text color="error">Error</Text>
 ```
 
 ### Truncate
 
-<div className="intent-demo" style={{ width: 300 }}>
-  <Text truncate>
+<div className="intent-demo">
+  <Text truncate style={{ maxWidth: '300px' }}>
     This is a very long text that will be truncated with an ellipsis when it exceeds the container width.
   </Text>
 </div>
 
 ```tsx
-<Text truncate>
-  This is a very long text that will be truncated...
-</Text>
+<Text truncate>This long text will be truncated...</Text>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `'xs'` \| `'sm'` \| `'base'` \| `'lg'` \| `'xl'` \| `'2xl'` \| `'3xl'` \| `'4xl'` | `'base'` | Font size |
-| `weight` | `'normal'` \| `'medium'` \| `'semibold'` \| `'bold'` | `'normal'` | Font weight |
-| `color` | `'default'` \| `'muted'` \| `'primary'` \| `'success'` \| `'warning'` \| `'danger'` | `'default'` | Text color |
-| `align` | `'left'` \| `'center'` \| `'right'` | `'left'` | Text alignment |
-| `truncate` | `boolean` | `false` | Single line with ellipsis |
-| `as` | `'p'` \| `'span'` \| `'div'` \| `'label'` | `'span'` | HTML element |
-
-## CSS Output
-
-```css
-.intent-text {
-  font-family: var(--intent-font-sans);
-  line-height: 1.5;
-}
-
-.intent-text--size-base {
-  font-size: var(--intent-font-size-base);
-}
-
-.intent-text--weight-medium {
-  font-weight: 500;
-}
-
-.intent-text--color-muted {
-  color: var(--intent-color-text-muted);
-}
-
-.intent-text--truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-```
+| `size` | `'xs' \| 'sm' \| 'base' \| 'lg' \| 'xl' \| '2xl' \| '3xl' \| '4xl'` | `'base'` | Text size |
+| `weight` | `'normal' \| 'medium' \| 'semibold' \| 'bold'` | - | Font weight |
+| `color` | `'default' \| 'muted' \| 'primary' \| 'success' \| 'warning' \| 'error'` | `'default'` | Text color |
+| `align` | `'left' \| 'center' \| 'right'` | - | Text alignment |
+| `truncate` | `boolean` | `false` | Truncate with ellipsis |
+| `as` | `keyof JSX.IntrinsicElements` | `'span'` | HTML element to render |

@@ -1,106 +1,121 @@
 ---
 sidebar_position: 91
 ---
-import React from 'react';
 
 # Notification
 
-Toast notifications and alerts.
+Toast notifications and alerts. Uses the **Elevated** archetype.
 
-export const Notification = ({ title, message, variant = 'info', onClose }) => {
-  const variants = {
-    info: { icon: 'ℹ️', background: '#eff6ff', border: '#bfdbfe', color: '#1e40af' },
-    success: { icon: '✓', background: '#f0fdf4', border: '#bbf7d0', color: '#166534' },
-    warning: { icon: '⚠️', background: '#fffbeb', border: '#fde68a', color: '#92400e' },
-    error: { icon: '✕', background: '#fef2f2', border: '#fecaca', color: '#991b1b' }
-  }
-  
-  const v = variants[variant]
-  
-  return (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'flex-start', 
-      gap: '12px', 
-      padding: '16px',
-      background: v.background,
-      border: `1px solid ${v.border}`,
-      borderRadius: '8px',
-      color: v.color
-    }}>
-      <span style={{ fontSize: '1.125rem' }}>{v.icon}</span>
-      <div style={{ flex: 1 }}>
-        <div style={{ fontWeight: 600, marginBottom: '4px' }}>{title}</div>
-        <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>{message}</div>
-      </div>
-      {onClose && (
-        <button 
-          onClick={onClose}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: v.color }}
-        >
-          ×
-        </button>
-      )}
-    </div>
-  )
-}
+:::tip
+Use the `useToast` hook for displaying notifications programmatically.
+:::
 
 ## Examples
 
 ### Info Notification
 
 <div className="intent-demo">
-  <Notification 
-    title="Information"
-    message="Your settings have been saved successfully."
-    variant="info"
-  />
+  <div style={{ 
+    display: 'flex', 
+    alignItems: 'flex-start', 
+    gap: '12px', 
+    padding: '16px',
+    background: 'var(--intent-color-surface)',
+    border: '1px solid var(--intent-color-border)',
+    borderRadius: '8px'
+  }}>
+    <span style={{ fontSize: '1.125rem' }}>ℹ️</span>
+    <div style={{ flex: 1 }}>
+      <div style={{ fontWeight: 600, marginBottom: '4px' }}>Information</div>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Your settings have been saved successfully.</div>
+    </div>
+  </div>
 </div>
 
 ```tsx
-<Notification 
-  title="Information"
-  message="Your settings have been saved."
-  variant="info"
-/>
+import { useToast } from 'intent-react';
+
+const toast = useToast();
+
+toast({
+  title: "Information",
+  description: "Your settings have been saved.",
+  status: "info"
+});
 ```
 
 ### Success with Close
 
 <div className="intent-demo">
-  <Notification 
-    title="Success!"
-    message="Your account has been created."
-    variant="success"
-    onClose={() => {}}
-  />
+  <div style={{ 
+    display: 'flex', 
+    alignItems: 'flex-start', 
+    gap: '12px', 
+    padding: '16px',
+    background: 'var(--intent-color-surface)',
+    border: '1px solid var(--intent-color-border)',
+    borderRadius: '8px'
+  }}>
+    <span style={{ fontSize: '1.125rem', color: 'var(--intent-color-success)' }}>✓</span>
+    <div style={{ flex: 1 }}>
+      <div style={{ fontWeight: 600, marginBottom: '4px' }}>Success!</div>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Your account has been created.</div>
+    </div>
+    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: 'var(--intent-color-muted)' }}>×</button>
+  </div>
 </div>
 
 ```tsx
-<Notification 
-  title="Success!"
-  message="Your account has been created."
-  variant="success"
-  onClose={() => setShow(false)}
-/>
+toast({
+  title: "Success!",
+  description: "Your account has been created.",
+  status: "success",
+  isClosable: true
+});
 ```
 
 ### Error Notification
 
 <div className="intent-demo">
-  <Notification 
-    title="Error"
-    message="Something went wrong. Please try again."
-    variant="error"
-  />
+  <div style={{ 
+    display: 'flex', 
+    alignItems: 'flex-start', 
+    gap: '12px', 
+    padding: '16px',
+    background: 'var(--intent-color-surface)',
+    border: '1px solid var(--intent-color-border)',
+    borderRadius: '8px'
+  }}>
+    <span style={{ fontSize: '1.125rem', color: 'var(--intent-color-error)' }}>✕</span>
+    <div style={{ flex: 1 }}>
+      <div style={{ fontWeight: 600, marginBottom: '4px' }}>Error</div>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Something went wrong. Please try again.</div>
+    </div>
+  </div>
 </div>
 
 ```tsx
-<Notification 
-  title="Error"
-  message="Something went wrong."
-  variant="error"
-/>
+toast({
+  title: "Error",
+  description: "Something went wrong.",
+  status: "error"
+});
+```
+
+## useToast Hook
+
+```tsx
+import { useToast, Button } from 'intent-react';
+
+function Example() {
+  const toast = useToast();
+  
+  return (
+    <Button onClick={() => toast({ title: "Hello!", status: "info" })}>
+      Show Toast
+    </Button>
+  );
+}
 ```
 
 ## Props
@@ -108,42 +123,16 @@ export const Notification = ({ title, message, variant = 'info', onClose }) => {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `title` | `string` | - | Notification title |
-| `message` | `string` | - | Notification message |
-| `variant` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | Notification style |
-| `onClose` | `() => void` | - | Close handler |
+| `description` | `string` | - | Notification message |
+| `status` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | Notification style |
+| `duration` | `number` | `5000` | Auto-dismiss duration (ms) |
+| `isClosable` | `boolean` | `true` | Show close button |
+| `position` | `'top' \| 'bottom' \| 'top-right' \| ...` | `'bottom'` | Position on screen |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-notification {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 16px;
-  border-radius: var(--intent-radius-md);
-}
-
-.intent-notification--info {
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  color: #1e40af;
-}
-
-.intent-notification--success {
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #166534;
-}
-
-.intent-notification--warning {
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  color: #92400e;
-}
-
-.intent-notification--error {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
-}
-```
+- Uses **Elevated** archetype
+- Status icons use semantic colors
+- Close button on the right
+- Auto-dismisses after duration
+- Supports multiple positions

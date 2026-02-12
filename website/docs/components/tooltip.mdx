@@ -2,51 +2,12 @@
 sidebar_position: 17
 ---
 
-import React from 'react';
+import { Tooltip } from 'intent-react';
+import { Button } from 'intent-react';
 
 # Tooltip
 
-Hover-activated information popup.
-
-export const Tooltip = ({ content, position = 'top', children }) => {
-  const [isVisible, setIsVisible] = React.useState(false)
-  
-  const getPositionStyles = () => {
-    switch(position) {
-      case 'top': return { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: '8px' }
-      case 'bottom': return { top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: '8px' }
-      case 'left': return { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: '8px' }
-      case 'right': return { left: '100%', top: '50%', transform: 'translateY(-50%)', marginLeft: '8px' }
-      default: return { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: '8px' }
-    }
-  }
-  
-  return (
-    <div 
-      style={{ position: 'relative', display: 'inline-block' }}
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
-    >
-      {children}
-      {isVisible && (
-        <div style={{
-          position: 'absolute',
-          padding: '8px 12px',
-          background: 'var(--intent-color-foreground)',
-          color: 'var(--intent-color-background)',
-          fontSize: '0.875rem',
-          borderRadius: '6px',
-          whiteSpace: 'nowrap',
-          zIndex: 50,
-          pointerEvents: 'none',
-          ...getPositionStyles()
-        }}>
-          {content}
-        </div>
-      )}
-    </div>
-  )
-}
+Hover-activated information popup. Uses the **Elevated** archetype for the tooltip panel.
 
 ## Examples
 
@@ -56,11 +17,13 @@ Hover over the button:
 
 <div className="intent-demo">
   <Tooltip content="Click to save your changes">
-    <button className="intent-btn intent-btn--variant-primary intent-btn--size-medium">Hover Me</button>
+    <Button importance="primary">Hover Me</Button>
   </Tooltip>
 </div>
 
 ```tsx
+import { Tooltip, Button } from 'intent-react';
+
 <Tooltip content="Click to save your changes">
   <Button>Hover Me</Button>
 </Tooltip>
@@ -70,17 +33,17 @@ Hover over the button:
 
 <div className="intent-demo">
   <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
-    <Tooltip content="Top position" position="top">
-      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-small">Top</button>
+    <Tooltip content="Top tooltip" position="top">
+      <Button importance="secondary">Top</Button>
     </Tooltip>
-    <Tooltip content="Right position" position="right">
-      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-small">Right</button>
+    <Tooltip content="Right tooltip" position="right">
+      <Button importance="secondary">Right</Button>
     </Tooltip>
-    <Tooltip content="Bottom position" position="bottom">
-      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-small">Bottom</button>
+    <Tooltip content="Bottom tooltip" position="bottom">
+      <Button importance="secondary">Bottom</Button>
     </Tooltip>
-    <Tooltip content="Left position" position="left">
-      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-small">Left</button>
+    <Tooltip content="Left tooltip" position="left">
+      <Button importance="secondary">Left</Button>
     </Tooltip>
   </div>
 </div>
@@ -92,22 +55,19 @@ Hover over the button:
 <Tooltip content="Left" position="left">...</Tooltip>
 ```
 
-### With Icons
+### With Icon Button
 
 <div className="intent-demo">
-  <div style={{ display: 'flex', gap: '16px' }}>
-    <Tooltip content="Add to favorites">
-      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium">❤️ Like</button>
-    </Tooltip>
-    <Tooltip content="Share this page">
-      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium">📤 Share</button>
-    </Tooltip>
-  </div>
+  <Tooltip content="Add to favorites">
+    <button style={{ padding: '8px', borderRadius: '6px', border: '1px solid var(--intent-color-border)', background: 'transparent', cursor: 'pointer' }}>
+      ⭐
+    </button>
+  </Tooltip>
 </div>
 
 ```tsx
 <Tooltip content="Add to favorites">
-  <Button icon="heart">Like</Button>
+  <IconButton icon="star" />
 </Tooltip>
 ```
 
@@ -115,26 +75,15 @@ Hover over the button:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `content` | `string` | - | Tooltip text |
-| `position` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` | Tooltip position |
-| `children` | `ReactNode` | - | Trigger element |
+| `content` | `ReactNode` | - | Tooltip content |
+| `position` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'` | Tooltip position |
+| `delay` | `number` | `200` | Show delay in ms |
+| `children` | `ReactElement` | - | Target element (must accept refs) |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.intent-tooltip__content {
-  position: absolute;
-  padding: 8px 12px;
-  background: var(--intent-color-foreground);
-  color: var(--intent-color-background);
-  font-size: 0.875rem;
-  border-radius: var(--intent-radius-md);
-  white-space: nowrap;
-  z-index: 50;
-}
-```
+- Tooltip uses **Elevated** archetype (floating above content)
+- Dark background with light text for contrast
+- Small border radius (6px)
+- Arrow points to trigger element
+- Respects safe area boundaries

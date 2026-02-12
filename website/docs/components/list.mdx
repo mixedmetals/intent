@@ -1,38 +1,13 @@
 ---
 sidebar_position: 29
 ---
-import React from 'react';
+
+import { List, ListItem } from 'intent-react';
+import { Card } from 'intent-react';
 
 # List
 
-Display lists of items with various styles.
-
-export const List = ({ children, variant = 'default' }) => (
-  <ul style={{ 
-    listStyle: 'none', 
-    padding: 0, 
-    margin: 0,
-    border: variant === 'bordered' ? '1px solid var(--intent-color-border)' : 'none',
-    borderRadius: variant === 'bordered' ? '8px' : '0',
-    overflow: 'hidden'
-  }}>
-    {children}
-  </ul>
-)
-
-export const ListItem = ({ children, icon, action }) => (
-  <li style={{ 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '12px', 
-    padding: '12px 16px',
-    borderBottom: '1px solid var(--intent-color-border)'
-  }}>
-    {icon && <span>{icon}</span>}
-    <span style={{ flex: 1 }}>{children}</span>
-    {action}
-  </li>
-)
+Display lists of items with various styles. Uses the **Flat** archetype.
 
 ## Examples
 
@@ -48,68 +23,60 @@ export const ListItem = ({ children, icon, action }) => (
 </div>
 
 ```tsx
+import { List, ListItem } from 'intent-react';
+
 <List>
   <ListItem>User Settings</ListItem>
   <ListItem>Notifications</ListItem>
 </List>
 ```
 
-### With Icons and Actions
+### Ordered List
 
 <div className="intent-demo">
-  <List variant="bordered">
-    <ListItem icon="👤" action={<button>→</button>}>Profile Settings</ListItem>
-    <ListItem icon="🔔" action={<button>→</button>}>Notifications</ListItem>
-    <ListItem icon="🔒" action={<button>→</button>}>Security</ListItem>
-    <ListItem icon="💳" action={<button>→</button>}>Billing</ListItem>
+  <List type="ordered">
+    <ListItem>Install dependencies</ListItem>
+    <ListItem>Configure settings</ListItem>
+    <ListItem>Deploy application</ListItem>
   </List>
 </div>
 
 ```tsx
-<List variant="bordered">
-  <ListItem icon="👤" action={<button>→</button>}>Profile</ListItem>
+<List type="ordered">
+  <ListItem>Install dependencies</ListItem>
+  <ListItem>Configure settings</ListItem>
+</List>
+```
+
+### With Icons
+
+<div className="intent-demo">
+  <List>
+    <ListItem icon="👤">Account Settings</ListItem>
+    <ListItem icon="🔔">Notifications</ListItem>
+    <ListItem icon="🔒">Privacy & Security</ListItem>
+  </List>
+</div>
+
+```tsx
+<List>
+  <ListItem icon="👤">Account Settings</ListItem>
+  <ListItem icon="🔔">Notifications</ListItem>
 </List>
 ```
 
 ## Props
 
 ### List
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'default' \| 'bordered'` | `'default'` | List style variant |
-| `children` | `ReactNode` | - | ListItem components |
+| `type` | `'unordered' \| 'ordered'` | `'unordered'` | List type |
+| `spacing` | `'compact' \| 'normal' \| 'relaxed'` | `'normal'` | Item spacing |
 
 ### ListItem
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `icon` | `ReactNode` | - | Optional icon |
-| `action` | `ReactNode` | - | Optional action element |
-| `children` | `ReactNode` | - | Item content |
-
-## CSS Output
-
-```css
-.intent-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.intent-list--bordered {
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  overflow: hidden;
-}
-
-.intent-list__item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--intent-color-border);
-}
-
-.intent-list__item:last-child {
-  border-bottom: none;
-}
-```
+| `icon` | `ReactNode` | - | Leading icon |
+| `action` | `ReactNode` | - | Trailing action |

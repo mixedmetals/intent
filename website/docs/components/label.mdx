@@ -2,27 +2,11 @@
 sidebar_position: 84
 ---
 
+import { Label } from 'intent-react';
+
 # Label
 
-Accessible form labels.
-
-export const Label = ({ children, required, htmlFor, disabled }) => (
-  <label 
-    htmlFor={htmlFor}
-    style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '4px',
-      fontSize: '0.875rem',
-      fontWeight: 500,
-      color: disabled ? 'var(--intent-color-muted)' : 'var(--intent-color-foreground)',
-      cursor: disabled ? 'not-allowed' : 'pointer'
-    }}
-  >
-    {children}
-    {required && <span style={{ color: 'var(--intent-color-error, #ef4444)' }}>*</span>}
-  </label>
-)
+Accessible form labels. Uses the **Flat** archetype with subtle styling.
 
 ## Examples
 
@@ -45,6 +29,8 @@ export const Label = ({ children, required, htmlFor, disabled }) => (
 </div>
 
 ```tsx
+import { Label, Input } from 'intent-react';
+
 <Label htmlFor="email">Email Address</Label>
 <Input id="email" type="email" />
 ```
@@ -69,31 +55,31 @@ export const Label = ({ children, required, htmlFor, disabled }) => (
 
 ```tsx
 <Label htmlFor="name" required>Name</Label>
-<Input id="name" required />
+<Input id="name" />
 ```
 
 ### Disabled State
 
 <div className="intent-demo">
-  <Label htmlFor="disabled" disabled>Disabled Field</Label>
+  <Label htmlFor="disabled" disabled>Disabled Label</Label>
   <input 
     id="disabled" 
     type="text" 
     disabled
-    placeholder="This field is disabled"
+    placeholder="Cannot edit"
     style={{ 
       marginTop: '4px', 
       width: '100%', 
       padding: '8px 12px', 
       border: '1px solid var(--intent-color-border)', 
       borderRadius: '6px',
-      opacity: 0.6
+      opacity: 0.5
     }} 
   />
 </div>
 
 ```tsx
-<Label htmlFor="disabled" disabled>Disabled Field</Label>
+<Label htmlFor="disabled" disabled>Disabled Label</Label>
 <Input id="disabled" disabled />
 ```
 
@@ -101,31 +87,6 @@ export const Label = ({ children, required, htmlFor, disabled }) => (
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `children` | `ReactNode` | - | Label text |
 | `htmlFor` | `string` | - | Associated input ID |
 | `required` | `boolean` | `false` | Show required indicator |
 | `disabled` | `boolean` | `false` | Disabled state styling |
-
-## CSS Output
-
-```css
-.intent-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--intent-color-foreground);
-  cursor: pointer;
-}
-
-.intent-label--required::after {
-  content: "*";
-  color: var(--intent-color-error);
-}
-
-.intent-label--disabled {
-  color: var(--intent-color-muted);
-  cursor: not-allowed;
-}
-```

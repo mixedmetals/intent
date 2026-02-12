@@ -1,113 +1,115 @@
 ---
 sidebar_position: 28
 ---
-import React from 'react';
+
+import { Timeline, TimelineItem } from 'intent-react/components/data';
 
 # Timeline
 
-Display chronological events.
-
-export const Timeline = ({ items }) => (
-  <div style={{ position: 'relative', paddingLeft: '24px' }}>
-    {items.map((item, i) => (
-      <div key={i} style={{ position: 'relative', paddingBottom: '24px' }}>
-        {/* Line */}
-        <div style={{
-          position: 'absolute',
-          left: '6px',
-          top: '8px',
-          bottom: i === items.length - 1 ? '0' : '-24px',
-          width: '2px',
-          background: 'var(--intent-color-border)'
-        }} />
-        {/* Dot */}
-        <div style={{
-          position: 'absolute',
-          left: '0',
-          top: '4px',
-          width: '12px',
-          height: '12px',
-          borderRadius: '50%',
-          background: item.active ? 'var(--intent-color-primary)' : 'var(--intent-color-border)',
-          border: '2px solid var(--intent-color-surface)'
-        }} />
-        {/* Content */}
-        <div>
-          <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginBottom: '4px' }}>{item.time}</div>
-          <div style={{ fontWeight: 500 }}>{item.title}</div>
-          {item.description && <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginTop: '4px' }}>{item.description}</div>}
-        </div>
-      </div>
-    ))}
-  </div>
-)
+Display chronological events. Uses the **Flat** archetype.
 
 ## Examples
 
 ### Basic Timeline
 
 <div className="intent-demo">
-  <Timeline 
-    items={[
-      { time: 'Today, 2:00 PM', title: 'Pull Request Merged', description: 'feat: add new table component', active: true },
-      { time: 'Today, 10:30 AM', title: 'Commit Pushed', description: 'fix: resolve sorting issue', active: false },
-      { time: 'Yesterday, 4:15 PM', title: 'Issue Created', description: 'Bug: pagination not working', active: false }
-    ]}
-  />
+  <Timeline>
+    <TimelineItem 
+      title="Pull Request Merged" 
+      description="feat: add new table component"
+      time="Today, 2:00 PM"
+    />
+    <TimelineItem 
+      title="Commit Pushed" 
+      description="fix: resolve sorting issue"
+      time="Today, 10:30 AM"
+    />
+    <TimelineItem 
+      title="Issue Created" 
+      description="Bug: pagination not working"
+      time="Yesterday, 4:15 PM"
+    />
+  </Timeline>
 </div>
 
 ```tsx
-<Timeline 
-  items={[
-    { time: 'Today, 2:00 PM', title: 'PR Merged', description: 'feat: add component', active: true },
-    { time: 'Today, 10:30 AM', title: 'Commit Pushed', active: false }
-  ]}
-/>
+import { Timeline, TimelineItem } from 'intent-react/components/data';
+
+<Timeline>
+  <TimelineItem 
+    title="Pull Request Merged" 
+    description="feat: add new table component"
+    time="Today, 2:00 PM"
+  />
+  <TimelineItem 
+    title="Commit Pushed" 
+    description="fix: resolve sorting issue"
+    time="Today, 10:30 AM"
+  />
+</Timeline>
+```
+
+### With Icons
+
+<div className="intent-demo">
+  <Timeline>
+    <TimelineItem 
+      title="Order Placed" 
+      time="2 hours ago"
+      icon="🛒"
+    />
+    <TimelineItem 
+      title="Payment Confirmed" 
+      time="1 hour ago"
+      icon="💳"
+    />
+    <TimelineItem 
+      title="Shipped" 
+      time="30 minutes ago"
+      icon="🚚"
+    />
+  </Timeline>
+</div>
+
+```tsx
+<Timeline>
+  <TimelineItem title="Order Placed" icon="🛒" />
+  <TimelineItem title="Payment Confirmed" icon="💳" />
+  <TimelineItem title="Shipped" icon="🚚" />
+</Timeline>
+```
+
+### Alternating Layout
+
+```tsx
+<Timeline alternate>
+  <TimelineItem title="Event 1" />
+  <TimelineItem title="Event 2" />
+  <TimelineItem title="Event 3" />
+</Timeline>
 ```
 
 ## Props
 
+### Timeline
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `Array<{time: string, title: string, description?: string, active?: boolean}>` | `[]` | Timeline items |
+| `alternate` | `boolean` | `false` | Alternate item alignment |
 
-## CSS Output
+### TimelineItem
 
-```css
-.intent-timeline {
-  position: relative;
-  padding-left: 24px;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | - | Item title |
+| `description` | `string` | - | Item description |
+| `time` | `string` | - | Timestamp |
+| `icon` | `ReactNode` | - | Custom icon |
 
-.intent-timeline__line {
-  position: absolute;
-  left: 6px;
-  top: 8px;
-  bottom: 0;
-  width: 2px;
-  background: var(--intent-color-border);
-}
+## Design Notes
 
-.intent-timeline__dot {
-  position: absolute;
-  left: 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--intent-color-primary);
-}
-
-.intent-timeline__time {
-  font-size: 0.875rem;
-  color: var(--intent-color-muted);
-}
-
-.intent-timeline__title {
-  font-weight: 500;
-}
-
-.intent-timeline__description {
-  font-size: 0.875rem;
-  color: var(--intent-color-muted);
-}
-```
+- Uses **Flat** archetype (no bevel)
+- Vertical line connects items
+- Dot indicator at each item
+- Last item has no connecting line
+- Icons can be emoji or custom components

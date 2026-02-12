@@ -5,7 +5,7 @@ import React from 'react';
 
 # Collapsible
 
-Expandable and collapsible content sections.
+Expandable and collapsible content sections. Uses the **Elevated** archetype for the container.
 
 export const Collapsible = ({ title, children, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = React.useState(defaultOpen)
@@ -59,29 +59,26 @@ export const Collapsible = ({ title, children, defaultOpen = false }) => {
 </div>
 
 ```tsx
-<Collapsible title="Section Title">
-  <p>Collapsible content goes here...</p>
+import { Collapsible } from 'intent-react';
+
+<Collapsible title="What is Intent Framework?">
+  <p>Intent is a schema-first CSS framework...</p>
 </Collapsible>
 ```
 
 ### Default Open
 
 <div className="intent-demo">
-  <Collapsible title="Terms and Conditions" defaultOpen>
-    <p style={{ margin: '0 0 12px 0' }}>
-      By using this service, you agree to the following terms:
+  <Collapsible title="Getting Started" defaultOpen>
+    <p style={{ margin: 0 }}>
+      Install Intent via npm: <code>npm install intent-css</code>
     </p>
-    <ul style={{ margin: 0, paddingLeft: '20px' }}>
-      <li>Respect other users</li>
-      <li>Follow community guidelines</li>
-      <li>No spam or abuse</li>
-    </ul>
   </Collapsible>
 </div>
 
 ```tsx
-<Collapsible title="Terms" defaultOpen>
-  <p>Terms content...</p>
+<Collapsible title="Getting Started" defaultOpen>
+  <p>Install Intent via npm...</p>
 </Collapsible>
 ```
 
@@ -89,45 +86,15 @@ export const Collapsible = ({ title, children, defaultOpen = false }) => {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `title` | `string` | - | Collapsible header |
-| `children` | `ReactNode` | - | Collapsible content |
+| `title` | `ReactNode` | - | Section title |
 | `defaultOpen` | `boolean` | `false` | Initial open state |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Open change callback |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-collapsible {
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  overflow: hidden;
-}
-
-.intent-collapsible__trigger {
-  width: 100%;
-  padding: 12px 16px;
-  text-align: left;
-  background: var(--intent-color-surface);
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.intent-collapsible__icon {
-  transition: transform 200ms;
-}
-
-.intent-collapsible__icon--open {
-  transform: rotate(180deg);
-}
-
-.intent-collapsible__content {
-  overflow: hidden;
-  transition: max-height 200ms ease-out;
-}
-
-.intent-collapsible__inner {
-  padding: 16px;
-  border-top: 1px solid var(--intent-color-border);
-  background: var(--intent-color-surface-elevated);
-}
-```
+- Header uses **Flat** archetype
+- Content area uses **Elevated** background
+- Smooth height animation
+- Chevron rotates when expanded
+- Common in FAQ and settings sections

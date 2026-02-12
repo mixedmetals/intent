@@ -7,7 +7,8 @@ import React from 'react';
 
 Drag and drop sortable lists.
 
-export const Sortable = ({ items: initialItems }) => {
+export const Sortable = (props) => {
+  const initialItems = props.items || []
   const [items, setItems] = React.useState(initialItems)
   const [dragging, setDragging] = React.useState(null)
   
@@ -107,7 +108,7 @@ export const Sortable = ({ items: initialItems }) => {
 
 .intent-sortable__item {
   display: flex;
-  align-items: center;
+  alignItems: center;
   gap: 12px;
   padding: 12px 16px;
   background: var(--intent-color-surface);

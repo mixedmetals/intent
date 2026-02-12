@@ -5,36 +5,17 @@ import React from 'react';
 
 # ScrollArea
 
-Custom scrollable containers.
+Custom scrollable containers with styled scrollbars.
 
-export const ScrollArea = ({ children, maxHeight = '200px', maxWidth }) => (
+export const ScrollArea = ({ children, maxHeight = '200px' }) => (
   <div style={{ 
     maxHeight, 
-    maxWidth,
     overflow: 'auto',
     border: '1px solid var(--intent-color-border)',
     borderRadius: '8px',
     padding: '12px'
   }}>
-    <style>{`
-      .scroll-area::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      .scroll-area::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .scroll-area::-webkit-scrollbar-thumb {
-        background: var(--intent-color-border);
-        border-radius: 4px;
-      }
-      .scroll-area::-webkit-scrollbar-thumb:hover {
-        background: var(--intent-color-muted);
-      }
-    `}</style>
-    <div className="scroll-area" style={{ maxHeight: '100%', overflow: 'auto' }}>
-      {children}
-    </div>
+    {children}
   </div>
 )
 
@@ -52,8 +33,34 @@ export const ScrollArea = ({ children, maxHeight = '200px', maxWidth }) => (
 </div>
 
 ```tsx
+import { ScrollArea } from 'intent-react';
+
 <ScrollArea maxHeight="200px">
   <p>Long content...</p>
+</ScrollArea>
+```
+
+### Horizontal Scroll
+
+<div className="intent-demo">
+  <ScrollArea maxHeight="100px">
+    <div style={{ display: 'flex', gap: '12px', width: 'max-content' }}>
+      <div style={{ width: '150px', height: '80px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Item 1</div>
+      <div style={{ width: '150px', height: '80px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Item 2</div>
+      <div style={{ width: '150px', height: '80px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Item 3</div>
+      <div style={{ width: '150px', height: '80px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Item 4</div>
+      <div style={{ width: '150px', height: '80px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Item 5</div>
+    </div>
+  </ScrollArea>
+</div>
+
+```tsx
+<ScrollArea>
+  <div style={{ display: 'flex', gap: '12px' }}>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+  </div>
 </ScrollArea>
 ```
 
@@ -61,33 +68,14 @@ export const ScrollArea = ({ children, maxHeight = '200px', maxWidth }) => (
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `children` | `ReactNode` | - | Scrollable content |
 | `maxHeight` | `string` | `'200px'` | Maximum height |
 | `maxWidth` | `string` | - | Maximum width |
 | `orientation` | `'vertical' \| 'horizontal' \| 'both'` | `'vertical'` | Scroll direction |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-scroll-area {
-  overflow: auto;
-}
-
-.intent-scroll-area::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.intent-scroll-area::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.intent-scroll-area::-webkit-scrollbar-thumb {
-  background: var(--intent-color-border);
-  border-radius: var(--intent-radius-full);
-}
-
-.intent-scroll-area::-webkit-scrollbar-thumb:hover {
-  background: var(--intent-color-muted);
-}
-```
+- Thin scrollbar (8px width)
+- Subtle thumb color (border color)
+- Hover state darkens thumb
+- Smooth scrolling behavior
+- Works in all modern browsers

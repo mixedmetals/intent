@@ -2,20 +2,15 @@
 sidebar_position: 77
 ---
 import React from 'react';
+import { Pagination, PaginationItem } from 'intent-react/components/navigation';
 
 # Pagination
 
-Page navigation controls.
+Page navigation controls. Uses the **Flat** archetype for page items.
 
-export const Pagination = ({ total, pageSize = 10, currentPage: initialPage = 1, onChange }) => {
-  const [currentPage, setCurrentPage] = React.useState(initialPage)
-  const totalPages = Math.ceil(total / pageSize)
-  
-  const goToPage = (page) => {
-    if (page < 1 || page > totalPages) return
-    setCurrentPage(page)
-    onChange?.(page)
-  }
+export const PaginationDemo = () => {
+  const [currentPage, setCurrentPage] = React.useState(1)
+  const totalPages = 10
   
   const pages = []
   for (let i = 1; i <= totalPages; i++) {
@@ -29,17 +24,9 @@ export const Pagination = ({ total, pageSize = 10, currentPage: initialPage = 1,
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
       <button 
-        onClick={() => goToPage(currentPage - 1)}
+        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
         disabled={currentPage === 1}
-        style={{
-          padding: '8px 12px',
-          border: '1px solid var(--intent-color-border)',
-          borderRadius: '6px',
-          background: 'var(--intent-color-surface)',
-          cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-          opacity: currentPage === 1 ? 0.5 : 1,
-          fontSize: '0.875rem'
-        }}
+        className="intent-button intent-button--importance-secondary intent-button--size-small"
       >
         ← Prev
       </button>
@@ -47,36 +34,19 @@ export const Pagination = ({ total, pageSize = 10, currentPage: initialPage = 1,
       {pages.map((page, i) => (
         <button
           key={i}
-          onClick={() => typeof page === 'number' && goToPage(page)}
+          onClick={() => typeof page === 'number' && setCurrentPage(page)}
           disabled={page === '...'}
-          style={{
-            minWidth: '36px',
-            padding: '8px',
-            border: '1px solid var(--intent-color-border)',
-            borderRadius: '6px',
-            background: page === currentPage ? 'var(--intent-color-primary)' : 'var(--intent-color-surface)',
-            color: page === currentPage ? 'white' : 'var(--intent-color-foreground)',
-            cursor: page === '...' ? 'default' : 'pointer',
-            fontSize: '0.875rem',
-            fontWeight: 500
-          }}
+          className={`intent-button intent-button--size-small ${page === currentPage ? 'intent-button--importance-primary' : 'intent-button--importance-secondary'}`}
+          style={{ minWidth: '36px' }}
         >
           {page}
         </button>
       ))}
       
       <button 
-        onClick={() => goToPage(currentPage + 1)}
+        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
         disabled={currentPage === totalPages}
-        style={{
-          padding: '8px 12px',
-          border: '1px solid var(--intent-color-border)',
-          borderRadius: '6px',
-          background: 'var(--intent-color-surface)',
-          cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-          opacity: currentPage === totalPages ? 0.5 : 1,
-          fontSize: '0.875rem'
-        }}
+        className="intent-button intent-button--importance-secondary intent-button--size-small"
       >
         Next →
       </button>
@@ -89,54 +59,55 @@ export const Pagination = ({ total, pageSize = 10, currentPage: initialPage = 1,
 ### Basic Pagination
 
 <div className="intent-demo">
-  <Pagination total={100} pageSize={10} />
+  <PaginationDemo />
 </div>
 
 ```tsx
-<Pagination 
-  total={100} 
-  pageSize={10} 
-  currentPage={1}
-  onChange={(page) => console.log(page)}
-/>
+import { Pagination, PaginationItem } from 'intent-react/components/navigation';
+
+<Pagination count={10} page={page} onChange={setPage} />
+```
+
+### Sizes
+
+```tsx
+<Pagination size="sm" count={10} />
+<Pagination size="md" count={10} />
+<Pagination size="lg" count={10} />
+```
+
+### With Boundaries
+
+```tsx
+<Pagination count={20} boundaryCount={2} />
 ```
 
 ## Props
 
+### Pagination
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `total` | `number` | - | Total number of items |
-| `pageSize` | `number` | `10` | Items per page |
-| `currentPage` | `number` | `1` | Current page |
-| `onChange` | `(page: number) => void` | - | Page change handler |
-| `showSizeChanger` | `boolean` | `false` | Show page size selector |
-| `showTotal` | `boolean` | `false` | Show total count |
+| `count` | `number` | - | Total number of pages |
+| `page` | `number` | - | Current page (controlled) |
+| `defaultPage` | `number` | `1` | Default page |
+| `onChange` | `(page: number) => void` | - | Page change callback |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Pagination size |
+| `boundaryCount` | `number` | `1` | Number of boundary pages |
+| `siblingCount` | `number` | `1` | Number of sibling pages |
 
-## CSS Output
+### PaginationItem
 
-```css
-.intent-pagination {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `page` | `number \| string` | - | Page number or '...' |
+| `selected` | `boolean` | `false` | Selected state |
+| `disabled` | `boolean` | `false` | Disabled state |
+| `type` | `'page' \| 'previous' \| 'next' \| 'start-ellipsis' \| 'end-ellipsis'` | - | Item type |
 
-.intent-pagination__button {
-  padding: 8px 12px;
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  background: var(--intent-color-surface);
-  font-size: 0.875rem;
-  cursor: pointer;
-}
+## Design Notes
 
-.intent-pagination__button--active {
-  background: var(--intent-color-primary);
-  color: white;
-}
-
-.intent-pagination__button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-```
+- Page items use **Flat** archetype
+- Active page uses filled style
+- Disabled state uses 0.5 opacity
+- Ellipsis items are not interactive

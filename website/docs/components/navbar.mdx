@@ -2,11 +2,18 @@
 sidebar_position: 95
 ---
 
+import { Navbar, NavbarItem } from 'intent-react/components/navigation';
+import { Button } from 'intent-react';
+
 # Navbar
 
-Top navigation bar.
+Top navigation bar. Uses the **Elevated** archetype for the bar.
 
-export const Navbar = ({ logo, items, actions }) => (
+## Examples
+
+### Basic Navbar
+
+<div className="intent-demo" style={{ padding: 0, overflow: 'hidden' }}>
   <nav style={{ 
     display: 'flex', 
     alignItems: 'center', 
@@ -16,113 +23,78 @@ export const Navbar = ({ logo, items, actions }) => (
     borderBottom: '1px solid var(--intent-color-border)'
   }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-      <div style={{ fontWeight: 700, fontSize: '1.25rem' }}>{logo}</div>
+      <div style={{ fontWeight: 700, fontSize: '1.25rem' }}>🚀 Intent</div>
       <div style={{ display: 'flex', gap: '4px' }}>
-        {items.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            style={{
-              padding: '8px 12px',
-              borderRadius: '6px',
-              textDecoration: 'none',
-              fontSize: '0.875rem',
-              fontWeight: 500,
-              color: item.active ? 'var(--intent-color-primary)' : 'var(--intent-color-foreground)',
-              background: item.active ? 'var(--intent-color-surface-hover)' : 'transparent'
-            }}
-          >
-            {item.label}
-          </a>
-        ))}
+        <a href="#" style={{ padding: '8px 12px', borderRadius: '6px', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500, color: 'var(--intent-color-primary)', background: 'var(--intent-color-surface-hover)' }}>Home</a>
+        <a href="#" style={{ padding: '8px 12px', borderRadius: '6px', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500, color: 'var(--intent-color-foreground)' }}>Products</a>
+        <a href="#" style={{ padding: '8px 12px', borderRadius: '6px', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500, color: 'var(--intent-color-foreground)' }}>About</a>
       </div>
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-      {actions}
+      <Button importance="secondary" size="sm">Sign In</Button>
+      <Button size="sm">Get Started</Button>
     </div>
   </nav>
-)
-
-## Examples
-
-### Basic Navbar
-
-<div className="intent-demo" style={{ padding: 0, overflow: 'hidden' }}>
-  <Navbar 
-    logo="🚀 Intent"
-    items={[
-      { label: 'Home', href: '/', active: true },
-      { label: 'Products', href: '/products' },
-      { label: 'About', href: '/about' },
-      { label: 'Contact', href: '/contact' }
-    ]}
-    actions={
-      <>
-        <button className="intent-btn intent-btn--variant-secondary intent-btn--size-small">Sign In</button>
-        <button className="intent-btn intent-btn--variant-primary intent-btn--size-small">Get Started</button>
-      </>
-    }
-  />
 </div>
 
 ```tsx
-<Navbar 
-  logo="MyApp"
-  items={[
-    { label: 'Home', href: '/', active: true },
-    { label: 'Products', href: '/products' }
-  ]}
-  actions={<Button>Sign In</Button>}
-/>
+import { Navbar, NavbarItem } from 'intent-react/components/navigation';
+
+<Navbar>
+  <Navbar.Brand>🚀 Intent</Navbar.Brand>
+  <Navbar.Items>
+    <NavbarItem active>Home</NavbarItem>
+    <NavbarItem>Products</NavbarItem>
+    <NavbarItem>About</NavbarItem>
+  </Navbar.Items>
+  <Navbar.Actions>
+    <Button importance="secondary">Sign In</Button>
+    <Button>Get Started</Button>
+  </Navbar.Actions>
+</Navbar>
+```
+
+### With Search
+
+```tsx
+<Navbar>
+  <Navbar.Brand>MyApp</Navbar.Brand>
+  <Navbar.Search placeholder="Search..." />
+  <Navbar.Actions>
+    <Button>Sign In</Button>
+  </Navbar.Actions>
+</Navbar>
+```
+
+### Fixed Position
+
+```tsx
+<Navbar position="fixed">
+  <Navbar.Brand>MyApp</Navbar.Brand>
+  <Navbar.Items>...</Navbar.Items>
+</Navbar>
 ```
 
 ## Props
 
+### Navbar
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `logo` | `ReactNode` | - | Logo/content |
-| `items` | `Array<{label: string, href: string, active?: boolean}>` | `[]` | Nav items |
-| `actions` | `ReactNode` | - | Right side actions |
+| `position` | `'static' \| 'fixed' \| 'sticky'` | `'static'` | Position behavior |
+| `border` | `boolean` | `true` | Show bottom border |
 
-## CSS Output
+### NavbarItem
 
-```css
-.intent-navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  background: var(--intent-color-surface);
-  border-bottom: 1px solid var(--intent-color-border);
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `active` | `boolean` | `false` | Active state |
+| `href` | `string` | - | Link URL |
 
-.intent-navbar__logo {
-  font-weight: 700;
-  font-size: 1.25rem;
-}
+## Design Notes
 
-.intent-navbar__links {
-  display: flex;
-  gap: 4px;
-}
-
-.intent-navbar__link {
-  padding: 8px 12px;
-  border-radius: var(--intent-radius-md);
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--intent-color-foreground);
-}
-
-.intent-navbar__link--active {
-  background: var(--intent-color-surface-hover);
-  color: var(--intent-color-primary);
-}
-
-.intent-navbar__actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-```
+- Uses **Elevated** archetype (slight elevation)
+- Bottom border for separation
+- Active item uses primary color
+- Supports brand logo, navigation items, and actions
+- Responsive behavior with mobile menu

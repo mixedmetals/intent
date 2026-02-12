@@ -5,11 +5,19 @@ import React from 'react';
 
 # ContextMenu
 
-Right-click context menus.
+Right-click context menus. Uses the **Elevated** archetype.
 
-export const ContextMenu = ({ children, items }) => {
+export const ContextMenuDemo = () => {
   const [isOpen, setIsOpen] = React.useState(false)
   const [position, setPosition] = React.useState({ x: 0, y: 0 })
+  
+  const items = [
+    { label: 'Cut', icon: '✂️', shortcut: '⌘X' },
+    { label: 'Copy', icon: '📋', shortcut: '⌘C' },
+    { label: 'Paste', icon: '📌', shortcut: '⌘V' },
+    { separator: true },
+    { label: 'Delete', icon: '🗑️', shortcut: '⌫' }
+  ]
   
   const handleContextMenu = (e) => {
     e.preventDefault()
@@ -27,8 +35,11 @@ export const ContextMenu = ({ children, items }) => {
   
   return (
     <>
-      <div onContextMenu={handleContextMenu} style={{ padding: '32px', border: '2px dashed var(--intent-color-border)', borderRadius: '8px', textAlign: 'center' }}>
-        {children}
+      <div 
+        onContextMenu={handleContextMenu} 
+        style={{ padding: '32px', border: '2px dashed var(--intent-color-border)', borderRadius: '8px', textAlign: 'center' }}
+      >
+        Right-click here
       </div>
       {isOpen && (
         <div style={{
@@ -44,29 +55,32 @@ export const ContextMenu = ({ children, items }) => {
           padding: '4px'
         }}>
           {items.map((item, i) => (
-            <button
-              key={i}
-              onClick={item.onClick}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                width: '100%',
-                padding: '8px 12px',
-                textAlign: 'left',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '0.875rem',
-                borderRadius: '4px'
-              }}
-              onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
-              onMouseLeave={(e) => e.target.style.background = 'none'}
-            >
-              {item.icon && <span>{item.icon}</span>}
-              <span>{item.label}</span>
-              {item.shortcut && <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{item.shortcut}</span>}
-            </button>
+            item.separator ? (
+              <div key={i} style={{ height: '1px', background: 'var(--intent-color-border)', margin: '4px' }} />
+            ) : (
+              <button
+                key={i}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  width: '100%',
+                  padding: '8px 12px',
+                  textAlign: 'left',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '0.875rem',
+                  borderRadius: '4px'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--intent-color-surface-hover)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+              >
+                {item.icon && <span>{item.icon}</span>}
+                <span>{item.label}</span>
+                {item.shortcut && <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{item.shortcut}</span>}
+              </button>
+            )
           ))}
         </div>
       )}
@@ -79,72 +93,41 @@ export const ContextMenu = ({ children, items }) => {
 ### Right-Click Menu
 
 <div className="intent-demo">
-  <ContextMenu 
-    items={[
-      { label: 'Back', icon: '←', shortcut: '⌘[' },
-      { label: 'Forward', icon: '→', shortcut: '⌘]' },
-      { label: 'Reload', icon: '↻', shortcut: '⌘R' },
-      { label: 'Save As...', icon: '💾', shortcut: '⌘S' }
-    ]}
-  >
-    Right click here
-  </ContextMenu>
+  <ContextMenuDemo />
 </div>
 
 ```tsx
-<ContextMenu 
-  items={[
-    { label: 'Cut', icon: '✂️', shortcut: '⌘X' },
-    { label: 'Copy', icon: '📋', shortcut: '⌘C' },
-    { label: 'Paste', icon: '📌', shortcut: '⌘V' }
-  ]}
->
-  Right click here
+import { ContextMenu, ContextMenuItem, ContextMenuSeparator } from 'intent-react';
+
+<ContextMenu>
+  <ContextMenuItem shortcut="⌘X">Cut</ContextMenuItem>
+  <ContextMenuItem shortcut="⌘C">Copy</ContextMenuItem>
+  <ContextMenuItem shortcut="⌘V">Paste</ContextMenuItem>
+  <ContextMenuSeparator />
+  <ContextMenuItem>Delete</ContextMenuItem>
 </ContextMenu>
 ```
 
 ## Props
 
+### ContextMenu
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `children` | `ReactNode` | - | Trigger area |
-| `items` | `Array<{label: string, icon?: ReactNode, shortcut?: string, onClick?: () => void}>` | `[]` | Menu items |
+| `children` | `ReactNode` | - | Menu items |
 
-## CSS Output
+### ContextMenuItem
 
-```css
-.intent-context-menu {
-  position: fixed;
-  min-width: 200px;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-  padding: 4px;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `shortcut` | `string` | - | Keyboard shortcut |
+| `disabled` | `boolean` | `false` | Disabled state |
+| `children` | `ReactNode` | - | Item content |
 
-.intent-context-menu__item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 8px 12px;
-  text-align: left;
-  background: none;
-  border: none;
-  border-radius: var(--intent-radius-sm);
-  cursor: pointer;
-  font-size: 0.875rem;
-}
+## Design Notes
 
-.intent-context-menu__item:hover {
-  background: var(--intent-color-surface-hover);
-}
-
-.intent-context-menu__shortcut {
-  margin-left: auto;
-  font-size: 0.75rem;
-  color: var(--intent-color-muted);
-}
-```
+- Triggered by right-click
+- Positioned at cursor location
+- Uses **Elevated** archetype
+- Supports icons and shortcuts
+- Click outside to close

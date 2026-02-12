@@ -2,44 +2,12 @@
 sidebar_position: 2
 ---
 
+import { Stack, VStack, HStack } from 'intent-react';
+import { Card } from 'intent-react';
+
 # Stack
 
 The foundation of Intent layouts. Stack provides vertical and horizontal spacing with consistent, theme-aware gaps.
-
-export const Stack = ({ children, direction = 'column', gap = 'normal', align, justify, padding, style, ...props }) => {
-  const className = [
-    'intent-stack',
-    `intent-stack--direction-${direction}`,
-    `intent-stack--gap-${gap}`,
-    align && `intent-stack--align-${align}`,
-    justify && `intent-stack--justify-${justify}`,
-  ].filter(Boolean).join(' ');
-  
-  const paddingStyles = padding ? {
-    compact: '4px',
-    normal: '8px',
-    relaxed: '16px',
-    loose: '24px'
-  }[padding] : undefined;
-  
-  return (
-    <div className={className} style={{ padding: paddingStyles, ...style }} {...props}>
-      {children}
-    </div>
-  )
-}
-
-export const Card = ({ children, padding = 'normal', style }) => (
-  <div className={`intent-card intent-card--padding-${padding} intent-card--elevation-low`} style={style}>
-    {children}
-  </div>
-)
-
-export const Button = ({ children, importance = 'secondary', size = 'medium', ...props }) => (
-  <button className={`intent-button intent-button--importance-${importance} intent-button--size-${size}`} {...props}>
-    {children}
-  </button>
-)
 
 ## Overview
 
@@ -50,117 +18,109 @@ Stack is the most fundamental layout component in Intent. It handles spacing bet
 ### Vertical Stack (Default)
 
 <div className="intent-demo">
-  <Stack gap="normal">
-    <Card padding="normal">Card 1</Card>
-    <Card padding="normal">Card 2</Card>
-    <Card padding="normal">Card 3</Card>
-  </Stack>
+  <VStack gap="normal">
+    <Card>Item 1</Card>
+    <Card>Item 2</Card>
+    <Card>Item 3</Card>
+  </VStack>
 </div>
 
 ```tsx
-<Stack gap="normal">
-  <Card padding="normal">Card 1</Card>
-  <Card padding="normal">Card 2</Card>
-  <Card padding="normal">Card 3</Card>
-</Stack>
+import { VStack } from 'intent-react';
+
+<VStack gap="normal">
+  <Card>Item 1</Card>
+  <Card>Item 2</Card>
+  <Card>Item 3</Card>
+</VStack>
 ```
 
 ### Horizontal Stack
 
 <div className="intent-demo">
-  <Stack direction="row" gap="normal">
-    <Button importance="secondary">Cancel</Button>
-    <Button importance="primary">Submit</Button>
-  </Stack>
+  <HStack gap="normal">
+    <Card>Item 1</Card>
+    <Card>Item 2</Card>
+    <Card>Item 3</Card>
+  </HStack>
 </div>
 
 ```tsx
-<Stack direction="row" gap="normal">
-  <Button importance="secondary">Cancel</Button>
-  <Button importance="primary">Submit</Button>
-</Stack>
+import { HStack } from 'intent-react';
+
+<HStack gap="normal">
+  <Card>Item 1</Card>
+  <Card>Item 2</Card>
+  <Card>Item 3</Card>
+</HStack>
 ```
 
 ### Gap Sizes
 
 <div className="intent-demo">
-  <Stack gap="normal">
-    <Stack direction="row" gap="compact">
-      <Button size="small">Compact</Button>
-      <Button size="small">Gap</Button>
-    </Stack>
-    <Stack direction="row" gap="normal">
-      <Button size="small">Normal</Button>
-      <Button size="small">Gap</Button>
-    </Stack>
-    <Stack direction="row" gap="relaxed">
-      <Button size="small">Relaxed</Button>
-      <Button size="small">Gap</Button>
-    </Stack>
-    <Stack direction="row" gap="loose">
-      <Button size="small">Loose</Button>
-      <Button size="small">Gap</Button>
-    </Stack>
-  </Stack>
+  <VStack gap="relaxed">
+    <div>
+      <div style={{ fontSize: '12px', marginBottom: '4px', opacity: 0.7 }}>compact</div>
+      <HStack gap="compact">
+        <Card>A</Card>
+        <Card>B</Card>
+        <Card>C</Card>
+      </HStack>
+    </div>
+    <div>
+      <div style={{ fontSize: '12px', marginBottom: '4px', opacity: 0.7 }}>normal</div>
+      <HStack gap="normal">
+        <Card>A</Card>
+        <Card>B</Card>
+        <Card>C</Card>
+      </HStack>
+    </div>
+    <div>
+      <div style={{ fontSize: '12px', marginBottom: '4px', opacity: 0.7 }}>relaxed</div>
+      <HStack gap="relaxed">
+        <Card>A</Card>
+        <Card>B</Card>
+        <Card>C</Card>
+      </HStack>
+    </div>
+  </VStack>
 </div>
 
 ```tsx
-<Stack direction="row" gap="compact">...</Stack>
-<Stack direction="row" gap="normal">...</Stack>
-<Stack direction="row" gap="relaxed">...</Stack>
-<Stack direction="row" gap="loose">...</Stack>
+<HStack gap="compact">...</HStack>
+<HStack gap="normal">...</HStack>
+<HStack gap="relaxed">...</HStack>
+<HStack gap="loose">...</HStack>
 ```
 
 ### Alignment
 
 <div className="intent-demo">
-  <Stack direction="row" gap="normal" justify="between" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px' }}>
-    <Button size="small">Left</Button>
-    <Button size="small">Center</Button>
-    <Button size="small">Right</Button>
-  </Stack>
+  <VStack gap="normal">
+    <HStack gap="normal" align="start" style={{ height: '80px', background: 'var(--intent-color-surface-elevated)', padding: '8px' }}>
+      <Card>Start</Card>
+    </HStack>
+    <HStack gap="normal" align="center" style={{ height: '80px', background: 'var(--intent-color-surface-elevated)', padding: '8px' }}>
+      <Card>Center</Card>
+    </HStack>
+    <HStack gap="normal" align="end" style={{ height: '80px', background: 'var(--intent-color-surface-elevated)', padding: '8px' }}>
+      <Card>End</Card>
+    </HStack>
+  </VStack>
 </div>
 
 ```tsx
-<Stack direction="row" gap="normal" justify="between">
-  <Button>Left</Button>
-  <Button>Center</Button>
-  <Button>Right</Button>
-</Stack>
+<HStack align="start">...</HStack>
+<HStack align="center">...</HStack>
+<HStack align="end">...</HStack>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `direction` | `'column'` \| `'row'` | `'column'` | Stack direction |
-| `gap` | `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'normal'` | Space between items |
-| `padding` | `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` \| `'none'` | `'none'` | Inner padding |
-| `align` | `'start'` \| `'center'` \| `'end'` \| `'stretch'` | `'stretch'` | Cross-axis alignment |
-| `justify` | `'start'` \| `'center'` \| `'end'` \| `'between'` \| `'around'` | `'start'` | Main-axis distribution |
-| `wrap` | `boolean` | `false` | Allow items to wrap |
-
-## Gap Values
-
-| Value | Pixels | Usage |
-|-------|--------|-------|
-| `compact` | 4px | Tight groupings, icon buttons |
-| `normal` | 8px | Standard spacing |
-| `relaxed` | 16px | Form sections |
-| `loose` | 24px | Page sections |
-
-## CSS Output
-
-```css
-.intent-stack {
-  display: flex;
-}
-
-.intent-stack--column {
-  flex-direction: column;
-}
-
-.intent-stack--gap-normal {
-  gap: var(--intent-spacing-normal);
-}
-```
+| `direction` | `'column' \| 'row'` | `'column'` | Stack direction |
+| `gap` | `'compact' \| 'normal' \| 'relaxed' \| 'loose'` | `'normal'` | Gap between items |
+| `align` | `'start' \| 'center' \| 'end' \| 'stretch'` | - | Cross-axis alignment |
+| `justify` | `'start' \| 'center' \| 'end' \| 'between' \| 'around'` | - | Main-axis alignment |
+| `padding` | `'compact' \| 'normal' \| 'relaxed' \| 'loose'` | - | Internal padding |

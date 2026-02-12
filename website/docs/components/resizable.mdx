@@ -7,7 +7,10 @@ import React from 'react';
 
 Resizable panel layouts.
 
-export const Resizable = ({ children, defaultSize = 50, direction = 'horizontal' }) => {
+export const Resizable = (props) => {
+  const children = props.children
+  const defaultSize = props.defaultSize || 50
+  const direction = props.direction || 'horizontal'
   const [size, setSize] = React.useState(defaultSize)
   const [isDragging, setIsDragging] = React.useState(false)
   const containerRef = React.useRef(null)

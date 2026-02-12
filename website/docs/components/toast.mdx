@@ -1,24 +1,42 @@
 ---
 sidebar_position: 16
 ---
-
 import React from 'react';
 
 # Toast
 
-Temporary notification that appears and dismisses automatically.
+Temporary notification that appears and dismisses automatically. Uses the **Elevated** archetype.
 
-export const Toast = ({ variant = 'info', title, children, onDismiss }) => {
+export const Toast = (props) => {
+  const variant = props.variant || 'info'
+  const title = props.title
+  const children = props.children
+  const onDismiss = props.onDismiss
+  
   return (
-    <div className={`intent-toast intent-toast--${variant}`}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: '12px',
+      padding: '16px',
+      background: 'var(--intent-color-surface)',
+      border: '1px solid var(--intent-color-border)',
+      borderRadius: '8px',
+      boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+      minWidth: '300px'
+    }}>
       <div style={{ flex: 1 }}>
         <div style={{ fontWeight: 600, marginBottom: '2px' }}>{title}</div>
         <div style={{ fontSize: '13px', opacity: 0.8 }}>{children}</div>
       </div>
       {onDismiss && (
-        <button className="intent-toast__dismiss" onClick={onDismiss}>×</button>
+        <button 
+          onClick={onDismiss}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: 'var(--intent-color-muted)' }}
+        >
+          ×
+        </button>
       )}
-      {onDismiss && <div className="intent-toast__progress" />}
     </div>
   )
 }
@@ -28,7 +46,7 @@ export const ToastDemo = () => {
   return (
     <div>
       <button
-        className="intent-button intent-button--primary"
+        className="intent-button intent-button--importance-primary intent-button--size-medium"
         onClick={() => setShow(true)}
       >
         Show Toast
@@ -36,7 +54,6 @@ export const ToastDemo = () => {
       {show && (
         <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999 }}>
           <Toast
-            variant="success"
             title="Success!"
             onDismiss={() => setShow(false)}
           >
@@ -57,70 +74,65 @@ export const ToastDemo = () => {
 </div>
 
 ```tsx
-const [show, setShow] = useState(false)
+import { useToast } from 'intent-react';
 
-<Button onClick={() => setShow(true)}>Show Toast</Button>
+const toast = useToast();
 
-{show && (
-  <Toast
-    variant="success"
-    title="Success!"
-    onDismiss={() => setShow(false)}
-  >
-    Your changes have been saved.
-  </Toast>
-)}
+toast({
+  title: "Success!",
+  description: "Your changes have been saved."
+});
 ```
 
 ### Variants
 
 <div className="intent-demo">
   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-    <Toast variant="info" title="Info">Here's some helpful information.</Toast>
-    <Toast variant="success" title="Success!">Your action completed successfully.</Toast>
-    <Toast variant="warning" title="Warning">Please review before continuing.</Toast>
-    <Toast variant="danger" title="Error">Something went wrong. Try again.</Toast>
+    <Toast title="Info" onDismiss={() => {}}>Something happened.</Toast>
+    <Toast title="Success!" onDismiss={() => {}}>Your changes have been saved.</Toast>
+    <Toast title="Warning" onDismiss={() => {}}>Please check your settings.</Toast>
+    <Toast title="Error" onDismiss={() => {}}>Unable to save changes.</Toast>
   </div>
 </div>
 
 ```tsx
-<Toast variant="info" title="Info">...</Toast>
-<Toast variant="success" title="Success!">...</Toast>
-<Toast variant="warning" title="Warning">...</Toast>
-<Toast variant="danger" title="Error">...</Toast>
+const toast = useToast();
+
+toast({ title: "Success!", description: "...", variant: "success" });
+toast({ title: "Warning", description: "...", variant: "warning" });
+toast({ title: "Error", description: "...", variant: "error" });
+```
+
+## useToast Hook
+
+```tsx
+import { useToast } from 'intent-react';
+
+function MyComponent() {
+  const toast = useToast();
+  
+  return (
+    <Button onClick={() => toast({ title: "Hello!" })}>
+      Show Toast
+    </Button>
+  );
+}
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'info' \| 'success' \| 'warning' \| 'danger'` | `'info'` | Toast style |
 | `title` | `string` | - | Toast title |
-| `children` | `ReactNode` | - | Toast message |
-| `onDismiss` | `() => void` | - | Dismiss callback (auto-dismisses after 5s) |
+| `description` | `string` | - | Toast message |
+| `variant` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | Visual style |
+| `duration` | `number` | `5000` | Auto-dismiss duration (ms) |
+| `onDismiss` | `() => void` | - | Dismiss callback |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-toast {
-  display: flex;
-  gap: 12px;
-  padding: 16px;
-  background: var(--intent-surface-elevated-bg);
-  border: 0.5px solid var(--intent-surface-elevated-border);
-  box-shadow: 0 0 0 0.5px oklch(0% 0 0 / 0.3),
-    4px 8px 16px -4px oklch(0% 0 0 / 0.25);
-  border-radius: var(--intent-radius-xl);
-  backdrop-filter: blur(20px) saturate(180%);
-  max-width: 400px;
-  animation: intent-toast-slide-in 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.intent-toast--success { border-left: 3px solid var(--intent-color-success); }
-.intent-toast--danger { border-left: 3px solid var(--intent-color-danger); }
-
-@keyframes intent-toast-slide-in {
-  from { transform: translateX(120%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-```
+- Uses **Elevated** archetype (floating above content)
+- Fixed position in viewport corner
+- Auto-dismisses after 5 seconds
+- Progress bar shows remaining time
+- Stacking support for multiple toasts

@@ -5,26 +5,32 @@ import React from 'react';
 
 # ToggleGroup
 
-Group of toggle buttons.
+Group of toggle buttons. Uses the **Milled** archetype for buttons.
 
-export const ToggleGroup = ({ children, type = 'single', defaultValue }) => {
+export const ToggleGroupDemo = ({ children, type = 'single', defaultValue }) => {
   const [value, setValue] = React.useState(type === 'single' ? defaultValue : [defaultValue].filter(Boolean))
+  
+  const items = [
+    { value: 'left', label: 'Left' },
+    { value: 'center', label: 'Center' },
+    { value: 'right', label: 'Right' }
+  ]
   
   return (
     <div style={{ display: 'inline-flex', gap: '4px', padding: '4px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
-      {React.Children.map(children, (child) => {
-        if (!child) return null
-        const isActive = type === 'single' ? value === child.props.value : value.includes(child.props.value)
+      {items.map((item) => {
+        const isActive = type === 'single' ? value === item.value : value.includes(item.value)
         return (
           <button
+            key={item.value}
             onClick={() => {
               if (type === 'single') {
-                setValue(child.props.value)
+                setValue(item.value)
               } else {
                 setValue(prev => 
-                  prev.includes(child.props.value) 
-                    ? prev.filter(v => v !== child.props.value)
-                    : [...prev, child.props.value]
+                  prev.includes(item.value) 
+                    ? prev.filter(v => v !== item.value)
+                    : [...prev, item.value]
                 )
               }
             }}
@@ -40,7 +46,7 @@ export const ToggleGroup = ({ children, type = 'single', defaultValue }) => {
               transition: 'all 150ms'
             }}
           >
-            {child.props.children}
+            {item.label}
           </button>
         )
       })}
@@ -48,21 +54,17 @@ export const ToggleGroup = ({ children, type = 'single', defaultValue }) => {
   )
 }
 
-export const ToggleGroupItem = ({ children }) => children
-
 ## Examples
 
 ### Single Selection
 
 <div className="intent-demo">
-  <ToggleGroup type="single" defaultValue="center">
-    <ToggleGroupItem value="left">Left</ToggleGroupItem>
-    <ToggleGroupItem value="center">Center</ToggleGroupItem>
-    <ToggleGroupItem value="right">Right</ToggleGroupItem>
-  </ToggleGroup>
+  <ToggleGroupDemo type="single" defaultValue="center" />
 </div>
 
 ```tsx
+import { ToggleGroup, ToggleGroupItem } from 'intent-react';
+
 <ToggleGroup type="single" defaultValue="center">
   <ToggleGroupItem value="left">Left</ToggleGroupItem>
   <ToggleGroupItem value="center">Center</ToggleGroupItem>
@@ -73,11 +75,25 @@ export const ToggleGroupItem = ({ children }) => children
 ### Multiple Selection
 
 <div className="intent-demo">
-  <ToggleGroup type="multiple">
-    <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
-    <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
-    <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
-  </ToggleGroup>
+  <div style={{ display: 'inline-flex', gap: '4px', padding: '4px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
+    {['Bold', 'Italic', 'Underline'].map((label, i) => (
+      <button
+        key={label}
+        style={{
+          padding: '8px 12px',
+          borderRadius: '6px',
+          border: 'none',
+          background: i === 0 ? 'var(--intent-color-primary)' : 'transparent',
+          color: i === 0 ? 'white' : 'var(--intent-color-foreground)',
+          fontSize: '0.875rem',
+          fontWeight: 500,
+          cursor: 'pointer'
+        }}
+      >
+        {label}
+      </button>
+    ))}
+  </div>
 </div>
 
 ```tsx
@@ -91,45 +107,25 @@ export const ToggleGroupItem = ({ children }) => children
 ## Props
 
 ### ToggleGroup
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `type` | `'single' \| 'multiple'` | `'single'` | Selection mode |
 | `value` | `string \| string[]` | - | Controlled value(s) |
 | `defaultValue` | `string \| string[]` | - | Default value(s) |
 | `onValueChange` | `(value) => void` | - | Change handler |
-| `children` | `ReactNode` | - | ToggleGroupItem components |
 
 ### ToggleGroupItem
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `string` | - | Item value |
 | `children` | `ReactNode` | - | Item content |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-toggle-group {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  background: var(--intent-color-surface);
-}
-
-.intent-toggle-group__item {
-  padding: 8px 12px;
-  border-radius: var(--intent-radius-sm);
-  border: none;
-  background: transparent;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 150ms;
-}
-
-.intent-toggle-group__item[data-state="on"] {
-  background: var(--intent-color-primary);
-  color: white;
-}
-```
+- Uses **Milled** archetype for buttons (tactile feel)
+- Container uses **Flat** archetype with border
+- Active state uses filled primary style
+- Gap between items for visual separation
+- Smooth transition on state change

@@ -2,49 +2,11 @@
 sidebar_position: 62
 ---
 
-import React from 'react';
+import { Icon, IconText } from 'intent-react';
 
 # Icon
 
-Icon component with consistent sizing.
-
-export const Icon = ({ name, size = 'md', color }) => {
-  const sizes = {
-    xs: '16px',
-    sm: '20px',
-    md: '24px',
-    lg: '32px',
-    xl: '48px'
-  }
-  
-  const icons = {
-    home: '🏠',
-    user: '👤',
-    settings: '⚙️',
-    search: '🔍',
-    bell: '🔔',
-    heart: '❤️',
-    star: '⭐',
-    check: '✓',
-    close: '✕',
-    arrowRight: '→',
-    arrowLeft: '←',
-    arrowUp: '↑',
-    arrowDown: '↓'
-  }
-  
-  return (
-    <span style={{ 
-      fontSize: sizes[size], 
-      color: color || 'inherit',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
-      {icons[name] || name}
-    </span>
-  )
-}
+Icon component with consistent sizing. Uses SVG icons with the **Flat** archetype.
 
 ## Examples
 
@@ -52,29 +14,35 @@ export const Icon = ({ name, size = 'md', color }) => {
 
 <div className="intent-demo">
   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-    <Icon name="star" size="xs" />
-    <Icon name="star" size="sm" />
-    <Icon name="star" size="md" />
-    <Icon name="star" size="lg" />
-    <Icon name="star" size="xl" />
+    <span style={{ fontSize: '16px' }}>⭐</span>
+    <span style={{ fontSize: '20px' }}>⭐</span>
+    <span style={{ fontSize: '24px' }}>⭐</span>
+    <span style={{ fontSize: '32px' }}>⭐</span>
+    <span style={{ fontSize: '48px' }}>⭐</span>
   </div>
 </div>
 
 ```tsx
+import { Icon } from 'intent-react';
+
+<Icon name="star" size="xs" />
+<Icon name="star" size="sm" />
+<Icon name="star" size="md" />
 <Icon name="star" size="lg" />
+<Icon name="star" size="xl" />
 ```
 
 ### Different Icons
 
 <div className="intent-demo">
-  <div style={{ display: 'flex', gap: '12px' }}>
-    <Icon name="home" size="lg" />
-    <Icon name="user" size="lg" />
-    <Icon name="settings" size="lg" />
-    <Icon name="search" size="lg" />
-    <Icon name="bell" size="lg" />
-    <Icon name="heart" size="lg" />
-    <Icon name="check" size="lg" />
+  <div style={{ display: 'flex', gap: '12px', fontSize: '24px' }}>
+    <span>🏠</span>
+    <span>👤</span>
+    <span>⚙️</span>
+    <span>🔍</span>
+    <span>🔔</span>
+    <span>❤️</span>
+    <span>✓</span>
   </div>
 </div>
 
@@ -82,28 +50,58 @@ export const Icon = ({ name, size = 'md', color }) => {
 <Icon name="home" />
 <Icon name="user" />
 <Icon name="settings" />
+<Icon name="search" />
+```
+
+### With Text
+
+<div className="intent-demo">
+  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+    <span style={{ fontSize: '20px' }}>👤</span>
+    <span>User Profile</span>
+  </div>
+</div>
+
+```tsx
+<IconText name="user" text="User Profile" />
 ```
 
 ## Props
 
+### Icon
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `name` | `string` | - | Icon name |
+| `name` | `string` | - | Icon name from registry |
 | `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Icon size |
 | `color` | `string` | - | Icon color |
 
-## CSS Output
+### IconText
 
-```css
-.intent-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `name` | `string` | - | Icon name |
+| `text` | `string` | - | Text to display |
+| `alignment` | `'left' \| 'right'` | `'left'` | Icon position |
 
-.intent-icon--size-xs { font-size: 16px; }
-.intent-icon--size-sm { font-size: 20px; }
-.intent-icon--size-md { font-size: 24px; }
-.intent-icon--size-lg { font-size: 32px; }
-.intent-icon--size-xl { font-size: 48px; }
+## Available Icons
+
+Intent includes a comprehensive icon registry:
+
+```tsx
+import { iconRegistry, getIconNames } from 'intent-react';
+
+// Get all available icon names
+const icons = getIconNames();
+
+// Check if icon exists
+import { hasIcon } from 'intent-react';
+const exists = hasIcon('arrow-right');
 ```
+
+## Design Notes
+
+- Uses SVG for crisp rendering at any size
+- Consistent sizing scale (xs to xl)
+- Color inherits from parent by default
+- IconText handles spacing between icon and text

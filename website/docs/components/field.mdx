@@ -2,56 +2,27 @@
 sidebar_position: 23
 ---
 
-import React from 'react';
+import { Input } from 'intent-react';
+import { Label } from 'intent-react';
 
 # Field
 
 Label and validation wrapper for form inputs.
-
-export const Field = ({ label, hint, error, children, required }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-    {label && (
-      <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--intent-color-foreground)' }}>
-        {label}
-        {required && <span style={{ color: 'var(--intent-color-error)', marginLeft: '2px' }}>*</span>}
-      </label>
-    )}
-    {children}
-    {hint && !error && (
-      <span style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{hint}</span>
-    )}
-    {error && (
-      <span style={{ fontSize: '0.75rem', color: 'var(--intent-color-error)' }}>{error}</span>
-    )}
-  </div>
-)
-
-export const Input = ({ type = 'text', placeholder, validation }) => (
-  <input
-    type={type}
-    placeholder={placeholder}
-    style={{
-      padding: '8px 12px',
-      border: `1px solid ${validation === 'invalid' ? 'var(--intent-color-error)' : 'var(--intent-color-border)'}`,
-      borderRadius: '6px',
-      fontSize: '0.875rem',
-      width: '100%',
-      outline: 'none'
-    }}
-  />
-)
 
 ## Examples
 
 ### Basic Field
 
 <div className="intent-demo">
-  <Field label="Email Address">
-    <Input type="email" placeholder="you@example.com" />
-  </Field>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <Label htmlFor="email">Email Address</Label>
+    <Input id="email" type="email" placeholder="you@example.com" />
+  </div>
 </div>
 
 ```tsx
+import { Field, Input } from 'intent-react';
+
 <Field label="Email Address">
   <Input type="email" placeholder="you@example.com" />
 </Field>
@@ -60,9 +31,11 @@ export const Input = ({ type = 'text', placeholder, validation }) => (
 ### With Hint
 
 <div className="intent-demo">
-  <Field label="Username" hint="Must be unique and 3-20 characters">
-    <Input placeholder="johndoe" />
-  </Field>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <Label htmlFor="username">Username</Label>
+    <Input id="username" placeholder="johndoe" />
+    <span style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>Must be unique and 3-20 characters</span>
+  </div>
 </div>
 
 ```tsx
@@ -74,12 +47,11 @@ export const Input = ({ type = 'text', placeholder, validation }) => (
 ### With Error
 
 <div className="intent-demo">
-  <Field 
-    label="Password" 
-    error="Password must be at least 8 characters"
-  >
-    <Input type="password" validation="invalid" />
-  </Field>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <Label htmlFor="password">Password</Label>
+    <Input id="password" type="password" validation="invalid" />
+    <span style={{ fontSize: '0.75rem', color: 'var(--intent-color-error)' }}>Password must be at least 8 characters</span>
+  </div>
 </div>
 
 ```tsx
@@ -94,9 +66,10 @@ export const Input = ({ type = 'text', placeholder, validation }) => (
 ### Required Field
 
 <div className="intent-demo">
-  <Field label="Full Name" required>
-    <Input placeholder="John Doe" />
-  </Field>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <Label htmlFor="name" required>Full Name</Label>
+    <Input id="name" placeholder="John Doe" />
+  </div>
 </div>
 
 ```tsx
@@ -115,34 +88,10 @@ export const Input = ({ type = 'text', placeholder, validation }) => (
 | `required` | `boolean` | `false` | Show required indicator |
 | `children` | `ReactNode` | - | Input element |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.intent-field__label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--intent-color-foreground);
-}
-
-.intent-field__label--required::after {
-  content: "*";
-  color: var(--intent-color-error);
-  margin-left: 2px;
-}
-
-.intent-field__hint {
-  font-size: 0.75rem;
-  color: var(--intent-color-muted);
-}
-
-.intent-field__error {
-  font-size: 0.75rem;
-  color: var(--intent-color-error);
-}
-```
+- Uses **Flat** archetype
+- Label positioned above input
+- Error message replaces hint when present
+- Required indicator uses error color
+- Consistent spacing with 4px gap

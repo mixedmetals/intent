@@ -2,135 +2,77 @@
 sidebar_position: 40
 ---
 
+import { Box } from 'intent-react/components/layout';
+
 # Flex
 
 Flexible box container with alignment options.
 
-export const Flex = ({ children, direction = 'row', gap = 'normal', justify, align, wrap, style }) => {
-  const gapMap = { compact: '4px', normal: '8px', relaxed: '16px', loose: '24px' }
-  return (
-    <div style={{
-      display: 'flex',
-      flexDirection: direction,
-      gap: gapMap[gap] || '8px',
-      justifyContent: justify,
-      alignItems: align,
-      flexWrap: wrap ? 'wrap' : 'nowrap',
-      ...style
-    }}>
-      {children}
-    </div>
-  )
-}
-
-export const Card = ({ children }) => (
-  <div className="intent-card intent-card--padding-normal intent-card--elevation-low">{children}</div>
-)
-
-export const Button = ({ children, importance = 'secondary' }) => (
-  <button className={`intent-button intent-button--importance-${importance} intent-button--size-medium`}>{children}</button>
-)
+:::note
+Use `Stack` (VStack/HStack) for most layouts. Use `Box` with flex styles for advanced flex configurations.
+:::
 
 ## Examples
 
-### Basic Flex
+### Basic Flex with Box
 
 <div className="intent-demo">
-  <Flex gap="normal">
-    <Card>Item 1</Card>
-    <Card>Item 2</Card>
-    <Card>Item 3</Card>
-  </Flex>
+  <Box display="flex" gap="normal">
+    <Box p="normal" style={{ background: 'var(--intent-color-surface-elevated)' }}>Item 1</Box>
+    <Box p="normal" style={{ background: 'var(--intent-color-surface-elevated)' }}>Item 2</Box>
+    <Box p="normal" style={{ background: 'var(--intent-color-surface-elevated)' }}>Item 3</Box>
+  </Box>
 </div>
 
 ```tsx
-<Flex gap="normal">
-  <Card>Item 1</Card>
-  <Card>Item 2</Card>
-  <Card>Item 3</Card>
-</Flex>
+import { Box } from 'intent-react/components/layout';
+
+<Box display="flex" gap="normal">
+  <Box p="normal">Item 1</Box>
+  <Box p="normal">Item 2</Box>
+  <Box p="normal">Item 3</Box>
+</Box>
 ```
 
 ### Justify Content
 
 <div className="intent-demo">
-  <Flex justify="between" gap="normal">
-    <Card>Left</Card>
-    <Card>Center</Card>
-    <Card>Right</Card>
-  </Flex>
+  <Box display="flex" gap="normal" justifyContent="space-between">
+    <Box p="normal" style={{ background: 'var(--intent-color-surface-elevated)' }}>Left</Box>
+    <Box p="normal" style={{ background: 'var(--intent-color-surface-elevated)' }}>Right</Box>
+  </Box>
 </div>
 
 ```tsx
-<Flex justify="between" gap="normal">
-  <Card>Left</Card>
-  <Card>Center</Card>
-  <Card>Right</Card>
-</Flex>
+<Box display="flex" justifyContent="space-between">...</Box>
+<Box display="flex" justifyContent="center">...</Box>
+<Box display="flex" justifyContent="flex-end">...</Box>
 ```
 
 ### Align Items
 
 <div className="intent-demo">
-  <Flex align="center" gap="normal" style={{ height: '100px', background: '#f8fafc', borderRadius: '8px', padding: '16px' }}>
-    <Card style={{ padding: '8px' }}>Small</Card>
-    <Card>Medium</Card>
-    <Card style={{ padding: '24px' }}>Large</Card>
-  </Flex>
+  <Box display="flex" gap="normal" alignItems="center" style={{ height: '100px' }}>
+    <Box p="normal" style={{ background: 'var(--intent-color-surface-elevated)' }}>Center</Box>
+    <Box p="normal" style={{ background: 'var(--intent-color-surface-elevated)' }}>Aligned</Box>
+  </Box>
 </div>
 
 ```tsx
-<Flex align="center" gap="normal">
-  <Card padding="compact">Small</Card>
-  <Card padding="normal">Medium</Card>
-  <Card padding="relaxed">Large</Card>
-</Flex>
+<Box display="flex" alignItems="center">...</Box>
+<Box display="flex" alignItems="flex-start">...</Box>
+<Box display="flex" alignItems="flex-end">...</Box>
 ```
 
-### Column Direction
-
-<div className="intent-demo">
-  <Flex direction="column" gap="normal">
-    <Button>First</Button>
-    <Button>Second</Button>
-    <Button>Third</Button>
-  </Flex>
-</div>
-
-```tsx
-<Flex direction="column" gap="normal">
-  <Button>First</Button>
-  <Button>Second</Button>
-  <Button>Third</Button>
-</Flex>
-```
-
-## Props
+## Box Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `direction` | `'row'` \| `'column'` | `'row'` | Flex direction |
-| `gap` | `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'normal'` | Gap between items |
-| `justify` | `'start'` \| `'center'` \| `'end'` \| `'between'` \| `'around'` | - | Justify content |
-| `align` | `'start'` \| `'center'` \| `'end'` \| `'stretch'` | - | Align items |
-| `wrap` | `boolean` | `false` | Wrap items |
-
-## CSS Output
-
-```css
-.intent-flex {
-  display: flex;
-}
-
-.intent-flex--direction-column {
-  flex-direction: column;
-}
-
-.intent-flex--gap-normal {
-  gap: var(--intent-spacing-normal);
-}
-
-.intent-flex--justify-between {
-  justify-content: space-between;
-}
-```
+| `display` | `'flex' \| 'block' \| 'inline' \| 'none'` | `'block'` | Display property |
+| `gap` | `'compact' \| 'normal' \| 'relaxed' \| 'loose'` | - | Flex gap |
+| `justifyContent` | `string` | - | Justify content |
+| `alignItems` | `string` | - | Align items |
+| `flexDirection` | `'row' \| 'column'` | - | Flex direction |
+| `flexWrap` | `'wrap' \| 'nowrap'` | - | Flex wrap |
+| `p` | `'compact' \| 'normal' \| 'relaxed' \| 'loose'` | - | Padding |
+| `m` | `'compact' \| 'normal' \| 'relaxed' \| 'loose'` | - | Margin |

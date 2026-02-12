@@ -5,9 +5,9 @@ import React from 'react';
 
 # Slider
 
-Range input for numeric values.
+Range input for numeric values. Uses the **Flat** archetype for the track and **Milled** for the thumb.
 
-export const Slider = ({ defaultValue = 50, min = 0, max = 100, step = 1, label, showValue = true }) => {
+export const SliderDemo = ({ defaultValue = 50, min = 0, max = 100, label, showValue = true }) => {
   const [value, setValue] = React.useState(defaultValue)
   const percentage = ((value - min) / (max - min)) * 100
   
@@ -38,7 +38,6 @@ export const Slider = ({ defaultValue = 50, min = 0, max = 100, step = 1, label,
           type="range"
           min={min}
           max={max}
-          step={step}
           value={value}
           onChange={(e) => setValue(Number(e.target.value))}
           style={{ 
@@ -70,31 +69,33 @@ export const Slider = ({ defaultValue = 50, min = 0, max = 100, step = 1, label,
 ### Basic Slider
 
 <div className="intent-demo">
-  <Slider label="Volume" defaultValue={70} />
+  <SliderDemo defaultValue={50} />
 </div>
 
 ```tsx
-<Slider label="Volume" defaultValue={70} />
+import { Slider } from 'intent-react';
+
+<Slider defaultValue={50} />
+```
+
+### With Label
+
+<div className="intent-demo">
+  <SliderDemo defaultValue={65} label="Volume" />
+</div>
+
+```tsx
+<Slider label="Volume" defaultValue={65} />
 ```
 
 ### Range
 
 <div className="intent-demo">
-  <Slider min={0} max={1000} step={10} defaultValue={350} label="Price Range" />
+  <SliderDemo defaultValue={25} min={0} max={100} />
 </div>
 
 ```tsx
-<Slider min={0} max={1000} step={10} defaultValue={350} />
-```
-
-### Without Value Display
-
-<div className="intent-demo">
-  <Slider showValue={false} defaultValue={60} />
-</div>
-
-```tsx
-<Slider showValue={false} />
+<Slider min={0} max={100} defaultValue={25} />
 ```
 
 ## Props
@@ -102,39 +103,17 @@ export const Slider = ({ defaultValue = 50, min = 0, max = 100, step = 1, label,
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `number` | - | Controlled value |
-| `defaultValue` | `number` | `0` | Default value |
+| `defaultValue` | `number` | `50` | Default value |
 | `min` | `number` | `0` | Minimum value |
 | `max` | `number` | `100` | Maximum value |
 | `step` | `number` | `1` | Step increment |
-| `label` | `string` | - | Input label |
-| `onChange` | `(value: number) => void` | - | Change handler |
+| `label` | `string` | - | Label text |
+| `showValue` | `boolean` | `true` | Show current value |
+| `onChange` | `(value: number) => void` | - | Change callback |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-slider {
-  position: relative;
-  width: 100%;
-}
-
-.intent-slider__track {
-  width: 100%;
-  height: 4px;
-  background: var(--intent-color-border);
-  border-radius: var(--intent-radius-full);
-}
-
-.intent-slider__filled {
-  height: 4px;
-  background: var(--intent-color-primary);
-  border-radius: var(--intent-radius-full);
-}
-
-.intent-slider__thumb {
-  width: 16px;
-  height: 16px;
-  background: var(--intent-color-primary);
-  border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-```
+- Track uses **Flat** archetype (no bevel)
+- Thumb uses **Milled** archetype (slight bevel for grip)
+- Fill color uses `var(--intent-color-primary)`
+- Smooth drag interactions

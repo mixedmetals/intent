@@ -2,24 +2,11 @@
 sidebar_position: 9
 ---
 
+import { Alert, Stack } from 'intent-react';
+
 # Alert
 
-Important messages that attract user attention.
-
-export const Alert = ({ children, variant = 'info', title }) => (
-  <div className={`intent-alert intent-alert--${variant}`}>
-    <div className="intent-alert__body">
-      {title && <div className="intent-alert__title">{title}</div>}
-      <div style={{ fontSize: '13px', lineHeight: 1.5 }}>{children}</div>
-    </div>
-  </div>
-)
-
-export const Stack = ({ children, gap = 'normal' }) => (
-  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`}>
-    {children}
-  </div>
-)
+Important messages that attract user attention. Uses the **Flat** archetype with status-based colors.
 
 ## Examples
 
@@ -27,47 +14,115 @@ export const Stack = ({ children, gap = 'normal' }) => (
 
 <div className="intent-demo">
   <Stack gap="normal">
-    <Alert variant="info" title="Did you know?">
+    <Alert status="info" title="Did you know?">
       Alerts can contain helpful information about your application.
     </Alert>
-    <Alert variant="success" title="Success!">
+    <Alert status="success" title="Success!">
       Your changes have been saved successfully.
     </Alert>
-    <Alert variant="warning" title="Heads up">
+    <Alert status="warning" title="Heads up">
       Your subscription expires in 3 days.
     </Alert>
-    <Alert variant="danger" title="Error">
+    <Alert status="error" title="Error">
       Unable to save changes. Please try again.
     </Alert>
   </Stack>
 </div>
 
 ```tsx
-<Alert variant="info" title="Did you know?">
-  Alerts can contain helpful information.
-</Alert>
-<Alert variant="success" title="Success!">
-  Your changes have been saved.
-</Alert>
-<Alert variant="warning" title="Heads up">
-  Your subscription expires soon.
-</Alert>
-<Alert variant="danger" title="Error">
-  Unable to save changes.
-</Alert>
+import { Alert, Stack } from 'intent-react';
+
+<Stack gap="normal">
+  <Alert status="info" title="Did you know?">
+    Alerts can contain helpful information.
+  </Alert>
+  <Alert status="success" title="Success!">
+    Your changes have been saved.
+  </Alert>
+  <Alert status="warning" title="Heads up">
+    Your subscription expires soon.
+  </Alert>
+  <Alert status="error" title="Error">
+    Unable to save changes.
+  </Alert>
+</Stack>
 ```
 
 ### Without Title
 
 <div className="intent-demo">
-  <Alert variant="info">
-    This is a simple alert without a title.
+  <Stack gap="normal">
+    <Alert status="info">
+      This is an informational message without a title.
+    </Alert>
+    <Alert status="success">
+      Operation completed successfully!
+    </Alert>
+  </Stack>
+</div>
+
+```tsx
+<Alert status="info">
+  This is an informational message without a title.
+</Alert>
+<Alert status="success">
+  Operation completed successfully!
+</Alert>
+```
+
+### Style Variants
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Alert status="info" variant="subtle">
+      Subtle variant (default)
+    </Alert>
+    <Alert status="info" variant="left-accent">
+      Left accent variant
+    </Alert>
+    <Alert status="info" variant="top-accent">
+      Top accent variant
+    </Alert>
+    <Alert status="success" variant="solid">
+      Solid variant
+    </Alert>
+  </Stack>
+</div>
+
+```tsx
+<Alert status="info" variant="subtle">Subtle variant</Alert>
+<Alert status="info" variant="left-accent">Left accent</Alert>
+<Alert status="info" variant="top-accent">Top accent</Alert>
+<Alert status="success" variant="solid">Solid variant</Alert>
+```
+
+### Sizes
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Alert status="info" size="sm">Small alert</Alert>
+    <Alert status="info" size="md">Medium alert (default)</Alert>
+    <Alert status="info" size="lg">Large alert</Alert>
+  </Stack>
+</div>
+
+```tsx
+<Alert status="info" size="sm">Small alert</Alert>
+<Alert status="info" size="md">Medium alert</Alert>
+<Alert status="info" size="lg">Large alert</Alert>
+```
+
+### Dismissible
+
+<div className="intent-demo">
+  <Alert status="info" dismissible>
+    This alert can be dismissed by clicking the X button.
   </Alert>
 </div>
 
 ```tsx
-<Alert variant="info">
-  This is a simple alert without a title.
+<Alert status="info" dismissible onDismiss={() => console.log('Dismissed')}>
+  This alert can be dismissed.
 </Alert>
 ```
 
@@ -75,51 +130,10 @@ export const Stack = ({ children, gap = 'normal' }) => (
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'info'` \| `'success'` \| `'warning'` \| `'danger'` | `'info'` | Alert style |
-| `title` | `string` | - | Alert heading |
-
-## When to Use
-
-| Variant | Use Case |
-|---------|----------|
-| **Info** | General information, tips |
-| **Success** | Completed actions, confirmations |
-| **Warning** | Attention needed, non-blocking issues |
-| **Danger** | Errors, blocking issues |
-
-## CSS Output
-
-```css
-.intent-alert {
-  display: flex;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 8px;
-  border-left: 4px solid;
-}
-
-.intent-alert--info {
-  background: var(--intent-color-primary-alpha);
-  border-color: var(--intent-color-primary);
-}
-
-.intent-alert--success {
-  background: var(--intent-color-success-alpha);
-  border-color: var(--intent-color-success);
-}
-
-.intent-alert--warning {
-  background: var(--intent-color-warning-alpha);
-  border-color: var(--intent-color-warning);
-}
-
-.intent-alert--danger {
-  background: var(--intent-color-danger-alpha);
-  border-color: var(--intent-color-danger);
-}
-
-.intent-alert__title {
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-```
+| `status` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | Status/color variant |
+| `variant` | `'subtle' \| 'solid' \| 'left-accent' \| 'top-accent'` | `'subtle'` | Visual style |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Alert size |
+| `title` | `string` | - | Optional title |
+| `dismissible` | `boolean` | `false` | Show dismiss button |
+| `onDismiss` | `() => void` | - | Dismiss handler |
+| `children` | `ReactNode` | - | Alert content |

@@ -5,9 +5,9 @@ import React from 'react';
 
 # Command
 
-Command palette for quick navigation and actions.
+Command palette for quick navigation and actions. Uses the **Elevated** archetype.
 
-export const Command = ({ placeholder = "Type a command or search..." }) => {
+export const CommandDemo = () => {
   const [isOpen, setIsOpen] = React.useState(false)
   const [search, setSearch] = React.useState('')
   
@@ -44,7 +44,7 @@ export const Command = ({ placeholder = "Type a command or search..." }) => {
             type="text" 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={placeholder}
+            placeholder="Type a command or search..."
             style={{ flex: 1, border: 'none', background: 'none', fontSize: '1rem', outline: 'none' }}
             autoFocus
           />
@@ -70,8 +70,8 @@ export const Command = ({ placeholder = "Type a command or search..." }) => {
                     cursor: 'pointer',
                     fontSize: '0.875rem'
                   }}
-                  onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
-                  onMouseLeave={(e) => e.target.style.background = 'none'}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'var(--intent-color-surface-hover)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
                   onClick={() => setIsOpen(false)}
                 >
                   <span>⌘</span>
@@ -80,10 +80,6 @@ export const Command = ({ placeholder = "Type a command or search..." }) => {
               ))}
             </div>
           ))}
-        </div>
-        <div style={{ display: 'flex', gap: '16px', padding: '12px 16px', borderTop: '1px solid var(--intent-color-border)', fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>
-          <span><kbd>↑↓</kbd> to navigate</span>
-          <span><kbd>↵</kbd> to select</span>
         </div>
       </div>
     </div>
@@ -94,14 +90,13 @@ export const Command = ({ placeholder = "Type a command or search..." }) => {
 
 ### Command Palette
 
-<div className="intent-demo" style={{ minHeight: '120px' }}>
-  <Command />
+<div className="intent-demo">
+  <CommandDemo />
 </div>
 
 ```tsx
-const [isOpen, setIsOpen] = useState(false)
+import { Command } from 'intent-react';
 
-// Open with ⌘K or Ctrl+K
 <Command>
   <Command.Input placeholder="Search..." />
   <Command.List>
@@ -115,61 +110,33 @@ const [isOpen, setIsOpen] = useState(false)
 
 ## Props
 
+### Command
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `children` | `ReactNode` | - | Command content |
-| `label` | `string` | - | ARIA label |
+| `children` | `ReactNode` | - | Command components |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Open change handler |
+
+### Command.Input
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
 | `placeholder` | `string` | `"Type a command..."` | Input placeholder |
 
-## CSS Output
+### Command.Item
 
-```css
-.intent-command {
-  width: 100%;
-  max-width: 640px;
-  background: var(--intent-color-surface);
-  border-radius: var(--intent-radius-xl);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Item value |
+| `onSelect` | `() => void` | - | Selection handler |
+| `children` | `ReactNode` | - | Item content |
 
-.intent-command__input {
-  width: 100%;
-  padding: 16px;
-  border: none;
-  background: none;
-  font-size: 1rem;
-  outline: none;
-}
+## Design Notes
 
-.intent-command__group {
-  padding: 8px;
-}
-
-.intent-command__group-heading {
-  padding: 8px 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--intent-color-muted);
-  text-transform: uppercase;
-}
-
-.intent-command__item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 10px 12px;
-  text-align: left;
-  background: none;
-  border: none;
-  border-radius: var(--intent-radius-md);
-  cursor: pointer;
-  font-size: 0.875rem;
-}
-
-.intent-command__item:hover,
-.intent-command__item--selected {
-  background: var(--intent-color-surface-hover);
-}
-```
+- Uses **Elevated** archetype (floating modal)
+- Search input at top with icon
+- Grouped items with headers
+- Keyboard navigation (arrow keys, enter)
+- ⌘K shortcut to open
+- ESC to close

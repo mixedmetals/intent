@@ -5,9 +5,19 @@ import React from 'react';
 
 # Sheet
 
-Side panels that slide in from any edge.
+Side panels that slide in from any edge. Uses the **Elevated** archetype.
 
-export const Sheet = ({ title, children, isOpen, onClose, side = 'right' }) => {
+:::tip
+Sheet is similar to Drawer but can slide from any edge.
+:::
+
+export const Sheet = (props) => {
+  const title = props.title
+  const children = props.children
+  const isOpen = props.isOpen
+  const onClose = props.onClose
+  const side = props.side || 'right'
+  
   if (!isOpen) return null
   
   const positions = {
@@ -23,14 +33,13 @@ export const Sheet = ({ title, children, isOpen, onClose, side = 'right' }) => {
         style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }} 
         onClick={onClose}
       />
-      <div style={{ 
+      <div style={Object.assign({ 
         position: 'absolute', 
         background: 'var(--intent-color-surface)', 
         boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
         display: 'flex',
-        flexDirection: 'column',
-        ...positions[side]
-      }}>
+        flexDirection: 'column'
+      }, positions[side])}>
         <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>{title}</h3>
           <button 
@@ -58,20 +67,20 @@ export const SheetDemo = () => {
         {['top', 'bottom', 'left', 'right'].map((s) => (
           <button 
             key={s}
-            className="intent-btn intent-btn--variant-secondary intent-btn--size-medium"
+            className="intent-button intent-button--importance-secondary intent-button--size-medium"
             onClick={() => { setSide(s); setIsOpen(true); }}
           >
-            Open {s}
+            {s.charAt(0).toUpperCase() + s.slice(1)}
           </button>
         ))}
       </div>
       <Sheet 
-        isOpen={isOpen} 
-        onClose={() => setIsOpen(false)}
         title={`${side.charAt(0).toUpperCase() + side.slice(1)} Sheet`}
         side={side}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
       >
-        <p>Sheet content goes here.</p>
+        <p>This sheet slides in from the {side}.</p>
       </Sheet>
     </div>
   )
@@ -79,20 +88,22 @@ export const SheetDemo = () => {
 
 ## Examples
 
-### Sheet Positions
+### All Sides
 
 <div className="intent-demo">
   <SheetDemo />
 </div>
 
 ```tsx
+import { Sheet } from 'intent-react';
+
 <Sheet 
-  isOpen={isOpen} 
-  onClose={() => setIsOpen(false)}
-  title="Sheet Title"
+  title="Settings"
   side="right"
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
 >
-  <p>Sheet content...</p>
+  <p>Sheet content</p>
 </Sheet>
 ```
 
@@ -101,46 +112,15 @@ export const SheetDemo = () => {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `isOpen` | `boolean` | `false` | Whether sheet is open |
-| `onClose` | `() => void` | - | Close handler |
+| `onClose` | `() => void` | - | Close callback |
 | `title` | `string` | - | Sheet title |
-| `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'right'` | Sheet position |
+| `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'right'` | Slide direction |
 | `children` | `ReactNode` | - | Sheet content |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-sheet {
-  position: fixed;
-  z-index: 50;
-  background: var(--intent-color-surface);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.intent-sheet--top {
-  top: 0;
-  left: 0;
-  right: 0;
-  max-height: 50vh;
-}
-
-.intent-sheet--right {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  max-width: 400px;
-}
-
-.intent-sheet--bottom {
-  bottom: 0;
-  left: 0;
-  right: 0;
-  max-height: 50vh;
-}
-
-.intent-sheet--left {
-  top: 0;
-  left: 0;
-  bottom: 0;
-  max-width: 400px;
-}
-```
+- Uses **Elevated** archetype (floating above content)
+- Backdrop with blur effect
+- Can slide from any edge
+- Header with close button
+- Scrollable content area

@@ -5,37 +5,27 @@ import React from 'react';
 
 # HoverCard
 
-Cards that appear on hover.
+Cards that appear on hover. Uses the **Elevated** archetype.
 
-export const HoverCard = ({ trigger, children }) => {
+export const HoverCardDemo = () => {
   const [isVisible, setIsVisible] = React.useState(false)
-  const [position, setPosition] = React.useState({ x: 0, y: 0 })
-  
-  const handleMouseEnter = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    setPosition({ x: rect.left, y: rect.bottom + 8 })
-    setIsVisible(true)
-  }
-  
-  const handleMouseLeave = () => {
-    setIsVisible(false)
-  }
   
   return (
     <>
       <span 
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
         style={{ cursor: 'pointer', color: 'var(--intent-color-primary)', textDecoration: 'underline' }}
       >
-        {trigger}
+        @intent
       </span>
       {isVisible && (
         <div 
           style={{ 
-            position: 'fixed', 
-            left: position.x, 
-            top: position.y,
+            position: 'fixed',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
             maxWidth: '320px',
             background: 'var(--intent-color-surface)', 
             border: '1px solid var(--intent-color-border)',
@@ -44,72 +34,58 @@ export const HoverCard = ({ trigger, children }) => {
             zIndex: 50,
             padding: '16px'
           }}
-          onMouseEnter={() => setIsVisible(true)}
-          onMouseLeave={handleMouseLeave}
         >
-          {children}
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--intent-color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>I</div>
+            <div>
+              <div style={{ fontWeight: 600 }}>Intent Framework</div>
+              <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Schema-first CSS framework</div>
+            </div>
+          </div>
         </div>
       )}
     </>
   )
 }
 
-export const HoverCardDemo = () => (
-  <div>
-    Hover over <HoverCard 
-      trigger="@nextjs"
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-        <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }} />
-        <div>
-          <div style={{ fontWeight: 600 }}>Next.js</div>
-          <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>@nextjs</div>
-        </div>
-      </div>
-      <div style={{ fontSize: '0.875rem', marginBottom: '12px' }}>
-        The React Framework for the Web. Used by some of the world's largest companies.
-      </div>
-      <div style={{ display: 'flex', gap: '16px', fontSize: '0.875rem' }}>
-        <span><strong>234</strong> Following</span>
-        <span><strong>120k</strong> Followers</span>
-      </div>
-    </HoverCard> to see their profile.
-  </div>
-)
-
 ## Examples
 
 ### Basic HoverCard
 
+Hover over the trigger:
+
 <div className="intent-demo">
-  <HoverCardDemo />
+  <div>
+    Hover over <HoverCardDemo /> to see the card.
+  </div>
 </div>
 
 ```tsx
-Hover over <HoverCard trigger="@username">
-  <Avatar name="User" />
-  <Text>User profile info...</Text>
-</HoverCard> to see profile.
+import { HoverCard } from 'intent-react';
+
+<HoverCard trigger="@intent">
+  <div>
+    <Avatar src="..." />
+    <div>
+      <Text weight="semibold">Intent Framework</Text>
+      <Text size="sm" color="muted">Schema-first CSS</Text>
+    </div>
+  </div>
+</HoverCard>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `trigger` | `ReactNode` | - | Trigger element |
+| `trigger` | `ReactNode` | - | Hover trigger element |
 | `children` | `ReactNode` | - | Card content |
-| `delay` | `number` | `200` | Delay before showing (ms) |
+| `delay` | `number` | `200` | Show delay in ms |
+| `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` | Card position |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-hover-card {
-  max-width: 320px;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-  padding: 16px;
-}
-```
+- Uses **Elevated** archetype (floating above content)
+- Similar styling to Popover
+- Delay prevents accidental triggers
+- Supports rich content (avatars, text, etc.)

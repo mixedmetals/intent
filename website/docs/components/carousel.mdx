@@ -7,11 +7,14 @@ import React from 'react';
 
 Image and content carousels.
 
-export const Carousel = ({ slides, autoPlay = false, interval = 5000 }) => {
+export const Carousel = (props) => {
+  const slides = props.slides || []
+  const autoPlay = props.autoPlay || false
+  const interval = props.interval || 5000
   const [current, setCurrent] = React.useState(0)
   
-  const next = () => setCurrent(prev => (prev + 1) % slides.length)
-  const prev = () => setCurrent(prev => (prev - 1 + slides.length) % slides.length)
+  const next = () => setCurrent((prev) => (prev + 1) % slides.length)
+  const prev = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length)
   
   React.useEffect(() => {
     if (!autoPlay) return
@@ -37,7 +40,6 @@ export const Carousel = ({ slides, autoPlay = false, interval = 5000 }) => {
         </div>
       </div>
       
-      {/* Navigation */}
       <button 
         onClick={prev}
         style={{
@@ -83,7 +85,6 @@ export const Carousel = ({ slides, autoPlay = false, interval = 5000 }) => {
         →
       </button>
       
-      {/* Indicators */}
       <div style={{
         position: 'absolute',
         bottom: '16px',

@@ -2,161 +2,122 @@
 sidebar_position: 70
 ---
 import React from 'react';
+import { Modal } from 'intent-react';
 
 # Dialog
 
-Accessible modal dialogs.
+Accessible modal dialogs. Uses the **Elevated** archetype.
 
-export const Dialog = ({ title, children, isOpen, onOpenChange, description }) => {
-  if (!isOpen) return null
-  
-  return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div 
-        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }} 
-        onClick={() => onOpenChange(false)}
-      />
-      <div style={{ 
-        position: 'relative', 
-        background: 'var(--intent-color-surface)', 
-        borderRadius: '12px', 
-        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
-        maxWidth: '450px',
-        width: '90%',
-        maxHeight: '85vh',
-        overflow: 'auto'
-      }}>
-        <div style={{ padding: '20px 24px', borderBottom: description ? 'none' : '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h2 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>{title}</h2>
-            {description && <p style={{ margin: '4px 0 0 0', fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>{description}</p>}
-          </div>
-          <button 
-            onClick={() => onOpenChange(false)}
-            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--intent-color-muted)', padding: '4px' }}
-          >
-            ×
-          </button>
-        </div>
-        <div style={{ padding: '24px' }}>
-          {children}
-        </div>
-      </div>
-    </div>
-  )
-}
+:::tip
+Dialog is an alias for Modal. Use whichever name fits your mental model.
+:::
 
 export const DialogDemo = () => {
   const [isOpen, setIsOpen] = React.useState(false)
   
   return (
     <>
-      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(true)}>
+      <button className="intent-button intent-button--importance-secondary intent-button--size-medium" onClick={() => setIsOpen(true)}>
         Edit Profile
       </button>
-      <Dialog 
-        isOpen={isOpen}
-        onOpenChange={setIsOpen}
-        title="Edit Profile"
-        description="Make changes to your profile here."
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>Name</label>
-            <input type="text" defaultValue="John Doe" style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px' }} />
-          </div>
-          <div>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>Username</label>
-            <input type="text" defaultValue="@johndoe" style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px' }} />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '8px' }}>
-            <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Cancel</button>
-            <button className="intent-btn intent-btn--variant-primary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Save Changes</button>
+      {isOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div 
+            style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }} 
+            onClick={() => setIsOpen(false)}
+          />
+          <div style={{ 
+            position: 'relative', 
+            background: 'var(--intent-color-surface)', 
+            borderRadius: '12px', 
+            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+            maxWidth: '450px',
+            width: '90%',
+            maxHeight: '85vh',
+            overflow: 'auto'
+          }}>
+            <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <h2 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>Edit Profile</h2>
+                <p style={{ margin: '4px 0 0 0', fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Make changes to your profile</p>
+              </div>
+              <button 
+                onClick={() => setIsOpen(false)}
+                style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--intent-color-muted)', padding: '4px' }}
+              >
+                ×
+              </button>
+            </div>
+            <div style={{ padding: '24px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>Name</label>
+                  <input type="text" defaultValue="John Doe" style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px' }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>Bio</label>
+                  <textarea defaultValue="Designer and developer" style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px', minHeight: '80px' }} />
+                </div>
+              </div>
+            </div>
+            <div style={{ padding: '16px 24px', borderTop: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+              <button className="intent-button intent-button--importance-secondary intent-button--size-medium" onClick={() => setIsOpen(false)}>Cancel</button>
+              <button className="intent-button intent-button--importance-primary intent-button--size-medium" onClick={() => setIsOpen(false)}>Save Changes</button>
+            </div>
           </div>
         </div>
-      </Dialog>
+      )}
     </>
   )
 }
 
 ## Examples
 
-### Edit Profile Dialog
+### Basic Dialog
 
 <div className="intent-demo">
   <DialogDemo />
 </div>
 
 ```tsx
+import { Modal } from 'intent-react';
+
 const [isOpen, setIsOpen] = useState(false)
 
-<Button onClick={() => setIsOpen(true)}>Edit Profile</Button>
+<Button onClick={() => setIsOpen(true)}>Open Dialog</Button>
 
-<Dialog 
-  isOpen={isOpen}
-  onOpenChange={setIsOpen}
+<Modal 
+  isOpen={isOpen} 
+  onClose={() => setIsOpen(false)}
   title="Edit Profile"
-  description="Make changes to your profile."
+  description="Make changes to your profile"
 >
-  <form>...</form>
-</Dialog>
+  <Form>
+    <Input label="Name" />
+    <Textarea label="Bio" />
+  </Form>
+  <ModalFooter>
+    <Button importance="secondary">Cancel</Button>
+    <Button>Save</Button>
+  </ModalFooter>
+</Modal>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `isOpen` | `boolean` | - | Dialog visibility |
-| `onOpenChange` | `(open: boolean) => void` | - | Visibility change handler |
+| `isOpen` | `boolean` | `false` | Whether dialog is open |
+| `onClose` | `() => void` | - | Called when dialog closes |
 | `title` | `string` | - | Dialog title |
 | `description` | `string` | - | Dialog description |
 | `children` | `ReactNode` | - | Dialog content |
+| `footer` | `ReactNode` | - | Footer content |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-dialog__overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  z-index: 50;
-}
-
-.intent-dialog {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--intent-color-surface);
-  border-radius: var(--intent-radius-xl);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  max-width: 450px;
-  width: 90%;
-  max-height: 85vh;
-  z-index: 51;
-}
-
-.intent-dialog__header {
-  padding: 20px 24px;
-  display: flex;
-  justifyContent: space-between;
-  align-items: center;
-}
-
-.intent-dialog__title {
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
-.intent-dialog__description {
-  margin: 4px 0 0 0;
-  font-size: 0.875rem;
-  color: var(--intent-color-muted);
-}
-
-.intent-dialog__body {
-  padding: 24px;
-}
-```
+- Uses **Elevated** archetype (floating above content)
+- Larger shadow than Card to indicate higher elevation
+- Backdrop uses `rgba(0,0,0,0.5)` with blur
+- Header and footer have subtle 1px borders
+- Focus trap and escape key handling

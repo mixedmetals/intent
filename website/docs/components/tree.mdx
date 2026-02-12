@@ -2,147 +2,126 @@
 sidebar_position: 93
 ---
 
-import React from 'react';
+import { Tree, TreeItem, TreeBranch } from 'intent-react/components/data';
 
 # Tree
 
-Hierarchical tree view component.
-
-export const Tree = ({ items, defaultExpanded = [] }) => {
-  const [expanded, setExpanded] = React.useState(new Set(defaultExpanded))
-  
-  const toggle = (id) => {
-    setExpanded(prev => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
-  
-  const renderItem = (item, level = 0) => {
-    const hasChildren = item.children && item.children.length > 0
-    const isExpanded = expanded.has(item.id)
-    
-    return (
-      <div key={item.id}>
-        <div 
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '4px', 
-            padding: '6px 8px',
-            paddingLeft: `${level * 20 + 8}px`,
-            cursor: hasChildren ? 'pointer' : 'default',
-            borderRadius: '4px'
-          }}
-          onClick={() => hasChildren && toggle(item.id)}
-          onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
-          onMouseLeave={(e) => e.target.style.background = 'transparent'}
-        >
-          {hasChildren && (
-            <span style={{ 
-              fontSize: '0.75rem', 
-              width: '16px',
-              transform: isExpanded ? 'rotate(90deg)' : 'rotate(0)',
-              transition: 'transform 150ms'
-            }}>▶</span>
-          )}
-          {!hasChildren && <span style={{ width: '16px' }} />}
-          <span>{item.icon}</span>
-          <span style={{ fontSize: '0.875rem' }}>{item.label}</span>
-        </div>
-        {hasChildren && isExpanded && (
-          <div>
-            {item.children.map(child => renderItem(child, level + 1))}
-          </div>
-        )}
-      </div>
-    )
-  }
-  
-  return <div style={{ border: '1px solid var(--intent-color-border)', borderRadius: '8px', padding: '8px' }}>{items.map(item => renderItem(item))}</div>
-}
+Hierarchical tree view component. Uses the **Flat** archetype for items.
 
 ## Examples
 
-### File Tree
+### Basic Tree
 
 <div className="intent-demo">
-  <Tree 
-    items={[
-      { 
-        id: 'src', 
-        label: 'src', 
-        icon: '📁',
-        children: [
-          { id: 'components', label: 'components', icon: '📁', children: [
-            { id: 'button', label: 'Button.tsx', icon: '📄' },
-            { id: 'card', label: 'Card.tsx', icon: '📄' }
-          ]},
-          { id: 'utils', label: 'utils', icon: '📁', children: [
-            { id: 'helpers', label: 'helpers.ts', icon: '📄' }
-          ]},
-          { id: 'app', label: 'App.tsx', icon: '📄' }
-        ]
-      },
-      { id: 'package', label: 'package.json', icon: '📄' }
-    ]}
-    defaultExpanded={['src']}
-  />
+  <Tree>
+    <TreeItem label="src">
+      <TreeBranch>
+        <TreeItem label="components" />
+        <TreeItem label="hooks" />
+        <TreeItem label="utils" />
+      </TreeBranch>
+    </TreeItem>
+    <TreeItem label="public" />
+    <TreeItem label="package.json" />
+  </Tree>
 </div>
 
 ```tsx
+import { Tree, TreeItem, TreeBranch } from 'intent-react/components/data';
+
+<Tree>
+  <TreeItem label="src">
+    <TreeBranch>
+      <TreeItem label="components" />
+      <TreeItem label="hooks" />
+    </TreeBranch>
+  </TreeItem>
+  <TreeItem label="public" />
+</Tree>
+```
+
+### With Icons
+
+<div className="intent-demo">
+  <Tree>
+    <TreeItem label="Documents" icon="📁">
+      <TreeBranch>
+        <TreeItem label="Resume.pdf" icon="📄" />
+        <TreeItem label="Cover Letter.pdf" icon="📄" />
+      </TreeBranch>
+    </TreeItem>
+    <TreeItem label="Pictures" icon="📁">
+      <TreeBranch>
+        <TreeItem label="Vacation.jpg" icon="🖼️" />
+        <TreeItem label="Family.jpg" icon="🖼️" />
+      </TreeBranch>
+    </TreeItem>
+  </Tree>
+</div>
+
+```tsx
+<Tree>
+  <TreeItem label="Documents" icon="📁">
+    <TreeBranch>
+      <TreeItem label="Resume.pdf" icon="📄" />
+    </TreeBranch>
+  </TreeItem>
+</Tree>
+```
+
+### Default Expanded
+
+```tsx
+<Tree defaultExpanded={['src', 'components']}>
+  <TreeItem id="src" label="src">
+    <TreeBranch>
+      <TreeItem id="components" label="components">
+        <TreeBranch>
+          <TreeItem label="Button.tsx" />
+        </TreeBranch>
+      </TreeItem>
+    </TreeBranch>
+  </TreeItem>
+</Tree>
+```
+
+### Selectable
+
+```tsx
 <Tree 
-  items={[
-    { id: 'folder', label: 'Folder', icon: '📁', children: [
-      { id: 'file', label: 'File', icon: '📄' }
-    ]}
-  ]}
-/>
+  selectable 
+  selectedIds={['item-1']}
+  onSelectionChange={setSelected}
+>
+  <TreeItem id="item-1" label="Item 1" />
+  <TreeItem id="item-2" label="Item 2" />
+</Tree>
 ```
 
 ## Props
 
+### Tree
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `Array<{id: string, label: string, icon?: ReactNode, children?: array}>` | `[]` | Tree items |
-| `defaultExpanded` | `string[]` | `[]` | Initially expanded item IDs |
-| `onSelect` | `(id: string) => void` | - | Selection handler |
+| `defaultExpanded` | `string[]` | `[]` | Default expanded node IDs |
+| `expandedIds` | `string[]` | - | Controlled expanded IDs |
+| `selectable` | `boolean` | `false` | Enable selection |
+| `selectedIds` | `string[]` | - | Selected node IDs |
+| `onSelectionChange` | `(ids: string[]) => void` | - | Selection change callback |
 
-## CSS Output
+### TreeItem
 
-```css
-.intent-tree {
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  padding: 8px;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | Item label |
+| `icon` | `ReactNode` | - | Item icon |
+| `id` | `string` | - | Unique identifier |
 
-.intent-tree__item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 8px;
-  border-radius: var(--intent-radius-sm);
-  cursor: pointer;
-}
+## Design Notes
 
-.intent-tree__item:hover {
-  background: var(--intent-color-surface-hover);
-}
-
-.intent-tree__toggle {
-  font-size: 0.75rem;
-  width: 16px;
-  transition: transform 150ms;
-}
-
-.intent-tree__toggle--expanded {
-  transform: rotate(90deg);
-}
-
-.intent-tree__label {
-  font-size: 0.875rem;
-}
-```
+- Uses **Flat** archetype (no bevel)
+- Indentation shows hierarchy level
+- Chevron rotates when expanded
+- Hover state on items
+- Selected state uses primary color

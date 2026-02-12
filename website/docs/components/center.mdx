@@ -1,40 +1,19 @@
 ---
 sidebar_position: 88
 ---
-import React from 'react';
+
+import { Center, Box } from 'intent-react/components/layout';
 
 # Center
 
-Center content horizontally and vertically.
-
-export const Center = ({ children }) => (
-  <div style={{ 
-    display: 'flex', 
-    alignItems: 'center', 
-    justifyContent: 'center',
-    minHeight: '120px',
-    padding: '24px'
-  }}>
-    {children || (
-      <div style={{ 
-        padding: '16px 32px', 
-        background: 'var(--intent-color-primary)', 
-        color: 'white',
-        borderRadius: '8px',
-        fontWeight: 600
-      }}>
-        Centered Content
-      </div>
-    )}
-  </div>
-)
+Center content horizontally and vertically using flexbox.
 
 ## Examples
 
 ### Basic Center
 
 <div className="intent-demo">
-  <Center>
+  <Center style={{ minHeight: '120px' }}>
     <div style={{ padding: '16px 32px', background: 'var(--intent-color-primary)', color: 'white', borderRadius: '8px', fontWeight: 600 }}>
       I'm centered!
     </div>
@@ -42,43 +21,69 @@ export const Center = ({ children }) => (
 </div>
 
 ```tsx
+import { Center } from 'intent-react/components/layout';
+
 <Center>
   <div>Centered content</div>
 </Center>
 ```
 
-### With Card
+### Column Direction
 
 <div className="intent-demo">
-  <Center>
+  <Center direction="column" style={{ minHeight: '150px', gap: '12px' }}>
+    <div style={{ fontSize: '24px', fontWeight: 'bold' }}>Title</div>
+    <div style={{ color: 'var(--intent-color-text-secondary)' }}>Subtitle</div>
+    <button style={{ padding: '8px 16px', marginTop: '8px' }}>Action</button>
+  </Center>
+</div>
+
+```tsx
+<Center direction="column">
+  <h1>Title</h1>
+  <p>Subtitle</p>
+  <button>Action</button>
+</Center>
+```
+
+### Full Screen Center
+
+<div className="intent-demo">
+  <Center style={{ height: '200px', background: 'var(--intent-surface-flat-bg)', borderRadius: '8px' }}>
     <div style={{ textAlign: 'center' }}>
-      <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🎉</div>
+      <div style={{ fontSize: '32px', marginBottom: '8px' }}>🎉</div>
       <div style={{ fontWeight: 600 }}>Success!</div>
-      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Your action was completed.</div>
     </div>
   </Center>
 </div>
 
 ```tsx
-<Center>
-  <Card>
-    <Text align="center">Success!</Text>
-  </Card>
+<Center style={{ height: '100vh' }}>
+  <div>
+    <h1>Welcome</h1>
+    <p>Your content here</p>
+  </div>
 </Center>
+```
+
+### Inline Center
+
+<div className="intent-demo">
+  <p>
+    Text with <Center inline style={{ background: 'var(--intent-color-primary-alpha)', padding: '2px 8px', borderRadius: '4px' }}>centered</Center> inline element
+  </p>
+</div>
+
+```tsx
+<p>
+  Text with <Center inline>centered</Center> inline element
+</p>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `inline` | `boolean` | `false` | Use inline-flex instead of flex |
+| `direction` | `'row' \| 'row-reverse' \| 'column' \| 'column-reverse'` | `'row'` | Flex direction |
 | `children` | `ReactNode` | - | Content to center |
-
-## CSS Output
-
-```css
-.intent-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-```

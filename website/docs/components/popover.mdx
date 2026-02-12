@@ -2,12 +2,13 @@
 sidebar_position: 55
 ---
 import React from 'react';
+import { Button } from 'intent-react';
 
 # Popover
 
-Floating content panels.
+Floating content panels. Uses the **Elevated** archetype.
 
-export const Popover = ({ trigger, children, title }) => {
+export const PopoverDemo = () => {
   const [isOpen, setIsOpen] = React.useState(false)
   const ref = React.useRef(null)
   
@@ -23,7 +24,7 @@ export const Popover = ({ trigger, children, title }) => {
   
   return (
     <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
-      <div onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
+      <Button importance="secondary" onClick={() => setIsOpen(!isOpen)}>Open Popover</Button>
       {isOpen && (
         <div style={{ 
           position: 'absolute', 
@@ -35,44 +36,31 @@ export const Popover = ({ trigger, children, title }) => {
           border: '1px solid var(--intent-color-border)',
           borderRadius: '8px',
           boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-          zIndex: 50,
-          padding: title ? '0' : '16px'
+          zIndex: 50
         }}>
-          {title && (
-            <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--intent-color-border)', fontWeight: 600 }}>
-              {title}
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--intent-color-border)', fontWeight: 600 }}>
+            Dimensions
+          </div>
+          <div style={{ padding: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '4px', fontWeight: 500 }}>Width</label>
+                <input type="text" defaultValue="100%" style={{ width: '100%', padding: '6px 10px', border: '1px solid var(--intent-color-border)', borderRadius: '4px' }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '4px', fontWeight: 500 }}>Height</label>
+                <input type="text" defaultValue="auto" style={{ width: '100%', padding: '6px 10px', border: '1px solid var(--intent-color-border)', borderRadius: '4px' }} />
+              </div>
+              <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                <Button size="sm" style={{ flex: 1 }}>Save</Button>
+              </div>
             </div>
-          )}
-          <div style={{ padding: title ? '16px' : '0' }}>
-            {children}
           </div>
         </div>
       )}
     </div>
   )
 }
-
-export const PopoverDemo = () => (
-  <Popover 
-    trigger={<button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium">Open Popover</button>}
-    title="Dimensions"
-  >
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <label style={{ fontSize: '0.875rem' }}>Width</label>
-        <input type="text" defaultValue="100%" style={{ width: '80px', padding: '4px 8px', border: '1px solid var(--intent-color-border)', borderRadius: '4px' }} />
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <label style={{ fontSize: '0.875rem' }}>Height</label>
-        <input type="text" defaultValue="auto" style={{ width: '80px', padding: '4px 8px', border: '1px solid var(--intent-color-border)', borderRadius: '4px' }} />
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <label style={{ fontSize: '0.875rem' }}>Max Width</label>
-        <input type="text" defaultValue="none" style={{ width: '80px', padding: '4px 8px', border: '1px solid var(--intent-color-border)', borderRadius: '4px' }} />
-      </div>
-    </div>
-  </Popover>
-)
 
 ## Examples
 
@@ -83,46 +71,56 @@ export const PopoverDemo = () => (
 </div>
 
 ```tsx
-<Popover 
-  trigger={<Button variant="secondary">Open Popover</Button>}
-  title="Dimensions"
->
-  <Form>
-    <Field label="Width"><Input value="100%" /></Field>
-    <Field label="Height"><Input value="auto" /></Field>
-  </Form>
+import { Popover, Button } from 'intent-react';
+
+<Popover>
+  <PopoverTrigger>
+    <Button>Open Popover</Button>
+  </PopoverTrigger>
+  <PopoverContent>
+    <div>Popover content here</div>
+  </PopoverContent>
+</Popover>
+```
+
+### With Title
+
+```tsx
+<Popover>
+  <PopoverTrigger>
+    <Button>Settings</Button>
+  </PopoverTrigger>
+  <PopoverContent title="Display Settings">
+    <Stack gap="normal">
+      <Switch label="Show grid" />
+      <Switch label="Snap to grid" />
+    </Stack>
+  </PopoverContent>
 </Popover>
 ```
 
 ## Props
 
+### Popover
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `trigger` | `ReactNode` | - | Trigger element |
-| `children` | `ReactNode` | - | Popover content |
-| `title` | `string` | - | Optional header title |
-| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'bottom'` | Position |
+| `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Default open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Open state change callback |
 
-## CSS Output
+### PopoverContent
 
-```css
-.intent-popover {
-  position: absolute;
-  min-width: 280px;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | - | Popover title |
+| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Alignment |
+| `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` | Preferred side |
 
-.intent-popover__header {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--intent-color-border);
-  font-weight: 600;
-}
+## Design Notes
 
-.intent-popover__body {
-  padding: 16px;
-}
-```
+- Uses **Elevated** archetype (floating above content)
+- Arrow points to trigger element
+- Click outside to close
+- Respects safe area boundaries
+- Same shadow as DropdownMenu

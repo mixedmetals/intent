@@ -2,109 +2,91 @@
 sidebar_position: 60
 ---
 import React from 'react';
+import { Calendar } from 'intent-react/components/data';
 
 # Calendar
 
-Date picker calendar component.
+Date picker calendar component. Uses the **Flat** archetype for day selection states.
 
-export const Calendar = () => {
+export const CalendarDemo = () => {
   const [selected, setSelected] = React.useState(new Date())
-  const [viewDate, setViewDate] = React.useState(new Date())
-  
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-  const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-  
-  const getDaysInMonth = (date) => {
-    const year = date.getFullYear()
-    const month = date.getMonth()
-    const firstDay = new Date(year, month, 1).getDay()
-    const daysInMonth = new Date(year, month + 1, 0).getDate()
-    const days = []
-    
-    for (let i = 0; i < firstDay; i++) {
-      days.push(null)
-    }
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push(i)
-    }
-    return days
-  }
-  
-  const handlePrev = () => {
-    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))
-  }
-  
-  const handleNext = () => {
-    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))
-  }
-  
-  const daysInMonth = getDaysInMonth(viewDate)
-  const today = new Date().getDate()
-  const isCurrentMonth = viewDate.getMonth() === new Date().getMonth() && viewDate.getFullYear() === new Date().getFullYear()
-  
   return (
-    <div style={{ width: '280px', border: '1px solid var(--intent-color-border)', borderRadius: '12px', padding: '16px', background: 'var(--intent-color-surface)' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <button onClick={handlePrev} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.125rem', padding: '4px 8px', borderRadius: '6px' }}>←</button>
-        <div style={{ fontWeight: 600 }}>{monthNames[viewDate.getMonth()]} {viewDate.getFullYear()}</div>
-        <button onClick={handleNext} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.125rem', padding: '4px 8px', borderRadius: '6px' }}>→</button>
-      </div>
-      
-      {/* Days Header */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', marginBottom: '8px' }}>
-        {days.map(d => (
-          <div key={d} style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 600, color: 'var(--intent-color-muted)' }}>{d}</div>
-        ))}
-      </div>
-      
-      {/* Days Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px' }}>
-        {daysInMonth.map((day, i) => (
-          <button
-            key={i}
-            onClick={() => day && setSelected(new Date(viewDate.getFullYear(), viewDate.getMonth(), day))}
-            style={{
-              aspectRatio: '1',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: 'none',
-              borderRadius: '6px',
-              background: day === selected.getDate() && viewDate.getMonth() === selected.getMonth() 
-                ? 'var(--intent-color-primary)' 
-                : 'transparent',
-              color: day === selected.getDate() && viewDate.getMonth() === selected.getMonth() 
-                ? 'white' 
-                : isCurrentMonth && day === today 
-                  ? 'var(--intent-color-primary)' 
-                  : 'var(--intent-color-foreground)',
-              fontWeight: isCurrentMonth && day === today ? 600 : 400,
-              cursor: day ? 'pointer' : 'default',
-              fontSize: '0.875rem'
-            }}
-          >
-            {day}
-          </button>
-        ))}
-      </div>
-    </div>
+    <Calendar 
+      selectedDate={selected} 
+      onSelect={(date) => setSelected(date)}
+    />
   )
 }
 
 ## Examples
 
-### Basic Calendar
+### Default
 
 <div className="intent-demo">
-  <Calendar />
+  <CalendarDemo />
 </div>
 
 ```tsx
+import { Calendar } from 'intent-react/components/data';
+
+const [selected, setSelected] = React.useState(new Date())
+
 <Calendar 
-  mode="single"
-  selected={date}
-  onSelect={setDate}
+  selectedDate={selected} 
+  onSelect={(date) => setSelected(date)}
+/>
+```
+
+### Sizes
+
+<div className="intent-demo" style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+  <div>
+    <div style={{ fontSize: '12px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.7 }}>Small</div>
+    <Calendar size="sm" />
+  </div>
+  <div>
+    <div style={{ fontSize: '12px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.7 }}>Medium</div>
+    <Calendar size="md" />
+  </div>
+  <div>
+    <div style={{ fontSize: '12px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.7 }}>Large</div>
+    <Calendar size="lg" />
+  </div>
+</div>
+
+```tsx
+<Calendar size="sm" />
+<Calendar size="md" />
+<Calendar size="lg" />
+```
+
+### Date Range
+
+export const RangeDemo = () => {
+  const today = new Date()
+  const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7)
+  
+  return (
+    <Calendar 
+      selectedDate={[today, nextWeek]}
+      minDate={today}
+      maxDate={new Date(today.getFullYear(), today.getMonth() + 2, 0)}
+    />
+  )
+}
+
+<div className="intent-demo">
+  <RangeDemo />
+</div>
+
+```tsx
+const today = new Date()
+const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7)
+
+<Calendar 
+  selectedDate={[today, nextWeek]}
+  minDate={today}
+  maxDate={new Date(today.getFullYear(), today.getMonth() + 2, 0)}
 />
 ```
 
@@ -112,57 +94,20 @@ export const Calendar = () => {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `mode` | `'single' \| 'multiple' \| 'range'` | `'single'` | Selection mode |
-| `selected` | `Date \| Date[] \| {from: Date, to: Date}` | - | Selected date(s) |
-| `onSelect` | `(date) => void` | - | Selection handler |
-| `disabled` | `Date[]` | `[]` | Disabled dates |
-| `initialFocus` | `boolean` | `false` | Auto-focus on mount |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of calendar |
+| `view` | `'month' \| 'year' \| 'decade'` | `'month'` | Current view mode |
+| `currentDate` | `Date` | - | Controlled displayed month/year |
+| `selectedDate` | `Date \| Date[]` | - | Selected date(s) |
+| `minDate` | `Date` | - | Minimum selectable date |
+| `maxDate` | `Date` | - | Maximum selectable date |
+| `onSelect` | `(date: Date) => void` | - | Callback when date is selected |
+| `onMonthChange` | `(date: Date) => void` | - | Callback when month changes |
+| `renderDay` | `(date, props) => ReactNode` | - | Custom day renderer |
 
-## CSS Output
+## Design Notes
 
-```css
-.intent-calendar {
-  width: 280px;
-  padding: 16px;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-xl);
-}
-
-.intent-calendar__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.intent-calendar__month {
-  font-weight: 600;
-}
-
-.intent-calendar__day-name {
-  text-align: center;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--intent-color-muted);
-}
-
-.intent-calendar__day {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--intent-radius-md);
-  font-size: 0.875rem;
-}
-
-.intent-calendar__day--selected {
-  background: var(--intent-color-primary);
-  color: white;
-}
-
-.intent-calendar__day--today {
-  color: var(--intent-color-primary);
-  font-weight: 600;
-}
-```
+- Days use the **Flat** archetype (no bevel)
+- Selected state uses `var(--intent-color-primary)` background
+- Today is indicated with a ring accent
+- Hover states use `var(--intent-color-surface-hover)`
+- Navigation buttons use the **Milled** archetype for tactile interaction

@@ -2,28 +2,12 @@
 sidebar_position: 32
 ---
 
+import { Container } from 'intent-react/components/layout';
+import { Card } from 'intent-react';
+
 # Container
 
 Centered, max-width wrapper for page content.
-
-export const Container = ({ children, size = 'medium', padding = 'normal', style }) => {
-  const sizeMap = { small: '640px', medium: '768px', large: '1024px', xl: '1280px' }
-  const paddingMap = { compact: '4px', normal: '16px', relaxed: '24px' }
-  
-  return (
-    <div style={{
-      maxWidth: sizeMap[size],
-      margin: '0 auto',
-      padding: paddingMap[padding],
-      ...style
-    }}>
-      {children}
-    </div>
-  )
-}
-
-export const Card = ({ children }) => <div className="intent-card intent-card--padding-normal intent-card--elevation-low">{children}</div>
-export const Text = ({ children }) => <span className="intent-text">{children}</span>
 
 ## Examples
 
@@ -31,53 +15,49 @@ export const Text = ({ children }) => <span className="intent-text">{children}</
 
 <div className="intent-demo">
   <Container size="small" style={{ marginBottom: '16px' }}>
-    <Card><Text align="center">Small (640px)</Text></Card>
+    <Card style={{ textAlign: 'center' }}>Small (640px)</Card>
   </Container>
   <Container size="medium" style={{ marginBottom: '16px' }}>
-    <Card><Text align="center">Medium (768px)</Text></Card>
+    <Card style={{ textAlign: 'center' }}>Medium (768px)</Card>
   </Container>
   <Container size="large" style={{ marginBottom: '16px' }}>
-    <Card><Text align="center">Large (1024px)</Text></Card>
+    <Card style={{ textAlign: 'center' }}>Large (1024px)</Card>
   </Container>
 </div>
 
 ```tsx
+import { Container } from 'intent-react/components/layout';
+
 <Container size="small">...</Container>
 <Container size="medium">...</Container>
 <Container size="large">...</Container>
+<Container size="xl">...</Container>
+```
+
+### Padding
+
+<div className="intent-demo">
+  <Container size="medium" padding="compact">
+    <Card>Compact padding (4px)</Card>
+  </Container>
+</div>
+
+```tsx
+<Container padding="compact">...</Container>
+<Container padding="normal">...</Container>
+<Container padding="relaxed">...</Container>
+```
+
+### Fluid Container
+
+```tsx
+<Container fluid>Full width with padding</Container>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `'small'` \| `'medium'` \| `'large'` \| `'xl'` | `'medium'` | Max width constraint |
-| `padding` | `'compact'` \| `'normal'` \| `'relaxed'` | `'normal'` | Horizontal padding |
-
-## Size Breakpoints
-
-| Size | Max Width | Use Case |
-|------|-----------|----------|
-| `small` | 640px | Forms, focused content |
-| `medium` | 768px | Articles, reading content |
-| `large` | 1024px | Dashboards, tables |
-| `xl` | 1280px | Full layouts |
-
-## CSS Output
-
-```css
-.intent-container {
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-}
-
-.intent-container--size-medium {
-  max-width: 768px;
-}
-
-.intent-container--padding-normal {
-  padding-left: var(--intent-spacing-4);
-  padding-right: var(--intent-spacing-4);
-}
-```
+| `size` | `'small' \| 'medium' \| 'large' \| 'xl' \| 'fluid'` | `'medium'` | Max width size |
+| `padding` | `'compact' \| 'normal' \| 'relaxed'` | `'normal'` | Horizontal padding |
+| `center` | `boolean` | `true` | Center the container |

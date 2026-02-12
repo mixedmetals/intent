@@ -1,15 +1,20 @@
 ---
 sidebar_position: 76
 ---
-
 import React from 'react';
 
 # Menubar
 
-Apple-style menu bar for desktop applications.
+Apple-style menu bar for desktop applications. Uses the **Elevated** archetype.
 
-export const Menubar = ({ items }) => {
+export const MenubarDemo = () => {
   const [activeMenu, setActiveMenu] = React.useState(null)
+  
+  const items = [
+    { label: 'File', children: [{ label: 'New' }, { label: 'Open' }, { separator: true }, { label: 'Exit' }] },
+    { label: 'Edit', children: [{ label: 'Cut' }, { label: 'Copy' }, { label: 'Paste' }] },
+    { label: 'View', children: [{ label: 'Zoom In' }, { label: 'Zoom Out' }] }
+  ]
   
   return (
     <div 
@@ -22,6 +27,7 @@ export const Menubar = ({ items }) => {
       }}
       onMouseLeave={() => setActiveMenu(null)}
     >
+      <div style={{ fontWeight: 600, padding: '4px 12px' }}>🚀 Intent</div>
       {items.map((item, i) => (
         <div 
           key={i} 
@@ -75,11 +81,10 @@ export const Menubar = ({ items }) => {
                         fontSize: '0.875rem',
                         borderRadius: '4px'
                       }}
-                      onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
-                      onMouseLeave={(e) => e.target.style.background = 'none'}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'var(--intent-color-surface-hover)'}
+                      onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
                     >
-                      <span>{child.label}</span>
-                      {child.shortcut && <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{child.shortcut}</span>}
+                      {child.label}
                     </button>
                   )}
                 </div>
@@ -94,104 +99,52 @@ export const Menubar = ({ items }) => {
 
 ## Examples
 
-### Application Menu Bar
+### Basic Menubar
 
 <div className="intent-demo" style={{ padding: 0, overflow: 'hidden' }}>
-  <Menubar 
-    items={[
-      { 
-        label: 'File',
-        children: [
-          { label: 'New', shortcut: '⌘N' },
-          { label: 'Open', shortcut: '⌘O' },
-          { separator: true },
-          { label: 'Save', shortcut: '⌘S' },
-          { label: 'Save As...', shortcut: '⇧⌘S' },
-          { separator: true },
-          { label: 'Exit' }
-        ]
-      },
-      { 
-        label: 'Edit',
-        children: [
-          { label: 'Undo', shortcut: '⌘Z' },
-          { label: 'Redo', shortcut: '⇧⌘Z' },
-          { separator: true },
-          { label: 'Cut', shortcut: '⌘X' },
-          { label: 'Copy', shortcut: '⌘C' },
-          { label: 'Paste', shortcut: '⌘V' }
-        ]
-      },
-      { 
-        label: 'View',
-        children: [
-          { label: 'Zoom In', shortcut: '⌘+' },
-          { label: 'Zoom Out', shortcut: '⌘-' },
-          { separator: true },
-          { label: 'Fullscreen', shortcut: '⌃⌘F' }
-        ]
-      }
-    ]}
-  />
+  <MenubarDemo />
 </div>
 
 ```tsx
-<Menubar 
-  items={[
-    { 
-      label: 'File',
-      children: [
-        { label: 'New', shortcut: '⌘N' },
-        { label: 'Open', shortcut: '⌘O' },
-        { separator: true },
-        { label: 'Exit' }
-      ]
-    }
-  ]}
-/>
+import { Menubar, MenubarMenu, MenubarItem } from 'intent-react';
+
+<Menubar>
+  <MenubarMenu label="File">
+    <MenubarItem>New</MenubarItem>
+    <MenubarItem>Open</MenubarItem>
+    <MenubarSeparator />
+    <MenubarItem>Exit</MenubarItem>
+  </MenubarMenu>
+</Menubar>
 ```
 
 ## Props
 
+### Menubar
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `Array<{label: string, children?: Array<{label?: string, shortcut?: string, separator?: boolean}>}>` | `[]` | Menu items |
+| `children` | `ReactNode` | - | MenubarMenu components |
 
-## CSS Output
+### MenubarMenu
 
-```css
-.intent-menubar {
-  display: flex;
-  gap: 4px;
-  padding: 4px 8px;
-  background: var(--intent-color-surface-elevated);
-  border-bottom: 1px solid var(--intent-color-border);
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | Menu label |
+| `children` | `ReactNode` | - | Menu items |
 
-.intent-menubar__trigger {
-  padding: 4px 12px;
-  border-radius: var(--intent-radius-sm);
-  border: none;
-  background: transparent;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-}
+### MenubarItem
 
-.intent-menubar__trigger--active {
-  background: var(--intent-color-primary);
-  color: white;
-}
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `shortcut` | `string` | - | Keyboard shortcut |
+| `disabled` | `boolean` | `false` | Disabled state |
+| `children` | `ReactNode` | - | Item label |
 
-.intent-menubar__content {
-  position: absolute;
-  top: 100%;
-  min-width: 200px;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-  padding: 4px;
-}
-```
+## Design Notes
+
+- Uses **Elevated** archetype for background
+- Hover state uses primary color
+- Dropdowns use **Elevated** with shadow
+- Keyboard navigation support
+- Separator lines between groups

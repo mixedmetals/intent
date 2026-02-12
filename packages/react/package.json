@@ -56,6 +56,11 @@
       "import": "./dist/components/form/index.js",
       "default": "./dist/components/form/index.js"
     },
+    "./components/layout": {
+      "types": "./dist/components/layout/index.d.ts",
+      "import": "./dist/components/layout/index.js",
+      "default": "./dist/components/layout/index.js"
+    },
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",

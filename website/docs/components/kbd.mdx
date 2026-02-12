@@ -2,41 +2,11 @@
 sidebar_position: 65
 ---
 
-import React from 'react';
+import { Kbd } from 'intent-react';
 
 # Kbd
 
-Keyboard key component for shortcuts.
-
-export const Kbd = ({ children, size = 'md' }) => {
-  const sizes = {
-    sm: { padding: '2px 6px', fontSize: '0.75rem' },
-    md: { padding: '4px 8px', fontSize: '0.875rem' },
-    lg: { padding: '6px 12px', fontSize: '1rem' }
-  }
-  
-  const s = sizes[size]
-  
-  return (
-    <kbd style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: s.padding,
-      fontSize: s.fontSize,
-      fontFamily: 'ui-monospace, monospace',
-      fontWeight: 600,
-      color: 'var(--intent-color-foreground)',
-      background: 'var(--intent-color-surface)',
-      border: '1px solid var(--intent-color-border)',
-      borderRadius: '6px',
-      boxShadow: '0 2px 0 var(--intent-color-border)',
-      whiteSpace: 'nowrap'
-    }}>
-      {children}
-    </kbd>
-  )
-}
+Keyboard key component for shortcuts. Uses the **Milled** archetype for tactile key appearance.
 
 ## Examples
 
@@ -51,6 +21,8 @@ export const Kbd = ({ children, size = 'md' }) => {
 </div>
 
 ```tsx
+import { Kbd } from 'intent-react';
+
 <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd>
 ```
 
@@ -58,9 +30,9 @@ export const Kbd = ({ children, size = 'md' }) => {
 
 <div className="intent-demo">
   <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-    <Kbd size="sm">⌘</Kbd>
-    <Kbd size="md">⌘</Kbd>
-    <Kbd size="lg">⌘</Kbd>
+    <Kbd size="sm">Small</Kbd>
+    <Kbd size="md">Medium</Kbd>
+    <Kbd size="lg">Large</Kbd>
   </div>
 </div>
 
@@ -70,28 +42,31 @@ export const Kbd = ({ children, size = 'md' }) => {
 <Kbd size="lg">Large</Kbd>
 ```
 
-### Keyboard Shortcuts
+### Shortcut Combinations
 
 <div className="intent-demo">
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'space-between' }}>
       <span>Copy</span>
-      <div style={{ display: 'flex', gap: '4px' }}>
-        <Kbd>Ctrl</Kbd>
+      <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+        <Kbd>⌘</Kbd>
+        <span>+</span>
         <Kbd>C</Kbd>
       </div>
     </div>
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'space-between' }}>
       <span>Paste</span>
-      <div style={{ display: 'flex', gap: '4px' }}>
-        <Kbd>Ctrl</Kbd>
+      <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+        <Kbd>⌘</Kbd>
+        <span>+</span>
         <Kbd>V</Kbd>
       </div>
     </div>
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'space-between' }}>
       <span>Save</span>
-      <div style={{ display: 'flex', gap: '4px' }}>
-        <Kbd>Ctrl</Kbd>
+      <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+        <Kbd>⌘</Kbd>
+        <span>+</span>
         <Kbd>S</Kbd>
       </div>
     </div>
@@ -99,9 +74,13 @@ export const Kbd = ({ children, size = 'md' }) => {
 </div>
 
 ```tsx
-<div style={{ display: 'flex', gap: '4px' }}>
-  <Kbd>Ctrl</Kbd>
-  <Kbd>S</Kbd>
+<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+  <span>Copy</span>
+  <div style={{ display: 'flex', gap: '4px' }}>
+    <Kbd>⌘</Kbd>
+    <span>+</span>
+    <Kbd>C</Kbd>
+  </div>
 </div>
 ```
 
@@ -109,35 +88,4 @@ export const Kbd = ({ children, size = 'md' }) => {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `children` | `ReactNode` | - | Key label |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Key size |
-
-## CSS Output
-
-```css
-.intent-kbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  font-size: 0.875rem;
-  font-family: ui-monospace, monospace;
-  font-weight: 600;
-  color: var(--intent-color-foreground);
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  box-shadow: 0 2px 0 var(--intent-color-border);
-  white-space: nowrap;
-}
-
-.intent-kbd--size-sm {
-  padding: 2px 6px;
-  font-size: 0.75rem;
-}
-
-.intent-kbd--size-lg {
-  padding: 6px 12px;
-  font-size: 1rem;
-}
-```
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the key |
