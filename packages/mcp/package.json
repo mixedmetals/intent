@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mixedmetals/intent-framework",
+    "url": "git+https://github.com/mixedmetals/intent-framework.git",
     "directory": "packages/mcp"
   },
   "keywords": [
@@ -17,7 +17,7 @@
     "design-system"
   ],
   "bin": {
-    "intent-mcp": "./dist/bin/mcp-server.js"
+    "intent-mcp": "dist/bin/mcp-server.js"
   },
   "files": [
     "dist",

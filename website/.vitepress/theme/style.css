@@ -1,0 +1,192 @@
+/* Intent Framework Theme Customization */
+
+/* Color Palette */
+:root {
+  --vp-c-brand-1: #3b82f6;
+  --vp-c-brand-2: #60a5fa;
+  --vp-c-brand-3: #2563eb;
+  --vp-c-brand-soft: rgba(59, 130, 246, 0.14);
+  
+  /* Intent Colors */
+  --intent-primary-50: #eff6ff;
+  --intent-primary-100: #dbeafe;
+  --intent-primary-200: #bfdbfe;
+  --intent-primary-300: #93c5fd;
+  --intent-primary-400: #60a5fa;
+  --intent-primary-500: #3b82f6;
+  --intent-primary-600: #2563eb;
+  --intent-primary-700: #1d4ed8;
+  --intent-primary-800: #1e40af;
+  --intent-primary-900: #1e3a8a;
+}
+
+/* Dark Mode Colors */
+.dark {
+  --vp-c-brand-1: #60a5fa;
+  --vp-c-brand-2: #3b82f6;
+  --vp-c-brand-3: #2563eb;
+}
+
+/* Hero Section Styling */
+.VPHero {
+  margin-bottom: 2rem;
+}
+
+.VPHero .name {
+  background: linear-gradient(120deg, #3b82f6 30%, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.VPHero .tagline {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  color: var(--vp-c-text-2);
+}
+
+.VPHero .actions {
+  margin-top: 2rem;
+}
+
+/* Button Styling */
+.VPButton.brand {
+  background-color: var(--intent-primary-600);
+  border-color: var(--intent-primary-600);
+}
+
+.VPButton.brand:hover {
+  background-color: var(--intent-primary-700);
+  border-color: var(--intent-primary-700);
+}
+
+/* Feature Cards */
+.VPFeatures {
+  margin-top: 3rem;
+}
+
+.VPFeatures .VPFeature {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.VPFeatures .VPFeature:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.VPFeatures .icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Code Blocks */
+.vp-doc div[class*='language-'] {
+  border-radius: 8px;
+}
+
+.vp-doc pre {
+  border-radius: 8px;
+}
+
+/* Custom Component for Homepage */
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.component-preview {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: var(--vp-c-bg-soft);
+}
+
+.component-preview h4 {
+  margin-top: 0;
+  color: var(--vp-c-text-1);
+}
+
+/* Stats Section */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.stat-item {
+  padding: 1.5rem;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--vp-c-brand-1);
+  line-height: 1;
+}
+
+.stat-label {
+  margin-top: 0.5rem;
+  color: var(--vp-c-text-2);
+}
+
+/* Comparison Table */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.comparison-table th {
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.comparison-table code {
+  background: var(--vp-c-bg-soft);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .component-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vp-c-brand-3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-brand-2);
+}
