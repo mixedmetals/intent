@@ -1,0 +1,209 @@
+---
+sidebar_position: 48
+---
+
+import { useState } from 'react'
+import { Calendar } from 'intent-react'
+
+export function CalendarDemo() {
+  const [date, setDate] = useState(new Date())
+  
+  return (
+    <Calendar 
+      value={date}
+      onChange={setDate}
+      style={{ marginBottom: 24 }}
+    />
+  )
+}
+
+# Calendar
+
+Date picker calendar view.
+
+## Example
+
+<CalendarDemo />
+
+```tsx
+import { useState } from 'react'
+import { Calendar } from 'intent-react'
+
+function Example() {
+  const [date, setDate] = useState(new Date())
+  
+  return (
+    <Calendar 
+      value={date}
+      onChange={setDate}
+    />
+  )
+}
+```
+
+## Range Selection
+
+```tsx
+const [range, setRange] = useState({ start: null, end: null })
+
+<Calendar 
+  mode="range"
+  value={range}
+  onChange={setRange}
+/>
+```
+
+## Multiple Selection
+
+```tsx
+const [dates, setDates] = useState([])
+
+<Calendar 
+  mode="multiple"
+  value={dates}
+  onChange={setDates}
+/>
+```
+
+## With Min/Max Dates
+
+```tsx
+<Calendar 
+  value={date}
+  onChange={setDate}
+  minDate={new Date()}
+  maxDate={new Date(2024, 11, 31)}
+/>
+```
+
+## Disabled Dates
+
+```tsx
+<Calendar 
+  value={date}
+  onChange={setDate}
+  disabledDates={[
+    new Date(2024, 0, 1),  // New Year
+    new Date(2024, 11, 25), // Christmas
+  ]}
+/>
+```
+
+## With Events
+
+```tsx
+<Calendar 
+  value={date}
+  onChange={setDate}
+  events={[
+    { date: new Date(2024, 0, 15), label: 'Meeting' },
+    { date: new Date(2024, 0, 20), label: 'Deadline' },
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `Date` \| `DateRange` \| `Date[]` | required | Selected date(s) |
+| `onChange` | `(value) => void` | required | Change callback |
+| `mode` | `'single'` \| `'range'` \| `'multiple'` | `'single'` | Selection mode |
+| `minDate` | `Date` | - | Minimum selectable date |
+| `maxDate` | `Date` | - | Maximum selectable date |
+| `disabledDates` | `Date[]` | - | Disabled dates |
+| `events` | `CalendarEvent[]` | - | Calendar events |
+| `firstDayOfWeek` | `0` \| `1` \| `2` \| `3` \| `4` \| `5` \| `6` | `0` | First day (0=Sunday) |
+| `showWeekNumbers` | `boolean` | `false` | Show week numbers |
+| `locale` | `string` | `'en-US'` | Locale for formatting |
+
+### CalendarEvent Type
+
+```typescript
+interface CalendarEvent {
+  date: Date
+  label: string
+  color?: 'default' | 'primary' | 'success' | 'warning' | 'danger'
+}
+```
+
+## CSS Output
+
+```css
+.calendar {
+  display: inline-block;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-lg);
+  padding: var(--intent-spacing-4);
+}
+
+.calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--intent-spacing-4);
+}
+
+.calendar__month-year {
+  font-weight: 600;
+}
+
+.calendar__nav {
+  display: flex;
+  gap: var(--intent-spacing-1);
+}
+
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--intent-spacing-1);
+  margin-bottom: var(--intent-spacing-2);
+}
+
+.calendar__weekday {
+  text-align: center;
+  font-size: var(--intent-font-size-xs);
+  font-weight: 500;
+  color: var(--intent-color-text-muted);
+  padding: var(--intent-spacing-1);
+}
+
+.calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--intent-spacing-1);
+}
+
+.calendar__day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--intent-radius-md);
+  cursor: pointer;
+  font-size: var(--intent-font-size-sm);
+}
+
+.calendar__day:hover:not(.calendar__day--disabled) {
+  background: var(--intent-color-surface-elevated);
+}
+
+.calendar__day--selected {
+  background: var(--intent-color-primary);
+  color: white;
+}
+
+.calendar__day--today {
+  border: 1px solid var(--intent-color-primary);
+}
+
+.calendar__day--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.calendar__day--other-month {
+  color: var(--intent-color-text-muted);
+}
+```

@@ -1,0 +1,81 @@
+---
+sidebar_position: 47
+---
+
+# Image
+
+Optimized image component with loading states.
+
+## Example
+
+```tsx
+import { Image } from 'intent-react'
+
+<Image 
+  src="/photo.jpg"
+  alt="Description"
+  aspectRatio={16 / 9}
+/>
+```
+
+### With Skeleton Loading
+
+```tsx
+<Image 
+  src="/photo.jpg"
+  alt="Description"
+  aspectRatio={4 / 3}
+  skeleton
+/>
+```
+
+### Object Fit
+
+```tsx
+<Image objectFit="cover" ... />
+<Image objectFit="contain" ... />
+```
+
+### With Fallback
+
+```tsx
+<Image 
+  src="/image.jpg"
+  fallback="/placeholder.jpg"
+  alt="Description"
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `src` | `string` | required | Image source URL |
+| `alt` | `string` | required | Alt text for accessibility |
+| `width` | `number` \| `string` | - | Image width |
+| `height` | `number` \| `string` | - | Image height |
+| `aspectRatio` | `number` | - | Aspect ratio (width / height) |
+| `objectFit` | `'cover'` \| `'contain'` \| `'fill'` \| `'none'` \| `'scale-down'` | `'cover'` | Object fit style |
+| `skeleton` | `boolean` | `false` | Show skeleton while loading |
+| `fallback` | `string` | - | Fallback image URL |
+| `lazy` | `boolean` | `true` | Lazy load image |
+
+## CSS Output
+
+```css
+.image {
+  position: relative;
+  overflow: hidden;
+}
+
+.image__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image__skeleton {
+  position: absolute;
+  inset: 0;
+}
+```

@@ -58,6 +58,7 @@ const sidebars: SidebarsConfig = {
           label: 'Feedback',
           items: [
             'components/alert',
+            'components/banner',
             'components/spinner',
             'components/progress',
             'components/skeleton',
@@ -101,6 +102,15 @@ const sidebars: SidebarsConfig = {
             'components/list',
             'components/tree',
             'components/stat',
+            'components/calendar',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Media',
+          items: [
+            'components/icon',
+            'components/image',
           ],
         },
       ],
