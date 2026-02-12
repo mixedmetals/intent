@@ -28,19 +28,23 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./hooks": {
       "types": "./dist/hooks/index.d.ts",
-      "import": "./dist/hooks/index.js"
+      "import": "./dist/hooks/index.js",
+      "default": "./dist/hooks/index.js"
     },
     "./components/motion": {
       "types": "./dist/components/motion/index.d.ts",
-      "import": "./dist/components/motion/index.js"
+      "import": "./dist/components/motion/index.js",
+      "default": "./dist/components/motion/index.js"
     },
     "./utils": {
       "types": "./dist/utils/index.d.ts",
-      "import": "./dist/utils/index.js"
+      "import": "./dist/utils/index.js",
+      "default": "./dist/utils/index.js"
     }
   },
   "scripts": {
