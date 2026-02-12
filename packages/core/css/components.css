@@ -1,0 +1,433 @@
+/**
+ * Intent Framework - Docusaurus Custom Styles
+ * Linear-esque "Subtle Tactility" Design System
+ */
+
+/* Import Intent Theme */
+@import './intent-theme.css';
+
+/* Override Docusaurus to use Intent tokens */
+:root {
+  --ifm-color-primary: var(--intent-color-primary);
+  --ifm-color-primary-dark: var(--intent-color-primary-hover);
+  --ifm-color-primary-darker: var(--intent-color-primary-active);
+  --ifm-color-primary-darkest: oklch(50% 0.15 250);
+  --ifm-color-primary-light: oklch(70% 0.15 250);
+  --ifm-color-primary-lighter: oklch(80% 0.1 250);
+  --ifm-color-primary-lightest: oklch(90% 0.05 250);
+  
+  --ifm-background-color: var(--intent-color-background);
+  --ifm-background-surface-color: var(--intent-color-surface);
+  
+  --ifm-font-family-base: var(--intent-font-sans);
+  --ifm-font-family-monospace: var(--intent-font-mono);
+  
+  --ifm-spacing-horizontal: var(--intent-spacing-4);
+  --ifm-spacing-vertical: var(--intent-spacing-4);
+  
+  --ifm-global-radius: var(--intent-radius-md);
+  
+  --ifm-code-background: var(--intent-color-surface-elevated);
+  --ifm-code-border-radius: var(--intent-radius-md);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: var(--intent-color-primary);
+  --ifm-background-color: var(--intent-color-background);
+  --ifm-background-surface-color: var(--intent-color-surface);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== TYPOGRAPHY ===== */
+.markdown h1 {
+  font-weight: var(--intent-font-weight-bold);
+  letter-spacing: -0.02em;
+}
+
+.markdown h2 {
+  font-weight: var(--intent-font-weight-semibold);
+  letter-spacing: -0.01em;
+  margin-top: 2.5rem;
+}
+
+/* Code blocks styling - Elevated archetype */
+pre {
+  border-radius: var(--intent-radius-lg);
+  background: var(--intent-surface-elevated-bg) !important;
+  border: 1px solid var(--intent-surface-elevated-border);
+  box-shadow: var(--intent-surface-elevated-shadow);
+  backdrop-filter: var(--intent-surface-elevated-blur);
+}
+
+code {
+  font-family: var(--intent-font-mono);
+  font-size: 0.875em;
+}
+
+/* Inline code - Milled archetype */
+:not(pre) > code {
+  background: var(--intent-surface-milled-bg);
+  border: 1px solid var(--intent-surface-milled-border);
+  box-shadow: var(--intent-surface-milled-shadow);
+  border-radius: var(--intent-radius-md);
+  padding: 0.2em 0.4em;
+  font-size: 0.85em;
+}
+
+/* ===== NAVBAR - Milled Surface ===== */
+.navbar {
+  background: var(--intent-surface-milled-bg);
+  border-bottom: 1px solid var(--intent-surface-milled-border);
+  box-shadow: var(--intent-surface-milled-shadow);
+}
+
+.navbar__title {
+  font-weight: var(--intent-font-weight-bold);
+  letter-spacing: -0.02em;
+}
+
+/* Sidebar styling - Flat with hover elevation */
+.sidebarItemLink {
+  border-radius: var(--intent-radius-md);
+  transition: all var(--intent-duration-fast) var(--intent-easing-mechanical);
+}
+
+.sidebarItemLink:hover {
+  background: var(--intent-surface-flat-bg);
+  border: 1px solid var(--intent-surface-flat-border);
+}
+
+/* ===== TABLES - Elevated Surface ===== */
+table {
+  border-radius: var(--intent-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--intent-surface-elevated-border);
+  background: var(--intent-surface-elevated-bg);
+  box-shadow: var(--intent-surface-elevated-shadow);
+  backdrop-filter: var(--intent-surface-elevated-blur);
+}
+
+table thead tr {
+  background: oklch(100% 0 0 / 0.05);
+  border-bottom: 1px solid var(--intent-surface-elevated-border);
+}
+
+table th {
+  font-weight: var(--intent-font-weight-semibold);
+}
+
+table th,
+table td {
+  border-bottom: 1px solid var(--intent-surface-elevated-border);
+}
+
+/* ===== CARDS - Elevated Surface ===== */
+.card {
+  border-radius: var(--intent-radius-xl);
+  background: var(--intent-surface-elevated-bg);
+  border: 1px solid var(--intent-surface-elevated-border);
+  box-shadow: var(--intent-surface-elevated-shadow);
+  backdrop-filter: var(--intent-surface-elevated-blur);
+  transition: all var(--intent-duration-normal) var(--intent-easing-mechanical);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 0 1px oklch(100% 0 0 / 0.15),
+    0 8px 16px -4px oklch(0% 0 0 / 0.2),
+    0 24px 48px -8px oklch(0% 0 0 / 0.25);
+}
+
+/* ===== ALERTS ===== */
+.alert {
+  border-radius: var(--intent-radius-lg);
+  border: 1px solid var(--intent-surface-flat-border);
+  background: var(--intent-surface-flat-bg);
+}
+
+/* ===== HERO - Elevated Gradient Surface ===== */
+.hero {
+  background: 
+    radial-gradient(120% 100% at 50% 0%, oklch(65% 0.15 250 / 0.15), transparent 70%),
+    var(--intent-surface-elevated-bg);
+  border-bottom: 1px solid var(--intent-surface-elevated-border);
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, oklch(100% 0 0 / 0.2), transparent);
+}
+
+.hero__title {
+  font-weight: var(--intent-font-weight-bold);
+  letter-spacing: -0.03em;
+}
+
+.hero__subtitle {
+  color: var(--intent-color-text-secondary);
+}
+
+/* Footer - Flat Surface */
+.footer {
+  background: var(--intent-surface-flat-bg);
+  border-top: 1px solid var(--intent-surface-flat-border);
+}
+
+/* Doc item content */
+.theme-doc-markdown {
+  font-size: var(--intent-font-size-base);
+  line-height: 1.7;
+}
+
+/* ===== COMPONENT DEMOS - Elevated Surface ===== */
+.intent-demo {
+  padding: var(--intent-spacing-8);
+  border-radius: var(--intent-radius-xl);
+  background: var(--intent-surface-elevated-bg);
+  border: 1px solid var(--intent-surface-elevated-border);
+  box-shadow: var(--intent-surface-elevated-shadow);
+  backdrop-filter: var(--intent-surface-elevated-blur);
+  margin-bottom: var(--intent-spacing-6);
+}
+
+/* ===== BUTTON COMPONENTS - Milled Surface ===== */
+.intent-button {
+  /* Base milled surface styling */
+  background: var(--intent-surface-milled-bg);
+  border: 1px solid var(--intent-surface-milled-border);
+  box-shadow: var(--intent-surface-milled-shadow);
+  border-radius: var(--intent-radius-md);
+  
+  /* Typography */
+  font-family: var(--intent-font-sans);
+  font-weight: var(--intent-font-weight-medium);
+  font-size: var(--intent-font-size-sm);
+  line-height: var(--intent-leading-tight);
+  color: var(--intent-color-text);
+  
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--intent-spacing-2);
+  cursor: pointer;
+  
+  /* Animation */
+  transition: all var(--intent-duration-fast) var(--intent-easing-mechanical);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Inner light reflection */
+.intent-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, oklch(100% 0 0 / 0.08), transparent);
+  pointer-events: none;
+}
+
+/* Hover state */
+.intent-button:hover:not(:disabled) {
+  background: 
+    radial-gradient(120% 80% at 50% 0%, oklch(100% 0 0 / 0.16), transparent 70%),
+    oklch(30% 0.01 260);
+  transform: translateY(-1px);
+  box-shadow: 
+    inset 0 1px 0 oklch(100% 0 0 / 0.15),
+    0 4px 8px oklch(0% 0 0 / 0.25);
+}
+
+/* Active state */
+.intent-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 
+    inset 0 2px 4px oklch(0% 0 0 / 0.3),
+    inset 0 1px 0 oklch(100% 0 0 / 0.05);
+}
+
+/* Focus state */
+.intent-button:focus-visible {
+  outline: 2px solid var(--intent-color-primary);
+  outline-offset: 2px;
+}
+
+/* Sizes */
+.intent-button--size-small {
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+  font-size: var(--intent-font-size-xs);
+  border-radius: var(--intent-radius-md);
+}
+
+.intent-button--size-medium {
+  padding: var(--intent-spacing-2_5) var(--intent-spacing-4);
+  font-size: var(--intent-font-size-sm);
+}
+
+.intent-button--size-large {
+  padding: var(--intent-spacing-3) var(--intent-spacing-5);
+  font-size: var(--intent-font-size-base);
+  border-radius: var(--intent-radius-lg);
+}
+
+/* Importance levels */
+.intent-button--importance-primary {
+  background: 
+    radial-gradient(120% 80% at 50% 0%, oklch(70% 0.15 250 / 0.3), transparent 70%),
+    oklch(60% 0.15 250);
+  border-color: oklch(70% 0.15 250 / 0.5);
+  color: white;
+}
+
+.intent-button--importance-primary:hover:not(:disabled) {
+  background: 
+    radial-gradient(120% 80% at 50% 0%, oklch(75% 0.15 250 / 0.4), transparent 70%),
+    oklch(65% 0.15 250);
+}
+
+.intent-button--importance-secondary {
+  /* Default milled styling */
+}
+
+.intent-button--importance-tertiary {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.intent-button--importance-tertiary::before {
+  display: none;
+}
+
+.intent-button--importance-tertiary:hover:not(:disabled) {
+  background: var(--intent-surface-flat-bg);
+  border-color: var(--intent-surface-flat-border);
+  box-shadow: none;
+}
+
+/* Full width */
+.intent-button--full-width {
+  width: 100%;
+}
+
+/* Disabled state */
+.intent-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: saturate(0.5);
+}
+
+/* ===== STACK COMPONENT ===== */
+.intent-stack {
+  display: flex;
+}
+
+.intent-stack--direction-row {
+  flex-direction: row;
+}
+
+.intent-stack--direction-column {
+  flex-direction: column;
+}
+
+.intent-stack--align-center {
+  align-items: center;
+}
+
+.intent-stack--gap-normal {
+  gap: var(--intent-spacing-4);
+}
+
+/* Props table styling */
+.theme-doc-markdown table {
+  font-size: var(--intent-font-size-sm);
+}
+
+.theme-doc-markdown table th {
+  font-weight: var(--intent-font-weight-semibold);
+  text-align: left;
+}
+
+/* Pagination - Milled Surface */
+.pagination-nav__link {
+  border-radius: var(--intent-radius-lg);
+  background: var(--intent-surface-milled-bg);
+  border: 1px solid var(--intent-surface-milled-border);
+  box-shadow: var(--intent-surface-milled-shadow);
+  transition: all var(--intent-duration-fast) var(--intent-easing-mechanical);
+}
+
+.pagination-nav__link:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    inset 0 1px 0 oklch(100% 0 0 / 0.12),
+    0 4px 8px oklch(0% 0 0 / 0.2);
+}
+
+/* Search - Flat Surface */
+.searchBar {
+  --ifm-navbar-search-input-background: var(--intent-surface-flat-bg);
+  --ifm-navbar-search-input-border-radius: var(--intent-radius-md);
+}
+
+.navbar__search-input {
+  border: 1px solid var(--intent-surface-flat-border);
+  transition: all var(--intent-duration-fast) var(--intent-easing-mechanical);
+}
+
+.navbar__search-input:focus {
+  border-color: var(--intent-color-primary);
+  box-shadow: 0 0 0 3px oklch(60% 0.15 250 / 0.15);
+}
+
+/* Breadcrumbs - Flat styling */
+.breadcrumbs__item--active .breadcrumbs__link {
+  background: var(--intent-surface-flat-bg);
+  border: 1px solid var(--intent-surface-flat-border);
+}
+
+/* Admonitions with surface styling */
+.admonition {
+  border-radius: var(--intent-radius-lg);
+  border: 1px solid var(--intent-surface-flat-border);
+  background: var(--intent-surface-flat-bg);
+}
+
+/* Theme toggle button - Milled */
+.toggleButton {
+  background: var(--intent-surface-milled-bg);
+  border: 1px solid var(--intent-surface-milled-border);
+  box-shadow: var(--intent-surface-milled-shadow);
+  border-radius: var(--intent-radius-md);
+}
+
+/* TOC styling */
+.table-of-contents {
+  font-size: var(--intent-font-size-sm);
+}
+
+.table-of-contents__link--active {
+  font-weight: var(--intent-font-weight-medium);
+  color: var(--intent-color-primary);
+}
+
+/* Menu links */
+.menu__link--active {
+  background: var(--intent-surface-flat-bg);
+  border: 1px solid var(--intent-surface-flat-border);
+  font-weight: var(--intent-font-weight-medium);
+}

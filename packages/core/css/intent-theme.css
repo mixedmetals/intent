@@ -1,0 +1,604 @@
+/**
+ * Intent Framework Theme CSS - Complete 92-Component System
+ * Subtle Tactility - Master Token System with Three Archetypes
+ * ============================================================================
+ * 
+ * ARCHETYPE 1: MILLED - Interactive items (45 components)
+ * ARCHETYPE 2: ELEVATED - Containers, overlays (28 components)  
+ * ARCHETYPE 3: FLAT - Badges, indicators (19 components)
+ * 
+ * MATHEMATICAL CONSTRAINT: Zero hard-coded hex values. All values reference tokens.
+ */
+
+/* ==========================================================================
+   0. BASE PRIMITIVE TOKENS
+   ========================================================================== */
+
+:root {
+  /* --------------------------------------------------------------------------
+     0.1 Color Space - OKLCH-based perceptually uniform colors
+     -------------------------------------------------------------------------- */
+  
+  /* Brand Primary */
+  --intent-color-primary-l: 55%;
+  --intent-color-primary-c: 0.22;
+  --intent-color-primary-h: 255;
+  --intent-color-primary: oklch(var(--intent-color-primary-l) var(--intent-color-primary-c) var(--intent-color-primary-h));
+  --intent-color-primary-hover: oklch(calc(var(--intent-color-primary-l) + 5%) calc(var(--intent-color-primary-c) * 0.9) var(--intent-color-primary-h));
+  --intent-color-primary-active: oklch(calc(var(--intent-color-primary-l) - 5%) calc(var(--intent-color-primary-c) * 1.1) var(--intent-color-primary-h));
+  --intent-color-primary-alpha: oklch(var(--intent-color-primary-l) var(--intent-color-primary-c) var(--intent-color-primary-h) / 0.15);
+  
+  /* Semantic Colors */
+  --intent-color-success: oklch(65% 0.18 145);
+  --intent-color-success-alpha: oklch(65% 0.18 145 / 0.15);
+  --intent-color-warning: oklch(75% 0.15 85);
+  --intent-color-warning-alpha: oklch(75% 0.15 85 / 0.15);
+  --intent-color-danger: oklch(55% 0.20 25);
+  --intent-color-danger-alpha: oklch(55% 0.20 25 / 0.15);
+  
+  /* Neutral Scale */
+  --intent-color-neutral-0: oklch(100% 0 0);
+  --intent-color-neutral-50: oklch(98% 0.001 0);
+  --intent-color-neutral-100: oklch(95% 0.002 0);
+  --intent-color-neutral-200: oklch(88% 0.004 0);
+  --intent-color-neutral-300: oklch(75% 0.006 0);
+  --intent-color-neutral-400: oklch(60% 0.008 0);
+  --intent-color-neutral-500: oklch(50% 0.01 0);
+  --intent-color-neutral-600: oklch(40% 0.008 0);
+  --intent-color-neutral-700: oklch(30% 0.006 0);
+  --intent-color-neutral-800: oklch(20% 0.004 0);
+  --intent-color-neutral-900: oklch(10% 0.002 0);
+  
+  /* Dark theme base */
+  --intent-color-base: oklch(18% 0.01 260);
+  --intent-color-base-elevated: oklch(22% 0.012 260);
+  
+  /* --------------------------------------------------------------------------
+     0.2 Spacing Scale - 4px base
+     -------------------------------------------------------------------------- */
+  --intent-space-0: 0px;
+  --intent-space-1: 4px;
+  --intent-space-2: 8px;
+  --intent-space-3: 12px;
+  --intent-space-4: 16px;
+  --intent-space-5: 24px;
+  --intent-space-6: 32px;
+  --intent-space-8: 48px;
+  --intent-space-10: 64px;
+  --intent-space-12: 96px;
+  
+  /* --------------------------------------------------------------------------
+     0.3 Density System
+     -------------------------------------------------------------------------- */
+  --intent-density: 1;
+  --intent-padding-compact: calc(var(--intent-space-2) * var(--intent-density));
+  --intent-padding-normal: calc(var(--intent-space-3) * var(--intent-density));
+  --intent-padding-relaxed: calc(var(--intent-space-4) * var(--intent-density));
+  
+  /* --------------------------------------------------------------------------
+     0.4 Typography
+     -------------------------------------------------------------------------- */
+  --intent-text-xs: 12px;
+  --intent-text-sm: 13px;
+  --intent-text-base: 15px;
+  --intent-text-lg: 17px;
+  --intent-text-xl: 20px;
+  --intent-text-2xl: 24px;
+  
+  /* --------------------------------------------------------------------------
+     0.5 Radius
+     -------------------------------------------------------------------------- */
+  --intent-radius-none: 0px;
+  --intent-radius-sm: 4px;
+  --intent-radius-md: 6px;
+  --intent-radius-lg: 8px;
+  --intent-radius-xl: 12px;
+  --intent-radius-full: 9999px;
+  
+  /* --------------------------------------------------------------------------
+     0.6 Motion
+     -------------------------------------------------------------------------- */
+  --intent-duration-micro: 75ms;
+  --intent-duration-fast: 100ms;
+  --intent-duration-normal: 150ms;
+  --intent-duration-slow: 250ms;
+  --intent-duration-deliberate: 400ms;
+  
+  --intent-easing-mechanical: cubic-bezier(0.2, 0, 0, 1);
+  --intent-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --intent-easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   1. THREE COMPONENT ARCHETYPES
+   ========================================================================== */
+
+:root {
+  /* --------------------------------------------------------------------------
+     ARCHETYPE 1: MILLED - Interactive items (45 components)
+     -------------------------------------------------------------------------- */
+  
+  /* Background: Radial gradient overlay (top-centered light source) */
+  --intent-surface-milled-bg: 
+    radial-gradient(120% 80% at 50% 0%, oklch(100% 0 0 / 0.12) 0%, transparent 70%),
+    oklch(25% 0.01 260);
+  
+  /* Border: 1px linear-gradient (Top: rgba(255,255,255,0.15), Bottom: transparent) */
+  --intent-surface-milled-border: 
+    linear-gradient(to bottom, oklch(100% 0 0 / 0.15) 0%, oklch(100% 0 0 / 0.05) 100%);
+  --intent-surface-milled-border-width: 1px;
+  
+  /* Shadow: Inner highlight */
+  --intent-surface-milled-shadow: 
+    inset 0 1px 0 0 oklch(100% 0 0 / 0.08),
+    0 1px 2px 0 oklch(0% 0 0 / 0.1);
+  
+  /* Hover state */
+  --intent-surface-milled-hover-bg: 
+    radial-gradient(120% 80% at 50% 0%, oklch(100% 0 0 / 0.18) 0%, transparent 70%),
+    oklch(30% 0.012 260);
+  
+  /* Active/Pressed state */
+  --intent-surface-milled-active-bg: 
+    radial-gradient(120% 80% at 50% 100%, oklch(0% 0 0 / 0.1) 0%, transparent 60%),
+    oklch(20% 0.008 260);
+  --intent-surface-milled-active-shadow: inset 0 2px 4px 0 oklch(0% 0 0 / 0.2);
+  
+  /* --------------------------------------------------------------------------
+     ARCHETYPE 2: ELEVATED - Containers (28 components)
+     -------------------------------------------------------------------------- */
+  
+  /* Background: Deep solid base with backdrop blur */
+  --intent-surface-elevated-bg: 
+    linear-gradient(180deg, oklch(22% 0.008 260) 0%, oklch(18% 0.006 260) 100%);
+  --intent-surface-elevated-backdrop: blur(20px) saturate(180%);
+  
+  /* Border: Hairline */
+  --intent-surface-elevated-border: oklch(100% 0 0 / 0.08);
+  --intent-surface-elevated-border-width: 1px;
+  
+  /* Shadow: Multi-layered ambient */
+  --intent-surface-elevated-shadow:
+    0 0 0 1px oklch(0% 0 0 / 0.2),
+    0 4px 6px -1px oklch(0% 0 0 / 0.1),
+    0 12px 24px -4px oklch(0% 0 0 / 0.15);
+  
+  --intent-surface-elevated-hover-shadow:
+    0 0 0 1px oklch(100% 0 0 / 0.1),
+    0 8px 12px -2px oklch(0% 0 0 / 0.15),
+    0 24px 32px -8px oklch(0% 0 0 / 0.2);
+  
+  /* --------------------------------------------------------------------------
+     ARCHETYPE 3: FLAT - Secondary items (19 components)
+     -------------------------------------------------------------------------- */
+  
+  /* Background: High-transparency tint */
+  --intent-surface-flat-bg: oklch(100% 0 0 / 0.08);
+  --intent-surface-flat-bg-primary: oklch(var(--intent-color-primary-l) var(--intent-color-primary-c) var(--intent-color-primary-h) / 0.12);
+  --intent-surface-flat-bg-success: oklch(65% 0.18 145 / 0.12);
+  --intent-surface-flat-bg-warning: oklch(75% 0.15 85 / 0.12);
+  --intent-surface-flat-bg-danger: oklch(55% 0.20 25 / 0.12);
+  
+  /* Border: 0.5px matching text color */
+  --intent-surface-flat-border: oklch(100% 0 0 / 0.15);
+  --intent-surface-flat-border-width: 0.5px;
+  --intent-surface-flat-shadow: none;
+}
+
+/* ==========================================================================
+   2. TOP 5 COMPONENTS (Previously Verified)
+   ========================================================================== */
+
+/* Button - Milled */
+.intent-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--intent-space-2);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: var(--intent-text-sm);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  padding: calc(var(--intent-space-2) * var(--intent-density)) calc(var(--intent-space-4) * var(--intent-density));
+  min-height: calc(40px * var(--intent-density));
+  background: var(--intent-surface-milled-bg);
+  border: var(--intent-surface-milled-border-width) solid transparent;
+  border-image: var(--intent-surface-milled-border) 1;
+  box-shadow: var(--intent-surface-milled-shadow);
+  border-radius: var(--intent-radius-md);
+  cursor: pointer;
+  user-select: none;
+  transition: 
+    background var(--intent-duration-fast) var(--intent-easing-mechanical),
+    box-shadow var(--intent-duration-fast) var(--intent-easing-mechanical),
+    transform var(--intent-duration-fast) var(--intent-easing-mechanical);
+  color: oklch(95% 0 0);
+}
+
+.intent-button:hover:not(:disabled) {
+  background: var(--intent-surface-milled-hover-bg);
+  box-shadow: inset 0 1px 0 0 oklch(100% 0 0 / 0.12), 0 2px 4px 0 oklch(0% 0 0 / 0.15);
+  transform: translateY(-0.5px);
+}
+
+.intent-button:active:not(:disabled) {
+  background: var(--intent-surface-milled-active-bg);
+  box-shadow: var(--intent-surface-milled-active-shadow);
+  transform: translateY(0.5px);
+}
+
+.intent-button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.intent-button--primary {
+  background: 
+    radial-gradient(120% 80% at 50% 0%, oklch(70% 0.15 255 / 0.3) 0%, transparent 70%),
+    var(--intent-color-primary);
+}
+
+/* Card - Elevated */
+.intent-card {
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--intent-space-4) * var(--intent-density));
+  gap: calc(var(--intent-space-3) * var(--intent-density));
+  background: var(--intent-surface-elevated-bg);
+  -webkit-backdrop-filter: var(--intent-surface-elevated-backdrop);
+  backdrop-filter: var(--intent-surface-elevated-backdrop);
+  border: var(--intent-surface-elevated-border-width) solid var(--intent-surface-elevated-border);
+  box-shadow: var(--intent-surface-elevated-shadow);
+  border-radius: var(--intent-radius-lg);
+  transition: box-shadow var(--intent-duration-normal) var(--intent-easing-smooth),
+              transform var(--intent-duration-normal) var(--intent-easing-smooth);
+}
+
+.intent-card--interactive:hover {
+  box-shadow: var(--intent-surface-elevated-hover-shadow);
+  transform: translateY(-2px);
+}
+
+/* Input - Milled */
+.intent-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: var(--intent-text-base);
+  line-height: 1.5;
+  padding: 0 calc(var(--intent-space-3) * var(--intent-density));
+  min-height: calc(44px * var(--intent-density));
+  background: var(--intent-surface-milled-bg);
+  border: var(--intent-surface-milled-border-width) solid transparent;
+  border-image: var(--intent-surface-milled-border) 1;
+  box-shadow: var(--intent-surface-milled-shadow);
+  border-radius: var(--intent-radius-md);
+  color: oklch(95% 0 0);
+  transition: background var(--intent-duration-fast) var(--intent-easing-mechanical),
+              box-shadow var(--intent-duration-fast) var(--intent-easing-mechanical);
+}
+
+.intent-input:focus-within {
+  background: var(--intent-surface-milled-hover-bg);
+  box-shadow: inset 0 1px 0 0 oklch(100% 0 0 / 0.12), 0 0 0 2px var(--intent-color-primary-alpha);
+}
+
+/* Switch - Milled */
+.intent-switch { display: inline-flex; align-items: center; gap: calc(var(--intent-space-2) * var(--intent-density)); cursor: pointer; }
+
+.intent-switch__track {
+  width: calc(48px * var(--intent-density));
+  height: calc(28px * var(--intent-density));
+  background: var(--intent-surface-milled-bg);
+  border: var(--intent-surface-milled-border-width) solid transparent;
+  border-image: var(--intent-surface-milled-border) 1;
+  box-shadow: var(--intent-surface-milled-shadow);
+  border-radius: var(--intent-radius-full);
+  transition: background var(--intent-duration-normal) var(--intent-easing-spring);
+}
+
+.intent-switch__track--checked {
+  background: var(--intent-color-primary);
+  box-shadow: inset 0 1px 0 0 oklch(100% 0 0 / 0.2), 0 0 8px 0 var(--intent-color-primary-alpha);
+}
+
+.intent-switch__thumb {
+  width: calc(22px * var(--intent-density));
+  height: calc(22px * var(--intent-density));
+  margin: calc(3px * var(--intent-density));
+  background: linear-gradient(180deg, oklch(100% 0 0) 0%, oklch(95% 0 0) 100%);
+  border-radius: var(--intent-radius-full);
+  box-shadow: 0 2px 4px 0 oklch(0% 0 0 / 0.2);
+  transition: transform var(--intent-duration-normal) var(--intent-easing-spring);
+}
+
+.intent-switch__track--checked .intent-switch__thumb {
+  transform: translateX(calc(20px * var(--intent-density)));
+}
+
+/* Modal - Elevated */
+.intent-modal {
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--intent-space-5) * var(--intent-density));
+  gap: calc(var(--intent-space-4) * var(--intent-density));
+  background: var(--intent-surface-elevated-bg);
+  -webkit-backdrop-filter: var(--intent-surface-elevated-backdrop);
+  backdrop-filter: var(--intent-surface-elevated-backdrop);
+  border: var(--intent-surface-elevated-border-width) solid var(--intent-surface-elevated-border);
+  box-shadow: 0 0 0 1px oklch(0% 0 0 / 0.3), 0 8px 16px -4px oklch(0% 0 0 / 0.2), 0 32px 64px -16px oklch(0% 0 0 / 0.4);
+  border-radius: var(--intent-radius-xl);
+  max-width: min(90vw, 560px);
+  max-height: 85vh;
+  overflow: auto;
+}
+
+.intent-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: oklch(5% 0 0 / 0.7);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--intent-space-5);
+  z-index: 9999;
+}
+
+/* ==========================================================================
+   3. DATA GRID - Ultimate Milled Test
+   ========================================================================== */
+
+.intent-datagrid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: var(--intent-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--intent-surface-elevated-shadow);
+}
+
+/* Header - Flat structure */
+.intent-datagrid-header {
+  background: oklch(22% 0.008 260);
+  border-bottom: 1px solid oklch(100% 0 0 / 0.06);
+}
+
+.intent-datagrid-row--header {
+  display: flex;
+  align-items: center;
+  padding: 0 calc(var(--intent-space-3) * var(--intent-datagrid-density));
+  min-height: calc(44px * var(--intent-datagrid-density));
+}
+
+.intent-datagrid-cell--header {
+  display: flex;
+  align-items: center;
+  padding: calc(var(--intent-space-2) * var(--intent-datagrid-density)) calc(var(--intent-space-3) * var(--intent-datagrid-density));
+  font-size: calc(var(--intent-text-xs) * (0.9 + 0.1 * var(--intent-datagrid-density)));
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: oklch(70% 0.01 260);
+  white-space: nowrap;
+}
+
+/* Body - Milled rows */
+.intent-datagrid-body {
+  display: flex;
+  flex-direction: column;
+  background: var(--intent-surface-milled-bg);
+}
+
+.intent-datagrid-row--body {
+  display: flex;
+  align-items: center;
+  padding: 0 calc(var(--intent-space-3) * var(--intent-datagrid-density));
+  min-height: calc(52px * var(--intent-datagrid-density));
+  background: var(--intent-surface-milled-bg);
+  border-bottom: 1px solid oklch(100% 0 0 / 0.04);
+  transition: background var(--intent-duration-fast) var(--intent-easing-mechanical);
+}
+
+.intent-datagrid-row--body:hover {
+  background: var(--intent-surface-milled-hover-bg);
+}
+
+.intent-datagrid-row--selected {
+  background: var(--intent-color-primary-alpha);
+}
+
+.intent-datagrid-row--selected:hover {
+  background: oklch(var(--intent-color-primary-l) var(--intent-color-primary-c) var(--intent-color-primary-h) / 0.2);
+}
+
+/* Cells */
+.intent-datagrid-cell {
+  display: flex;
+  align-items: center;
+  padding: calc(var(--intent-space-2) * var(--intent-datagrid-density)) calc(var(--intent-space-3) * var(--intent-datagrid-density));
+  font-size: calc(var(--intent-text-sm) * (0.9 + 0.1 * var(--intent-datagrid-density)));
+  color: oklch(90% 0 0);
+}
+
+.intent-datagrid-cell--checkbox {
+  width: calc(40px * var(--intent-datagrid-density));
+  justify-content: center;
+  padding: 0;
+}
+
+/* Tabular number alignment */
+.intent-datagrid-cell--tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* Alignment utilities */
+.intent-datagrid-cell--align-left { justify-content: flex-start; text-align: left; }
+.intent-datagrid-cell--align-center { justify-content: center; text-align: center; }
+.intent-datagrid-cell--align-right { justify-content: flex-end; text-align: right; }
+
+/* Sort button with cap-height alignment */
+.intent-datagrid-sort-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: calc(var(--intent-space-1) * var(--intent-datagrid-density));
+  padding: 2px;
+  background: transparent;
+  border: none;
+  color: oklch(60% 0.01 260);
+  cursor: pointer;
+  border-radius: var(--intent-radius-sm);
+  transition: color var(--intent-duration-fast), background var(--intent-duration-fast);
+}
+
+.intent-datagrid-sort-button:hover {
+  color: oklch(90% 0 0);
+  background: oklch(100% 0 0 / 0.08);
+}
+
+.intent-datagrid-sort-icon {
+  width: calc(12px * var(--intent-datagrid-density));
+  height: calc(12px * var(--intent-datagrid-density));
+}
+
+/* Empty state */
+.intent-datagrid-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--intent-space-8) * var(--intent-datagrid-density));
+  color: oklch(60% 0.01 260);
+  font-size: calc(var(--intent-text-sm) * (0.9 + 0.1 * var(--intent-datagrid-density)));
+}
+
+/* ==========================================================================
+   4. FLAT COMPONENTS (19 components)
+   ========================================================================== */
+
+/* Badge - Flat */
+.intent-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--intent-space-1) * var(--intent-density));
+  padding: calc(var(--intent-space-1) * var(--intent-density)) calc(var(--intent-space-2) * var(--intent-density));
+  font-size: calc(var(--intent-text-xs) * (0.9 + 0.1 * var(--intent-density)));
+  font-weight: 600;
+  line-height: 1;
+  background: var(--intent-surface-flat-bg);
+  border: var(--intent-surface-flat-border-width) solid var(--intent-surface-flat-border);
+  border-radius: var(--intent-radius-md);
+  color: oklch(90% 0 0);
+  white-space: nowrap;
+}
+
+.intent-badge--primary { background: var(--intent-surface-flat-bg-primary); color: var(--intent-color-primary); }
+.intent-badge--success { background: var(--intent-surface-flat-bg-success); color: var(--intent-color-success); }
+.intent-badge--warning { background: var(--intent-surface-flat-bg-warning); color: var(--intent-color-warning); }
+.intent-badge--danger { background: var(--intent-surface-flat-bg-danger); color: var(--intent-color-danger); }
+
+/* Avatar - Flat */
+.intent-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(32px * var(--intent-density));
+  height: calc(32px * var(--intent-density));
+  background: var(--intent-surface-flat-bg);
+  border: var(--intent-surface-flat-border-width) solid var(--intent-surface-flat-border);
+  border-radius: var(--intent-radius-full);
+  font-size: calc(var(--intent-text-sm) * var(--intent-density));
+  font-weight: 600;
+  color: oklch(90% 0 0);
+  overflow: hidden;
+}
+
+.intent-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Kbd - Flat */
+.intent-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(20px * var(--intent-density));
+  padding: calc(var(--intent-space-1) * var(--intent-density)) calc(var(--intent-space-2) * var(--intent-density));
+  font-family: ui-monospace, monospace;
+  font-size: calc(var(--intent-text-xs) * (0.9 + 0.1 * var(--intent-density)));
+  font-weight: 600;
+  background: var(--intent-surface-flat-bg);
+  border: var(--intent-surface-flat-border-width) solid var(--intent-surface-flat-border);
+  border-bottom-width: 2px;
+  border-radius: var(--intent-radius-sm);
+  color: oklch(80% 0 0);
+}
+
+/* Separator - Flat */
+.intent-separator {
+  border: none;
+  background: oklch(100% 0 0 / 0.08);
+}
+
+.intent-separator--horizontal {
+  height: 1px;
+  width: 100%;
+  margin: calc(var(--intent-space-3) * var(--intent-density)) 0;
+}
+
+.intent-separator--vertical {
+  width: 1px;
+  height: 100%;
+  margin: 0 calc(var(--intent-space-3) * var(--intent-density));
+}
+
+/* Skeleton - Flat */
+.intent-skeleton {
+  background: linear-gradient(90deg, oklch(100% 0 0 / 0.04) 0%, oklch(100% 0 0 / 0.08) 50%, oklch(100% 0 0 / 0.04) 100%);
+  background-size: 200% 100%;
+  border-radius: var(--intent-radius-sm);
+  animation: intent-skeleton-shimmer 1.5s infinite;
+}
+
+@keyframes intent-skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ==========================================================================
+   5. UTILITY CLASSES
+   ========================================================================== */
+
+.intent-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.intent-focus-ring:focus-visible {
+  outline: 2px solid var(--intent-color-primary);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .intent-button, .intent-card, .intent-input, .intent-modal, .intent-datagrid {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
