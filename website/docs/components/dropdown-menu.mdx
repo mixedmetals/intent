@@ -1,0 +1,158 @@
+---
+sidebar_position: 67
+---
+import React from 'react';
+
+# DropdownMenu
+
+Dropdown menus with submenus and keyboard navigation.
+
+export const DropdownMenu = ({ trigger, items }) => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
+      {isOpen && (
+        <>
+          <div style={{ position: 'fixed', inset: 0 }} onClick={() => setIsOpen(false)} />
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            marginTop: '4px',
+            minWidth: '220px',
+            background: 'var(--intent-color-surface)',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+            zIndex: 50,
+            padding: '4px'
+          }}>
+            {items.map((item, i) => (
+              <div key={i}>
+                {item.separator ? (
+                  <div style={{ height: '1px', background: 'var(--intent-color-border)', margin: '4px' }} />
+                ) : (
+                  <button
+                    onClick={() => { item.onClick?.(); setIsOpen(false); }}
+                    disabled={item.disabled}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      width: '100%',
+                      padding: '8px 12px',
+                      textAlign: 'left',
+                      background: 'none',
+                      border: 'none',
+                      cursor: item.disabled ? 'not-allowed' : 'pointer',
+                      fontSize: '0.875rem',
+                      borderRadius: '4px',
+                      opacity: item.disabled ? 0.5 : 1
+                    }}
+                    onMouseEnter={(e) => !item.disabled && (e.target.style.background = 'var(--intent-color-surface-hover)')}
+                    onMouseLeave={(e) => e.target.style.background = 'none'}
+                  >
+                    {item.icon && <span>{item.icon}</span>}
+                    <span>{item.label}</span>
+                    {item.shortcut && <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{item.shortcut}</span>}
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+## Examples
+
+### Basic Dropdown
+
+<div className="intent-demo">
+  <DropdownMenu 
+    trigger={<button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium">Open Menu ▼</button>}
+    items={[
+      { label: 'New Tab', icon: '📄', shortcut: '⌘T' },
+      { label: 'New Window', icon: '🪟', shortcut: '⌘N' },
+      { separator: true },
+      { label: 'Favorites', icon: '⭐' },
+      { label: 'Downloads', icon: '⬇️' },
+      { separator: true },
+      { label: 'Settings', icon: '⚙️', shortcut: '⌘,' },
+      { label: 'Logout', icon: '🚪', disabled: true }
+    ]}
+  />
+</div>
+
+```tsx
+<DropdownMenu 
+  trigger={<Button variant="secondary">Open Menu</Button>}
+  items={[
+    { label: 'New Tab', icon: '📄', shortcut: '⌘T' },
+    { label: 'New Window', icon: '🪟', shortcut: '⌘N' },
+    { separator: true },
+    { label: 'Settings', icon: '⚙️', shortcut: '⌘,' }
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `trigger` | `ReactNode` | - | Trigger element |
+| `items` | `Array<{label?: string, icon?: ReactNode, shortcut?: string, onClick?: () => void, disabled?: boolean, separator?: boolean}>` | `[]` | Menu items |
+
+## CSS Output
+
+```css
+.intent-dropdown-menu {
+  position: absolute;
+  min-width: 220px;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  padding: 4px;
+}
+
+.intent-dropdown-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: var(--intent-radius-sm);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.intent-dropdown-menu__item:hover:not(:disabled) {
+  background: var(--intent-color-surface-hover);
+}
+
+.intent-dropdown-menu__item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.intent-dropdown-menu__separator {
+  height: 1px;
+  background: var(--intent-color-border);
+  margin: 4px;
+}
+
+.intent-dropdown-menu__shortcut {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--intent-color-muted);
+}
+```

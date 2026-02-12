@@ -1,33 +1,92 @@
 ---
-sidebar_position: 12
+sidebar_position: 82
 ---
+import React from 'react';
 
 # Select
 
-Dropdown for selecting from a list of options.
+Dropdown selection input.
 
-export const Select = ({ options = [], size = 'medium', validation = 'none', disabled, placeholder }) => (
-  <div className={`intent-input intent-input--size-${size} intent-input--validation-${validation}`}>
-    <select 
-      className="intent-input__field intent-select"
-      disabled={disabled}
-      style={{ cursor: 'pointer', paddingRight: '40px' }}
-    >
-      {placeholder && <option value="">{placeholder}</option>}
-      {options.map((opt, i) => (
-        <option key={i} value={typeof opt === 'string' ? opt : opt.value}>
-          {typeof opt === 'string' ? opt : opt.label}
-        </option>
-      ))}
-    </select>
-  </div>
-)
-
-export const Stack = ({ children, gap = 'normal' }) => (
-  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`}>
-    {children}
-  </div>
-)
+export const Select = ({ label, options, placeholder = "Select an option..." }) => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [selected, setSelected] = React.useState(null)
+  
+  return (
+    <div style={{ width: '100%', maxWidth: '300px' }}>
+      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>{label}</label>}
+      <div style={{ position: 'relative' }}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          style={{
+            width: '100%',
+            padding: '8px 36px 8px 12px',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            background: 'var(--intent-color-surface)',
+            textAlign: 'left',
+            fontSize: '0.875rem',
+            cursor: 'pointer',
+            color: selected ? 'var(--intent-color-foreground)' : 'var(--intent-color-muted)'
+          }}
+        >
+          {selected ? selected.label : placeholder}
+        </button>
+        <span style={{ 
+          position: 'absolute', 
+          right: '12px', 
+          top: '50%', 
+          transform: 'translateY(-50%)',
+          pointerEvents: 'none',
+          fontSize: '0.75rem'
+        }}>▼</span>
+        
+        {isOpen && (
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            marginTop: '4px',
+            background: 'var(--intent-color-surface)',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+            zIndex: 50,
+            maxHeight: '200px',
+            overflow: 'auto'
+          }}>
+            {options.map((option) => (
+              <button
+                key={option.value}
+                onClick={() => {
+                  setSelected(option)
+                  setIsOpen(false)
+                }}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  textAlign: 'left',
+                  background: selected?.value === option.value ? 'var(--intent-color-surface-hover)' : 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '0.875rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+                onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
+                onMouseLeave={(e) => e.target.style.background = selected?.value === option.value ? 'var(--intent-color-surface-hover)' : 'transparent'}
+              >
+                {selected?.value === option.value && <span>✓</span>}
+                <span>{option.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
@@ -35,67 +94,84 @@ export const Stack = ({ children, gap = 'normal' }) => (
 
 <div className="intent-demo">
   <Select 
-    options={['React', 'Vue', 'Angular']}
-    placeholder="Choose a framework"
+    label="Favorite Fruit"
+    options={[
+      { value: 'apple', label: 'Apple' },
+      { value: 'banana', label: 'Banana' },
+      { value: 'cherry', label: 'Cherry' },
+      { value: 'date', label: 'Date' },
+      { value: 'elderberry', label: 'Elderberry' }
+    ]}
   />
 </div>
 
 ```tsx
 <Select 
-  options={['React', 'Vue', 'Angular']}
-  placeholder="Choose a framework"
+  label="Favorite Fruit"
+  options={[
+    { value: 'apple', label: 'Apple' },
+    { value: 'banana', label: 'Banana' }
+  ]}
 />
-```
-
-### Sizes
-
-<div className="intent-demo">
-  <Stack gap="normal">
-    <Select size="small" options={['Small']} />
-    <Select size="medium" options={['Medium']} />
-    <Select size="large" options={['Large']} />
-  </Stack>
-</div>
-
-```tsx
-<Select size="small" options={...} />
-<Select size="medium" options={...} />
-<Select size="large" options={...} />
-```
-
-### Validation States
-
-<div className="intent-demo">
-  <Stack gap="normal">
-    <Select validation="valid" options={[{value: 'valid', label: 'Valid selection'}]} />
-    <Select validation="invalid" options={[{value: '', label: 'Invalid selection'}]} />
-  </Stack>
-</div>
-
-```tsx
-<Select validation="valid" options={...} />
-<Select validation="invalid" options={...} />
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `Array<{value: string, label: string}>` \| `string[]` | `[]` | Select options |
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Select size |
-| `validation` | `'valid'` \| `'invalid'` \| `'none'` | `'none'` | Validation state |
-| `placeholder` | `string` | - | Default placeholder |
+| `label` | `string` | - | Select label |
+| `value` | `string` | - | Selected value |
+| `options` | `Array<{value: string, label: string}>` | `[]` | Available options |
+| `placeholder` | `string` | `"Select..."` | Placeholder text |
 | `disabled` | `boolean` | `false` | Disable select |
+| `onChange` | `(value: string) => void` | - | Change handler |
 
 ## CSS Output
 
 ```css
 .intent-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 12px center;
-  background-repeat: no-repeat;
-  background-size: 16px;
-  padding-right: 40px;
+  position: relative;
+  width: 100%;
+}
+
+.intent-select__trigger {
+  width: 100%;
+  padding: 8px 36px 8px 12px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+  text-align: left;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.intent-select__listbox {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  max-height: 200px;
+  overflow: auto;
+}
+
+.intent-select__option {
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.intent-select__option:hover,
+.intent-select__option--selected {
+  background: var(--intent-color-surface-hover);
 }
 ```

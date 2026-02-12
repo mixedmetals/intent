@@ -1,0 +1,134 @@
+---
+sidebar_position: 74
+---
+import React from 'react';
+
+# Toggle
+
+Two-state buttons that can be on or off.
+
+export const Toggle = ({ children, defaultPressed = false, variant = 'default', disabled = false }) => {
+  const [pressed, setPressed] = React.useState(defaultPressed)
+  
+  const variants = {
+    default: {
+      background: pressed ? 'var(--intent-color-surface-elevated)' : 'transparent',
+      border: '1px solid var(--intent-color-border)'
+    },
+    outline: {
+      background: pressed ? 'var(--intent-color-primary)' : 'transparent',
+      color: pressed ? 'white' : 'var(--intent-color-foreground)',
+      border: `1px solid ${pressed ? 'var(--intent-color-primary)' : 'var(--intent-color-border)'}`
+    }
+  }
+  
+  return (
+    <button
+      aria-pressed={pressed}
+      onClick={() => setPressed(!pressed)}
+      disabled={disabled}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        padding: '8px 12px',
+        borderRadius: '6px',
+        fontSize: '0.875rem',
+        fontWeight: 500,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1,
+        transition: 'all 150ms',
+        ...variants[variant]
+      }}
+    >
+      {children}
+    </button>
+  )
+}
+
+## Examples
+
+### Default Toggle
+
+<div className="intent-demo">
+  <Toggle>Italic</Toggle>
+</div>
+
+```tsx
+<Toggle>Italic</Toggle>
+```
+
+### Outline Variant
+
+<div className="intent-demo">
+  <Toggle variant="outline" defaultPressed>
+    Bold
+  </Toggle>
+</div>
+
+```tsx
+<Toggle variant="outline" defaultPressed>
+  Bold
+</Toggle>
+```
+
+### With Icon
+
+<div className="intent-demo">
+  <Toggle defaultPressed>
+    <span>🔔</span>
+    <span>Notifications</span>
+  </Toggle>
+</div>
+
+```tsx
+<Toggle>
+  <BellIcon />
+  <span>Notifications</span>
+</Toggle>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `pressed` | `boolean` | - | Controlled pressed state |
+| `defaultPressed` | `boolean` | `false` | Default pressed state |
+| `variant` | `'default' \| 'outline'` | `'default'` | Toggle style |
+| `disabled` | `boolean` | `false` | Disable toggle |
+| `onPressedChange` | `(pressed: boolean) => void` | - | State change handler |
+| `children` | `ReactNode` | - | Toggle content |
+
+## CSS Output
+
+```css
+.intent-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--intent-radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 150ms;
+  background: transparent;
+  border: 1px solid var(--intent-color-border);
+}
+
+.intent-toggle[data-state="on"] {
+  background: var(--intent-color-surface-elevated);
+}
+
+.intent-toggle--outline[data-state="on"] {
+  background: var(--intent-color-primary);
+  color: white;
+  border-color: var(--intent-color-primary);
+}
+
+.intent-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+```

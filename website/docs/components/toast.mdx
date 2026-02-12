@@ -2,128 +2,171 @@
 sidebar_position: 16
 ---
 
+import React from 'react';
+
 # Toast
 
 Temporary notification that appears and dismisses automatically.
 
-## Example
-
-```tsx
-import { useState } from 'react'
-import { Toast, Button } from 'intent-react'
-
-function Example() {
-  const [show, setShow] = useState(false)
+export const Toast = ({ variant = 'info', title, children, onDismiss }) => {
+  const variants = {
+    info: { icon: 'ℹ️', bg: '#eff6ff', border: '#bfdbfe', color: '#1e40af' },
+    success: { icon: '✓', bg: '#f0fdf4', border: '#bbf7d0', color: '#166534' },
+    warning: { icon: '⚠️', bg: '#fffbeb', border: '#fde68a', color: '#92400e' },
+    danger: { icon: '✕', bg: '#fef2f2', border: '#fecaca', color: '#991b1b' }
+  }
+  
+  const v = variants[variant]
+  
+  React.useEffect(() => {
+    if (onDismiss) {
+      const timer = setTimeout(onDismiss, 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [onDismiss])
   
   return (
-    <>
-      <Button onClick={() => setShow(true)}>
-        Show Toast
-      </Button>
-      
-      {show && (
-        <Toast
-          variant="success"
-          title="Success!"
-          onDismiss={() => setShow(false)}
+    <div style={{
+      display: 'flex',
+      gap: '12px',
+      padding: '16px',
+      background: v.bg,
+      border: `1px solid ${v.border}`,
+      borderRadius: '8px',
+      color: v.color,
+      maxWidth: '400px'
+    }}>
+      <span style={{ fontSize: '1.125rem', flexShrink: 0 }}>{v.icon}</span>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontWeight: 600, marginBottom: '4px' }}>{title}</div>
+        <div style={{ fontSize: '0.875rem' }}>{children}</div>
+      </div>
+      {onDismiss && (
+        <button 
+          onClick={onDismiss}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: v.color, fontSize: '1.25rem' }}
         >
-          Your changes have been saved.
-        </Toast>
+          ×
+        </button>
       )}
-    </>
+    </div>
   )
 }
-```
 
-## Variants
+export const ToastDemo = () => {
+  const [show, setShow] = React.useState(false)
+  return (
+    <div>
+      <button 
+        className="intent-btn intent-btn--variant-primary intent-btn--size-medium"
+        onClick={() => setShow(true)}
+      >
+        Show Toast
+      </button>
+      {show && (
+        <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 50 }}>
+          <Toast
+            variant="success"
+            title="Success!"
+            onDismiss={() => setShow(false)}
+          >
+            Your changes have been saved.
+          </Toast>
+        </div>
+      )}
+    </div>
+  )
+}
+
+## Examples
+
+### Interactive Toast
+
+<div className="intent-demo">
+  <ToastDemo />
+</div>
 
 ```tsx
-<Toast variant="info" title="Info">
-  Here's some helpful information.
-</Toast>
+const [show, setShow] = useState(false)
 
-<Toast variant="success" title="Success!">
-  Your action completed successfully.
-</Toast>
+<Button onClick={() => setShow(true)}>Show Toast</Button>
 
-<Toast variant="warning" title="Warning">
-  Please review before continuing.
-</Toast>
-
-<Toast variant="danger" title="Error">
-  Something went wrong. Try again.
-</Toast>
+{show && (
+  <Toast
+    variant="success"
+    title="Success!"
+    onDismiss={() => setShow(false)}
+  >
+    Your changes have been saved.
+  </Toast>
+)}
 ```
 
-## With Action
+### Variants
+
+<div className="intent-demo">
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <Toast variant="info" title="Info">Here's some helpful information.</Toast>
+    <Toast variant="success" title="Success!">Your action completed successfully.</Toast>
+    <Toast variant="warning" title="Warning">Please review before continuing.</Toast>
+    <Toast variant="danger" title="Error">Something went wrong. Try again.</Toast>
+  </div>
+</div>
 
 ```tsx
-<Toast 
-  variant="info"
-  title="New update available"
-  action={{ label: 'Update', onClick: handleUpdate }}
->
-  Version 2.0 is ready to install.
-</Toast>
+<Toast variant="info" title="Info">...</Toast>
+<Toast variant="success" title="Success!">...</Toast>
+<Toast variant="warning" title="Warning">...</Toast>
+<Toast variant="danger" title="Error">...</Toast>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'info'` \| `'success'` \| `'warning'` \| `'danger'` | `'info'` | Toast style |
-| `title` | `string` | - | Toast heading |
-| `action` | `{ label: string, onClick: () => void }` | - | Action button |
-| `duration` | `number` | `5000` | Auto-dismiss time (ms) |
-| `onDismiss` | `() => void` | - | Dismiss callback |
-
-## Toast Provider Pattern
-
-For multiple toasts, use a provider:
-
-```tsx
-// App.tsx
-import { ToastProvider } from 'intent-react'
-
-function App() {
-  return (
-    <ToastProvider>
-      <YourApp />
-    </ToastProvider>
-  )
-}
-
-// Any component
-import { useToast } from 'intent-react'
-
-function MyComponent() {
-  const toast = useToast()
-  
-  const handleSave = () => {
-    saveData()
-    toast.success({
-      title: 'Saved!',
-      description: 'Your changes were saved.'
-    })
-  }
-  
-  return <Button onClick={handleSave}>Save</Button>
-}
-```
+| `variant` | `'info' \| 'success' \| 'warning' \| 'danger'` | `'info'` | Toast style |
+| `title` | `string` | - | Toast title |
+| `children` | `ReactNode` | - | Toast message |
+| `onDismiss` | `() => void` | - | Dismiss callback (auto-dismisses after 5s) |
 
 ## CSS Output
 
 ```css
-.toast {
+.intent-toast {
   display: flex;
-  gap: var(--intent-spacing-3);
-  padding: var(--intent-spacing-4);
+  gap: 12px;
+  padding: 16px;
   border-radius: var(--intent-radius-md);
-  background: var(--intent-color-surface-elevated);
-  box-shadow: var(--intent-shadow-lg);
+  max-width: 400px;
+  animation: slideIn 0.3s ease;
 }
 
-.toast--success {
-  border-left: 4px solid var(--intent-color-success);
+.intent-toast--info {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.intent-toast--success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+.intent-toast--warning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.intent-toast--danger {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 ```

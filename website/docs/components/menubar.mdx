@@ -1,0 +1,197 @@
+---
+sidebar_position: 76
+---
+
+import React from 'react';
+
+# Menubar
+
+Apple-style menu bar for desktop applications.
+
+export const Menubar = ({ items }) => {
+  const [activeMenu, setActiveMenu] = React.useState(null)
+  
+  return (
+    <div 
+      style={{ 
+        display: 'flex', 
+        gap: '4px', 
+        padding: '4px 8px', 
+        background: 'var(--intent-color-surface-elevated)',
+        borderBottom: '1px solid var(--intent-color-border)'
+      }}
+      onMouseLeave={() => setActiveMenu(null)}
+    >
+      {items.map((item, i) => (
+        <div 
+          key={i} 
+          style={{ position: 'relative' }}
+          onMouseEnter={() => setActiveMenu(i)}
+        >
+          <button 
+            style={{ 
+              padding: '4px 12px', 
+              borderRadius: '4px', 
+              border: 'none',
+              background: activeMenu === i ? 'var(--intent-color-primary)' : 'transparent',
+              color: activeMenu === i ? 'white' : 'var(--intent-color-foreground)',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              cursor: 'pointer'
+            }}
+          >
+            {item.label}
+          </button>
+          {activeMenu === i && item.children && (
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              marginTop: '4px',
+              minWidth: '200px',
+              background: 'var(--intent-color-surface)',
+              border: '1px solid var(--intent-color-border)',
+              borderRadius: '8px',
+              boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+              zIndex: 50,
+              padding: '4px'
+            }}>
+              {item.children.map((child, j) => (
+                <div key={j}>
+                  {child.separator ? (
+                    <div style={{ height: '1px', background: 'var(--intent-color-border)', margin: '4px' }} />
+                  ) : (
+                    <button
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        width: '100%',
+                        padding: '6px 12px',
+                        textAlign: 'left',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: '0.875rem',
+                        borderRadius: '4px'
+                      }}
+                      onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
+                      onMouseLeave={(e) => e.target.style.background = 'none'}
+                    >
+                      <span>{child.label}</span>
+                      {child.shortcut && <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{child.shortcut}</span>}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+## Examples
+
+### Application Menu Bar
+
+<div className="intent-demo" style={{ padding: 0, overflow: 'hidden' }}>
+  <Menubar 
+    items={[
+      { 
+        label: 'File',
+        children: [
+          { label: 'New', shortcut: '⌘N' },
+          { label: 'Open', shortcut: '⌘O' },
+          { separator: true },
+          { label: 'Save', shortcut: '⌘S' },
+          { label: 'Save As...', shortcut: '⇧⌘S' },
+          { separator: true },
+          { label: 'Exit' }
+        ]
+      },
+      { 
+        label: 'Edit',
+        children: [
+          { label: 'Undo', shortcut: '⌘Z' },
+          { label: 'Redo', shortcut: '⇧⌘Z' },
+          { separator: true },
+          { label: 'Cut', shortcut: '⌘X' },
+          { label: 'Copy', shortcut: '⌘C' },
+          { label: 'Paste', shortcut: '⌘V' }
+        ]
+      },
+      { 
+        label: 'View',
+        children: [
+          { label: 'Zoom In', shortcut: '⌘+' },
+          { label: 'Zoom Out', shortcut: '⌘-' },
+          { separator: true },
+          { label: 'Fullscreen', shortcut: '⌃⌘F' }
+        ]
+      }
+    ]}
+  />
+</div>
+
+```tsx
+<Menubar 
+  items={[
+    { 
+      label: 'File',
+      children: [
+        { label: 'New', shortcut: '⌘N' },
+        { label: 'Open', shortcut: '⌘O' },
+        { separator: true },
+        { label: 'Exit' }
+      ]
+    }
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `Array<{label: string, children?: Array<{label?: string, shortcut?: string, separator?: boolean}>}>` | `[]` | Menu items |
+
+## CSS Output
+
+```css
+.intent-menubar {
+  display: flex;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--intent-color-surface-elevated);
+  border-bottom: 1px solid var(--intent-color-border);
+}
+
+.intent-menubar__trigger {
+  padding: 4px 12px;
+  border-radius: var(--intent-radius-sm);
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.intent-menubar__trigger--active {
+  background: var(--intent-color-primary);
+  color: white;
+}
+
+.intent-menubar__content {
+  position: absolute;
+  top: 100%;
+  min-width: 200px;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  padding: 4px;
+}
+```

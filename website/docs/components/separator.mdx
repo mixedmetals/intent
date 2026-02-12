@@ -1,0 +1,125 @@
+---
+sidebar_position: 58
+---
+import React from 'react';
+
+# Separator
+
+Visual dividers between content.
+
+export const Separator = ({ orientation = 'horizontal', label, decorative = true }) => {
+  if (orientation === 'vertical') {
+    return (
+      <div style={{ 
+        width: '1px', 
+        height: '100%', 
+        minHeight: '24px',
+        background: 'var(--intent-color-border)',
+        display: 'inline-block',
+        margin: '0 12px'
+      }} role={decorative ? 'none' : 'separator'} />
+    )
+  }
+  
+  if (label) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '16px',
+        width: '100%'
+      }}>
+        <div style={{ flex: 1, height: '1px', background: 'var(--intent-color-border)' }} />
+        <span style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', fontWeight: 500 }}>{label}</span>
+        <div style={{ flex: 1, height: '1px', background: 'var(--intent-color-border)' }} />
+      </div>
+    )
+  }
+  
+  return (
+    <div style={{ 
+      height: '1px', 
+      width: '100%', 
+      background: 'var(--intent-color-border)',
+      margin: '16px 0'
+    }} role={decorative ? 'none' : 'separator'} />
+  )
+}
+
+## Examples
+
+### Horizontal
+
+<div className="intent-demo">
+  <div>Content above</div>
+  <Separator />
+  <div>Content below</div>
+</div>
+
+```tsx
+<div>Content above</div>
+<Separator />
+<div>Content below</div>
+```
+
+### With Label
+
+<div className="intent-demo">
+  <Separator label="OR" />
+</div>
+
+```tsx
+<Separator label="OR" />
+```
+
+### Vertical
+
+<div className="intent-demo">
+  <div style={{ display: 'flex', alignItems: 'center', height: '24px' }}>
+    <span>Item 1</span>
+    <Separator orientation="vertical" />
+    <span>Item 2</span>
+    <Separator orientation="vertical" />
+    <span>Item 3</span>
+  </div>
+</div>
+
+```tsx
+<div style={{ display: 'flex' }}>
+  <span>Item 1</span>
+  <Separator orientation="vertical" />
+  <span>Item 2</span>
+</div>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Divider orientation |
+| `label` | `string` | - | Optional label text |
+| `decorative` | `boolean` | `true` | If false, adds semantic role |
+
+## CSS Output
+
+```css
+.intent-separator {
+  background: var(--intent-color-border);
+}
+
+.intent-separator--horizontal {
+  height: 1px;
+  width: 100%;
+}
+
+.intent-separator--vertical {
+  width: 1px;
+  height: 100%;
+}
+
+.intent-separator__label {
+  font-size: 0.875rem;
+  color: var(--intent-color-muted);
+  font-weight: 500;
+}
+```

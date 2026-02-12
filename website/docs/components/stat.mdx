@@ -1,244 +1,112 @@
 ---
-sidebar_position: 45
+sidebar_position: 30
 ---
-
-import { Grid, Stat } from 'intent-react'
+import React from 'react';
 
 # Stat
 
-Display a single statistic with label and trend.
+Display statistics and metrics.
 
-## Example
+export const Stat = ({ label, value, helpText, trend }) => (
+  <div style={{ padding: '16px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
+    <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginBottom: '4px' }}>{label}</div>
+    <div style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '4px' }}>{value}</div>
+    {helpText && <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{helpText}</div>}
+    {trend && (
+      <div style={{ 
+        fontSize: '0.875rem', 
+        color: trend > 0 ? 'var(--intent-color-success)' : 'var(--intent-color-error)',
+        marginTop: '4px',
+        fontWeight: 500
+      }}>
+        {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
+      </div>
+    )}
+  </div>
+)
 
-<Grid columns={3} gap="normal" style={{ marginBottom: 24 }}>
-  <Stat 
-    label="Total Revenue"
-    value="$45,231"
-    trend={{ value: 12.5, direction: 'up' }}
-  />
-  <Stat 
-    label="Active Users"
-    value="2,345"
-    trend={{ value: 8.2, direction: 'up' }}
-  />
-  <Stat 
-    label="Bounce Rate"
-    value="42.3%"
-    trend={{ value: 2.1, direction: 'down' }}
-  />
-</Grid>
+export const StatGroup = ({ children }) => (
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px' }}>
+    {children}
+  </div>
+)
+
+## Examples
+
+### Basic Stat
+
+<div className="intent-demo">
+  <Stat label="Total Users" value="2,543" helpText="All time registered users" trend={12.5} />
+</div>
 
 ```tsx
-import { Grid, Stat } from 'intent-react'
-
-<Grid columns={3} gap="normal">
-  <Stat 
-    label="Total Revenue"
-    value="$45,231"
-    trend={{ value: 12.5, direction: 'up' }}
-  />
-  <Stat 
-    label="Active Users"
-    value="2,345"
-    trend={{ value: 8.2, direction: 'up' }}
-  />
-  <Stat 
-    label="Bounce Rate"
-    value="42.3%"
-    trend={{ value: 2.1, direction: 'down' }}
-  />
-</Grid>
+<Stat label="Total Users" value="2,543" trend={12.5} />
 ```
 
-## Without Trend
+### Stat Group
 
-<Grid columns={4} gap="normal" style={{ marginBottom: 24 }}>
-  <Stat label="Total Orders" value="1,234" />
-  <Stat label="Pending" value="56" />
-  <Stat label="Completed" value="1,100" />
-  <Stat label="Cancelled" value="78" />
-</Grid>
-
-```tsx
-<Stat label="Total Orders" value="1,234" />
-<Stat label="Pending" value="56" />
-```
-
-## With Helper Text
-
-<Grid columns={2} gap="normal" style={{ marginBottom: 24 }}>
-  <Stat 
-    label="Monthly Recurring Revenue"
-    value="$12,450"
-    helperText="Based on last 30 days"
-    trend={{ value: 5.4, direction: 'up' }}
-  />
-  <Stat 
-    label="Churn Rate"
-    value="2.4%"
-    helperText="Industry average: 5%"
-    trend={{ value: 0.8, direction: 'down' }}
-  />
-</Grid>
+<div className="intent-demo">
+  <StatGroup>
+    <Stat label="Revenue" value="$45,231" trend={8.2} />
+    <Stat label="Orders" value="1,234" trend={-3.1} />
+    <Stat label="Customers" value="892" trend={15.7} />
+    <Stat label="Conversion" value="3.2%" trend={0.5} />
+  </StatGroup>
+</div>
 
 ```tsx
-<Stat 
-  label="Monthly Recurring Revenue"
-  value="$12,450"
-  helperText="Based on last 30 days"
-  trend={{ value: 5.4, direction: 'up' }}
-/>
-```
-
-## Sizes
-
-<Grid columns={3} gap="normal" style={{ marginBottom: 24 }}>
-  <Stat 
-    size="small"
-    label="Small"
-    value="$1.2K"
-  />
-  <Stat 
-    size="medium"
-    label="Medium"
-    value="$12.5K"
-  />
-  <Stat 
-    size="large"
-    label="Large"
-    value="$125K"
-  />
-</Grid>
-
-```tsx
-<Stat size="small" label="Small" value="$1.2K" />
-<Stat size="medium" label="Medium" value="$12.5K" />
-<Stat size="large" label="Large" value="$125K" />
-```
-
-## With Icon
-
-<Grid columns={3} gap="normal" style={{ marginBottom: 24 }}>
-  <Stat 
-    label="Revenue"
-    value="$54.2K"
-    icon="dollar-sign"
-    trend={{ value: 14.2, direction: 'up' }}
-  />
-  <Stat 
-    label="Users"
-    value="1,429"
-    icon="users"
-    trend={{ value: 7.3, direction: 'up' }}
-  />
-  <Stat 
-    label="Active Now"
-    value="284"
-    icon="activity"
-  />
-</Grid>
-
-```tsx
-<Stat 
-  label="Revenue"
-  value="$54.2K"
-  icon="dollar-sign"
-  trend={{ value: 14.2, direction: 'up' }}
-/>
-```
-
-## In Card
-
-```tsx
-<Card padding="relaxed">
-  <Stat 
-    label="Conversion Rate"
-    value="3.24%"
-    helperText="From 12,450 visitors"
-    trend={{ value: 0.8, direction: 'up' }}
-  />
-</Card>
+<StatGroup>
+  <Stat label="Revenue" value="$45,231" trend={8.2} />
+  <Stat label="Orders" value="1,234" trend={-3.1} />
+  <Stat label="Customers" value="892" trend={15.7} />
+</StatGroup>
 ```
 
 ## Props
 
+### Stat
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `string` | required | Statistic label |
-| `value` | `string` \| `number` | required | Statistic value |
-| `helperText` | `string` | - | Helper/description text |
-| `icon` | `string` | - | Icon name |
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Stat size |
-| `trend` | `{ value: number, direction: 'up' \| 'down' }` | - | Trend indicator |
+| `label` | `string` | - | Stat label |
+| `value` | `string \| number` | - | Stat value |
+| `helpText` | `string` | - | Help text below value |
+| `trend` | `number` | - | Trend percentage (positive/negative) |
+
+### StatGroup
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Stat components |
 
 ## CSS Output
 
 ```css
-.stat {
-  display: flex;
-  flex-direction: column;
-  gap: var(--intent-spacing-1);
-}
-
-.stat--with-icon {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: var(--intent-spacing-3);
-}
-
-.stat__icon {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--intent-color-primary-alpha);
-  color: var(--intent-color-primary);
+.intent-stat {
+  padding: 16px;
+  border: 1px solid var(--intent-color-border);
   border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
 }
 
-.stat__content {
-  flex: 1;
+.intent-stat__label {
+  font-size: 0.875rem;
+  color: var(--intent-color-muted);
 }
 
-.stat__label {
-  font-size: var(--intent-font-size-sm);
-  color: var(--intent-color-text-muted);
+.intent-stat__value {
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
-.stat__value {
-  font-size: var(--intent-font-size-2xl);
-  font-weight: 700;
-  color: var(--intent-color-text);
-  line-height: 1.2;
-}
-
-.stat--size-small .stat__value {
-  font-size: var(--intent-font-size-lg);
-}
-
-.stat--size-large .stat__value {
-  font-size: var(--intent-font-size-3xl);
-}
-
-.stat__helper {
-  font-size: var(--intent-font-size-xs);
-  color: var(--intent-color-text-muted);
-}
-
-.stat__trend {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--intent-spacing-1);
-  font-size: var(--intent-font-size-sm);
+.intent-stat__trend {
+  font-size: 0.875rem;
   font-weight: 500;
 }
 
-.stat__trend--up {
+.intent-stat__trend--positive {
   color: var(--intent-color-success);
 }
 
-.stat__trend--down {
-  color: var(--intent-color-danger);
+.intent-stat__trend--negative {
+  color: var(--intent-color-error);
 }
 ```

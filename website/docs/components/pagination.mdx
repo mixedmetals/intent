@@ -1,227 +1,142 @@
 ---
-sidebar_position: 26
+sidebar_position: 77
 ---
+import React from 'react';
 
-import { useState } from 'react'
-import { Stack, Pagination } from 'intent-react'
+# Pagination
 
-export function PaginationDemo() {
-  const [page, setPage] = useState(1)
+Page navigation controls.
+
+export const Pagination = ({ total, pageSize = 10, currentPage: initialPage = 1, onChange }) => {
+  const [currentPage, setCurrentPage] = React.useState(initialPage)
+  const totalPages = Math.ceil(total / pageSize)
+  
+  const goToPage = (page) => {
+    if (page < 1 || page > totalPages) return
+    setCurrentPage(page)
+    onChange?.(page)
+  }
+  
+  const pages = []
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+      pages.push(i)
+    } else if (pages[pages.length - 1] !== '...') {
+      pages.push('...')
+    }
+  }
   
   return (
-    <div style={{ marginBottom: 24 }}>
-      <Pagination 
-        currentPage={page}
-        totalPages={10}
-        onPageChange={setPage}
-      />
+    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <button 
+        onClick={() => goToPage(currentPage - 1)}
+        disabled={currentPage === 1}
+        style={{
+          padding: '8px 12px',
+          border: '1px solid var(--intent-color-border)',
+          borderRadius: '6px',
+          background: 'var(--intent-color-surface)',
+          cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+          opacity: currentPage === 1 ? 0.5 : 1,
+          fontSize: '0.875rem'
+        }}
+      >
+        ← Prev
+      </button>
+      
+      {pages.map((page, i) => (
+        <button
+          key={i}
+          onClick={() => typeof page === 'number' && goToPage(page)}
+          disabled={page === '...'}
+          style={{
+            minWidth: '36px',
+            padding: '8px',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '6px',
+            background: page === currentPage ? 'var(--intent-color-primary)' : 'var(--intent-color-surface)',
+            color: page === currentPage ? 'white' : 'var(--intent-color-foreground)',
+            cursor: page === '...' ? 'default' : 'pointer',
+            fontSize: '0.875rem',
+            fontWeight: 500
+          }}
+        >
+          {page}
+        </button>
+      ))}
+      
+      <button 
+        onClick={() => goToPage(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        style={{
+          padding: '8px 12px',
+          border: '1px solid var(--intent-color-border)',
+          borderRadius: '6px',
+          background: 'var(--intent-color-surface)',
+          cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+          opacity: currentPage === totalPages ? 0.5 : 1,
+          fontSize: '0.875rem'
+        }}
+      >
+        Next →
+      </button>
     </div>
   )
 }
 
-# Pagination
+## Examples
 
-Navigation for dividing content across multiple pages.
+### Basic Pagination
 
-## Example
-
-<PaginationDemo />
-
-```tsx
-import { useState } from 'react'
-import { Pagination } from 'intent-react'
-
-function Example() {
-  const [page, setPage] = useState(1)
-  
-  return (
-    <Pagination 
-      currentPage={page}
-      totalPages={10}
-      onPageChange={setPage}
-    />
-  )
-}
-```
-
-## Compact Variant
-
-<div style={{ marginBottom: 24 }}>
-  <Pagination 
-    variant="compact"
-    currentPage={3}
-    totalPages={10}
-    onPageChange={() => {}}
-  />
+<div className="intent-demo">
+  <Pagination total={100} pageSize={10} />
 </div>
 
 ```tsx
 <Pagination 
-  variant="compact"
-  currentPage={3}
-  totalPages={10}
-  onPageChange={handlePageChange}
-/>
-```
-
-## With Total Items
-
-<div style={{ marginBottom: 24 }}>
-  <Pagination 
-    currentPage={1}
-    totalPages={20}
-    totalItems={387}
-    pageSize={20}
-    onPageChange={() => {}}
-  />
-</div>
-
-```tsx
-<Pagination 
+  total={100} 
+  pageSize={10} 
   currentPage={1}
-  totalPages={20}
-  totalItems={387}
-  pageSize={20}
-  onPageChange={handlePageChange}
+  onChange={(page) => console.log(page)}
 />
-```
-
-## Sizes
-
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Pagination 
-    size="small"
-    currentPage={5}
-    totalPages={10}
-    onPageChange={() => {}}
-  />
-  <Pagination 
-    size="medium"
-    currentPage={5}
-    totalPages={10}
-    onPageChange={() => {}}
-  />
-  <Pagination 
-    size="large"
-    currentPage={5}
-    totalPages={10}
-    onPageChange={() => {}}
-  />
-</Stack>
-
-```tsx
-<Pagination size="small" ... />
-<Pagination size="medium" ... />
-<Pagination size="large" ... />
-```
-
-## Edge Cases
-
-### First Page
-
-```tsx
-<Pagination currentPage={1} totalPages={10} onPageChange={...} />
-```
-
-### Last Page
-
-```tsx
-<Pagination currentPage={10} totalPages={10} onPageChange={...} />
-```
-
-### Single Page
-
-```tsx
-<Pagination currentPage={1} totalPages={1} onPageChange={...} />
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `currentPage` | `number` | - | Current active page |
-| `totalPages` | `number` | - | Total number of pages |
-| `totalItems` | `number` | - | Total item count (for display) |
-| `pageSize` | `number` | - | Items per page (for display) |
-| `onPageChange` | `(page: number) => void` | - | Page change callback |
-| `variant` | `'default'` \| `'compact'` | `'default'` | Pagination style |
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Pagination size |
-| `showFirstLast` | `boolean` | `true` | Show first/last buttons |
+| `total` | `number` | - | Total number of items |
+| `pageSize` | `number` | `10` | Items per page |
+| `currentPage` | `number` | `1` | Current page |
+| `onChange` | `(page: number) => void` | - | Page change handler |
+| `showSizeChanger` | `boolean` | `false` | Show page size selector |
+| `showTotal` | `boolean` | `false` | Show total count |
 
 ## CSS Output
 
 ```css
-.pagination {
+.intent-pagination {
   display: flex;
   align-items: center;
-  gap: var(--intent-spacing-1);
+  gap: 4px;
 }
 
-.pagination__button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2rem;
-  height: 2rem;
-  padding: 0 var(--intent-spacing-2);
+.intent-pagination__button {
+  padding: 8px 12px;
+  border: 1px solid var(--intent-color-border);
   border-radius: var(--intent-radius-md);
-  color: var(--intent-color-text);
-  background: transparent;
+  background: var(--intent-color-surface);
+  font-size: 0.875rem;
   cursor: pointer;
 }
 
-.pagination__button:hover:not(:disabled) {
-  background: var(--intent-color-surface-elevated);
-}
-
-.pagination__button--active {
+.intent-pagination__button--active {
   background: var(--intent-color-primary);
   color: white;
 }
 
-.pagination__button:disabled {
+.intent-pagination__button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-.pagination__ellipsis {
-  padding: 0 var(--intent-spacing-2);
-  color: var(--intent-color-text-muted);
-}
-```
-
-## Usage with Data
-
-```tsx
-import { useState } from 'react'
-import { Pagination } from 'intent-react'
-
-const ITEMS_PER_PAGE = 10
-
-function ProductList({ products }) {
-  const [currentPage, setCurrentPage] = useState(1)
-  
-  const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE)
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-  const displayedProducts = products.slice(
-    startIndex, 
-    startIndex + ITEMS_PER_PAGE
-  )
-  
-  return (
-    <>
-      {displayedProducts.map(product => (
-        <ProductCard key={product.id} product={product} />
-      ))}
-      
-      <Pagination 
-        currentPage={currentPage}
-        totalPages={totalPages}
-        totalItems={products.length}
-        pageSize={ITEMS_PER_PAGE}
-        onPageChange={setCurrentPage}
-      />
-    </>
-  )
 }
 ```

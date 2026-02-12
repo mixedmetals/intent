@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Intent Framework',
-  tagline: 'The Schema-irst, AI-Native CSS Framework',
+  tagline: 'The Schema-first, AI-Native CSS Framework',
   favicon: 'img/favicon.ico',
 
   url: 'https://mixedmetals.github.io',

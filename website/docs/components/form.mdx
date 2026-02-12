@@ -1,112 +1,196 @@
 ---
-sidebar_position: 56
+sidebar_position: 81
 ---
-
-import { Form, Field, Input, Button } from 'intent-react'
+import React from 'react';
 
 # Form
 
-Form wrapper with validation and submission handling.
+Form building utilities with validation.
+
+export const FormDemo = () => {
+  const [values, setValues] = React.useState({ name: '', email: '', message: '' })
+  const [errors, setErrors] = React.useState({})
+  const [submitted, setSubmitted] = React.useState(false)
+  
+  const validate = () => {
+    const newErrors = {}
+    if (!values.name) newErrors.name = 'Name is required'
+    if (!values.email) newErrors.email = 'Email is required'
+    else if (!/\S+@\S+\.\S+/.test(values.email)) newErrors.email = 'Email is invalid'
+    if (!values.message) newErrors.message = 'Message is required'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+  
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (validate()) {
+      setSubmitted(true)
+    }
+  }
+  
+  if (submitted) {
+    return (
+      <div style={{ padding: '24px', textAlign: 'center', background: 'var(--intent-color-success-subtle, #dcfce7)', borderRadius: '8px' }}>
+        <div style={{ fontSize: '2rem', marginBottom: '8px' }}>✓</div>
+        <div style={{ fontWeight: 600, color: 'var(--intent-color-success, #16a34a)' }}>Form submitted!</div>
+      </div>
+    )
+  }
+  
+  return (
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div>
+        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>
+          Name *
+        </label>
+        <input
+          type="text"
+          value={values.name}
+          onChange={(e) => setValues({ ...values, name: e.target.value })}
+          style={{
+            width: '100%',
+            padding: '8px 12px',
+            border: `1px solid ${errors.name ? 'var(--intent-color-error, #ef4444)' : 'var(--intent-color-border)'}`,
+            borderRadius: '6px',
+            fontSize: '0.875rem',
+            outline: 'none'
+          }}
+          placeholder="Enter your name"
+        />
+        {errors.name && <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-error, #ef4444)', marginTop: '4px' }}>{errors.name}</div>}
+      </div>
+      
+      <div>
+        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>
+          Email *
+        </label>
+        <input
+          type="email"
+          value={values.email}
+          onChange={(e) => setValues({ ...values, email: e.target.value })}
+          style={{
+            width: '100%',
+            padding: '8px 12px',
+            border: `1px solid ${errors.email ? 'var(--intent-color-error, #ef4444)' : 'var(--intent-color-border)'}`,
+            borderRadius: '6px',
+            fontSize: '0.875rem',
+            outline: 'none'
+          }}
+          placeholder="Enter your email"
+        />
+        {errors.email && <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-error, #ef4444)', marginTop: '4px' }}>{errors.email}</div>}
+      </div>
+      
+      <div>
+        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>
+          Message *
+        </label>
+        <textarea
+          value={values.message}
+          onChange={(e) => setValues({ ...values, message: e.target.value })}
+          rows={4}
+          style={{
+            width: '100%',
+            padding: '8px 12px',
+            border: `1px solid ${errors.message ? 'var(--intent-color-error, #ef4444)' : 'var(--intent-color-border)'}`,
+            borderRadius: '6px',
+            fontSize: '0.875rem',
+            outline: 'none',
+            resize: 'vertical',
+            fontFamily: 'inherit'
+          }}
+          placeholder="Enter your message"
+        />
+        {errors.message && <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-error, #ef4444)', marginTop: '4px' }}>{errors.message}</div>}
+      </div>
+      
+      <button 
+        type="submit"
+        className="intent-btn intent-btn--variant-primary intent-btn--size-medium"
+        style={{ alignSelf: 'flex-start' }}
+      >
+        Submit
+      </button>
+    </form>
+  )
+}
 
 ## Examples
 
-### Basic Form
+### Contact Form
+
+<div className="intent-demo">
+  <FormDemo />
+</div>
 
 ```tsx
-import { Form, Field, Input, Button } from 'intent-react'
-
 <Form onSubmit={handleSubmit}>
-  <Field label="Email">
-    <Input type="email" name="email" required />
-  </Field>
-  <Field label="Password">
-    <Input type="password" name="password" required />
-  </Field>
-  <Button type="submit" importance="primary">
-    Sign In
-  </Button>
-</Form>
-```
-
-### With Validation
-
-```tsx
-<Form 
-  onSubmit={handleSubmit}
-  validate={(values) => {
-    const errors = {}
-    if (!values.email) errors.email = 'Required'
-    if (!values.password) errors.password = 'Required'
-    if (values.password?.length < 8) {
-      errors.password = 'Must be at least 8 characters'
-    }
-    return errors
-  }}
->
-  <Field label="Email" name="email">
-    <Input type="email" />
-  </Field>
-  <Field label="Password" name="password">
-    <Input type="password" />
-  </Field>
-  <Button type="submit">Submit</Button>
-</Form>
-```
-
-### Controlled Form
-
-```tsx
-const [values, setValues] = useState({ name: '', email: '' })
-
-<Form 
-  values={values}
-  onChange={setValues}
-  onSubmit={handleSubmit}
->
-  <Field label="Name">
-    <Input value={values.name} onChange={e => 
-      setValues(v => ({ ...v, name: e.target.value }))
-    } />
-  </Field>
-</Form>
-```
-
-### Loading State
-
-```tsx
-<Form onSubmit={handleSubmit} loading={isSubmitting}>
-  <Field label="Email">
-    <Input type="email" />
-  </Field>
-  <Button type="submit" loading={isSubmitting}>
-    Submit
-  </Button>
+  <Form.Field name="email">
+    <Form.Label>Email</Form.Label>
+    <Form.Input type="email" />
+    <Form.Error />
+  </Form.Field>
+  <Form.Submit>Submit</Form.Submit>
 </Form>
 ```
 
 ## Props
 
+### Form
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `onSubmit` | `(values) => void` \| `Promise<void>` | - | Submit handler |
-| `onChange` | `(values) => void` | - | Change callback |
-| `validate` | `(values) => object` | - | Validation function |
-| `values` | `object` | - | Controlled values |
-| `initialValues` | `object` | `{}` | Initial form values |
-| `loading` | `boolean` | `false` | Loading state |
-| `children` | `ReactNode` | required | Form fields |
+| `onSubmit` | `(values) => void` | - | Submit handler |
+| `validation` | `object` | - | Validation schema |
+| `defaultValues` | `object` | `{}` | Default form values |
+| `children` | `ReactNode` | - | Form fields |
+
+### Form.Field
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `name` | `string` | - | Field name |
+| `children` | `ReactNode` | - | Field content |
+
+### Form.Input
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `type` | `string` | `'text'` | Input type |
+| `placeholder` | `string` | - | Placeholder text |
 
 ## CSS Output
 
 ```css
-.form {
+.intent-form {
   display: flex;
   flex-direction: column;
-  gap: var(--intent-spacing-4);
+  gap: 16px;
 }
 
-.form__error {
-  color: var(--intent-color-danger);
-  font-size: var(--intent-font-size-sm);
+.intent-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.intent-form__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.intent-form__input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  font-size: 0.875rem;
+}
+
+.intent-form__input--error {
+  border-color: var(--intent-color-error);
+}
+
+.intent-form__error {
+  font-size: 0.75rem;
+  color: var(--intent-color-error);
 }
 ```

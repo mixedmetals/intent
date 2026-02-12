@@ -1,227 +1,146 @@
 ---
-sidebar_position: 33
+sidebar_position: 65
 ---
-
-import { Stack, Button, Sheet, Text } from 'intent-react'
+import React from 'react';
 
 # Sheet
 
-Bottom sheet for mobile-first designs.
+Side panels that slide in from any edge.
 
-## Overview
-
-Sheet is a specialized overlay component that slides up from the bottom of the screen. It's the mobile equivalent of a Drawer and follows platform conventions for iOS/Android bottom sheets.
-
-## Example
-
-```tsx
-import { useState } from 'react'
-import { Button, Sheet, Text } from 'intent-react'
-
-function Example() {
-  const [open, setOpen] = useState(false)
+export const Sheet = ({ title, children, isOpen, onClose, side = 'right' }) => {
+  if (!isOpen) return null
+  
+  const positions = {
+    top: { top: 0, left: 0, right: 0, height: 'auto', maxHeight: '50vh' },
+    bottom: { bottom: 0, left: 0, right: 0, height: 'auto', maxHeight: '50vh' },
+    left: { top: 0, left: 0, bottom: 0, width: 'auto', maxWidth: '400px' },
+    right: { top: 0, right: 0, bottom: 0, width: 'auto', maxWidth: '400px' }
+  }
   
   return (
-    <>
-      <Button onClick={() => setOpen(true)}>Open Sheet</Button>
-      
-      <Sheet
-        open={open}
-        onOpenChange={setOpen}
-        title="Options"
-      >
-        <Text>Sheet content goes here.</Text>
-      </Sheet>
-    </>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50 }}>
+      <div 
+        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }} 
+        onClick={onClose}
+      />
+      <div style={{ 
+        position: 'absolute', 
+        background: 'var(--intent-color-surface)', 
+        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+        display: 'flex',
+        flexDirection: 'column',
+        ...positions[side]
+      }}>
+        <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>{title}</h3>
+          <button 
+            onClick={onClose}
+            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--intent-color-muted)' }}
+          >
+            ×
+          </button>
+        </div>
+        <div style={{ padding: '24px', flex: 1, overflow: 'auto' }}>
+          {children}
+        </div>
+      </div>
+    </div>
   )
 }
-```
 
-## With Handle
+export const SheetDemo = () => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [side, setSide] = React.useState('right')
+  
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        {['top', 'bottom', 'left', 'right'].map((s) => (
+          <button 
+            key={s}
+            className="intent-btn intent-btn--variant-secondary intent-btn--size-medium"
+            onClick={() => { setSide(s); setIsOpen(true); }}
+          >
+            Open {s}
+          </button>
+        ))}
+      </div>
+      <Sheet 
+        isOpen={isOpen} 
+        onClose={() => setIsOpen(false)}
+        title={`${side.charAt(0).toUpperCase() + side.slice(1)} Sheet`}
+        side={side}
+      >
+        <p>Sheet content goes here.</p>
+      </Sheet>
+    </div>
+  )
+}
 
-Sheets typically show a drag handle on mobile:
+## Examples
+
+### Sheet Positions
+
+<div className="intent-demo">
+  <SheetDemo />
+</div>
 
 ```tsx
-<Sheet
-  open={open}
-  onOpenChange={setOpen}
-  showHandle
-  title="Filter"
+<Sheet 
+  isOpen={isOpen} 
+  onClose={() => setIsOpen(false)}
+  title="Sheet Title"
+  side="right"
 >
-  <Stack gap="normal">
-    <Field label="Sort by">
-      <Select options={sortOptions} />
-    </Field>
-    <Field label="Category">
-      <Select options={categoryOptions} />
-    </Field>
-  </Stack>
+  <p>Sheet content...</p>
 </Sheet>
-```
-
-## Sizes
-
-Sheets can be different heights:
-
-| Size | Height | Use Case |
-|------|--------|----------|
-| `auto` | Fit content | Short options/lists |
-| `sm` | 25% viewport | Quick actions |
-| `md` | 50% viewport | Forms, filters |
-| `lg` | 75% viewport | Detail views |
-| `full` | 100% viewport | Full content |
-
-```tsx
-<Sheet size="md" open={open} onOpenChange={setOpen}>
-  ...
-</Sheet>
-```
-
-## Snap Points
-
-Sheets can snap to specific heights:
-
-```tsx
-<Sheet
-  open={open}
-  onOpenChange={setOpen}
-  snapPoints={['25%', '50%', '100%']}
-  defaultSnapPoint={1}  // Start at 50%
->
-  <Text>Swipe up to expand</Text>
-</Sheet>
-```
-
-## Mobile Action Sheet
-
-Common pattern for mobile action selection:
-
-```tsx
-<Sheet
-  open={open}
-  onOpenChange={setOpen}
-  variant="actions"
-  actions={[
-    { label: 'Share', icon: 'share', onClick: handleShare },
-    { label: 'Copy Link', icon: 'link', onClick: handleCopy },
-    { label: 'Add to Favorites', icon: 'heart', onClick: handleFavorite },
-    { label: 'Delete', icon: 'trash', danger: true, onClick: handleDelete },
-  ]}
-  cancel={{ label: 'Cancel' }}
-/>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `open` | `boolean` | - | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | - | State change callback |
+| `isOpen` | `boolean` | `false` | Whether sheet is open |
+| `onClose` | `() => void` | - | Close handler |
 | `title` | `string` | - | Sheet title |
-| `size` | `'auto'` \| `'sm'` \| `'md'` \| `'lg'` \| `'full'` | `'auto'` | Sheet height |
-| `showHandle` | `boolean` | `true` | Show drag handle |
-| `dismissible` | `boolean` | `true` | Allow swipe to dismiss |
-| `snapPoints` | `string[]` | - | Snap point heights |
-| `defaultSnapPoint` | `number` | `0` | Initial snap point index |
-| `variant` | `'default'` \| `'actions'` | `'default'` | Sheet variant |
-| `actions` | `Action[]` | - | Action items (for actions variant) |
-| `cancel` | `{ label: string }` | - | Cancel button (for actions variant) |
-
-### Action Type
-
-```typescript
-interface Action {
-  label: string
-  icon?: string
-  onClick: () => void
-  danger?: boolean
-  disabled?: boolean
-}
-```
+| `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'right'` | Sheet position |
+| `children` | `ReactNode` | - | Sheet content |
 
 ## CSS Output
 
 ```css
-.sheet {
+.intent-sheet {
   position: fixed;
+  z-index: 50;
+  background: var(--intent-color-surface);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.intent-sheet--top {
+  top: 0;
+  left: 0;
+  right: 0;
+  max-height: 50vh;
+}
+
+.intent-sheet--right {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 400px;
+}
+
+.intent-sheet--bottom {
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--intent-color-surface);
-  border-radius: var(--intent-radius-xl) var(--intent-radius-xl) 0 0;
-  box-shadow: var(--intent-shadow-xl);
-  z-index: 50;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: 50vh;
 }
 
-.sheet__handle {
-  width: 40px;
-  height: 4px;
-  background: var(--intent-color-border);
-  border-radius: 2px;
-  margin: var(--intent-spacing-3) auto;
-}
-
-.sheet__header {
-  padding: var(--intent-spacing-4);
-  border-bottom: 1px solid var(--intent-color-border);
-}
-
-.sheet__content {
-  padding: var(--intent-spacing-4);
-}
-
-.sheet__overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 40;
-}
-
-/* Animation */
-@keyframes sheet-slide-up {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-.sheet-enter {
-  animation: sheet-slide-up 300ms ease-out;
-}
-```
-
-## Sheet vs Drawer
-
-Use **Sheet** when:
-- Targeting mobile-first design
-- Following iOS/Android conventions
-- Need snap points and gestures
-- Action selection on mobile
-
-Use **Drawer** when:
-- Desktop or responsive layouts
-- Side navigation or details panel
-- Persistent content that slides
-
-## Responsive Pattern
-
-```tsx
-function ResponsiveOverlay() {
-  const [open, setOpen] = useState(false)
-  const isMobile = useMediaQuery('(max-width: 768px)')
-  
-  return isMobile ? (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <FilterContent />
-    </Sheet>
-  ) : (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <FilterContent />
-    </Drawer>
-  )
+.intent-sheet--left {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  max-width: 400px;
 }
 ```

@@ -1,0 +1,140 @@
+---
+sidebar_position: 20
+---
+import React from 'react';
+
+# Slider
+
+Range input for numeric values.
+
+export const Slider = ({ defaultValue = 50, min = 0, max = 100, step = 1, label, showValue = true }) => {
+  const [value, setValue] = React.useState(defaultValue)
+  const percentage = ((value - min) / (max - min)) * 100
+  
+  return (
+    <div style={{ width: '100%' }}>
+      {(label || showValue) && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.875rem' }}>
+          {label && <span style={{ fontWeight: 500 }}>{label}</span>}
+          {showValue && <span style={{ color: 'var(--intent-color-muted)' }}>{value}</span>}
+        </div>
+      )}
+      <div style={{ position: 'relative', height: '20px', display: 'flex', alignItems: 'center' }}>
+        <div style={{ 
+          position: 'absolute', 
+          width: '100%', 
+          height: '4px', 
+          background: 'var(--intent-color-border)', 
+          borderRadius: '2px' 
+        }} />
+        <div style={{ 
+          position: 'absolute', 
+          width: `${percentage}%`, 
+          height: '4px', 
+          background: 'var(--intent-color-primary)', 
+          borderRadius: '2px' 
+        }} />
+        <input 
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => setValue(Number(e.target.value))}
+          style={{ 
+            position: 'absolute', 
+            width: '100%', 
+            opacity: 0, 
+            cursor: 'pointer',
+            height: '20px'
+          }}
+        />
+        <div style={{ 
+          position: 'absolute', 
+          left: `${percentage}%`, 
+          transform: 'translateX(-50%)',
+          width: '16px',
+          height: '16px',
+          background: 'var(--intent-color-primary)',
+          borderRadius: '50%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+          pointerEvents: 'none'
+        }} />
+      </div>
+    </div>
+  )
+}
+
+## Examples
+
+### Basic Slider
+
+<div className="intent-demo">
+  <Slider label="Volume" defaultValue={70} />
+</div>
+
+```tsx
+<Slider label="Volume" defaultValue={70} />
+```
+
+### Range
+
+<div className="intent-demo">
+  <Slider min={0} max={1000} step={10} defaultValue={350} label="Price Range" />
+</div>
+
+```tsx
+<Slider min={0} max={1000} step={10} defaultValue={350} />
+```
+
+### Without Value Display
+
+<div className="intent-demo">
+  <Slider showValue={false} defaultValue={60} />
+</div>
+
+```tsx
+<Slider showValue={false} />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | - | Controlled value |
+| `defaultValue` | `number` | `0` | Default value |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `step` | `number` | `1` | Step increment |
+| `label` | `string` | - | Input label |
+| `onChange` | `(value: number) => void` | - | Change handler |
+
+## CSS Output
+
+```css
+.intent-slider {
+  position: relative;
+  width: 100%;
+}
+
+.intent-slider__track {
+  width: 100%;
+  height: 4px;
+  background: var(--intent-color-border);
+  border-radius: var(--intent-radius-full);
+}
+
+.intent-slider__filled {
+  height: 4px;
+  background: var(--intent-color-primary);
+  border-radius: var(--intent-radius-full);
+}
+
+.intent-slider__thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--intent-color-primary);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+```

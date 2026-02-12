@@ -1,64 +1,78 @@
 ---
-sidebar_position: 60
+sidebar_position: 90
 ---
-
-import { PhoneInput } from 'intent-react'
+import React from 'react';
 
 # PhoneInput
 
-Phone number input with country code selection.
+International phone number input.
+
+export const PhoneInput = ({ label, placeholder = "Enter phone number" }) => {
+  const [value, setValue] = React.useState('')
+  const [country, setCountry] = React.useState('+1')
+  
+  const countries = [
+    { code: '+1', flag: '🇺🇸', name: 'United States' },
+    { code: '+44', flag: '🇬🇧', name: 'United Kingdom' },
+    { code: '+33', flag: '🇫🇷', name: 'France' },
+    { code: '+49', flag: '🇩🇪', name: 'Germany' },
+    { code: '+81', flag: '🇯🇵', name: 'Japan' },
+    { code: '+86', flag: '🇨🇳', name: 'China' }
+  ]
+  
+  return (
+    <div style={{ width: '100%', maxWidth: '300px' }}>
+      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>{label}</label>}
+      <div style={{ display: 'flex' }}>
+        <select 
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          style={{
+            padding: '8px 12px',
+            border: '1px solid var(--intent-color-border)',
+            borderRight: 'none',
+            borderRadius: '8px 0 0 8px',
+            background: 'var(--intent-color-surface-elevated)',
+            fontSize: '0.875rem',
+            cursor: 'pointer'
+          }}
+        >
+          {countries.map(c => (
+            <option key={c.code} value={c.code}>{c.flag} {c.code}</option>
+          ))}
+        </select>
+        <input
+          type="tel"
+          value={value}
+          onChange={(e) => setValue(e.target.value.replace(/\D/g, ''))}
+          placeholder={placeholder}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '0 8px 8px 0',
+            fontSize: '0.875rem',
+            outline: 'none'
+          }}
+        />
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
 ### Basic PhoneInput
 
-```tsx
-import { useState } from 'react'
-import { PhoneInput } from 'intent-react'
-
-function Example() {
-  const [phone, setPhone] = useState('')
-  
-  return (
-    <PhoneInput 
-      value={phone}
-      onChange={setPhone}
-      defaultCountry="US"
-      placeholder="(555) 123-4567"
-    />
-  )
-}
-```
-
-### With Country Select
+<div className="intent-demo">
+  <PhoneInput label="Phone Number" />
+</div>
 
 ```tsx
 <PhoneInput 
+  label="Phone Number"
   value={phone}
   onChange={setPhone}
-  countries={['US', 'CA', 'GB', 'AU', 'DE']}
-  defaultCountry="US"
-/>
-```
-
-### With Validation
-
-```tsx
-<PhoneInput 
-  value={phone}
-  onChange={setPhone}
-  validation={isValid ? 'valid' : 'invalid'}
-  errorMessage={!isValid ? 'Please enter a valid phone number' : undefined}
-/>
-```
-
-### International Format
-
-```tsx
-<PhoneInput 
-  value={phone}
-  onChange={setPhone}
-  format="international"  // +1 (555) 123-4567
 />
 ```
 
@@ -67,46 +81,32 @@ function Example() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `string` | - | Phone number value |
-| `onChange` | `(value: string) => void` | - | Change callback |
+| `label` | `string` | - | Input label |
+| `placeholder` | `string` | `"Enter phone number"` | Placeholder text |
 | `defaultCountry` | `string` | `'US'` | Default country code |
-| `countries` | `string[]` | - | Allowed countries |
-| `format` | `'national'` \| `'international'` | `'national'` | Number format |
-| `placeholder` | `string` | - | Input placeholder |
-| `disabled` | `boolean` | `false` | Disable input |
-| `validation` | `'valid'` \| `'invalid'` \| `'none'` | `'none'` | Validation state |
+| `onChange` | `(value: string) => void` | - | Change handler |
 
 ## CSS Output
 
 ```css
-.phone-input {
+.intent-phone-input {
   display: flex;
-  align-items: center;
+}
+
+.intent-phone-input__country {
+  padding: 8px 12px;
   border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  background: var(--intent-color-surface);
+  border-right: none;
+  border-radius: var(--intent-radius-md) 0 0 var(--intent-radius-md);
+  background: var(--intent-color-surface-elevated);
+  font-size: 0.875rem;
 }
 
-.phone-input__country {
-  display: flex;
-  align-items: center;
-  gap: var(--intent-spacing-1);
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
-  border-right: 1px solid var(--intent-color-border);
-  cursor: pointer;
-}
-
-.phone-input__flag {
-  font-size: 20px;
-}
-
-.phone-input__input {
+.intent-phone-input__number {
   flex: 1;
-  border: none;
-  background: transparent;
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
-}
-
-.phone-input__input:focus {
-  outline: none;
+  padding: 8px 12px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: 0 var(--intent-radius-md) var(--intent-radius-md) 0;
+  font-size: 0.875rem;
 }
 ```

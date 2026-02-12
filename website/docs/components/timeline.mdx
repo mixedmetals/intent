@@ -1,141 +1,66 @@
 ---
-sidebar_position: 37
+sidebar_position: 28
 ---
-
-import { Timeline, Text, Badge } from 'intent-react'
+import React from 'react';
 
 # Timeline
 
-Chronological display of events or activities.
+Display chronological events.
 
-## Example
+export const Timeline = ({ items }) => (
+  <div style={{ position: 'relative', paddingLeft: '24px' }}>
+    {items.map((item, i) => (
+      <div key={i} style={{ position: 'relative', paddingBottom: '24px' }}>
+        {/* Line */}
+        <div style={{
+          position: 'absolute',
+          left: '6px',
+          top: '8px',
+          bottom: i === items.length - 1 ? '0' : '-24px',
+          width: '2px',
+          background: 'var(--intent-color-border)'
+        }} />
+        {/* Dot */}
+        <div style={{
+          position: 'absolute',
+          left: '0',
+          top: '4px',
+          width: '12px',
+          height: '12px',
+          borderRadius: '50%',
+          background: item.active ? 'var(--intent-color-primary)' : 'var(--intent-color-border)',
+          border: '2px solid var(--intent-color-surface)'
+        }} />
+        {/* Content */}
+        <div>
+          <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginBottom: '4px' }}>{item.time}</div>
+          <div style={{ fontWeight: 500 }}>{item.title}</div>
+          {item.description && <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)', marginTop: '4px' }}>{item.description}</div>}
+        </div>
+      </div>
+    ))}
+  </div>
+)
 
-<Timeline 
-  items={[
-    {
-      id: 1,
-      title: 'Project Created',
-      description: 'The project was initialized by John Doe',
-      timestamp: '2024-01-15 10:30 AM',
-      icon: 'plus-circle',
-      color: 'success'
-    },
-    {
-      id: 2,
-      title: 'First Commit',
-      description: 'Initial codebase pushed to repository',
-      timestamp: '2024-01-15 2:45 PM',
-      icon: 'git-commit',
-      color: 'primary'
-    },
-    {
-      id: 3,
-      title: 'Team Member Added',
-      description: 'Jane Smith was added as a collaborator',
-      timestamp: '2024-01-16 9:00 AM',
-      icon: 'user-plus',
-      color: 'info'
-    },
-    {
-      id: 4,
-      title: 'Deployment Failed',
-      description: 'Build failed due to missing environment variables',
-      timestamp: '2024-01-16 4:20 PM',
-      icon: 'alert-circle',
-      color: 'danger'
-    },
-  ]}
-  style={{ marginBottom: 24 }}
-/>
+## Examples
 
-```tsx
-import { Timeline } from 'intent-react'
+### Basic Timeline
 
-<Timeline 
-  items={[
-    {
-      id: 1,
-      title: 'Project Created',
-      description: 'The project was initialized by John Doe',
-      timestamp: '2024-01-15 10:30 AM',
-      icon: 'plus-circle',
-      color: 'success'
-    },
-    ...
-  ]}
-/>
-```
-
-## Without Icons
-
-<Timeline 
-  items={[
-    { id: 1, title: 'Order Placed', timestamp: 'Jan 10, 2024' },
-    { id: 2, title: 'Payment Confirmed', timestamp: 'Jan 10, 2024' },
-    { id: 3, title: 'Shipped', timestamp: 'Jan 11, 2024' },
-    { id: 4, title: 'Delivered', timestamp: 'Jan 13, 2024' },
-  ]}
-  style={{ marginBottom: 24 }}
-/>
+<div className="intent-demo">
+  <Timeline 
+    items={[
+      { time: 'Today, 2:00 PM', title: 'Pull Request Merged', description: 'feat: add new table component', active: true },
+      { time: 'Today, 10:30 AM', title: 'Commit Pushed', description: 'fix: resolve sorting issue', active: false },
+      { time: 'Yesterday, 4:15 PM', title: 'Issue Created', description: 'Bug: pagination not working', active: false }
+    ]}
+  />
+</div>
 
 ```tsx
 <Timeline 
   items={[
-    { id: 1, title: 'Order Placed', timestamp: 'Jan 10, 2024' },
-    ...
-  ]}
-/>
-```
-
-## Compact
-
-<Timeline 
-  variant="compact"
-  items={[
-    { id: 1, title: 'Created', timestamp: '2 min ago' },
-    { id: 2, title: 'Updated', timestamp: '1 hour ago' },
-    { id: 3, title: 'Commented', timestamp: '3 hours ago' },
-  ]}
-  style={{ marginBottom: 24 }}
-/>
-
-```tsx
-<Timeline variant="compact" items={[...]} />
-```
-
-## Horizontal
-
-<Timeline 
-  variant="horizontal"
-  items={[
-    { id: 1, title: 'Step 1', description: 'Start' },
-    { id: 2, title: 'Step 2', description: 'Process' },
-    { id: 3, title: 'Step 3', description: 'Review' },
-    { id: 4, title: 'Step 4', description: 'Complete' },
-  ]}
-  style={{ marginBottom: 24 }}
-/>
-
-```tsx
-<Timeline variant="horizontal" items={[...]} />
-```
-
-## With Custom Content
-
-```tsx
-<Timeline 
-  items={[
-    {
-      id: 1,
-      title: 'New Comment',
-      content: (
-        <Card padding="normal">
-          <Text>"Great work on this feature!"</Text>
-          <Text size="sm" color="muted">- Jane Doe</Text>
-        </Card>
-      ),
-      timestamp: '5 minutes ago'
-    },
+    { time: 'Today, 2:00 PM', title: 'PR Merged', description: 'feat: add component', active: true },
+    { time: 'Today, 10:30 AM', title: 'Commit Pushed', active: false }
   ]}
 />
 ```
@@ -144,97 +69,45 @@ import { Timeline } from 'intent-react'
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `TimelineItem[]` | required | Timeline events |
-| `variant` | `'default'` \| `'compact'` \| `'horizontal'` | `'default'` | Timeline style |
-
-### TimelineItem Type
-
-```typescript
-interface TimelineItem {
-  id: string | number
-  title: string
-  description?: string
-  content?: ReactNode
-  timestamp?: string
-  icon?: string
-  color?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
-}
-```
+| `items` | `Array<{time: string, title: string, description?: string, active?: boolean}>` | `[]` | Timeline items |
 
 ## CSS Output
 
 ```css
-.timeline {
+.intent-timeline {
   position: relative;
-  padding-left: var(--intent-spacing-8);
+  padding-left: 24px;
 }
 
-.timeline::before {
-  content: '';
+.intent-timeline__line {
   position: absolute;
-  left: 15px;
-  top: 0;
+  left: 6px;
+  top: 8px;
   bottom: 0;
   width: 2px;
   background: var(--intent-color-border);
 }
 
-.timeline__item {
-  position: relative;
-  padding-bottom: var(--intent-spacing-6);
-}
-
-.timeline__item:last-child {
-  padding-bottom: 0;
-}
-
-.timeline__icon {
+.intent-timeline__dot {
   position: absolute;
-  left: calc(-1 * var(--intent-spacing-8) + 7px);
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--intent-color-surface);
-  border: 2px solid var(--intent-color-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.timeline__icon--success {
-  border-color: var(--intent-color-success);
-  color: var(--intent-color-success);
-}
-
-.timeline__title {
-  font-weight: 500;
-  color: var(--intent-color-text);
-}
-
-.timeline__description {
-  font-size: var(--intent-font-size-sm);
-  color: var(--intent-color-text-muted);
-  margin-top: var(--intent-spacing-1);
-}
-
-.timeline__timestamp {
-  font-size: var(--intent-font-size-xs);
-  color: var(--intent-color-text-muted);
-  margin-top: var(--intent-spacing-1);
-}
-
-/* Horizontal variant */
-.timeline--horizontal {
-  display: flex;
-  padding-left: 0;
-  padding-top: var(--intent-spacing-8);
-}
-
-.timeline--horizontal::before {
   left: 0;
-  right: 0;
-  top: 15px;
-  width: auto;
-  height: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--intent-color-primary);
+}
+
+.intent-timeline__time {
+  font-size: 0.875rem;
+  color: var(--intent-color-muted);
+}
+
+.intent-timeline__title {
+  font-weight: 500;
+}
+
+.intent-timeline__description {
+  font-size: 0.875rem;
+  color: var(--intent-color-muted);
 }
 ```

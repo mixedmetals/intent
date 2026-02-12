@@ -1,160 +1,231 @@
 ---
-sidebar_position: 71
+sidebar_position: 80
 ---
-
-import { Chart } from 'intent-react'
+import React from 'react';
 
 # Chart
 
-Data visualization component.
+Data visualization components.
+
+export const BarChart = ({ data, height = 200 }) => {
+  const max = Math.max(...data.map(d => d.value))
+  
+  return (
+    <div style={{ height, display: 'flex', alignItems: 'flex-end', gap: '12px', padding: '20px' }}>
+      {data.map((item, i) => (
+        <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>{item.value}</div>
+          <div 
+            style={{ 
+              width: '100%', 
+              height: `${(item.value / max) * (height - 60)}px`,
+              background: `linear-gradient(to top, var(--intent-color-primary), var(--intent-color-primary-light, #60a5fa))`,
+              borderRadius: '4px 4px 0 0',
+              minHeight: '4px'
+            }} 
+          />
+          <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{item.label}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export const LineChart = ({ data, height = 200 }) => {
+  const max = Math.max(...data.map(d => d.value))
+  const min = Math.min(...data.map(d => d.value))
+  const range = max - min || 1
+  
+  const points = data.map((d, i) => {
+    const x = (i / (data.length - 1)) * 100
+    const y = 100 - ((d.value - min) / range) * 100
+    return `${x},${y}`
+  }).join(' ')
+  
+  return (
+    <div style={{ height, padding: '20px' }}>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+        <defs>
+          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="var(--intent-color-primary)" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="var(--intent-color-primary)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <polygon points={`0,100 ${points} 100,100`} fill="url(#lineGradient)" />
+        <polyline points={points} fill="none" stroke="var(--intent-color-primary)" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+        {data.map((d, i) => {
+          const x = (i / (data.length - 1)) * 100
+          const y = 100 - ((d.value - min) / range) * 100
+          return <circle key={i} cx={x} cy={y} r="1.5" fill="var(--intent-color-primary)" />
+        })}
+      </svg>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>
+        {data.map((d, i) => (
+          <span key={i}>{d.label}</span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export const PieChart = ({ data, size = 150 }) => {
+  const total = data.reduce((sum, d) => sum + d.value, 0)
+  let cumulative = 0
+  const colors = ['var(--intent-color-primary)', 'var(--intent-color-success)', 'var(--intent-color-warning)', 'var(--intent-color-error)']
+  
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+      <svg width={size} height={size} viewBox="0 0 100 100">
+        {data.map((d, i) => {
+          const startAngle = (cumulative / total) * 360
+          cumulative += d.value
+          const endAngle = (cumulative / total) * 360
+          const largeArc = endAngle - startAngle > 180 ? 1 : 0
+          
+          const startX = 50 + 40 * Math.cos((startAngle - 90) * Math.PI / 180)
+          const startY = 50 + 40 * Math.sin((startAngle - 90) * Math.PI / 180)
+          const endX = 50 + 40 * Math.cos((endAngle - 90) * Math.PI / 180)
+          const endY = 50 + 40 * Math.sin((endAngle - 90) * Math.PI / 180)
+          
+          return (
+            <path
+              key={i}
+              d={`M 50 50 L ${startX} ${startY} A 40 40 0 ${largeArc} 1 ${endX} ${endY} Z`}
+              fill={colors[i % colors.length]}
+              stroke="white"
+              strokeWidth="2"
+            />
+          )
+        })}
+        <circle cx="50" cy="50" r="25" fill="var(--intent-color-surface)" />
+      </svg>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {data.map((d, i) => (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem' }}>
+            <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: colors[i % colors.length] }} />
+            <span>{d.label}: {Math.round((d.value / total) * 100)}%</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
-### Line Chart
+### Bar Chart
+
+<div className="intent-demo">
+  <BarChart 
+    data={[
+      { label: 'Mon', value: 45 },
+      { label: 'Tue', value: 72 },
+      { label: 'Wed', value: 58 },
+      { label: 'Thu', value: 90 },
+      { label: 'Fri', value: 65 },
+      { label: 'Sat', value: 35 },
+      { label: 'Sun', value: 25 }
+    ]}
+    height={200}
+  />
+</div>
 
 ```tsx
-import { Chart } from 'intent-react'
-
-<Chart
-  type="line"
-  data={{
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-    datasets: [{
-      label: 'Revenue',
-      data: [12000, 19000, 15000, 25000, 22000],
-    }]
-  }}
+<BarChart 
+  data={[{ label: 'Mon', value: 45 }, ...]}
+  height={200}
 />
 ```
 
-### Bar Chart
+### Line Chart
+
+<div className="intent-demo">
+  <LineChart 
+    data={[
+      { label: 'Jan', value: 10 },
+      { label: 'Feb', value: 25 },
+      { label: 'Mar', value: 18 },
+      { label: 'Apr', value: 40 },
+      { label: 'May', value: 35 },
+      { label: 'Jun', value: 55 }
+    ]}
+    height={180}
+  />
+</div>
 
 ```tsx
-<Chart
-  type="bar"
-  data={{
-    labels: ['Product A', 'Product B', 'Product C'],
-    datasets: [{
-      label: 'Sales',
-      data: [300, 450, 200],
-    }]
-  }}
-  options={{
-    colors: ['#3b82f6'],
-  }}
-/>
+<LineChart data={[...]} height={180} />
 ```
 
 ### Pie Chart
 
-```tsx
-<Chart
-  type="pie"
-  data={{
-    labels: ['Desktop', 'Mobile', 'Tablet'],
-    datasets: [{
-      data: [60, 30, 10],
-    }]
-  }}
-  options={{
-    colors: ['#3b82f6', '#10b981', '#f59e0b'],
-  }}
-/>
-```
-
-### Area Chart
+<div className="intent-demo">
+  <PieChart 
+    data={[
+      { label: 'Desktop', value: 55 },
+      { label: 'Mobile', value: 30 },
+      { label: 'Tablet', value: 15 }
+    ]}
+  />
+</div>
 
 ```tsx
-<Chart
-  type="area"
-  data={{
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-    datasets: [{
-      label: 'Visitors',
-      data: [120, 190, 150, 250, 220],
-    }]
-  }}
-  fill
+<PieChart 
+  data={[
+    { label: 'Desktop', value: 55 },
+    { label: 'Mobile', value: 30 },
+    { label: 'Tablet', value: 15 }
+  ]}
 />
 ```
 
 ## Props
 
+### BarChart
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `type` | `'line'` \| `'bar'` \| `'pie'` \| `'area'` \| `'doughnut'` | required | Chart type |
-| `data` | `ChartData` | required | Chart data |
-| `options` | `ChartOptions` | `{}` | Chart options |
-| `height` | `number` | `300` | Chart height |
-| `width` | `number` | - | Chart width |
-| `fill` | `boolean` | `false` | Fill area (area charts) |
+| `data` | `Array<{label: string, value: number}>` | `[]` | Chart data |
+| `height` | `number` | `200` | Chart height |
 
-### ChartData Type
+### LineChart
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `data` | `Array<{label: string, value: number}>` | `[]` | Chart data |
+| `height` | `number` | `200` | Chart height |
 
-```typescript
-interface ChartData {
-  labels: string[]
-  datasets: {
-    label?: string
-    data: number[]
-    color?: string
-  }[]
-}
-```
-
-### ChartOptions Type
-
-```typescript
-interface ChartOptions {
-  colors?: string[]
-  legend?: boolean
-  grid?: boolean
-  tooltips?: boolean
-  animations?: boolean
-}
-```
+### PieChart
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `data` | `Array<{label: string, value: number}>` | `[]` | Chart data |
+| `size` | `number` | `150` | Chart size |
 
 ## CSS Output
 
 ```css
-.chart {
-  position: relative;
-  width: 100%;
-}
-
-.chart__canvas {
-  width: 100%;
-  height: 100%;
-}
-
-.chart__tooltip {
-  position: absolute;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
-  pointer-events: none;
-  z-index: 10;
-  box-shadow: var(--intent-shadow-md);
-}
-
-.chart__legend {
+.intent-bar-chart {
   display: flex;
-  justify-content: center;
-  gap: var(--intent-spacing-4);
-  margin-top: var(--intent-spacing-4);
+  align-items: flex-end;
+  gap: 12px;
 }
 
-.chart__legend-item {
-  display: flex;
-  align-items: center;
-  gap: var(--intent-spacing-2);
-  font-size: var(--intent-font-size-sm);
+.intent-bar-chart__bar {
+  background: linear-gradient(to top, var(--intent-color-primary), var(--intent-color-primary-light));
+  border-radius: 4px 4px 0 0;
+  transition: height 300ms ease;
 }
 
-.chart__legend-color {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
+.intent-line-chart__line {
+  stroke: var(--intent-color-primary);
+  stroke-width: 2;
+  fill: none;
+}
+
+.intent-line-chart__area {
+  fill: url(#lineGradient);
+}
+
+.intent-pie-chart__slice {
+  stroke: white;
+  stroke-width: 2;
 }
 ```

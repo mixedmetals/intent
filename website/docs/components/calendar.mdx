@@ -1,104 +1,110 @@
 ---
-sidebar_position: 48
+sidebar_position: 60
 ---
-
-import { useState } from 'react'
-import { Calendar } from 'intent-react'
-
-export function CalendarDemo() {
-  const [date, setDate] = useState(new Date())
-  
-  return (
-    <Calendar 
-      value={date}
-      onChange={setDate}
-      style={{ marginBottom: 24 }}
-    />
-  )
-}
+import React from 'react';
 
 # Calendar
 
-Date picker calendar view.
+Date picker calendar component.
 
-## Example
-
-<CalendarDemo />
-
-```tsx
-import { useState } from 'react'
-import { Calendar } from 'intent-react'
-
-function Example() {
-  const [date, setDate] = useState(new Date())
+export const Calendar = () => {
+  const [selected, setSelected] = React.useState(new Date())
+  const [viewDate, setViewDate] = React.useState(new Date())
+  
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+  
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const firstDay = new Date(year, month, 1).getDay()
+    const daysInMonth = new Date(year, month + 1, 0).getDate()
+    const days = []
+    
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null)
+    }
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(i)
+    }
+    return days
+  }
+  
+  const handlePrev = () => {
+    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))
+  }
+  
+  const handleNext = () => {
+    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))
+  }
+  
+  const daysInMonth = getDaysInMonth(viewDate)
+  const today = new Date().getDate()
+  const isCurrentMonth = viewDate.getMonth() === new Date().getMonth() && viewDate.getFullYear() === new Date().getFullYear()
   
   return (
-    <Calendar 
-      value={date}
-      onChange={setDate}
-    />
+    <div style={{ width: '280px', border: '1px solid var(--intent-color-border)', borderRadius: '12px', padding: '16px', background: 'var(--intent-color-surface)' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <button onClick={handlePrev} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.125rem', padding: '4px 8px', borderRadius: '6px' }}>←</button>
+        <div style={{ fontWeight: 600 }}>{monthNames[viewDate.getMonth()]} {viewDate.getFullYear()}</div>
+        <button onClick={handleNext} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.125rem', padding: '4px 8px', borderRadius: '6px' }}>→</button>
+      </div>
+      
+      {/* Days Header */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', marginBottom: '8px' }}>
+        {days.map(d => (
+          <div key={d} style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 600, color: 'var(--intent-color-muted)' }}>{d}</div>
+        ))}
+      </div>
+      
+      {/* Days Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px' }}>
+        {daysInMonth.map((day, i) => (
+          <button
+            key={i}
+            onClick={() => day && setSelected(new Date(viewDate.getFullYear(), viewDate.getMonth(), day))}
+            style={{
+              aspectRatio: '1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: 'none',
+              borderRadius: '6px',
+              background: day === selected.getDate() && viewDate.getMonth() === selected.getMonth() 
+                ? 'var(--intent-color-primary)' 
+                : 'transparent',
+              color: day === selected.getDate() && viewDate.getMonth() === selected.getMonth() 
+                ? 'white' 
+                : isCurrentMonth && day === today 
+                  ? 'var(--intent-color-primary)' 
+                  : 'var(--intent-color-foreground)',
+              fontWeight: isCurrentMonth && day === today ? 600 : 400,
+              cursor: day ? 'pointer' : 'default',
+              fontSize: '0.875rem'
+            }}
+          >
+            {day}
+          </button>
+        ))}
+      </div>
+    </div>
   )
 }
-```
 
-## Range Selection
+## Examples
 
-```tsx
-const [range, setRange] = useState({ start: null, end: null })
+### Basic Calendar
 
-<Calendar 
-  mode="range"
-  value={range}
-  onChange={setRange}
-/>
-```
-
-## Multiple Selection
-
-```tsx
-const [dates, setDates] = useState([])
-
-<Calendar 
-  mode="multiple"
-  value={dates}
-  onChange={setDates}
-/>
-```
-
-## With Min/Max Dates
+<div className="intent-demo">
+  <Calendar />
+</div>
 
 ```tsx
 <Calendar 
-  value={date}
-  onChange={setDate}
-  minDate={new Date()}
-  maxDate={new Date(2024, 11, 31)}
-/>
-```
-
-## Disabled Dates
-
-```tsx
-<Calendar 
-  value={date}
-  onChange={setDate}
-  disabledDates={[
-    new Date(2024, 0, 1),  // New Year
-    new Date(2024, 11, 25), // Christmas
-  ]}
-/>
-```
-
-## With Events
-
-```tsx
-<Calendar 
-  value={date}
-  onChange={setDate}
-  events={[
-    { date: new Date(2024, 0, 15), label: 'Meeting' },
-    { date: new Date(2024, 0, 20), label: 'Deadline' },
-  ]}
+  mode="single"
+  selected={date}
+  onSelect={setDate}
 />
 ```
 
@@ -106,104 +112,57 @@ const [dates, setDates] = useState([])
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `Date` \| `DateRange` \| `Date[]` | required | Selected date(s) |
-| `onChange` | `(value) => void` | required | Change callback |
-| `mode` | `'single'` \| `'range'` \| `'multiple'` | `'single'` | Selection mode |
-| `minDate` | `Date` | - | Minimum selectable date |
-| `maxDate` | `Date` | - | Maximum selectable date |
-| `disabledDates` | `Date[]` | - | Disabled dates |
-| `events` | `CalendarEvent[]` | - | Calendar events |
-| `firstDayOfWeek` | `0` \| `1` \| `2` \| `3` \| `4` \| `5` \| `6` | `0` | First day (0=Sunday) |
-| `showWeekNumbers` | `boolean` | `false` | Show week numbers |
-| `locale` | `string` | `'en-US'` | Locale for formatting |
-
-### CalendarEvent Type
-
-```typescript
-interface CalendarEvent {
-  date: Date
-  label: string
-  color?: 'default' | 'primary' | 'success' | 'warning' | 'danger'
-}
-```
+| `mode` | `'single' \| 'multiple' \| 'range'` | `'single'` | Selection mode |
+| `selected` | `Date \| Date[] \| {from: Date, to: Date}` | - | Selected date(s) |
+| `onSelect` | `(date) => void` | - | Selection handler |
+| `disabled` | `Date[]` | `[]` | Disabled dates |
+| `initialFocus` | `boolean` | `false` | Auto-focus on mount |
 
 ## CSS Output
 
 ```css
-.calendar {
-  display: inline-block;
+.intent-calendar {
+  width: 280px;
+  padding: 16px;
   background: var(--intent-color-surface);
   border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-lg);
-  padding: var(--intent-spacing-4);
+  border-radius: var(--intent-radius-xl);
 }
 
-.calendar__header {
+.intent-calendar__header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--intent-spacing-4);
+  align-items: center;
+  margin-bottom: 16px;
 }
 
-.calendar__month-year {
+.intent-calendar__month {
   font-weight: 600;
 }
 
-.calendar__nav {
-  display: flex;
-  gap: var(--intent-spacing-1);
-}
-
-.calendar__weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: var(--intent-spacing-1);
-  margin-bottom: var(--intent-spacing-2);
-}
-
-.calendar__weekday {
+.intent-calendar__day-name {
   text-align: center;
-  font-size: var(--intent-font-size-xs);
-  font-weight: 500;
-  color: var(--intent-color-text-muted);
-  padding: var(--intent-spacing-1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--intent-color-muted);
 }
 
-.calendar__days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: var(--intent-spacing-1);
-}
-
-.calendar__day {
+.intent-calendar__day {
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--intent-radius-md);
-  cursor: pointer;
-  font-size: var(--intent-font-size-sm);
+  font-size: 0.875rem;
 }
 
-.calendar__day:hover:not(.calendar__day--disabled) {
-  background: var(--intent-color-surface-elevated);
-}
-
-.calendar__day--selected {
+.intent-calendar__day--selected {
   background: var(--intent-color-primary);
   color: white;
 }
 
-.calendar__day--today {
-  border: 1px solid var(--intent-color-primary);
-}
-
-.calendar__day--disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.calendar__day--other-month {
-  color: var(--intent-color-text-muted);
+.intent-calendar__day--today {
+  color: var(--intent-color-primary);
+  font-weight: 600;
 }
 ```

@@ -1,103 +1,93 @@
 ---
-sidebar_position: 36
+sidebar_position: 92
 ---
-
-import { Stack, Stepper, Button } from 'intent-react'
+import React from 'react';
 
 # Stepper
 
-Visual indicator for multi-step processes.
+Multi-step process indicator.
 
-## Example
-
-```tsx
-import { useState } from 'react'
-import { Stepper, Button, Stack } from 'intent-react'
-
-function Checkout() {
-  const [currentStep, setCurrentStep] = useState(1)
-  
-  const steps = [
-    { id: 1, title: 'Shipping', description: 'Delivery address' },
-    { id: 2, title: 'Payment', description: 'Billing method' },
-    { id: 3, title: 'Review', description: 'Confirm order' },
-  ]
-  
-  return (
-    <Stack gap="relaxed">
-      <Stepper steps={steps} currentStep={currentStep} />
+export const Stepper = ({ steps, currentStep = 0 }) => (
+  <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+    {steps.map((step, i) => {
+      const isActive = i === currentStep
+      const isCompleted = i < currentStep
       
-      {/* Step content */}
-      {currentStep === 1 && <ShippingForm />}
-      {currentStep === 2 && <PaymentForm />}
-      {currentStep === 3 && <ReviewOrder />}
-      
-      {/* Navigation */}
-      <Stack direction="row" gap="normal">
-        <Button 
-          disabled={currentStep === 1}
-          onClick={() => setCurrentStep(s => s - 1)}
-        >
-          Back
-        </Button>
-        <Button 
-          importance="primary"
-          onClick={() => setCurrentStep(s => s + 1)}
-        >
-          {currentStep === steps.length ? 'Complete' : 'Continue'}
-        </Button>
-      </Stack>
-    </Stack>
-  )
-}
-```
+      return (
+        <React.Fragment key={i}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: i === steps.length - 1 ? '0 0 auto' : 1 }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              background: isCompleted ? 'var(--intent-color-success, #22c55e)' : isActive ? 'var(--intent-color-primary)' : 'var(--intent-color-surface-elevated)',
+              color: isCompleted || isActive ? 'white' : 'var(--intent-color-muted)',
+              border: `2px solid ${isCompleted ? 'var(--intent-color-success, #22c55e)' : isActive ? 'var(--intent-color-primary)' : 'var(--intent-color-border)'}`,
+              transition: 'all 200ms'
+            }}>
+              {isCompleted ? '✓' : i + 1}
+            </div>
+            <div style={{
+              marginTop: '8px',
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              color: isActive ? 'var(--intent-color-primary)' : 'var(--intent-color-muted)',
+              textAlign: 'center'
+            }}>
+              {step}
+            </div>
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{
+              flex: 1,
+              height: '2px',
+              background: isCompleted ? 'var(--intent-color-success, #22c55e)' : 'var(--intent-color-border)',
+              margin: '0 8px',
+              marginBottom: '20px'
+            }} />
+          )}
+        </React.Fragment>
+      )
+    })}
+  </div>
+)
 
-## Variants
+## Examples
 
-### Horizontal (Default)
+### Basic Stepper
 
-```tsx
-<Stepper steps={steps} currentStep={2} />
-```
-
-### Vertical
-
-```tsx
-<Stepper variant="vertical" steps={steps} currentStep={2} />
-```
-
-### Simple (No Descriptions)
-
-```tsx
-<Stepper variant="simple" steps={steps} currentStep={2} />
-```
-
-## With Clickable Steps
+<div className="intent-demo">
+  <Stepper 
+    steps={['Account', 'Personal', 'Billing', 'Review']}
+    currentStep={1}
+  />
+</div>
 
 ```tsx
 <Stepper 
-  steps={steps}
-  currentStep={currentStep}
-  clickable
-  onStepClick={(stepId) => {
-    // Only allow clicking completed steps
-    if (stepId < currentStep) {
-      setCurrentStep(stepId)
-    }
-  }}
+  steps={['Account', 'Personal', 'Billing', 'Review']}
+  currentStep={1}
 />
 ```
 
-## Error State
+### Completed Steps
+
+<div className="intent-demo">
+  <Stepper 
+    steps={['Cart', 'Shipping', 'Payment', 'Confirm']}
+    currentStep={3}
+  />
+</div>
 
 ```tsx
 <Stepper 
-  steps={[
-    { id: 1, title: 'Account', status: 'complete' },
-    { id: 2, title: 'Personal', status: 'error', error: 'Invalid email' },
-    { id: 3, title: 'Payment', status: 'pending' },
-  ]}
-  currentStep={2}
+  steps={['Cart', 'Shipping', 'Payment', 'Confirm']}
+  currentStep={3}
 />
 ```
 
@@ -105,79 +95,64 @@ function Checkout() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `steps` | `Step[]` | required | Array of steps |
-| `currentStep` | `number` | `1` | Active step ID |
-| `variant` | `'horizontal'` \| `'vertical'` \| `'simple'` | `'horizontal'` | Stepper style |
-| `clickable` | `boolean` | `false` | Allow step clicking |
-| `onStepClick` | `(stepId: number) => void` | - | Step click handler |
-
-### Step Type
-
-```typescript
-interface Step {
-  id: number
-  title: string
-  description?: string
-  status?: 'pending' | 'active' | 'complete' | 'error'
-  error?: string
-}
-```
+| `steps` | `string[]` | `[]` | Step labels |
+| `currentStep` | `number` | `0` | Active step index |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Stepper orientation |
 
 ## CSS Output
 
 ```css
-.stepper {
-  display: flex;
-  gap: var(--intent-spacing-2);
-}
-
-.stepper--vertical {
-  flex-direction: column;
-}
-
-.step {
+.intent-stepper {
   display: flex;
   align-items: center;
-  gap: var(--intent-spacing-3);
-  flex: 1;
+  width: 100%;
 }
 
-.step__indicator {
+.intent-stepper__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.intent-stepper__indicator {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--intent-color-surface-elevated);
-  border: 2px solid var(--intent-color-border);
+  font-size: 0.875rem;
   font-weight: 600;
-  font-size: var(--intent-font-size-sm);
+  border: 2px solid var(--intent-color-border);
+  transition: all 200ms;
 }
 
-.step--active .step__indicator {
-  border-color: var(--intent-color-primary);
-  color: var(--intent-color-primary);
-}
-
-.step--complete .step__indicator {
+.intent-stepper__indicator--active {
   background: var(--intent-color-primary);
   border-color: var(--intent-color-primary);
   color: white;
 }
 
-.step--error .step__indicator {
-  border-color: var(--intent-color-danger);
-  color: var(--intent-color-danger);
+.intent-stepper__indicator--completed {
+  background: var(--intent-color-success);
+  border-color: var(--intent-color-success);
+  color: white;
 }
 
-.step__title {
+.intent-stepper__label {
+  margin-top: 8px;
+  font-size: 0.75rem;
   font-weight: 500;
-  color: var(--intent-color-text);
 }
 
-.step__description {
-  font-size: var(--intent-font-size-sm);
-  color: var(--intent-color-text-muted);
+.intent-stepper__connector {
+  flex: 1;
+  height: 2px;
+  background: var(--intent-color-border);
+  margin: 0 8px;
+}
+
+.intent-stepper__connector--completed {
+  background: var(--intent-color-success);
 }
 ```

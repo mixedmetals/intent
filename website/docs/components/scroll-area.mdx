@@ -1,0 +1,93 @@
+---
+sidebar_position: 71
+---
+import React from 'react';
+
+# ScrollArea
+
+Custom scrollable containers.
+
+export const ScrollArea = ({ children, maxHeight = '200px', maxWidth }) => (
+  <div style={{ 
+    maxHeight, 
+    maxWidth,
+    overflow: 'auto',
+    border: '1px solid var(--intent-color-border)',
+    borderRadius: '8px',
+    padding: '12px'
+  }}>
+    <style>{`
+      .scroll-area::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      .scroll-area::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .scroll-area::-webkit-scrollbar-thumb {
+        background: var(--intent-color-border);
+        border-radius: 4px;
+      }
+      .scroll-area::-webkit-scrollbar-thumb:hover {
+        background: var(--intent-color-muted);
+      }
+    `}</style>
+    <div className="scroll-area" style={{ maxHeight: '100%', overflow: 'auto' }}>
+      {children}
+    </div>
+  </div>
+)
+
+## Examples
+
+### Vertical Scroll
+
+<div className="intent-demo">
+  <ScrollArea maxHeight="150px">
+    <p>Scrollable content area with custom scrollbar styling.</p>
+    <p style={{ marginTop: '100px' }}>More content below...</p>
+    <p style={{ marginTop: '100px' }}>Even more content...</p>
+    <p style={{ marginTop: '100px' }}>End of content.</p>
+  </ScrollArea>
+</div>
+
+```tsx
+<ScrollArea maxHeight="200px">
+  <p>Long content...</p>
+</ScrollArea>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Scrollable content |
+| `maxHeight` | `string` | `'200px'` | Maximum height |
+| `maxWidth` | `string` | - | Maximum width |
+| `orientation` | `'vertical' \| 'horizontal' \| 'both'` | `'vertical'` | Scroll direction |
+
+## CSS Output
+
+```css
+.intent-scroll-area {
+  overflow: auto;
+}
+
+.intent-scroll-area::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.intent-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.intent-scroll-area::-webkit-scrollbar-thumb {
+  background: var(--intent-color-border);
+  border-radius: var(--intent-radius-full);
+}
+
+.intent-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: var(--intent-color-muted);
+}
+```

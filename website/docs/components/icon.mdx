@@ -1,71 +1,109 @@
 ---
-sidebar_position: 46
+sidebar_position: 62
 ---
+
+import React from 'react';
 
 # Icon
 
-Display icon from the icon library.
+Icon component with consistent sizing.
 
-## Example
+export const Icon = ({ name, size = 'md', color }) => {
+  const sizes = {
+    xs: '16px',
+    sm: '20px',
+    md: '24px',
+    lg: '32px',
+    xl: '48px'
+  }
+  
+  const icons = {
+    home: '🏠',
+    user: '👤',
+    settings: '⚙️',
+    search: '🔍',
+    bell: '🔔',
+    heart: '❤️',
+    star: '⭐',
+    check: '✓',
+    close: '✕',
+    arrowRight: '→',
+    arrowLeft: '←',
+    arrowUp: '↑',
+    arrowDown: '↓'
+  }
+  
+  return (
+    <span style={{ 
+      fontSize: sizes[size], 
+      color: color || 'inherit',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      {icons[name] || name}
+    </span>
+  )
+}
+
+## Examples
+
+### Icon Sizes
+
+<div className="intent-demo">
+  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+    <Icon name="star" size="xs" />
+    <Icon name="star" size="sm" />
+    <Icon name="star" size="md" />
+    <Icon name="star" size="lg" />
+    <Icon name="star" size="xl" />
+  </div>
+</div>
 
 ```tsx
-import { Icon } from 'intent-react'
+<Icon name="star" size="lg" />
+```
 
+### Different Icons
+
+<div className="intent-demo">
+  <div style={{ display: 'flex', gap: '12px' }}>
+    <Icon name="home" size="lg" />
+    <Icon name="user" size="lg" />
+    <Icon name="settings" size="lg" />
+    <Icon name="search" size="lg" />
+    <Icon name="bell" size="lg" />
+    <Icon name="heart" size="lg" />
+    <Icon name="check" size="lg" />
+  </div>
+</div>
+
+```tsx
 <Icon name="home" />
 <Icon name="user" />
 <Icon name="settings" />
-```
-
-### Sizes
-
-```tsx
-<Icon name="star" size={12} />
-<Icon name="star" size={24} />
-<Icon name="star" size={32} />
-```
-
-### Colors
-
-```tsx
-<Icon name="circle" color="primary" />
-<Icon name="circle" color="success" />
-<Icon name="circle" color="danger" />
-```
-
-### Rotating
-
-```tsx
-<Icon name="loader" spin />
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `name` | `string` | required | Icon name |
-| `size` | `number` | `20` | Icon size |
-| `color` | `string` | `'default'` | Icon color |
-| `spin` | `boolean` | `false` | Rotate animation |
+| `name` | `string` | - | Icon name |
+| `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Icon size |
+| `color` | `string` | - | Icon color |
 
 ## CSS Output
 
 ```css
-.icon {
+.intent-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.icon--spin {
-  animation: icon-spin 1s linear infinite;
-}
-
-@keyframes icon-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+.intent-icon--size-xs { font-size: 16px; }
+.intent-icon--size-sm { font-size: 20px; }
+.intent-icon--size-md { font-size: 24px; }
+.intent-icon--size-lg { font-size: 32px; }
+.intent-icon--size-xl { font-size: 48px; }
 ```
-
-## Available Icons
-
-Intent uses the [Lucide](https://lucide.dev/) icon library.

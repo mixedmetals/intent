@@ -1,72 +1,120 @@
 ---
-sidebar_position: 55
+sidebar_position: 59
 ---
 
-import { DatePicker } from 'intent-react'
+import React from 'react';
 
 # DatePicker
 
-Input for selecting dates with calendar popup.
+Date selection input (alternate implementation).
+
+export const DatePicker = ({ label, placeholder = "Select date" }) => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [selected, setSelected] = React.useState(null)
+  const [currentMonth, setCurrentMonth] = React.useState(new Date())
+  
+  const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate()
+  const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay()
+  
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  
+  const selectDate = (day) => {
+    setSelected(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day))
+    setIsOpen(false)
+  }
+  
+  return (
+    <div style={{ width: '100%', maxWidth: '280px' }}>
+      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>{label}</label>}
+      <div style={{ position: 'relative' }}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            width: '100%',
+            padding: '8px 12px',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            background: 'var(--intent-color-surface)',
+            cursor: 'pointer',
+            textAlign: 'left'
+          }}
+        >
+          <span>📅</span>
+          <span style={{ color: selected ? 'var(--intent-color-foreground)' : 'var(--intent-color-muted)' }}>
+            {selected ? selected.toLocaleDateString() : placeholder}
+          </span>
+        </button>
+        
+        {isOpen && (
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            marginTop: '8px',
+            background: 'var(--intent-color-surface)',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '12px',
+            boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+            zIndex: 50,
+            padding: '16px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}>←</button>
+              <span style={{ fontWeight: 600 }}>{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</span>
+              <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}>→</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 32px)', gap: '4px', textAlign: 'center' }}>
+              {['S','M','T','W','T','F','S'].map(d => (
+                <div key={d} style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--intent-color-muted)' }}>{d}</div>
+              ))}
+              {Array.from({ length: firstDay }, (_, i) => (
+                <div key={`empty-${i}`} />
+              ))}
+              {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
+                const isSelected = selected && selected.getDate() === day && selected.getMonth() === currentMonth.getMonth()
+                return (
+                  <button
+                    key={day}
+                    onClick={() => selectDate(day)}
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      border: 'none',
+                      borderRadius: '6px',
+                      background: isSelected ? 'var(--intent-color-primary)' : 'transparent',
+                      color: isSelected ? 'white' : 'var(--intent-color-foreground)',
+                      cursor: 'pointer',
+                      fontSize: '0.875rem'
+                    }}
+                  >
+                    {day}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
 ### Basic DatePicker
 
-```tsx
-import { useState } from 'react'
-import { DatePicker } from 'intent-react'
-
-function Example() {
-  const [date, setDate] = useState(new Date())
-  
-  return (
-    <DatePicker 
-      value={date}
-      onChange={setDate}
-      placeholder="Select date..."
-    />
-  )
-}
-```
-
-### Date Range
-
-```tsx
-const [range, setRange] = useState({ start: null, end: null })
-
-<DatePicker 
-  mode="range"
-  value={range}
-  onChange={setRange}
-/>
-```
-
-### With Min/Max
+<div className="intent-demo">
+  <DatePicker label="Select Date" />
+</div>
 
 ```tsx
 <DatePicker 
+  label="Select Date"
   value={date}
   onChange={setDate}
-  minDate={new Date()}
-  maxDate={new Date(2024, 11, 31)}
-/>
-```
-
-### Different Formats
-
-```tsx
-<DatePicker format="MM/dd/yyyy" />  // 12/25/2024
-<DatePicker format="dd/MM/yyyy" />  // 25/12/2024
-<DatePicker format="yyyy-MM-dd" />  // 2024-12-25
-```
-
-### With Time
-
-```tsx
-<DatePicker 
-  withTime
-  value={dateTime}
-  onChange={setDateTime}
 />
 ```
 
@@ -74,32 +122,42 @@ const [range, setRange] = useState({ start: null, end: null })
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `Date` \| `DateRange` | - | Selected date(s) |
-| `onChange` | `(value) => void` | - | Change callback |
-| `mode` | `'single'` \| `'range'` | `'single'` | Selection mode |
-| `minDate` | `Date` | - | Minimum date |
-| `maxDate` | `Date` | - | Maximum date |
-| `format` | `string` | `'MMM dd, yyyy'` | Display format |
-| `withTime` | `boolean` | `false` | Include time selection |
-| `placeholder` | `string` | - | Input placeholder |
-| `disabledDates` | `Date[]` | - | Disabled dates |
+| `value` | `Date` | - | Selected date |
+| `label` | `string` | - | Input label |
+| `placeholder` | `string` | `"Select date"` | Placeholder text |
+| `onChange` | `(date: Date) => void` | - | Change handler |
+| `minDate` | `Date` | - | Minimum selectable date |
+| `maxDate` | `Date` | - | Maximum selectable date |
 
 ## CSS Output
 
 ```css
-.date-picker {
+.intent-datepicker {
   position: relative;
-}
-
-.date-picker__input {
   width: 100%;
 }
 
-.date-picker__popover {
+.intent-datepicker__trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+  cursor: pointer;
+}
+
+.intent-datepicker__calendar {
   position: absolute;
   top: 100%;
-  left: 0;
-  margin-top: var(--intent-spacing-1);
+  margin-top: 8px;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-xl);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   z-index: 50;
+  padding: 16px;
 }
 ```

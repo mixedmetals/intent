@@ -2,25 +2,132 @@
 sidebar_position: 70
 ---
 
+import React from 'react';
+
 # BadgeGroup
 
 Group of badges with overflow handling.
 
-## Example
+export const BadgeGroup = ({ badges, limit, removable, onRemove }) => {
+  const [removed, setRemoved] = React.useState(new Set())
+  
+  const visibleBadges = badges
+    .filter(b => !removed.has(b.id))
+    .slice(0, limit || badges.length)
+  
+  const remaining = badges.length - visibleBadges.length
+  
+  const handleRemove = (id) => {
+    setRemoved(prev => new Set([...prev, id]))
+    onRemove?.(id)
+  }
+  
+  const variantStyles = {
+    primary: { bg: 'var(--intent-color-primary)', color: 'white' },
+    success: { bg: 'var(--intent-color-success, #22c55e)', color: 'white' },
+    warning: { bg: 'var(--intent-color-warning, #f59e0b)', color: 'white' },
+    error: { bg: 'var(--intent-color-error, #ef4444)', color: 'white' },
+    secondary: { bg: 'var(--intent-color-surface-elevated)', color: 'var(--intent-color-foreground)' }
+  }
+  
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+      {visibleBadges.map(badge => {
+        const style = variantStyles[badge.variant] || variantStyles.secondary
+        return (
+          <span
+            key={badge.id}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '4px 12px',
+              borderRadius: '9999px',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              background: style.bg,
+              color: style.color
+            }}
+          >
+            {badge.label}
+            {removable && (
+              <button
+                onClick={() => handleRemove(badge.id)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '14px',
+                  height: '14px',
+                  marginLeft: '2px',
+                  border: 'none',
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.3)',
+                  color: 'inherit',
+                  cursor: 'pointer',
+                  fontSize: '10px'
+                }}
+              >
+                ×
+              </button>
+            )}
+          </span>
+        )
+      })}
+      {remaining > 0 && (
+        <span style={{
+          padding: '4px 12px',
+          borderRadius: '9999px',
+          fontSize: '0.75rem',
+          fontWeight: 600,
+          background: 'var(--intent-color-surface-elevated)',
+          color: 'var(--intent-color-muted)'
+        }}>
+          +{remaining}
+        </span>
+      )}
+    </div>
+  )
+}
+
+## Examples
+
+### Basic BadgeGroup
+
+<div className="intent-demo">
+  <BadgeGroup 
+    badges={[
+      { id: '1', label: 'React', variant: 'primary' },
+      { id: '2', label: 'TypeScript', variant: 'secondary' },
+      { id: '3', label: 'Node.js', variant: 'success' },
+      { id: '4', label: 'Warning', variant: 'warning' }
+    ]}
+  />
+</div>
 
 ```tsx
-import { BadgeGroup } from 'intent-react'
-
 <BadgeGroup 
   badges={[
     { id: '1', label: 'React', variant: 'primary' },
-    { id: '2', label: 'TypeScript', variant: 'success' },
-    { id: '3', label: 'Node.js', variant: 'warning' },
+    { id: '2', label: 'TypeScript', variant: 'secondary' }
   ]}
 />
 ```
 
 ### With Limit
+
+<div className="intent-demo">
+  <BadgeGroup 
+    limit={3}
+    badges={[
+      { id: '1', label: 'React', variant: 'primary' },
+      { id: '2', label: 'TypeScript', variant: 'secondary' },
+      { id: '3', label: 'Node.js', variant: 'success' },
+      { id: '4', label: 'GraphQL', variant: 'primary' },
+      { id: '5', label: 'Docker', variant: 'secondary' }
+    ]}
+  />
+</div>
 
 ```tsx
 <BadgeGroup 
@@ -31,9 +138,19 @@ import { BadgeGroup } from 'intent-react'
 
 ### Removable
 
-```tsx
-const [tags, setTags] = useState([...])
+<div className="intent-demo">
+  <BadgeGroup 
+    removable
+    badges={[
+      { id: '1', label: 'React', variant: 'primary' },
+      { id: '2', label: 'TypeScript', variant: 'secondary' },
+      { id: '3', label: 'Node.js', variant: 'success' }
+    ]}
+    onRemove={(id) => console.log('Removed:', id)}
+  />
+</div>
 
+```tsx
 <BadgeGroup 
   badges={tags}
   removable
@@ -45,24 +162,61 @@ const [tags, setTags] = useState([...])
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `badges` | `Badge[]` | required | Array of badges |
+| `badges` | `Array<{id: string, label: string, variant?: string}>` | `[]` | Array of badges |
 | `limit` | `number` | - | Max badges to show |
 | `removable` | `boolean` | `false` | Show remove button |
-| `onRemove` | `(id: string) => void` | - | Remove callback |
-| `size` | `'small'` \| `'medium'` | `'medium'` | Badge size |
+| `onRemove` | `(id: string) => void` | - | Remove handler |
 
 ## CSS Output
 
 ```css
-.badge-group {
+.intent-badge-group {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--intent-spacing-1);
+  gap: 8px;
+  align-items: center;
 }
 
-.badge-group__badge {
+.intent-badge-group__badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--intent-spacing-1);
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: var(--intent-radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.intent-badge-group__badge--primary {
+  background: var(--intent-color-primary);
+  color: white;
+}
+
+.intent-badge-group__badge--secondary {
+  background: var(--intent-color-surface-elevated);
+  color: var(--intent-color-foreground);
+}
+
+.intent-badge-group__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.intent-badge-group__overflow {
+  padding: 4px 12px;
+  border-radius: var(--intent-radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--intent-color-surface-elevated);
+  color: var(--intent-color-muted);
 }
 ```

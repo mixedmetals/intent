@@ -2,11 +2,51 @@
 sidebar_position: 17
 ---
 
-import { Stack, Button, Tooltip } from 'intent-react'
+import React from 'react';
 
 # Tooltip
 
 Hover-activated information popup.
+
+export const Tooltip = ({ content, position = 'top', children }) => {
+  const [isVisible, setIsVisible] = React.useState(false)
+  
+  const getPositionStyles = () => {
+    switch(position) {
+      case 'top': return { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: '8px' }
+      case 'bottom': return { top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: '8px' }
+      case 'left': return { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: '8px' }
+      case 'right': return { left: '100%', top: '50%', transform: 'translateY(-50%)', marginLeft: '8px' }
+      default: return { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: '8px' }
+    }
+  }
+  
+  return (
+    <div 
+      style={{ position: 'relative', display: 'inline-block' }}
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+    >
+      {children}
+      {isVisible && (
+        <div style={{
+          position: 'absolute',
+          padding: '8px 12px',
+          background: 'var(--intent-color-foreground)',
+          color: 'var(--intent-color-background)',
+          fontSize: '0.875rem',
+          borderRadius: '6px',
+          whiteSpace: 'nowrap',
+          zIndex: 50,
+          pointerEvents: 'none',
+          ...getPositionStyles()
+        }}>
+          {content}
+        </div>
+      )}
+    </div>
+  )
+}
 
 ## Examples
 
@@ -14,11 +54,11 @@ Hover-activated information popup.
 
 Hover over the button:
 
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
+<div className="intent-demo">
   <Tooltip content="Click to save your changes">
-    <Button>Hover Me</Button>
+    <button className="intent-btn intent-btn--variant-primary intent-btn--size-medium">Hover Me</button>
   </Tooltip>
-</Stack>
+</div>
 
 ```tsx
 <Tooltip content="Click to save your changes">
@@ -28,20 +68,22 @@ Hover over the button:
 
 ### Positions
 
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Tooltip content="Top position" position="top">
-    <Button size="small">Top</Button>
-  </Tooltip>
-  <Tooltip content="Right position" position="right">
-    <Button size="small">Right</Button>
-  </Tooltip>
-  <Tooltip content="Bottom position" position="bottom">
-    <Button size="small">Bottom</Button>
-  </Tooltip>
-  <Tooltip content="Left position" position="left">
-    <Button size="small">Left</Button>
-  </Tooltip>
-</Stack>
+<div className="intent-demo">
+  <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+    <Tooltip content="Top position" position="top">
+      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-small">Top</button>
+    </Tooltip>
+    <Tooltip content="Right position" position="right">
+      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-small">Right</button>
+    </Tooltip>
+    <Tooltip content="Bottom position" position="bottom">
+      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-small">Bottom</button>
+    </Tooltip>
+    <Tooltip content="Left position" position="left">
+      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-small">Left</button>
+    </Tooltip>
+  </div>
+</div>
 
 ```tsx
 <Tooltip content="Top" position="top">...</Tooltip>
@@ -52,17 +94,16 @@ Hover over the button:
 
 ### With Icons
 
-<Stack direction="row" gap="relaxed" style={{ marginBottom: 24 }}>
-  <Tooltip content="Add to favorites">
-    <Button importance="tertiary" icon="heart">Like</Button>
-  </Tooltip>
-  <Tooltip content="Share this page">
-    <Button importance="tertiary" icon="share">Share</Button>
-  </Tooltip>
-  <Tooltip content="More options">
-    <Button importance="tertiary" icon="more-horizontal">Menu</Button>
-  </Tooltip>
-</Stack>
+<div className="intent-demo">
+  <div style={{ display: 'flex', gap: '16px' }}>
+    <Tooltip content="Add to favorites">
+      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium">❤️ Like</button>
+    </Tooltip>
+    <Tooltip content="Share this page">
+      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium">📤 Share</button>
+    </Tooltip>
+  </div>
+</div>
 
 ```tsx
 <Tooltip content="Add to favorites">
@@ -70,81 +111,30 @@ Hover over the button:
 </Tooltip>
 ```
 
-### Delay
-
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Tooltip content="Appears immediately" delay={0}>
-    <Button size="small">No Delay</Button>
-  </Tooltip>
-  <Tooltip content="Appears after 500ms" delay={500}>
-    <Button size="small">500ms Delay</Button>
-  </Tooltip>
-</Stack>
-
-```tsx
-<Tooltip content="Quick" delay={0}>...</Tooltip>
-<Tooltip content="Slow" delay={500}>...</Tooltip>
-```
-
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `content` | `string` \| `ReactNode` | - | Tooltip content |
-| `position` | `'top'` \| `'right'` \| `'bottom'` \| `'left'` | `'top'` | Tooltip position |
-| `delay` | `number` | `200` | Show delay in ms |
-| `disabled` | `boolean` | `false` | Disable tooltip |
-
-## Accessibility
-
-- Uses `aria-describedby` to associate with trigger
-- Trigger element must be focusable
-- Keyboard accessible (shows on focus)
+| `content` | `string` | - | Tooltip text |
+| `position` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` | Tooltip position |
+| `children` | `ReactNode` | - | Trigger element |
 
 ## CSS Output
 
 ```css
-.tooltip {
+.intent-tooltip {
   position: relative;
   display: inline-block;
 }
 
-.tooltip__content {
+.intent-tooltip__content {
   position: absolute;
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
-  background: var(--intent-color-text);
+  padding: 8px 12px;
+  background: var(--intent-color-foreground);
   color: var(--intent-color-background);
+  font-size: 0.875rem;
   border-radius: var(--intent-radius-md);
-  font-size: var(--intent-font-size-sm);
   white-space: nowrap;
   z-index: 50;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 150ms ease;
-}
-
-.tooltip:hover .tooltip__content,
-.tooltip:focus-within .tooltip__content {
-  opacity: 1;
-  visibility: visible;
-}
-
-.tooltip__content--top {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: var(--intent-spacing-2);
 }
 ```
-
-## When to Use
-
-**Use Tooltips for:**
-- Icon button labels
-- Abbreviation explanations
-- Additional context that isn't critical
-
-**Don't use for:**
-- Critical information (use Alert)
-- Content that needs to be copied (use Popover)
-- Mobile (tooltips don't work well on touch)

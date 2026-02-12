@@ -1,103 +1,100 @@
 ---
-sidebar_position: 41
+sidebar_position: 99
 ---
-
-import { Stack, Button, Spacer } from 'intent-react'
+import React from 'react';
 
 # Spacer
 
-Pushes adjacent elements apart in flex layouts.
+Flexible spacing component for layouts.
 
-## Example
+export const Spacer = ({ size = 4 }) => {
+  const sizes = {
+    1: '4px',
+    2: '8px',
+    3: '12px',
+    4: '16px',
+    5: '20px',
+    6: '24px',
+    8: '32px',
+    10: '40px',
+    12: '48px',
+    16: '64px'
+  }
+  
+  return (
+    <div style={{ 
+      height: sizes[size] || `${size * 4}px`,
+      background: 'repeating-linear-gradient(45deg, transparent, transparent 5px, var(--intent-color-border) 5px, var(--intent-color-border) 6px)',
+      borderRadius: '4px',
+      opacity: 0.3
+    }} />
+  )
+}
 
-<Stack direction="row" gap="normal" style={{ padding: 16, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8, marginBottom: 24 }}>
-  <Button>Left Button</Button>
-  <Spacer />
-  <Button importance="secondary">Right Button</Button>
-</Stack>
+## Examples
+
+### Spacer Sizes
+
+<div className="intent-demo">
+  <div>Content above</div>
+  <Spacer size={4} />
+  <div>Content below (16px gap)</div>
+  <Spacer size={8} />
+  <div>More content (32px gap)</div>
+</div>
 
 ```tsx
-<Stack direction="row">
-  <Button>Left</Button>
-  <Spacer />
-  <Button>Right</Button>
-</Stack>
+<div>Content A</div>
+<Spacer size={4} />
+<div>Content B</div>
 ```
 
-## Pushes Multiple Items
+### Horizontal Spacer
 
-<Stack direction="row" gap="normal" style={{ padding: 16, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8, marginBottom: 24 }}>
-  <Button size="small">First</Button>
-  <Button size="small">Second</Button>
-  <Spacer />
-  <Button size="small" importance="tertiary">Cancel</Button>
-  <Button size="small" importance="primary">Save</Button>
-</Stack>
-
-```tsx
-<Stack direction="row">
-  <Button>First</Button>
-  <Button>Second</Button>
-  <Spacer />
-  <Button>Cancel</Button>
-  <Button importance="primary">Save</Button>
-</Stack>
-```
-
-## With Minimum Size
+<div className="intent-demo">
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <span>Item 1</span>
+    <div style={{ width: '16px' }} />
+    <span>Item 2</span>
+    <div style={{ flex: 1 }} />
+    <span>Item 3 (pushed right)</span>
+  </div>
+</div>
 
 ```tsx
-<Stack direction="row">
-  <Button>Left</Button>
-  <Spacer min={100} />
-  <Button>Right</Button>
-</Stack>
-```
-
-## In Navbar
-
-```tsx
-<Navbar>
-  <Navbar.Logo><Logo /></Navbar.Logo>
-  <Spacer />
-  <Navbar.Items>
-    <NavLink href="/">Home</NavLink>
-    <NavLink href="/about">About</NavLink>
-  </Navbar.Items>
-  <Spacer />
-  <Button>Sign In</Button>
-</Navbar>
+<Flex>
+  <Text>Left</Text>
+  <Spacer flex={1} />
+  <Text>Right</Text>
+</Flex>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `min` | `number` \| `string` | `0` | Minimum size |
-| `flex` | `number` \| `string` | `1` | Flex grow value |
+| `size` | `number` | `4` | Spacer size (1-16) |
+| `flex` | `number` | - | Flex grow value |
 
 ## CSS Output
 
 ```css
-.spacer {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
+.intent-spacer {
+  height: 16px; /* size-4 default */
 }
 
-.spacer--with-min {
-  min-width: var(--spacer-min);
-  min-height: var(--spacer-min);
+.intent-spacer--size-1 { height: 4px; }
+.intent-spacer--size-2 { height: 8px; }
+.intent-spacer--size-3 { height: 12px; }
+.intent-spacer--size-4 { height: 16px; }
+.intent-spacer--size-5 { height: 20px; }
+.intent-spacer--size-6 { height: 24px; }
+.intent-spacer--size-8 { height: 32px; }
+.intent-spacer--size-10 { height: 40px; }
+.intent-spacer--size-12 { height: 48px; }
+.intent-spacer--size-16 { height: 64px; }
+
+.intent-spacer--flex {
+  flex: 1;
 }
 ```
-
-## When to Use
-
-Use **Spacer** when:
-- You need to push elements to opposite sides
-- Creating space between groups of elements
-- In toolbars, navbars, and card headers
-
-Don't use for:
-- General spacing (use `gap` on Stack/Flex)
-- Margins (use Box or style props)

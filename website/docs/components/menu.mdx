@@ -1,221 +1,160 @@
 ---
-sidebar_position: 42
+sidebar_position: 52
 ---
-
-import { Menu } from 'intent-react'
+import React from 'react';
 
 # Menu
 
-Vertical navigation menu with nested support.
+Dropdown menus for actions and navigation.
 
-## Example
+export const Menu = ({ children }) => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <button 
+        className="intent-btn intent-btn--variant-secondary intent-btn--size-medium"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        Actions ▼
+      </button>
+      {isOpen && (
+        <div 
+          style={{ 
+            position: 'absolute', 
+            top: '100%', 
+            left: 0, 
+            marginTop: '4px',
+            minWidth: '200px',
+            background: 'var(--intent-color-surface)', 
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+            zIndex: 50
+          }}
+        >
+          <div onClick={() => setIsOpen(false)}>
+            {children}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export const MenuItem = ({ children, icon, onClick }) => (
+  <button
+    onClick={onClick}
+    style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '12px', 
+      width: '100%',
+      padding: '10px 16px',
+      textAlign: 'left',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '0.875rem',
+      transition: 'background 150ms'
+    }}
+    onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
+    onMouseLeave={(e) => e.target.style.background = 'none'}
+  >
+    {icon && <span style={{ width: '16px', textAlign: 'center' }}>{icon}</span>}
+    <span>{children}</span>
+  </button>
+)
+
+export const MenuDivider = () => (
+  <div style={{ height: '1px', background: 'var(--intent-color-border)', margin: '4px 0' }} />
+)
+
+export const MenuDemo = () => {
+  const [lastAction, setLastAction] = React.useState(null)
+  return (
+    <div>
+      <Menu>
+        <MenuItem icon="✏️" onClick={() => setLastAction('Edit')}>Edit</MenuItem>
+        <MenuItem icon="📋" onClick={() => setLastAction('Duplicate')}>Duplicate</MenuItem>
+        <MenuItem icon="🔗" onClick={() => setLastAction('Copy link')}>Copy link</MenuItem>
+        <MenuDivider />
+        <MenuItem icon="🗑️" onClick={() => setLastAction('Delete')}>Delete</MenuItem>
+      </Menu>
+      {lastAction && <p style={{ marginTop: '12px', fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Last action: <strong>{lastAction}</strong></p>}
+    </div>
+  )
+}
+
+## Examples
+
+### Basic Menu
+
+<div className="intent-demo">
+  <MenuDemo />
+</div>
 
 ```tsx
-import { Menu } from 'intent-react'
-
-<Menu
-  items={[
-    { 
-      id: 'dashboard',
-      label: 'Dashboard', 
-      icon: 'layout-dashboard',
-      active: true 
-    },
-    { 
-      id: 'projects',
-      label: 'Projects', 
-      icon: 'folder',
-      badge: 5
-    },
-    { 
-      id: 'tasks',
-      label: 'Tasks', 
-      icon: 'check-square'
-    },
-    { 
-      id: 'settings',
-      label: 'Settings', 
-      icon: 'settings'
-    },
-  ]}
-  onSelect={(item) => console.log('Selected:', item.id)}
-/>
-```
-
-## With Nested Items
-
-```tsx
-<Menu
-  items={[
-    { 
-      id: 'home',
-      label: 'Home', 
-      icon: 'home'
-    },
-    { 
-      id: 'products',
-      label: 'Products', 
-      icon: 'package',
-      items: [
-        { id: 'all', label: 'All Products' },
-        { id: 'categories', label: 'Categories' },
-        { id: 'inventory', label: 'Inventory' },
-      ]
-    },
-    { 
-      id: 'orders',
-      label: 'Orders', 
-      icon: 'shopping-cart',
-      expanded: true,
-      items: [
-        { id: 'pending', label: 'Pending', badge: 3 },
-        { id: 'completed', label: 'Completed' },
-        { id: 'refunded', label: 'Refunded' },
-      ]
-    },
-  ]}
-/>
-```
-
-## Compact
-
-```tsx
-<Menu
-  compact
-  items={[
-    { id: 'edit', label: 'Edit', icon: 'edit' },
-    { id: 'copy', label: 'Copy', icon: 'copy' },
-    { id: 'delete', label: 'Delete', icon: 'trash', danger: true },
-  ]}
-/>
-```
-
-## Collapsible Groups
-
-```tsx
-<Menu
-  collapsible
-  items={[
-    {
-      id: 'workspace',
-      label: 'Workspace',
-      icon: 'briefcase',
-      items: [
-        { id: 'projects', label: 'Projects' },
-        { id: 'tasks', label: 'Tasks' },
-      ]
-    },
-    {
-      id: 'admin',
-      label: 'Administration',
-      icon: 'shield',
-      items: [
-        { id: 'users', label: 'Users' },
-        { id: 'billing', label: 'Billing' },
-      ]
-    },
-  ]}
-/>
+<Menu>
+  <MenuItem icon="✏️">Edit</MenuItem>
+  <MenuItem icon="📋">Duplicate</MenuItem>
+  <MenuDivider />
+  <MenuItem icon="🗑️">Delete</MenuItem>
+</Menu>
 ```
 
 ## Props
 
+### Menu
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `MenuItem[]` | required | Menu items |
-| `compact` | `boolean` | `false` | Compact style |
-| `collapsible` | `boolean` | `false` | Allow collapsing groups |
-| `onSelect` | `(item: MenuItem) => void` | - | Item select callback |
-| `onToggle` | `(item: MenuItem) => void` | - | Group toggle callback |
+| `children` | `ReactNode` | - | Menu items |
 
-### MenuItem Type
+### MenuItem
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `icon` | `ReactNode` | - | Optional icon |
+| `onClick` | `() => void` | - | Click handler |
+| `children` | `ReactNode` | - | Item label |
 
-```typescript
-interface MenuItem {
-  id: string
-  label: string
-  icon?: string
-  badge?: string | number
-  danger?: boolean
-  disabled?: boolean
-  active?: boolean
-  expanded?: boolean
-  href?: string
-  onClick?: () => void
-  items?: MenuItem[]
-}
-```
+### MenuDivider
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| - | - | - | Visual separator |
 
 ## CSS Output
 
 ```css
-.menu {
-  display: flex;
-  flex-direction: column;
-  gap: var(--intent-spacing-1);
+.intent-menu {
+  position: absolute;
+  min-width: 200px;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 50;
 }
 
-.menu__item {
+.intent-menu__item {
   display: flex;
   align-items: center;
-  gap: var(--intent-spacing-3);
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
-  border-radius: var(--intent-radius-md);
-  color: var(--intent-color-text-muted);
+  gap: 12px;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  background: none;
+  border: none;
   cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 150ms;
 }
 
-.menu__item:hover:not(.menu__item--disabled) {
-  background: var(--intent-color-surface-elevated);
-  color: var(--intent-color-text);
+.intent-menu__item:hover {
+  background: var(--intent-color-surface-hover);
 }
 
-.menu__item--active {
-  background: var(--intent-color-primary-alpha);
-  color: var(--intent-color-primary);
-}
-
-.menu__item--danger {
-  color: var(--intent-color-danger);
-}
-
-.menu__item--danger:hover {
-  background: var(--intent-color-danger-alpha);
-}
-
-.menu__item--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.menu__item-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.menu__item-badge {
-  margin-left: auto;
-}
-
-.menu__submenu {
-  margin-left: var(--intent-spacing-6);
-  margin-top: var(--intent-spacing-1);
-}
-
-.menu--compact .menu__item {
-  padding: var(--intent-spacing-1) var(--intent-spacing-2);
+.intent-menu__divider {
+  height: 1px;
+  background: var(--intent-color-border);
+  margin: 4px 0;
 }
 ```
-
-## Menu vs Dropdown
-
-Use **Menu** for:
-- Sidebar navigation
-- Context menus
-- Command palettes
-- Static navigation lists
-
-Use **Dropdown** for:
-- Action menus
-- Selection from options
-- Temporary overlays

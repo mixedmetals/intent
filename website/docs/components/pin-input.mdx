@@ -1,0 +1,119 @@
+---
+sidebar_position: 63
+---
+import React from 'react';
+
+# PinInput
+
+Input for PIN codes or OTPs.
+
+export const PinInput = ({ length = 4, label }) => {
+  const [values, setValues] = React.useState(Array(length).fill(''))
+  const inputRefs = React.useRef([])
+  
+  const handleChange = (index, value) => {
+    if (!/^\d*$/.test(value)) return
+    const newValues = [...values]
+    newValues[index] = value.slice(-1)
+    setValues(newValues)
+    
+    if (value && index < length - 1) {
+      inputRefs.current[index + 1]?.focus()
+    }
+  }
+  
+  const handleKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !values[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus()
+    }
+  }
+  
+  return (
+    <div>
+      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '8px' }}>{label}</label>}
+      <div style={{ display: 'flex', gap: '8px' }}>
+        {values.map((value, i) => (
+          <input
+            key={i}
+            ref={(el) => inputRefs.current[i] = el}
+            type="text"
+            inputMode="numeric"
+            maxLength={1}
+            value={value}
+            onChange={(e) => handleChange(i, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(i, e)}
+            style={{
+              width: '48px',
+              height: '56px',
+              textAlign: 'center',
+              fontSize: '1.25rem',
+              fontWeight: 600,
+              border: '1px solid var(--intent-color-border)',
+              borderRadius: '8px',
+              background: 'var(--intent-color-surface)',
+              outline: 'none'
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+## Examples
+
+### Basic PinInput
+
+<div className="intent-demo">
+  <PinInput length={4} label="Enter PIN" />
+</div>
+
+```tsx
+<PinInput length={4} label="Enter PIN" />
+```
+
+### 6-Digit OTP
+
+<div className="intent-demo">
+  <PinInput length={6} label="Enter verification code" />
+</div>
+
+```tsx
+<PinInput length={6} label="Enter verification code" />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `length` | `number` | `4` | Number of digits |
+| `value` | `string` | - | Controlled value |
+| `label` | `string` | - | Input label |
+| `mask` | `boolean` | `false` | Mask input as dots |
+| `onComplete` | `(value: string) => void` | - | Called when all digits entered |
+| `onChange` | `(value: string) => void` | - | Change handler |
+
+## CSS Output
+
+```css
+.intent-pin-input {
+  display: flex;
+  gap: 8px;
+}
+
+.intent-pin-input__field {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+}
+
+.intent-pin-input__field:focus {
+  border-color: var(--intent-color-primary);
+  box-shadow: 0 0 0 3px var(--intent-color-primary-subtle);
+}
+```

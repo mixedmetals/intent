@@ -1,70 +1,127 @@
 ---
-sidebar_position: 67
+sidebar_position: 96
 ---
-
-import { Search } from 'intent-react'
+import React from 'react';
 
 # Search
 
-Search input with suggestions and filters.
+Search input with autocomplete.
+
+export const Search = ({ placeholder = "Search...", suggestions = [] }) => {
+  const [query, setQuery] = React.useState('')
+  const [isOpen, setIsOpen] = React.useState(false)
+  
+  const filtered = suggestions.filter(s => 
+    s.toLowerCase().includes(query.toLowerCase())
+  )
+  
+  return (
+    <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
+      <div style={{ position: 'relative' }}>
+        <span style={{ 
+          position: 'absolute', 
+          left: '12px', 
+          top: '50%', 
+          transform: 'translateY(-50%)',
+          color: 'var(--intent-color-muted)'
+        }}>🔍</span>
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setIsOpen(true)}
+          onBlur={() => setTimeout(() => setIsOpen(false), 150)}
+          placeholder={placeholder}
+          style={{
+            width: '100%',
+            padding: '10px 12px 10px 40px',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            fontSize: '0.875rem',
+            outline: 'none',
+            background: 'var(--intent-color-surface)'
+          }}
+        />
+        <span style={{ 
+          position: 'absolute', 
+          right: '12px', 
+          top: '50%', 
+          transform: 'translateY(-50%)',
+          fontSize: '0.75rem',
+          color: 'var(--intent-color-muted)',
+          padding: '2px 6px',
+          background: 'var(--intent-color-surface-elevated)',
+          borderRadius: '4px'
+        }}>
+          ⌘K
+        </span>
+      </div>
+      
+      {isOpen && filtered.length > 0 && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          right: 0,
+          marginTop: '8px',
+          background: 'var(--intent-color-surface)',
+          border: '1px solid var(--intent-color-border)',
+          borderRadius: '8px',
+          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+          zIndex: 50
+        }}>
+          {filtered.slice(0, 5).map((suggestion, i) => (
+            <button
+              key={i}
+              onClick={() => { setQuery(suggestion); setIsOpen(false); }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                width: '100%',
+                padding: '10px 12px',
+                textAlign: 'left',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+              onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
+              onMouseLeave={(e) => e.target.style.background = 'none'}
+            >
+              <span>🔍</span>
+              <span>{suggestion}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 ## Examples
 
-### Basic Search
+### Search with Suggestions
 
-```tsx
-import { useState } from 'react'
-import { Search } from 'intent-react'
-
-function Example() {
-  const [query, setQuery] = useState('')
-  
-  return (
-    <Search 
-      value={query}
-      onChange={setQuery}
-      placeholder="Search..."
-      onSearch={(q) => console.log('Search:', q)}
-    />
-  )
-}
-```
-
-### With Suggestions
+<div className="intent-demo">
+  <Search 
+    placeholder="Search components..."
+    suggestions={[
+      'Button component',
+      'Card layout',
+      'Modal dialog',
+      'Form validation',
+      'Toast notifications',
+      'Dropdown menu',
+      'Tabs navigation'
+    ]}
+  />
+</div>
 
 ```tsx
 <Search 
-  value={query}
-  onChange={setQuery}
-  suggestions={[
-    { id: '1', label: 'Recent: Project Alpha' },
-    { id: '2', label: 'Recent: Dashboard' },
-  ]}
-  onSelectSuggestion={(s) => navigate(s.id)}
-/>
-```
-
-### With Filters
-
-```tsx
-<Search 
-  value={query}
-  onChange={setQuery}
-  filters={[
-    { key: 'type', label: 'Type', options: ['All', 'Document', 'Image'] },
-    { key: 'date', label: 'Date', options: ['Any', 'Today', 'Week'] },
-  ]}
-  onFilterChange={(filters) => applyFilters(filters)}
-/>
-```
-
-### Loading State
-
-```tsx
-<Search 
-  value={query}
-  onChange={setQuery}
-  loading={isSearching}
+  placeholder="Search..."
+  suggestions={['Item 1', 'Item 2', 'Item 3']}
 />
 ```
 
@@ -72,74 +129,59 @@ function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | - | Search query |
-| `onChange` | `(value: string) => void` | - | Change callback |
-| `onSearch` | `(value: string) => void` | - | Search submit callback |
-| `placeholder` | `string` | `'Search...'` | Placeholder text |
-| `suggestions` | `Suggestion[]` | - | Search suggestions |
-| `filters` | `Filter[]` | - | Search filters |
-| `loading` | `boolean` | `false` | Loading state |
-| `clearable` | `boolean` | `true` | Show clear button |
-| `autoFocus` | `boolean` | `false` | Auto focus input |
-
-### Suggestion Type
-
-```typescript
-interface Suggestion {
-  id: string
-  label: string
-  icon?: string
-}
-```
-
-### Filter Type
-
-```typescript
-interface Filter {
-  key: string
-  label: string
-  options: string[]
-}
-```
+| `placeholder` | `string` | `"Search..."` | Input placeholder |
+| `value` | `string` | - | Controlled value |
+| `suggestions` | `string[]` | `[]` | Autocomplete suggestions |
+| `onSearch` | `(query: string) => void` | - | Search handler |
+| `onSelect` | `(value: string) => void` | - | Selection handler |
 
 ## CSS Output
 
 ```css
-.search {
+.intent-search {
   position: relative;
-}
-
-.search__input {
   width: 100%;
-  padding-left: var(--intent-spacing-10);
-  padding-right: var(--intent-spacing-10);
 }
 
-.search__icon {
+.intent-search__input {
+  width: 100%;
+  padding: 10px 12px 10px 40px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  font-size: 0.875rem;
+  background: var(--intent-color-surface);
+}
+
+.intent-search__icon {
   position: absolute;
-  left: var(--intent-spacing-3);
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--intent-color-text-muted);
+  color: var(--intent-color-muted);
 }
 
-.search__clear {
+.intent-search__shortcut {
   position: absolute;
-  right: var(--intent-spacing-3);
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--intent-color-muted);
+  padding: 2px 6px;
+  background: var(--intent-color-surface-elevated);
+  border-radius: var(--intent-radius-sm);
 }
 
-.search__suggestions {
+.intent-search__suggestions {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  margin-top: var(--intent-spacing-1);
+  margin-top: 8px;
   background: var(--intent-color-surface);
   border: 1px solid var(--intent-color-border);
   border-radius: var(--intent-radius-md);
-  box-shadow: var(--intent-shadow-lg);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   z-index: 50;
 }
 ```

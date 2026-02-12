@@ -2,17 +2,50 @@
 sidebar_position: 23
 ---
 
-import { Stack, Field, Input, Switch } from 'intent-react'
+import React from 'react';
 
 # Field
 
 Label and validation wrapper for form inputs.
 
+export const Field = ({ label, hint, error, children, required }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    {label && (
+      <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--intent-color-foreground)' }}>
+        {label}
+        {required && <span style={{ color: 'var(--intent-color-error)', marginLeft: '2px' }}>*</span>}
+      </label>
+    )}
+    {children}
+    {hint && !error && (
+      <span style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{hint}</span>
+    )}
+    {error && (
+      <span style={{ fontSize: '0.75rem', color: 'var(--intent-color-error)' }}>{error}</span>
+    )}
+  </div>
+)
+
+export const Input = ({ type = 'text', placeholder, validation }) => (
+  <input
+    type={type}
+    placeholder={placeholder}
+    style={{
+      padding: '8px 12px',
+      border: `1px solid ${validation === 'invalid' ? 'var(--intent-color-error)' : 'var(--intent-color-border)'}`,
+      borderRadius: '6px',
+      fontSize: '0.875rem',
+      width: '100%',
+      outline: 'none'
+    }}
+  />
+)
+
 ## Examples
 
 ### Basic Field
 
-<div style={{ marginBottom: 24 }}>
+<div className="intent-demo">
   <Field label="Email Address">
     <Input type="email" placeholder="you@example.com" />
   </Field>
@@ -26,7 +59,7 @@ Label and validation wrapper for form inputs.
 
 ### With Hint
 
-<div style={{ marginBottom: 24 }}>
+<div className="intent-demo">
   <Field label="Username" hint="Must be unique and 3-20 characters">
     <Input placeholder="johndoe" />
   </Field>
@@ -40,7 +73,7 @@ Label and validation wrapper for form inputs.
 
 ### With Error
 
-<div style={{ marginBottom: 24 }}>
+<div className="intent-demo">
   <Field 
     label="Password" 
     error="Password must be at least 8 characters"
@@ -58,9 +91,9 @@ Label and validation wrapper for form inputs.
 </Field>
 ```
 
-### Required
+### Required Field
 
-<div style={{ marginBottom: 24 }}>
+<div className="intent-demo">
   <Field label="Full Name" required>
     <Input placeholder="John Doe" />
   </Field>
@@ -72,102 +105,44 @@ Label and validation wrapper for form inputs.
 </Field>
 ```
 
-### Horizontal Layout
-
-<div style={{ marginBottom: 24 }}>
-  <Field label="Enable notifications" layout="horizontal">
-    <Switch />
-  </Field>
-</div>
-
-```tsx
-<Field label="Enable notifications" layout="horizontal">
-  <Switch />
-</Field>
-```
-
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `label` | `string` | - | Field label |
-| `hint` | `string` | - | Helper text |
+| `hint` | `string` | - | Helper text below input |
 | `error` | `string` | - | Error message |
 | `required` | `boolean` | `false` | Show required indicator |
-| `layout` | `'vertical'` \| `'horizontal'` | `'vertical'` | Label position |
 | `children` | `ReactNode` | - | Input element |
-
-## Accessibility
-
-- Associates label with input via `htmlFor`
-- Error message linked via `aria-describedby`
-- Required field indicated visually and via `aria-required`
 
 ## CSS Output
 
 ```css
-.field {
+.intent-field {
   display: flex;
   flex-direction: column;
-  gap: var(--intent-spacing-1);
+  gap: 4px;
 }
 
-.field--horizontal {
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.field__label {
+.intent-field__label {
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--intent-color-text);
+  color: var(--intent-color-foreground);
 }
 
-.field__required {
-  color: var(--intent-color-danger);
-  margin-left: var(--intent-spacing-1);
+.intent-field__label--required::after {
+  content: "*";
+  color: var(--intent-color-error);
+  margin-left: 2px;
 }
 
-.field__hint {
-  font-size: var(--intent-font-size-sm);
-  color: var(--intent-color-text-muted);
+.intent-field__hint {
+  font-size: 0.75rem;
+  color: var(--intent-color-muted);
 }
 
-.field__error {
-  font-size: var(--intent-font-size-sm);
-  color: var(--intent-color-danger);
-}
-```
-
-## Usage with Validation
-
-```tsx
-import { useState } from 'react'
-import { Field, Input } from 'intent-react'
-
-function ValidatedField() {
-  const [value, setValue] = useState('')
-  const [error, setError] = useState('')
-  
-  const validate = (val) => {
-    if (val.length < 3) {
-      setError('Must be at least 3 characters')
-    } else {
-      setError('')
-    }
-  }
-  
-  return (
-    <Field label="Username" error={error} required>
-      <Input 
-        value={value}
-        onChange={(e) => {
-          setValue(e.target.value)
-          validate(e.target.value)
-        }}
-        validation={error ? 'invalid' : 'none'}
-      />
-    </Field>
-  )
+.intent-field__error {
+  font-size: 0.75rem;
+  color: var(--intent-color-error);
 }
 ```

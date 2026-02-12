@@ -1,72 +1,75 @@
 ---
-sidebar_position: 58
+sidebar_position: 98
 ---
-
-import { RangeSlider } from 'intent-react'
+import React from 'react';
 
 # RangeSlider
 
-Dual-handle slider for selecting a range of values.
+Dual-handle range slider for selecting a range.
+
+export const RangeSlider = ({ min = 0, max = 100, defaultValue = [20, 80], label }) => {
+  const [values, setValues] = React.useState(defaultValue)
+  
+  const leftPercent = ((values[0] - min) / (max - min)) * 100
+  const rightPercent = ((values[1] - min) / (max - min)) * 100
+  
+  return (
+    <div style={{ width: '100%' }}>
+      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '8px' }}>{label}</label>}
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.875rem' }}>
+        <span>{values[0]}</span>
+        <span>{values[1]}</span>
+      </div>
+      <div style={{ position: 'relative', height: '20px', display: 'flex', alignItems: 'center' }}>
+        <div style={{ position: 'absolute', width: '100%', height: '4px', background: 'var(--intent-color-border)', borderRadius: '2px' }} />
+        <div style={{ 
+          position: 'absolute', 
+          left: `${leftPercent}%`, 
+          width: `${rightPercent - leftPercent}%`, 
+          height: '4px', 
+          background: 'var(--intent-color-primary)', 
+          borderRadius: '2px' 
+        }} />
+        {/* Simplified demo - real implementation would have draggable handles */}
+        <div style={{ 
+          position: 'absolute', 
+          left: `${leftPercent}%`, 
+          transform: 'translateX(-50%)',
+          width: '16px',
+          height: '16px',
+          background: 'var(--intent-color-primary)',
+          borderRadius: '50%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
+        }} />
+        <div style={{ 
+          position: 'absolute', 
+          left: `${rightPercent}%`, 
+          transform: 'translateX(-50%)',
+          width: '16px',
+          height: '16px',
+          background: 'var(--intent-color-primary)',
+          borderRadius: '50%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
+        }} />
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
-### Basic RangeSlider
+### Price Range
 
-```tsx
-import { useState } from 'react'
-import { RangeSlider } from 'intent-react'
-
-function Example() {
-  const [range, setRange] = useState([20, 80])
-  
-  return (
-    <RangeSlider 
-      value={range}
-      onChange={setRange}
-      min={0}
-      max={100}
-    />
-  )
-}
-```
-
-### With Labels
+<div className="intent-demo">
+  <RangeSlider min={0} max={1000} defaultValue={[200, 800]} label="Price Range ($)" />
+</div>
 
 ```tsx
 <RangeSlider 
-  value={priceRange}
-  onChange={setPriceRange}
-  min={0}
-  max={1000}
-  step={10}
-  formatValue={(v) => `$${v}`}
-/>
-```
-
-### Single Handle (Slider mode)
-
-```tsx
-<RangeSlider 
-  value={[50]}
-  onChange={([value]) => setValue(value)}
-  min={0}
-  max={100}
-/>
-```
-
-### With Marks
-
-```tsx
-<RangeSlider 
-  value={range}
-  onChange={setRange}
-  min={0}
-  max={100}
-  marks={[
-    { value: 0, label: '0%' },
-    { value: 50, label: '50%' },
-    { value: 100, label: '100%' },
-  ]}
+  min={0} 
+  max={1000} 
+  defaultValue={[200, 800]} 
+  label="Price Range"
 />
 ```
 
@@ -74,64 +77,45 @@ function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number[]` | required | Selected range [min, max] |
-| `onChange` | `(value: number[]) => void` | - | Change callback |
 | `min` | `number` | `0` | Minimum value |
 | `max` | `number` | `100` | Maximum value |
+| `value` | `[number, number]` | - | Controlled range |
+| `defaultValue` | `[number, number]` | `[0, 100]` | Default range |
+| `label` | `string` | - | Slider label |
 | `step` | `number` | `1` | Step increment |
-| `marks` | `Mark[]` | - | Mark labels |
-| `disabled` | `boolean` | `false` | Disable slider |
-| `formatValue` | `(value: number) => string` | - | Value formatter |
-
-### Mark Type
-
-```typescript
-interface Mark {
-  value: number
-  label?: string
-}
-```
+| `onChange` | `(value: [number, number]) => void` | - | Change handler |
 
 ## CSS Output
 
 ```css
-.range-slider {
+.intent-range-slider {
   position: relative;
-  height: 24px;
-  touch-action: none;
+  width: 100%;
 }
 
-.range-slider__track {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
+.intent-range-slider__track {
+  width: 100%;
   height: 4px;
-  transform: translateY(-50%);
   background: var(--intent-color-border);
-  border-radius: 2px;
+  border-radius: var(--intent-radius-full);
 }
 
-.range-slider__range {
-  position: absolute;
-  height: 100%;
+.intent-range-slider__filled {
+  height: 4px;
   background: var(--intent-color-primary);
-  border-radius: 2px;
+  border-radius: var(--intent-radius-full);
 }
 
-.range-slider__thumb {
-  position: absolute;
-  top: 50%;
-  width: 20px;
-  height: 20px;
-  transform: translate(-50%, -50%);
-  background: var(--intent-color-surface);
-  border: 2px solid var(--intent-color-primary);
+.intent-range-slider__thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--intent-color-primary);
   border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   cursor: grab;
 }
 
-.range-slider__thumb:active {
+.intent-range-slider__thumb:active {
   cursor: grabbing;
 }
 ```

@@ -1,166 +1,139 @@
 ---
-sidebar_position: 28
+sidebar_position: 60
 ---
+
+import React from 'react';
 
 # Dropdown
 
-Menu that appears when clicking a trigger element.
+Simple dropdown menu component.
 
-## Example
+export const Dropdown = ({ trigger, items }) => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [selected, setSelected] = React.useState(null)
+  
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
+      {isOpen && (
+        <>
+          <div style={{ position: 'fixed', inset: 0 }} onClick={() => setIsOpen(false)} />
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            marginTop: '4px',
+            minWidth: '200px',
+            background: 'var(--intent-color-surface)',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+            zIndex: 50
+          }}>
+            {items.map((item, i) => (
+              <button
+                key={i}
+                onClick={() => { setSelected(item.value); setIsOpen(false); item.onClick?.(); }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  width: '100%',
+                  padding: '10px 16px',
+                  textAlign: 'left',
+                  background: selected === item.value ? 'var(--intent-color-surface-hover)' : 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '0.875rem',
+                  borderBottom: i < items.length - 1 ? '1px solid var(--intent-color-border)' : 'none'
+                }}
+              >
+                {item.icon && <span>{item.icon}</span>}
+                <span>{item.label}</span>
+                {selected === item.value && <span style={{ marginLeft: 'auto' }}>✓</span>}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+## Examples
+
+### Basic Dropdown
+
+<div className="intent-demo">
+  <Dropdown 
+    trigger={<button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium">Select Option ▼</button>}
+    items={[
+      { label: 'Option 1', value: '1', icon: '🔵' },
+      { label: 'Option 2', value: '2', icon: '🟢' },
+      { label: 'Option 3', value: '3', icon: '🟡', onClick: () => console.log('Selected!') }
+    ]}
+  />
+</div>
 
 ```tsx
-import { Button, Dropdown } from 'intent-react'
-
 <Dropdown 
-  trigger={<Button>Options</Button>}
+  trigger={<Button>Select Option</Button>}
   items={[
-    { label: 'Edit', value: 'edit', icon: 'edit' },
-    { label: 'Duplicate', value: 'duplicate', icon: 'copy' },
-    { label: 'Delete', value: 'delete', icon: 'trash', danger: true },
-  ]}
-  onSelect={(item) => console.log(item)}
-/>
-```
-
-## With Sections
-
-```tsx
-<Dropdown 
-  trigger={<Button>View Options</Button>}
-  items={[
-    { 
-      section: 'Layout',
-      items: [
-        { label: 'Grid view', value: 'grid', icon: 'grid' },
-        { label: 'List view', value: 'list', icon: 'list' },
-      ]
-    },
-    { 
-      section: 'Sort by',
-      items: [
-        { label: 'Name', value: 'name' },
-        { label: 'Date', value: 'date' },
-        { label: 'Size', value: 'size' },
-      ]
-    },
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2', onClick: handleClick }
   ]}
 />
-```
-
-## With Disabled Items
-
-```tsx
-<Dropdown 
-  trigger={<Button>Actions</Button>}
-  items={[
-    { label: 'Copy', value: 'copy', icon: 'copy' },
-    { label: 'Paste', value: 'paste', disabled: true },
-    { separator: true },
-    { label: 'Delete', value: 'delete', danger: true },
-  ]}
-/>
-```
-
-## Alignment
-
-```tsx
-<Dropdown align="start" trigger={...} items={...} />
-<Dropdown align="center" trigger={...} items={...} />
-<Dropdown align="end" trigger={...} items={...} />
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `trigger` | `ReactNode` | required | Element that opens the dropdown |
-| `items` | `Array<Item>` | `[]` | Dropdown items |
-| `align` | `'start'` \| `'center'` \| `'end'` | `'start'` | Menu alignment |
-| `side` | `'top'` \| `'right'` \| `'bottom'` \| `'left'` | `'bottom'` | Menu position |
-| `open` | `boolean` | - | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | - | Open state callback |
-| `onSelect` | `(item: Item) => void` | - | Item select callback |
-
-### Item Type
-
-```typescript
-interface Item {
-  label: string
-  value: string
-  icon?: string
-  danger?: boolean
-  disabled?: boolean
-  separator?: boolean
-  section?: string
-  items?: Item[]  // For nested sections
-}
-```
+| `trigger` | `ReactNode` | - | Dropdown trigger element |
+| `items` | `Array<{label: string, value: string, icon?: ReactNode, onClick?: () => void}>` | `[]` | Dropdown items |
+| `value` | `string` | - | Selected value |
+| `onChange` | `(value: string) => void` | - | Selection handler |
 
 ## CSS Output
 
 ```css
-.dropdown {
+.intent-dropdown {
   position: relative;
   display: inline-block;
 }
 
-.dropdown__menu {
+.intent-dropdown__menu {
   position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
   min-width: 200px;
   background: var(--intent-color-surface);
   border: 1px solid var(--intent-color-border);
   border-radius: var(--intent-radius-md);
-  box-shadow: var(--intent-shadow-lg);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   z-index: 50;
-  padding: var(--intent-spacing-1);
 }
 
-.dropdown__item {
+.intent-dropdown__item {
   display: flex;
   align-items: center;
-  gap: var(--intent-spacing-2);
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
-  border-radius: var(--intent-radius-sm);
+  gap: 12px;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  background: none;
+  border: none;
   cursor: pointer;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--intent-color-border);
 }
 
-.dropdown__item:hover:not(.dropdown__item--disabled) {
-  background: var(--intent-color-surface-elevated);
+.intent-dropdown__item:last-child {
+  border-bottom: none;
 }
 
-.dropdown__item--danger {
-  color: var(--intent-color-danger);
-}
-
-.dropdown__item--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.dropdown__separator {
-  height: 1px;
-  background: var(--intent-color-border);
-  margin: var(--intent-spacing-1) 0;
-}
-
-.dropdown__section {
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
-  font-size: var(--intent-font-size-xs);
-  font-weight: 600;
-  color: var(--intent-color-text-muted);
-  text-transform: uppercase;
+.intent-dropdown__item:hover {
+  background: var(--intent-color-surface-hover);
 }
 ```
-
-## Dropdown vs Select
-
-Use **Dropdown** for:
-- Action menus
-- Context menus
-- Command palettes
-- Overflow menus
-
-Use **Select** for:
-- Form inputs
-- Picking from a list of values
-- When the selection needs to be displayed

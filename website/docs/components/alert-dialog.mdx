@@ -1,0 +1,150 @@
+---
+sidebar_position: 69
+---
+
+import React from 'react';
+
+# AlertDialog
+
+Modal dialogs for critical alerts requiring user action.
+
+export const AlertDialog = ({ title, description, isOpen, onOpenChange, onConfirm, confirmText = 'Continue', cancelText = 'Cancel', destructive = false }) => {
+  if (!isOpen) return null
+  
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div 
+        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }} 
+        onClick={() => onOpenChange(false)}
+      />
+      <div style={{ 
+        position: 'relative', 
+        background: 'var(--intent-color-surface)', 
+        borderRadius: '12px', 
+        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+        maxWidth: '400px',
+        width: '90%',
+        padding: '24px'
+      }}>
+        <h2 style={{ margin: '0 0 8px 0', fontSize: '1.125rem', fontWeight: 600 }}>{title}</h2>
+        <p style={{ margin: '0 0 20px 0', fontSize: '0.875rem', color: 'var(--intent-color-muted)', lineHeight: 1.5 }}>{description}</p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+          <button 
+            className="intent-btn intent-btn--variant-secondary intent-btn--size-medium"
+            onClick={() => onOpenChange(false)}
+          >
+            {cancelText}
+          </button>
+          <button 
+            className={`intent-btn intent-btn--size-medium ${destructive ? 'intent-btn--intent-error' : 'intent-btn--variant-primary'}`}
+            onClick={() => { onConfirm?.(); onOpenChange(false); }}
+            style={destructive ? { background: 'var(--intent-color-error)', color: 'white', borderColor: 'var(--intent-color-error)' } : {}}
+          >
+            {confirmText}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export const AlertDialogDemo = () => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  
+  return (
+    <>
+      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(true)}>
+        Delete Account
+      </button>
+      <AlertDialog 
+        isOpen={isOpen}
+        onOpenChange={setIsOpen}
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+        confirmText="Delete Account"
+        destructive
+      />
+    </>
+  )
+}
+
+## Examples
+
+### Destructive Alert
+
+<div className="intent-demo">
+  <AlertDialogDemo />
+</div>
+
+```tsx
+const [isOpen, setIsOpen] = useState(false)
+
+<Button variant="secondary" onClick={() => setIsOpen(true)}>Delete</Button>
+
+<AlertDialog 
+  isOpen={isOpen}
+  onOpenChange={setIsOpen}
+  title="Are you sure?"
+  description="This action cannot be undone."
+  confirmText="Delete"
+  destructive
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `isOpen` | `boolean` | - | Dialog visibility |
+| `onOpenChange` | `(open: boolean) => void` | - | Visibility change handler |
+| `title` | `string` | - | Alert title |
+| `description` | `string` | - | Alert description |
+| `confirmText` | `string` | `'Continue'` | Confirm button text |
+| `cancelText` | `string` | `'Cancel'` | Cancel button text |
+| `destructive` | `boolean` | `false` | Red destructive styling |
+| `onConfirm` | `() => void` | - | Confirm handler |
+
+## CSS Output
+
+```css
+.intent-alert-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+
+.intent-alert-dialog {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--intent-color-surface);
+  border-radius: var(--intent-radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 400px;
+  width: 90%;
+  padding: 24px;
+  z-index: 51;
+}
+
+.intent-alert-dialog__title {
+  margin: 0 0 8px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.intent-alert-dialog__description {
+  margin: 0 0 20px 0;
+  font-size: 0.875rem;
+  color: var(--intent-color-muted);
+  line-height: 1.5;
+}
+
+.intent-alert-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+```

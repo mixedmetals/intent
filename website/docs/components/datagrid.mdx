@@ -1,91 +1,161 @@
 ---
-sidebar_position: 69
+sidebar_position: 58
 ---
 
-import { DataGrid } from 'intent-react'
+import React from 'react';
 
 # DataGrid
 
-Advanced data table with sorting, filtering, and pagination.
+Advanced data grid with sorting, filtering, and pagination.
+
+export const DataGrid = ({ rows, columns }) => {
+  const [sortConfig, setSortConfig] = React.useState({ key: null, direction: 'asc' })
+  const [selected, setSelected] = React.useState([])
+  
+  const sortedRows = React.useMemo(() => {
+    if (!sortConfig.key) return rows
+    return [...rows].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1
+      if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1
+      return 0
+    })
+  }, [rows, sortConfig])
+  
+  const handleSort = (key) => {
+    setSortConfig(current => ({
+      key,
+      direction: current.key === key && current.direction === 'asc' ? 'desc' : 'asc'
+    }))
+  }
+  
+  const toggleSelect = (id) => {
+    setSelected(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    )
+  }
+  
+  const selectAll = () => {
+    setSelected(selected.length === rows.length ? [] : rows.map(r => r.id))
+  }
+  
+  return (
+    <div style={{ border: '1px solid var(--intent-color-border)', borderRadius: '8px', overflow: 'hidden' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr style={{ background: 'var(--intent-color-surface-elevated)' }}>
+            <th style={{ padding: '12px 16px', width: '40px' }}>
+              <input 
+                type="checkbox" 
+                checked={selected.length === rows.length && rows.length > 0}
+                onChange={selectAll}
+              />
+            </th>
+            {columns.map(col => (
+              <th 
+                key={col.key}
+                onClick={() => handleSort(col.key)}
+                style={{ 
+                  padding: '12px 16px', 
+                  textAlign: 'left', 
+                  fontWeight: 600, 
+                  fontSize: '0.875rem',
+                  cursor: 'pointer',
+                  userSelect: 'none'
+                }}
+              >
+                {col.label}
+                {sortConfig.key === col.key && (sortConfig.direction === 'asc' ? ' ↑' : ' ↓')}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {sortedRows.map(row => (
+            <tr 
+              key={row.id} 
+              style={{ 
+                borderTop: '1px solid var(--intent-color-border)',
+                background: selected.includes(row.id) ? 'var(--intent-color-primary-subtle, #dbeafe)' : 'transparent'
+              }}
+            >
+              <td style={{ padding: '12px 16px' }}>
+                <input 
+                  type="checkbox" 
+                  checked={selected.includes(row.id)}
+                  onChange={() => toggleSelect(row.id)}
+                />
+              </td>
+              {columns.map(col => (
+                <td key={col.key} style={{ padding: '12px 16px', fontSize: '0.875rem' }}>
+                  {col.render ? col.render(row[col.key], row) : row[col.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div style={{ padding: '12px 16px', borderTop: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.875rem' }}>
+        <span>{selected.length} of {rows.length} selected</span>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button style={{ padding: '6px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px', background: 'var(--intent-color-surface)' }}>Previous</button>
+          <button style={{ padding: '6px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px', background: 'var(--intent-color-surface)' }}>Next</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export const Badge = ({ children, variant = 'default' }) => {
+  const variants = {
+    active: { bg: '#dcfce7', color: '#166534' },
+    inactive: { bg: '#f3f4f6', color: '#6b7280' },
+    pending: { bg: '#fef3c7', color: '#92400e' }
+  }
+  const v = variants[variant] || variants.inactive
+  return (
+    <span style={{ 
+      display: 'inline-flex', 
+      padding: '2px 8px', 
+      borderRadius: '9999px', 
+      fontSize: '0.75rem', 
+      fontWeight: 600,
+      background: v.bg,
+      color: v.color
+    }}>
+      {children}
+    </span>
+  )
+}
 
 ## Examples
 
-### Basic DataGrid
+### Data Grid with Selection
+
+<div className="intent-demo">
+  <DataGrid 
+    rows={[
+      { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'active' },
+      { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Editor', status: 'active' },
+      { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Viewer', status: 'inactive' },
+      { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Editor', status: 'pending' }
+    ]}
+    columns={[
+      { key: 'name', label: 'Name' },
+      { key: 'email', label: 'Email' },
+      { key: 'role', label: 'Role' },
+      { key: 'status', label: 'Status', render: (v) => <Badge variant={v}>{v}</Badge> }
+    ]}
+  />
+</div>
 
 ```tsx
-import { DataGrid } from 'intent-react'
-
-<DataGrid
+<DataGrid 
+  rows={[...]}
   columns={[
-    { key: 'name', title: 'Name', sortable: true },
-    { key: 'email', title: 'Email', sortable: true },
-    { key: 'role', title: 'Role' },
-    { key: 'status', title: 'Status' },
+    { key: 'name', label: 'Name' },
+    { key: 'email', label: 'Email' },
+    { key: 'status', label: 'Status', render: (v) => <Badge>{v}</Badge> }
   ]}
-  data={users}
-  pagination
-  pageSize={10}
-/>
-```
-
-### With Selection
-
-```tsx
-const [selected, setSelected] = useState([])
-
-<DataGrid
-  selectable
-  selectedRows={selected}
-  onSelectionChange={setSelected}
-  columns={[...]}
-  data={users}
-/>
-```
-
-### With Row Actions
-
-```tsx
-<DataGrid
-  columns={[...]}
-  data={users}
-  rowActions={[
-    { label: 'Edit', icon: 'edit', onClick: (row) => editUser(row) },
-    { label: 'Delete', icon: 'trash', danger: true, 
-      onClick: (row) => deleteUser(row) },
-  ]}
-/>
-```
-
-### Async Data
-
-```tsx
-<DataGrid
-  columns={[...]}
-  fetchData={async (params) => {
-    // params: { page, pageSize, sort, filters }
-    const response = await fetchUsers(params)
-    return {
-      data: response.users,
-      total: response.total,
-    }
-  }}
-  pagination
-/>
-```
-
-### Expandable Rows
-
-```tsx
-<DataGrid
-  columns={[...]}
-  data={orders}
-  expandable
-  renderExpandedRow={(order) => (
-    <div>
-      <h4>Order Items</h4>
-      {order.items.map(item => <div key={item.id}>{item.name}</div>)}
-    </div>
-  )}
 />
 ```
 
@@ -93,71 +163,52 @@ const [selected, setSelected] = useState([])
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `columns` | `DataGridColumn[]` | required | Column definitions |
-| `data` | `object[]` | - | Table data |
-| `fetchData` | `(params) => Promise<{ data, total }>` | - | Async data loader |
-| `pagination` | `boolean` | `false` | Enable pagination |
-| `pageSize` | `number` | `10` | Rows per page |
-| `selectable` | `boolean` | `false` | Enable row selection |
-| `selectedRows` | `string[]` | - | Selected row IDs |
-| `onSelectionChange` | `(ids: string[]) => void` | - | Selection callback |
-| `rowActions` | `RowAction[]` | - | Row action buttons |
-| `expandable` | `boolean` | `false` | Enable expandable rows |
-| `renderExpandedRow` | `(row) => ReactNode` | - | Expanded content |
-| `loading` | `boolean` | `false` | Loading state |
-
-### DataGridColumn Type
-
-```typescript
-interface DataGridColumn {
-  key: string
-  title: string
-  sortable?: boolean
-  filterable?: boolean
-  width?: number | string
-  align?: 'left' | 'center' | 'right'
-  render?: (value, row) => ReactNode
-}
-```
+| `rows` | `Array<object>` | `[]` | Grid data |
+| `columns` | `Array<{key: string, label: string, render?: (value, row) => ReactNode}>` | `[]` | Column definitions |
+| `selectable` | `boolean` | `true` | Enable row selection |
+| `sortable` | `boolean` | `true` | Enable sorting |
+| `pagination` | `object` | - | Pagination config |
 
 ## CSS Output
 
 ```css
-.data-grid {
-  display: flex;
-  flex-direction: column;
+.intent-data-grid {
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  overflow: hidden;
 }
 
-.data-grid__toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--intent-spacing-3);
-  border-bottom: 1px solid var(--intent-color-border);
-}
-
-.data-grid__table {
-  flex: 1;
-  overflow: auto;
-}
-
-.data-grid__row--selected {
-  background: var(--intent-color-primary-alpha);
-}
-
-.data-grid__row--expanded {
+.intent-data-grid__header {
   background: var(--intent-color-surface-elevated);
 }
 
-.data-grid__expanded-content {
-  padding: var(--intent-spacing-4);
+.intent-data-grid__th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  user-select: none;
 }
 
-.data-grid__pagination {
+.intent-data-grid__row {
+  border-top: 1px solid var(--intent-color-border);
+}
+
+.intent-data-grid__row--selected {
+  background: var(--intent-color-primary-subtle);
+}
+
+.intent-data-grid__td {
+  padding: 12px 16px;
+  font-size: 0.875rem;
+}
+
+.intent-data-grid__footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--intent-color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--intent-spacing-3);
-  border-top: 1px solid var(--intent-color-border);
 }
 ```

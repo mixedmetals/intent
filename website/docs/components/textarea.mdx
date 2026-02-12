@@ -1,95 +1,113 @@
 ---
-sidebar_position: 11
+sidebar_position: 83
 ---
+import React from 'react';
 
 # Textarea
 
-Multi-line text input for longer content.
+Multi-line text input.
 
-export const Textarea = ({ placeholder, rows = 3, size = 'medium', validation = 'none', disabled, readOnly }) => (
-  <textarea
-    className={`intent-input intent-textarea intent-input--size-${size} intent-input--validation-${validation}`}
-    placeholder={placeholder}
-    rows={rows}
-    disabled={disabled}
-    readOnly={readOnly}
-    style={{ resize: 'vertical', minHeight: '80px', padding: '8px 12px', fontFamily: 'inherit' }}
-  />
-)
-
-export const Stack = ({ children, gap = 'normal' }) => (
-  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`}>
-    {children}
-  </div>
-)
+export const Textarea = ({ label, placeholder = "Enter text...", rows = 4, disabled = false, error }) => {
+  const [value, setValue] = React.useState('')
+  
+  return (
+    <div style={{ width: '100%' }}>
+      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>{label}</label>}
+      <textarea
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={placeholder}
+        rows={rows}
+        disabled={disabled}
+        style={{
+          width: '100%',
+          padding: '10px 12px',
+          border: `1px solid ${error ? 'var(--intent-color-error, #ef4444)' : 'var(--intent-color-border)'}`,
+          borderRadius: '8px',
+          fontSize: '0.875rem',
+          fontFamily: 'inherit',
+          resize: 'vertical',
+          outline: 'none',
+          opacity: disabled ? 0.6 : 1,
+          background: disabled ? 'var(--intent-color-surface-elevated)' : 'var(--intent-color-surface)'
+        }}
+      />
+      {error && <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-error, #ef4444)', marginTop: '4px' }}>{error}</div>}
+    </div>
+  )
+}
 
 ## Examples
 
 ### Basic Textarea
 
 <div className="intent-demo">
-  <Textarea placeholder="Enter your message..." rows={4} />
+  <Textarea label="Description" placeholder="Enter a description..." />
 </div>
 
 ```tsx
-<Textarea placeholder="Enter your message..." rows={4} />
+<Textarea label="Description" placeholder="Enter a description..." />
 ```
 
-### Sizes
+### With Error
 
 <div className="intent-demo">
-  <Stack gap="normal">
-    <Textarea size="small" placeholder="Small textarea" rows={2} />
-    <Textarea size="medium" placeholder="Medium textarea" rows={3} />
-    <Textarea size="large" placeholder="Large textarea" rows={4} />
-  </Stack>
+  <Textarea label="Bio" error="Bio must be at least 50 characters" />
 </div>
 
 ```tsx
-<Textarea size="small" rows={2} />
-<Textarea size="medium" rows={3} />
-<Textarea size="large" rows={4} />
-```
-
-### Validation States
-
-<div className="intent-demo">
-  <Stack gap="normal">
-    <Textarea validation="valid" value="This content looks good!" rows={2} readOnly />
-    <Textarea validation="invalid" value="Too short" rows={2} readOnly />
-  </Stack>
-</div>
-
-```tsx
-<Textarea validation="valid" value="This content looks good!" />
-<Textarea validation="invalid" value="Too short" />
+<Textarea label="Bio" error="Bio must be at least 50 characters" />
 ```
 
 ### Disabled
 
 <div className="intent-demo">
-  <Textarea disabled value="This textarea is disabled" rows={2} />
+  <Textarea label="Comments" disabled value="Comments are closed" />
 </div>
 
 ```tsx
-<Textarea disabled value="This textarea is disabled" />
+<Textarea label="Comments" disabled />
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Textarea size |
-| `validation` | `'valid'` \| `'invalid'` \| `'none'` | `'none'` | Validation state |
-| `rows` | `number` | `3` | Number of visible rows |
-| `disabled` | `boolean` | `false` | Disable textarea |
-| `placeholder` | `string` | - | Placeholder text |
+| `value` | `string` | - | Controlled value |
+| `label` | `string` | - | Input label |
+| `placeholder` | `string` | `""` | Placeholder text |
+| `rows` | `number` | `4` | Number of rows |
+| `disabled` | `boolean` | `false` | Disable input |
+| `error` | `string` | - | Error message |
+| `onChange` | `(value: string) => void` | - | Change handler |
 
 ## CSS Output
 
 ```css
 .intent-textarea {
-  min-height: 80px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  font-size: 0.875rem;
+  font-family: inherit;
   resize: vertical;
+  background: var(--intent-color-surface);
+}
+
+.intent-textarea:focus {
+  outline: none;
+  border-color: var(--intent-color-primary);
+  box-shadow: 0 0 0 3px var(--intent-color-primary-subtle);
+}
+
+.intent-textarea--error {
+  border-color: var(--intent-color-error);
+}
+
+.intent-textarea:disabled {
+  opacity: 0.6;
+  background: var(--intent-color-surface-elevated);
+  cursor: not-allowed;
 }
 ```

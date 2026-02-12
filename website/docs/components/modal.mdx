@@ -1,62 +1,115 @@
 ---
-sidebar_position: 10
+sidebar_position: 50
 ---
-
-import { Stack, Button, Modal, Text } from 'intent-react'
+import React from 'react';
 
 # Modal
 
-Dialog window for focused interactions.
+Overlay dialogs for important actions.
 
-## Example
+export const Modal = ({ title, children, isOpen, onClose, footer }) => {
+  if (!isOpen) return null
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      {/* Backdrop */}
+      <div 
+        style={{ 
+          position: 'absolute', 
+          inset: 0, 
+          background: 'rgba(0,0,0,0.5)', 
+          backdropFilter: 'blur(4px)' 
+        }} 
+        onClick={onClose}
+      />
+      {/* Modal */}
+      <div style={{ 
+        position: 'relative', 
+        background: 'var(--intent-color-surface)', 
+        borderRadius: '12px', 
+        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+        maxWidth: '500px',
+        width: '90%',
+        maxHeight: '90vh',
+        overflow: 'auto'
+      }}>
+        {/* Header */}
+        <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>{title}</h3>
+          <button 
+            onClick={onClose}
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              fontSize: '1.5rem', 
+              cursor: 'pointer',
+              color: 'var(--intent-color-muted)'
+            }}
+          >
+            ×
+          </button>
+        </div>
+        {/* Body */}
+        <div style={{ padding: '24px' }}>
+          {children}
+        </div>
+        {/* Footer */}
+        {footer && (
+          <div style={{ padding: '16px 24px', borderTop: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+            {footer}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
-```tsx
-import { useState } from 'react'
-import { Button, Modal, Text, Stack } from 'intent-react'
-
-function Example() {
-  const [open, setOpen] = useState(false)
-  
+export const ModalDemo = () => {
+  const [isOpen, setIsOpen] = React.useState(false)
   return (
     <>
-      <Button onClick={() => setOpen(true)}>
-        Open Modal
-      </Button>
-      
+      <button className="intent-btn intent-btn--variant-primary intent-btn--size-medium" onClick={() => setIsOpen(true)}>Open Modal</button>
       <Modal 
-        open={open} 
-        onOpenChange={setOpen}
-        title="Example Modal"
+        isOpen={isOpen} 
+        onClose={() => setIsOpen(false)}
+        title="Confirm Action"
+        footer={
+          <>
+            <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Cancel</button>
+            <button className="intent-btn intent-btn--variant-primary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Confirm</button>
+          </>
+        }
       >
-        <Text>Modal content goes here.</Text>
-        <Stack direction="row" gap="normal">
-          <Button importance="tertiary" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button importance="primary" onClick={() => setOpen(false)}>
-            Confirm
-          </Button>
-        </Stack>
+        <p style={{ margin: 0 }}>Are you sure you want to proceed with this action? This cannot be undone.</p>
       </Modal>
     </>
   )
 }
-```
 
-## Sizes
+## Examples
 
-Modals support different widths:
+### Basic Modal
 
-| Size | Width | Use Case |
-|------|-------|----------|
-| `small` | 400px | Confirmations, simple forms |
-| `medium` | 500px | Default, most content |
-| `large` | 700px | Complex forms, detail views |
-| `fullscreen` | 100% | Immersive experiences |
+<div className="intent-demo">
+  <ModalDemo />
+</div>
 
 ```tsx
-<Modal size="large" open={open} onOpenChange={setOpen}>
-  ...
+const [isOpen, setIsOpen] = useState(false)
+
+<Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+
+<Modal 
+  isOpen={isOpen} 
+  onClose={() => setIsOpen(false)}
+  title="Confirm Action"
+  footer={
+    <>
+      <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
+      <Button onClick={() => setIsOpen(false)}>Confirm</Button>
+    </>
+  }
+>
+  <p>Are you sure you want to proceed?</p>
 </Modal>
 ```
 
@@ -64,94 +117,51 @@ Modals support different widths:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `open` | `boolean` | - | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | - | State change callback |
-| `title` | `string` | - | Modal header title |
-| `size` | `'small'` \| `'medium'` \| `'large'` \| `'fullscreen'` | `'medium'` | Modal width |
-| `showClose` | `boolean` | `true` | Show close button |
-| `closeOnOverlay` | `boolean` | `true` | Close when clicking backdrop |
+| `isOpen` | `boolean` | `false` | Whether modal is open |
+| `onClose` | `() => void` | - | Called when modal closes |
+| `title` | `string` | - | Modal title |
+| `children` | `ReactNode` | - | Modal content |
+| `footer` | `ReactNode` | - | Footer content |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'` | `'md'` | Modal size |
 
-## Accessibility
+## CSS Output
 
-- Traps focus within modal when open
-- Returns focus to trigger on close
-- Supports Escape key to close
-- ARIA dialog role
-- aria-modal="true"
-
-## Pattern: Confirmation Dialog
-
-```tsx
-function DeleteConfirm({ item, onConfirm }) {
-  const [open, setOpen] = useState(false)
-  
-  return (
-    <>
-      <Button importance="tertiary" onClick={() => setOpen(true)}>
-        Delete
-      </Button>
-      
-      <Modal
-        open={open}
-        onOpenChange={setOpen}
-        title="Confirm Delete"
-        size="small"
-      >
-        <Text>
-          Are you sure you want to delete <strong>{item.name}</strong>?
-        </Text>
-        <Text size="sm" color="muted">
-          This action cannot be undone.
-        </Text>
-        <Stack direction="row" gap="normal">
-          <Button importance="tertiary" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button 
-            importance="danger" 
-            onClick={() => {
-              onConfirm(item)
-              setOpen(false)
-            }}
-          >
-            Delete
-          </Button>
-        </Stack>
-      </Modal>
-    </>
-  )
+```css
+.intent-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 50;
 }
-```
 
-## Pattern: Form Modal
+.intent-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--intent-color-surface);
+  border-radius: var(--intent-radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 500px;
+  width: 90%;
+  z-index: 51;
+}
 
-```tsx
-function EditModal({ user }) {
-  const [open, setOpen] = useState(false)
-  
-  return (
-    <Modal
-      open={open}
-      onOpenChange={setOpen}
-      title="Edit User"
-    >
-      <Form onSubmit={handleSubmit}>
-        <Field label="Name">
-          <Input defaultValue={user.name} />
-        </Field>
-        <Field label="Email">
-          <Input type="email" defaultValue={user.email} />
-        </Field>
-        <Stack direction="row" gap="normal">
-          <Button importance="tertiary" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button importance="primary" type="submit">
-            Save Changes
-          </Button>
-        </Stack>
-      </Form>
-    </Modal>
-  )
+.intent-modal__header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--intent-color-border);
+}
+
+.intent-modal__body {
+  padding: 24px;
+}
+
+.intent-modal__footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--intent-color-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 ```

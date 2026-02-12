@@ -2,74 +2,94 @@
 sidebar_position: 57
 ---
 
-import { ColorPicker } from 'intent-react'
+import React from 'react';
 
 # ColorPicker
 
 Input for selecting colors.
 
+export const ColorPicker = ({ defaultValue = '#3b82f6', label }) => {
+  const [color, setColor] = React.useState(defaultValue)
+  const [isOpen, setIsOpen] = React.useState(false)
+  
+  const presetColors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e']
+  
+  return (
+    <div style={{ width: '100%', maxWidth: '280px' }}>
+      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '8px' }}>{label}</label>}
+      <div style={{ position: 'relative' }}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            width: '100%',
+            padding: '10px 12px',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            background: 'var(--intent-color-surface)',
+            cursor: 'pointer'
+          }}
+        >
+          <div style={{ width: '24px', height: '24px', borderRadius: '4px', background: color, border: '1px solid var(--intent-color-border)' }} />
+          <span style={{ fontSize: '0.875rem', fontFamily: 'monospace', textTransform: 'uppercase' }}>{color}</span>
+        </button>
+        
+        {isOpen && (
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            marginTop: '8px',
+            padding: '16px',
+            background: 'var(--intent-color-surface)',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '12px',
+            boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+            zIndex: 50
+          }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: '6px', marginBottom: '12px' }}>
+              {presetColors.map(c => (
+                <button
+                  key={c}
+                  onClick={() => setColor(c)}
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '4px',
+                    background: c,
+                    border: color === c ? '2px solid var(--intent-color-foreground)' : '1px solid var(--intent-color-border)',
+                    cursor: 'pointer'
+                  }}
+                />
+              ))}
+            </div>
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              style={{ width: '100%', height: '40px', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 ## Examples
 
 ### Basic ColorPicker
 
-```tsx
-import { useState } from 'react'
-import { ColorPicker } from 'intent-react'
-
-function Example() {
-  const [color, setColor] = useState('#3b82f6')
-  
-  return (
-    <ColorPicker 
-      value={color}
-      onChange={setColor}
-    />
-  )
-}
-```
-
-### With Presets
+<div className="intent-demo">
+  <ColorPicker defaultValue="#3b82f6" label="Choose Color" />
+</div>
 
 ```tsx
 <ColorPicker 
-  value={color}
-  onChange={setColor}
-  presets={[
-    '#ef4444', '#f97316', '#f59e0b', '#84cc16',
-    '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6',
-  ]}
-/>
-```
-
-### Different Formats
-
-```tsx
-<ColorPicker 
-  value={color}
-  onChange={setColor}
-  format="hex"     // #3b82f6
-/>
-
-<ColorPicker 
-  value={color}
-  onChange={setColor}
-  format="rgb"     // rgb(59, 130, 246)
-/>
-
-<ColorPicker 
-  value={color}
-  onChange={setColor}
-  format="hsl"     // hsl(217, 91%, 60%)
-/>
-```
-
-### Alpha Support
-
-```tsx
-<ColorPicker 
-  value={color}
-  onChange={setColor}
-  alpha
+  defaultValue="#3b82f6"
+  onChange={(color) => console.log(color)}
 />
 ```
 
@@ -77,50 +97,56 @@ function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | - | Selected color |
-| `onChange` | `(color: string) => void` | - | Change callback |
-| `format` | `'hex'` \| `'rgb'` \| `'hsl'` | `'hex'` | Color format |
-| `alpha` | `boolean` | `false` | Allow alpha selection |
-| `presets` | `string[]` | - | Preset colors |
-| `disabled` | `boolean` | `false` | Disable picker |
+| `value` | `string` | - | Controlled color value |
+| `defaultValue` | `string` | `'#000000'` | Default color |
+| `label` | `string` | - | Input label |
+| `onChange` | `(color: string) => void` | - | Color change handler |
+| `presets` | `string[]` | - | Preset color options |
 
 ## CSS Output
 
 ```css
-.color-picker {
+.intent-color-picker {
   position: relative;
-  display: inline-block;
 }
 
-.color-picker__trigger {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--intent-radius-md);
+.intent-color-picker__trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
   border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
   cursor: pointer;
 }
 
-.color-picker__popover {
+.intent-color-picker__swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--intent-radius-sm);
+  border: 1px solid var(--intent-color-border);
+}
+
+.intent-color-picker__popover {
   position: absolute;
   top: 100%;
-  left: 0;
-  margin-top: var(--intent-spacing-1);
+  margin-top: 8px;
+  padding: 16px;
   background: var(--intent-color-surface);
   border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-lg);
-  box-shadow: var(--intent-shadow-lg);
-  padding: var(--intent-spacing-4);
+  border-radius: var(--intent-radius-xl);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   z-index: 50;
 }
 
-.color-picker__presets {
+.intent-color-picker__presets {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: var(--intent-spacing-1);
-  margin-top: var(--intent-spacing-3);
+  gap: 6px;
 }
 
-.color-picker__preset {
+.intent-color-picker__preset {
   width: 24px;
   height: 24px;
   border-radius: var(--intent-radius-sm);

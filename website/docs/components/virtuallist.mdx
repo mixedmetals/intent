@@ -1,67 +1,81 @@
 ---
-sidebar_position: 63
+sidebar_position: 101
 ---
 
-import { VirtualList } from 'intent-react'
+import React from 'react';
 
 # VirtualList
 
-High-performance list for large datasets.
+Efficiently render large lists.
+
+export const VirtualList = ({ items, itemHeight = 40, height = 200 }) => {
+  const [scrollTop, setScrollTop] = React.useState(0)
+  const containerRef = React.useRef(null)
+  
+  const visibleCount = Math.ceil(height / itemHeight)
+  const totalHeight = items.length * itemHeight
+  const startIndex = Math.floor(scrollTop / itemHeight)
+  const endIndex = Math.min(startIndex + visibleCount + 1, items.length)
+  
+  const visibleItems = items.slice(startIndex, endIndex)
+  const offsetY = startIndex * itemHeight
+  
+  return (
+    <div
+      ref={containerRef}
+      onScroll={(e) => setScrollTop(e.target.scrollTop)}
+      style={{
+        height,
+        overflow: 'auto',
+        border: '1px solid var(--intent-color-border)',
+        borderRadius: '8px'
+      }}
+    >
+      <div style={{ height: totalHeight, position: 'relative' }}>
+        <div style={{ transform: `translateY(${offsetY}px)` }}>
+          {visibleItems.map((item, i) => (
+            <div
+              key={startIndex + i}
+              style={{
+                height: itemHeight,
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0 16px',
+                borderBottom: '1px solid var(--intent-color-border)',
+                background: 'var(--intent-color-surface)',
+                fontSize: '0.875rem'
+              }}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding: '8px 16px', fontSize: '0.75rem', color: 'var(--intent-color-muted)', borderTop: '1px solid var(--intent-color-border)' }}>
+        Showing {visibleItems.length} of {items.length} items (virtualized)
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
-### Basic VirtualList
+### Large List
+
+<div className="intent-demo">
+  <VirtualList 
+    items={Array.from({ length: 1000 }, (_, i) => `Item ${i + 1}`)}
+    itemHeight={40}
+    height={200}
+  />
+</div>
 
 ```tsx
-import { VirtualList } from 'intent-react'
-
-const items = Array.from({ length: 10000 }, (_, i) => ({
-  id: i,
-  name: `Item ${i}`,
-}))
-
-<VirtualList
-  items={items}
-  itemHeight={50}
-  renderItem={(item) => (
-    <div style={{ padding: 16, borderBottom: '1px solid #eee' }}>
-      {item.name}
-    </div>
-  )}
+<VirtualList 
+  items={largeArray}
+  itemHeight={40}
   height={400}
-/>
-```
-
-### With Variable Heights
-
-```tsx
-<VirtualList
-  items={items}
-  estimateItemHeight={50}
-  getItemHeight={(item) => item.expanded ? 100 : 50}
-  renderItem={(item) => (
-    <div style={{ padding: 16 }}>
-      <h4>{item.title}</h4>
-      {item.expanded && <p>{item.description}</p>}
-    </div>
-  )}
-  height={600}
-/>
-```
-
-### Horizontal Scroll
-
-```tsx
-<VirtualList
-  direction="horizontal"
-  items={items}
-  itemWidth={200}
-  renderItem={(item) => (
-    <Card padding="normal">
-      <Text>{item.name}</Text>
-    </Card>
-  )}
-  width={800}
+  renderItem={(item) => <div>{item}</div>}
 />
 ```
 
@@ -69,45 +83,33 @@ const items = Array.from({ length: 10000 }, (_, i) => ({
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `T[]` | required | List items |
-| `renderItem` | `(item: T, index: number) => ReactNode` | required | Item renderer |
-| `itemHeight` | `number` | required | Fixed item height |
-| `estimateItemHeight` | `number` | - | Estimated height (variable) |
-| `getItemHeight` | `(item: T) => number` | - | Get item height (variable) |
-| `itemWidth` | `number` | - | Fixed item width (horizontal) |
-| `height` | `number` | required | List container height |
-| `width` | `number` \| `'100%'` | `'100%'` | List container width |
-| `direction` | `'vertical'` \| `'horizontal'` | `'vertical'` | Scroll direction |
-| `overscan` | `number` | `3` | Items to render outside viewport |
-| `onScroll` | `(scrollTop: number) => void` | - | Scroll callback |
+| `items` | `Array<any>` | `[]` | List items |
+| `itemHeight` | `number` | `40` | Height of each item |
+| `height` | `number` | `400` | Container height |
+| `renderItem` | `(item, index) => ReactNode` | - | Item renderer |
+| `overscan` | `number` | `5` | Extra items to render |
 
 ## CSS Output
 
 ```css
-.virtual-list {
+.intent-virtual-list {
   overflow: auto;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+}
+
+.intent-virtual-list__container {
   position: relative;
 }
 
-.virtual-list__content {
-  position: relative;
-}
-
-.virtual-list__item {
+.intent-virtual-list__item {
   position: absolute;
   left: 0;
   right: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--intent-color-border);
+  background: var(--intent-color-surface);
 }
 ```
-
-## When to Use
-
-Use **VirtualList** when:
-- Rendering 100+ items
-- Items have consistent height
-- Performance is critical
-
-Don't use when:
-- Fewer than 50 items (use regular List)
-- Items need complex animations
-- Grid layout (use Grid instead)

@@ -1,148 +1,143 @@
 ---
-sidebar_position: 49
+sidebar_position: 86
 ---
+import React from 'react';
 
 # Banner
 
-Persistent notification at the top of the page.
+Site-wide announcement banners.
 
-## Example
-
-```tsx
-import { useState } from 'react'
-import { Banner } from 'intent-react'
-
-function Example() {
-  const [show, setShow] = useState(true)
+export const Banner = ({ children, variant = 'info', dismissible = false }) => {
+  const [dismissed, setDismissed] = React.useState(false)
   
-  if (!show) return null
+  if (dismissed) return null
+  
+  const variants = {
+    info: { background: '#dbeafe', color: '#1e40af', border: '#93c5fd' },
+    warning: { background: '#fef3c7', color: '#92400e', border: '#fcd34d' },
+    error: { background: '#fee2e2', color: '#991b1b', border: '#fca5a5' },
+    success: { background: '#dcfce7', color: '#166534', border: '#86efac' }
+  }
+  
+  const v = variants[variant]
   
   return (
-    <Banner 
-      variant="info"
-      title="New Features Available"
-      description="Check out the latest updates."
-      action={{ label: 'Learn More', onClick: () => {} }}
-      onDismiss={() => setShow(false)}
-    />
+    <div style={{ 
+      padding: '12px 16px', 
+      background: v.background, 
+      color: v.color,
+      borderBottom: `1px solid ${v.border}`,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '12px',
+      fontSize: '0.875rem'
+    }}>
+      <span style={{ flex: 1, textAlign: 'center' }}>{children}</span>
+      {dismissible && (
+        <button 
+          onClick={() => setDismissed(true)}
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            cursor: 'pointer', 
+            color: v.color,
+            fontSize: '1.25rem',
+            lineHeight: 1
+          }}
+        >
+          ×
+        </button>
+      )}
+    </div>
   )
 }
-```
 
-## Variants
+## Examples
 
-### Info
+### Info Banner
 
-```tsx
-<Banner 
-  variant="info"
-  title="Scheduled Maintenance"
-  description="The system will be down for maintenance on Sunday at 2 AM."
-/>
-```
-
-### Success
+<div className="intent-demo" style={{ padding: 0, overflow: 'hidden' }}>
+  <Banner>
+    🎉 New features available! Check out the latest updates.
+  </Banner>
+</div>
 
 ```tsx
-<Banner 
-  variant="success"
-  title="Deployment Successful"
-  description="Your changes are now live."
-/>
+<Banner>
+  🎉 New features available! Check out the latest updates.
+</Banner>
 ```
 
-### Warning
+### Warning with Dismiss
+
+<div className="intent-demo" style={{ padding: 0, overflow: 'hidden' }}>
+  <Banner variant="warning" dismissible>
+    ⚠️ Scheduled maintenance tonight at 2 AM.
+  </Banner>
+</div>
 
 ```tsx
-<Banner 
-  variant="warning"
-  title="Storage Almost Full"
-  description="You've used 90% of your storage. Upgrade to add more."
-  action={{ label: 'Upgrade', onClick: handleUpgrade }}
-/>
+<Banner variant="warning" dismissible>
+  ⚠️ Scheduled maintenance tonight at 2 AM.
+</Banner>
 ```
 
-### Danger
+### Error Banner
+
+<div className="intent-demo" style={{ padding: 0, overflow: 'hidden' }}>
+  <Banner variant="error">
+    🚫 Service disruption detected. We're working on it.
+  </Banner>
+</div>
 
 ```tsx
-<Banner 
-  variant="danger"
-  title="Payment Failed"
-  description="We couldn't process your payment. Please update your billing info."
-  action={{ label: 'Update Billing', onClick: handleBilling }}
-/>
-```
-
-## Sticky
-
-Keep banner visible when scrolling:
-
-```tsx
-<Banner 
-  sticky
-  variant="info"
-  title="Welcome!"
-  description="Complete your profile to get started."
-/>
+<Banner variant="error">
+  🚫 Service disruption detected. We're working on it.
+</Banner>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'info'` \| `'success'` \| `'warning'` \| `'danger'` | `'info'` | Banner style |
-| `title` | `string` | required | Banner title |
-| `description` | `string` | - | Banner description |
-| `action` | `{ label: string, onClick: () => void }` | - | Action button |
-| `dismissible` | `boolean` | `true` | Show dismiss button |
-| `onDismiss` | `() => void` | - | Dismiss callback |
-| `sticky` | `boolean` | `false` | Stick to top |
+| `variant` | `'info' \| 'warning' \| 'error' \| 'success'` | `'info'` | Banner style |
+| `dismissible` | `boolean` | `false` | Show close button |
+| `children` | `ReactNode` | - | Banner content |
 
 ## CSS Output
 
 ```css
-.banner {
+.intent-banner {
+  padding: 12px 16px;
   display: flex;
-  align-items: flex-start;
-  gap: var(--intent-spacing-4);
-  padding: var(--intent-spacing-4);
-  background: var(--intent-color-info-alpha);
-  border-bottom: 1px solid var(--intent-color-info);
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 0.875rem;
 }
 
-.banner--success {
-  background: var(--intent-color-success-alpha);
-  border-color: var(--intent-color-success);
+.intent-banner--info {
+  background: #dbeafe;
+  color: #1e40af;
+  border-bottom: 1px solid #93c5fd;
 }
 
-.banner--warning {
-  background: var(--intent-color-warning-alpha);
-  border-color: var(--intent-color-warning);
+.intent-banner--warning {
+  background: #fef3c7;
+  color: #92400e;
+  border-bottom: 1px solid #fcd34d;
 }
 
-.banner--danger {
-  background: var(--intent-color-danger-alpha);
-  border-color: var(--intent-color-danger);
+.intent-banner--error {
+  background: #fee2e2;
+  color: #991b1b;
+  border-bottom: 1px solid #fca5a5;
 }
 
-.banner--sticky {
-  position: sticky;
-  top: 0;
-  z-index: 50;
+.intent-banner--success {
+  background: #dcfce7;
+  color: #166534;
+  border-bottom: 1px solid #86efac;
 }
 ```
-
-## Banner vs Alert vs Toast
-
-Use **Banner** when:
-- Information is persistent and important
-- At the top of the page
-- User should eventually read it
-
-Use **Alert** when:
-- Contextual to a specific section
-- Immediate feedback needed
-
-Use **Toast** when:
-- Temporary notification
-- Doesn't require immediate action

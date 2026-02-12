@@ -1,75 +1,95 @@
 ---
-sidebar_position: 59
+sidebar_position: 89
 ---
-
-import { OTPInput } from 'intent-react'
+import React from 'react';
 
 # OTPInput
 
-One-time password input with individual digit fields.
+One-time password input component.
+
+export const OTPInput = ({ length = 6, label }) => {
+  const [values, setValues] = React.useState(Array(length).fill(''))
+  const inputRefs = React.useRef([])
+  
+  const handleChange = (index, value) => {
+    if (!/^\d*$/.test(value)) return
+    const newValues = [...values]
+    newValues[index] = value.slice(-1)
+    setValues(newValues)
+    
+    if (value && index < length - 1) {
+      inputRefs.current[index + 1]?.focus()
+    }
+  }
+  
+  const handleKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !values[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus()
+    }
+  }
+  
+  const handlePaste = (e) => {
+    e.preventDefault()
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, length)
+    const newValues = [...values]
+    pasted.split('').forEach((char, i) => {
+      if (i < length) newValues[i] = char
+    })
+    setValues(newValues)
+  }
+  
+  return (
+    <div>
+      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '8px' }}>{label}</label>}
+      <div style={{ display: 'flex', gap: '8px' }} onPaste={handlePaste}>
+        {values.map((value, i) => (
+          <input
+            key={i}
+            ref={(el) => inputRefs.current[i] = el}
+            type="text"
+            inputMode="numeric"
+            maxLength={1}
+            value={value}
+            onChange={(e) => handleChange(i, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(i, e)}
+            style={{
+              width: '48px',
+              height: '56px',
+              textAlign: 'center',
+              fontSize: '1.25rem',
+              fontWeight: 600,
+              border: '1px solid var(--intent-color-border)',
+              borderRadius: '8px',
+              background: 'var(--intent-color-surface)',
+              outline: 'none'
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
-### Basic OTPInput
+### 6-Digit OTP
+
+<div className="intent-demo">
+  <OTPInput length={6} label="Enter verification code" />
+</div>
 
 ```tsx
-import { useState } from 'react'
-import { OTPInput } from 'intent-react'
-
-function Example() {
-  const [otp, setOtp] = useState('')
-  
-  return (
-    <OTPInput 
-      length={6}
-      value={otp}
-      onChange={setOtp}
-    />
-  )
-}
+<OTPInput length={6} label="Enter verification code" />
 ```
 
-### With Verification
+### 4-Digit PIN
+
+<div className="intent-demo">
+  <OTPInput length={4} label="Enter PIN" />
+</div>
 
 ```tsx
-const [otp, setOtp] = useState('')
-const [verifying, setVerifying] = useState(false)
-const [error, setError] = useState('')
-
-<OTPInput 
-  length={6}
-  value={otp}
-  onChange={(value) => {
-    setOtp(value)
-    setError('')
-    if (value.length === 6) {
-      verifyOTP(value)
-    }
-  }}
-  error={!!error}
-/>
-```
-
-### Numeric Only
-
-```tsx
-<OTPInput 
-  length={4}
-  type="numeric"
-  value={otp}
-  onChange={setOtp}
-/>
-```
-
-### Secure Input
-
-```tsx
-<OTPInput 
-  length={6}
-  secure  // Masks input like password
-  value={otp}
-  onChange={setOtp}
-/>
+<OTPInput length={4} label="Enter PIN" />
 ```
 
 ## Props
@@ -77,44 +97,33 @@ const [error, setError] = useState('')
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `length` | `number` | `6` | Number of digits |
-| `value` | `string` | - | Current value |
-| `onChange` | `(value: string) => void` | - | Change callback |
-| `type` | `'text'` \| `'numeric'` | `'text'` | Input type |
-| `secure` | `boolean` | `false` | Mask input |
-| `disabled` | `boolean` | `false` | Disable input |
-| `error` | `boolean` | `false` | Error state |
-| `autoFocus` | `boolean` | `true` | Auto-focus first field |
+| `value` | `string` | - | Controlled value |
+| `label` | `string` | - | Input label |
+| `mask` | `boolean` | `false` | Mask input as dots |
+| `onComplete` | `(value: string) => void` | - | Called when all digits entered |
+| `onChange` | `(value: string) => void` | - | Change handler |
 
 ## CSS Output
 
 ```css
-.otp-input {
+.intent-otp-input {
   display: flex;
-  gap: var(--intent-spacing-2);
+  gap: 8px;
 }
 
-.otp-input__field {
+.intent-otp-input__field {
   width: 48px;
   height: 56px;
   text-align: center;
-  font-size: var(--intent-font-size-xl);
+  font-size: 1.25rem;
   font-weight: 600;
   border: 1px solid var(--intent-color-border);
   border-radius: var(--intent-radius-md);
   background: var(--intent-color-surface);
 }
 
-.otp-input__field:focus {
+.intent-otp-input__field:focus {
   border-color: var(--intent-color-primary);
-  box-shadow: 0 0 0 2px var(--intent-color-primary-alpha);
-  outline: none;
-}
-
-.otp-input__field--error {
-  border-color: var(--intent-color-danger);
-}
-
-.otp-input__field--filled {
-  background: var(--intent-color-surface-elevated);
+  box-shadow: 0 0 0 3px var(--intent-color-primary-subtle);
 }
 ```

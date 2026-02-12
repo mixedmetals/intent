@@ -1,160 +1,149 @@
 ---
-sidebar_position: 62
+sidebar_position: 91
 ---
-
-import { Notification } from 'intent-react'
+import React from 'react';
 
 # Notification
 
-Toast notification system with queue management.
+Toast notifications and alerts.
+
+export const Notification = ({ title, message, variant = 'info', onClose }) => {
+  const variants = {
+    info: { icon: 'ℹ️', background: '#eff6ff', border: '#bfdbfe', color: '#1e40af' },
+    success: { icon: '✓', background: '#f0fdf4', border: '#bbf7d0', color: '#166534' },
+    warning: { icon: '⚠️', background: '#fffbeb', border: '#fde68a', color: '#92400e' },
+    error: { icon: '✕', background: '#fef2f2', border: '#fecaca', color: '#991b1b' }
+  }
+  
+  const v = variants[variant]
+  
+  return (
+    <div style={{ 
+      display: 'flex', 
+      alignItems: 'flex-start', 
+      gap: '12px', 
+      padding: '16px',
+      background: v.background,
+      border: `1px solid ${v.border}`,
+      borderRadius: '8px',
+      color: v.color
+    }}>
+      <span style={{ fontSize: '1.125rem' }}>{v.icon}</span>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontWeight: 600, marginBottom: '4px' }}>{title}</div>
+        <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>{message}</div>
+      </div>
+      {onClose && (
+        <button 
+          onClick={onClose}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: v.color }}
+        >
+          ×
+        </button>
+      )}
+    </div>
+  )
+}
 
 ## Examples
 
-### Basic Usage
+### Info Notification
+
+<div className="intent-demo">
+  <Notification 
+    title="Information"
+    message="Your settings have been saved successfully."
+    variant="info"
+  />
+</div>
 
 ```tsx
-import { useNotification } from 'intent-react'
-
-function Example() {
-  const notify = useNotification()
-  
-  const handleClick = () => {
-    notify({
-      title: 'Success!',
-      description: 'Your changes have been saved.',
-      variant: 'success',
-    })
-  }
-  
-  return <Button onClick={handleClick}>Show Notification</Button>
-}
+<Notification 
+  title="Information"
+  message="Your settings have been saved."
+  variant="info"
+/>
 ```
 
-### Different Variants
+### Success with Close
+
+<div className="intent-demo">
+  <Notification 
+    title="Success!"
+    message="Your account has been created."
+    variant="success"
+    onClose={() => {}}
+  />
+</div>
 
 ```tsx
-// Success
-notify.success({
-  title: 'Saved!',
-  description: 'Changes saved successfully.',
-})
-
-// Error
-notify.error({
-  title: 'Error!',
-  description: 'Something went wrong.',
-})
-
-// Warning
-notify.warning({
-  title: 'Warning',
-  description: 'Please review your input.',
-})
-
-// Info
-notify.info({
-  title: 'FYI',
-  description: 'New features available.',
-})
+<Notification 
+  title="Success!"
+  message="Your account has been created."
+  variant="success"
+  onClose={() => setShow(false)}
+/>
 ```
 
-### With Action
+### Error Notification
+
+<div className="intent-demo">
+  <Notification 
+    title="Error"
+    message="Something went wrong. Please try again."
+    variant="error"
+  />
+</div>
 
 ```tsx
-notify({
-  title: 'Update Available',
-  description: 'A new version is ready.',
-  action: {
-    label: 'Update',
-    onClick: () => handleUpdate(),
-  },
-})
-```
-
-### Persistent
-
-```tsx
-notify({
-  title: 'Important',
-  description: 'This notification stays until dismissed.',
-  duration: Infinity,
-})
-```
-
-## Provider Setup
-
-```tsx
-import { NotificationProvider } from 'intent-react'
-
-function App() {
-  return (
-    <NotificationProvider 
-      max={5}
-      position="top-right"
-    >
-      <YourApp />
-    </NotificationProvider>
-  )
-}
+<Notification 
+  title="Error"
+  message="Something went wrong."
+  variant="error"
+/>
 ```
 
 ## Props
 
-### notify options
-
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `title` | `string` | required | Notification title |
-| `description` | `string` | - | Description text |
-| `variant` | `'success'` \| `'error'` \| `'warning'` \| `'info'` | `'info'` | Variant style |
-| `duration` | `number` | `5000` | Duration in ms |
-| `action` | `{ label: string, onClick: () => void }` | - | Action button |
-
-### NotificationProvider
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `max` | `number` | `5` | Max notifications shown |
-| `position` | `'top-left'` \| `'top-right'` \| `'bottom-left'` \| `'bottom-right'` | `'bottom-right'` | Position |
+| `title` | `string` | - | Notification title |
+| `message` | `string` | - | Notification message |
+| `variant` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | Notification style |
+| `onClose` | `() => void` | - | Close handler |
 
 ## CSS Output
 
 ```css
-.notification-container {
-  position: fixed;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: var(--intent-spacing-2);
-}
-
-.notification-container--top-right {
-  top: var(--intent-spacing-4);
-  right: var(--intent-spacing-4);
-}
-
-.notification {
+.intent-notification {
   display: flex;
   align-items: flex-start;
-  gap: var(--intent-spacing-3);
-  padding: var(--intent-spacing-4);
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
+  gap: 12px;
+  padding: 16px;
   border-radius: var(--intent-radius-md);
-  box-shadow: var(--intent-shadow-lg);
-  animation: notification-slide-in 200ms ease;
-  min-width: 300px;
-  max-width: 400px;
 }
 
-@keyframes notification-slide-in {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.intent-notification--info {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.intent-notification--success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+.intent-notification--warning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.intent-notification--error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
 }
 ```

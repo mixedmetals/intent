@@ -1,135 +1,88 @@
 ---
-sidebar_position: 35
+sidebar_position: 94
 ---
-
-import { Sidebar, Badge } from 'intent-react'
+import React from 'react';
 
 # Sidebar
 
-Vertical navigation for application side menu.
+Application sidebar navigation.
 
-## Example
+export const Sidebar = ({ items }) => {
+  const [active, setActive] = React.useState(items[0]?.id)
+  
+  return (
+    <div style={{ 
+      width: '240px', 
+      background: 'var(--intent-color-surface-elevated)', 
+      borderRight: '1px solid var(--intent-color-border)',
+      minHeight: '300px',
+      padding: '16px'
+    }}>
+      <div style={{ fontWeight: 700, fontSize: '1.125rem', marginBottom: '16px', padding: '0 12px' }}>
+        My App
+      </div>
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        {items.map((item) => (
+          <a
+            key={item.id}
+            href={item.href}
+            onClick={(e) => { e.preventDefault(); setActive(item.id); }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '10px 12px',
+              borderRadius: '6px',
+              textDecoration: 'none',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              color: active === item.id ? 'var(--intent-color-primary)' : 'var(--intent-color-foreground)',
+              background: active === item.id ? 'var(--intent-color-primary-subtle, #dbeafe)' : 'transparent'
+            }}
+          >
+            <span>{item.icon}</span>
+            <span>{item.label}</span>
+            {item.badge && (
+              <span style={{ 
+                marginLeft: 'auto', 
+                padding: '2px 8px', 
+                background: 'var(--intent-color-error, #ef4444)', 
+                color: 'white', 
+                borderRadius: '9999px', 
+                fontSize: '0.75rem' 
+              }}>
+                {item.badge}
+              </span>
+            )}
+          </a>
+        ))}
+      </nav>
+    </div>
+  )
+}
+
+## Examples
+
+### Navigation Sidebar
+
+<div className="intent-demo" style={{ padding: 0 }}>
+  <Sidebar 
+    items={[
+      { id: 'dashboard', label: 'Dashboard', icon: '📊', href: '/dashboard' },
+      { id: 'projects', label: 'Projects', icon: '📁', href: '/projects', badge: '3' },
+      { id: 'tasks', label: 'Tasks', icon: '✓', href: '/tasks' },
+      { id: 'team', label: 'Team', icon: '👥', href: '/team' },
+      { id: 'settings', label: 'Settings', icon: '⚙️', href: '/settings' }
+    ]}
+  />
+</div>
 
 ```tsx
-import { Sidebar, Badge } from 'intent-react'
-
-<Sidebar
-  logo={<Logo />}
+<Sidebar 
   items={[
-    { 
-      label: 'Dashboard', 
-      icon: 'layout-dashboard', 
-      href: '/dashboard',
-      active: true 
-    },
-    { 
-      label: 'Projects', 
-      icon: 'folder',
-      href: '/projects',
-      badge: '12'
-    },
-    { 
-      label: 'Tasks', 
-      icon: 'check-square',
-      href: '/tasks'
-    },
-    { 
-      label: 'Team', 
-      icon: 'users',
-      href: '/team'
-    },
-    { 
-      label: 'Settings', 
-      icon: 'settings',
-      href: '/settings'
-    },
+    { id: 'dashboard', label: 'Dashboard', icon: '📊', href: '/dashboard' },
+    { id: 'projects', label: 'Projects', icon: '📁', href: '/projects', badge: '3' }
   ]}
-/>
-```
-
-## With Sections
-
-```tsx
-<Sidebar
-  logo={<Logo />}
-  sections={[
-    {
-      title: 'Workspace',
-      items: [
-        { label: 'Dashboard', icon: 'layout-dashboard', href: '/dashboard' },
-        { label: 'Projects', icon: 'folder', href: '/projects' },
-        { label: 'Tasks', icon: 'check-square', href: '/tasks' },
-      ]
-    },
-    {
-      title: 'Administration',
-      items: [
-        { label: 'Team', icon: 'users', href: '/team' },
-        { label: 'Billing', icon: 'credit-card', href: '/billing' },
-        { label: 'Settings', icon: 'settings', href: '/settings' },
-      ]
-    },
-  ]}
-/>
-```
-
-## Collapsible
-
-```tsx
-const [collapsed, setCollapsed] = useState(false)
-
-<Sidebar
-  collapsible
-  collapsed={collapsed}
-  onCollapse={setCollapsed}
-  logo={<Logo />}
-  items={[...]}
-/>
-```
-
-## Nested Items
-
-```tsx
-<Sidebar
-  logo={<Logo />}
-  items={[
-    { label: 'Dashboard', icon: 'layout-dashboard', href: '/dashboard' },
-    { 
-      label: 'Products', 
-      icon: 'package',
-      items: [
-        { label: 'All Products', href: '/products' },
-        { label: 'Categories', href: '/categories' },
-        { label: 'Inventory', href: '/inventory' },
-      ]
-    },
-    { 
-      label: 'Orders', 
-      icon: 'shopping-cart',
-      badge: '3',
-      items: [
-        { label: 'All Orders', href: '/orders' },
-        { label: 'Pending', href: '/orders/pending' },
-        { label: 'Completed', href: '/orders/completed' },
-      ]
-    },
-  ]}
-/>
-```
-
-## Footer
-
-```tsx
-<Sidebar
-  logo={<Logo />}
-  items={[...]}
-  footer={
-    <UserCard 
-      name="John Doe"
-      email="john@example.com"
-      avatar="/avatar.jpg"
-    />
-  }
 />
 ```
 
@@ -137,133 +90,48 @@ const [collapsed, setCollapsed] = useState(false)
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `logo` | `ReactNode` | - | Brand logo |
-| `items` | `SidebarItem[]` | `[]` | Navigation items |
-| `sections` | `Section[]` | - | Grouped sections |
-| `collapsible` | `boolean` | `false` | Allow collapse |
-| `collapsed` | `boolean` | `false` | Collapsed state |
-| `onCollapse` | `(collapsed: boolean) => void` | - | Collapse callback |
-| `footer` | `ReactNode` | - | Footer content |
-| `width` | `number` | `240` | Sidebar width (px) |
-| `collapsedWidth` | `number` | `64` | Collapsed width (px) |
-
-### SidebarItem Type
-
-```typescript
-interface SidebarItem {
-  label: string
-  icon?: string
-  href?: string
-  onClick?: () => void
-  active?: boolean
-  disabled?: boolean
-  badge?: string | number
-  items?: SidebarItem[]  // Nested items
-}
-```
-
-### Section Type
-
-```typescript
-interface Section {
-  title?: string
-  items: SidebarItem[]
-}
-```
+| `items` | `Array<{id: string, label: string, icon?: ReactNode, href: string, badge?: string}>` | `[]` | Navigation items |
+| `defaultActive` | `string` | - | Default active item ID |
 
 ## CSS Output
 
 ```css
-.sidebar {
+.intent-sidebar {
+  width: 240px;
+  background: var(--intent-color-surface-elevated);
+  border-right: 1px solid var(--intent-color-border);
+}
+
+.intent-sidebar__nav {
   display: flex;
   flex-direction: column;
-  width: 240px;
-  height: 100vh;
-  background: var(--intent-color-surface);
-  border-right: 1px solid var(--intent-color-border);
-  position: fixed;
-  left: 0;
-  top: 0;
+  gap: 2px;
+  padding: 16px;
 }
 
-.sidebar--collapsed {
-  width: 64px;
-}
-
-.sidebar__logo {
+.intent-sidebar__link {
   display: flex;
   align-items: center;
-  height: 64px;
-  padding: 0 var(--intent-spacing-4);
-  border-bottom: 1px solid var(--intent-color-border);
-}
-
-.sidebar__content {
-  flex: 1;
-  overflow-y: auto;
-  padding: var(--intent-spacing-2);
-}
-
-.sidebar__section {
-  margin-bottom: var(--intent-spacing-4);
-}
-
-.sidebar__section-title {
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
-  font-size: var(--intent-font-size-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--intent-color-text-muted);
-}
-
-.sidebar__item {
-  display: flex;
-  align-items: center;
-  gap: var(--intent-spacing-3);
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+  gap: 12px;
+  padding: 10px 12px;
   border-radius: var(--intent-radius-md);
-  color: var(--intent-color-text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--intent-color-foreground);
 }
 
-.sidebar__item:hover {
-  background: var(--intent-color-surface-elevated);
-  color: var(--intent-color-text);
-}
-
-.sidebar__item--active {
-  background: var(--intent-color-primary-alpha);
+.intent-sidebar__link--active {
+  background: var(--intent-color-primary-subtle);
   color: var(--intent-color-primary);
 }
 
-.sidebar__item-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.sidebar__item-badge {
+.intent-sidebar__badge {
   margin-left: auto;
-}
-
-.sidebar__footer {
-  padding: var(--intent-spacing-3);
-  border-top: 1px solid var(--intent-color-border);
-}
-```
-
-## Layout Integration
-
-```tsx
-function Layout({ children }) {
-  return (
-    <div style={{ display: 'flex' }}>
-      <Sidebar
-        items={navItems}
-        style={{ position: 'fixed' }}
-      />
-      <main style={{ marginLeft: 240, flex: 1 }}>
-        {children}
-      </main>
-    </div>
-  )
+  padding: 2px 8px;
+  background: var(--intent-color-error);
+  color: white;
+  border-radius: var(--intent-radius-full);
+  font-size: 0.75rem;
 }
 ```

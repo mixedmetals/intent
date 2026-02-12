@@ -1,29 +1,37 @@
 ---
-sidebar_position: 61
+sidebar_position: 65
 ---
+
+import React from 'react';
 
 # Kbd
 
-Keyboard key indicator for shortcuts.
+Keyboard key component for shortcuts.
 
 export const Kbd = ({ children, size = 'md' }) => {
-  const padding = size === 'sm' ? '2px 6px' : '4px 10px'
-  const fontSize = size === 'sm' ? '12px' : '14px'
+  const sizes = {
+    sm: { padding: '2px 6px', fontSize: '0.75rem' },
+    md: { padding: '4px 8px', fontSize: '0.875rem' },
+    lg: { padding: '6px 12px', fontSize: '1rem' }
+  }
+  
+  const s = sizes[size]
   
   return (
     <kbd style={{
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: 'var(--intent-font-mono)',
-      fontWeight: 500,
-      fontSize,
-      padding,
+      padding: s.padding,
+      fontSize: s.fontSize,
+      fontFamily: 'ui-monospace, monospace',
+      fontWeight: 600,
+      color: 'var(--intent-color-foreground)',
+      background: 'var(--intent-color-surface)',
       border: '1px solid var(--intent-color-border)',
       borderRadius: '6px',
-      background: 'var(--intent-color-surface-elevated)',
       boxShadow: '0 2px 0 var(--intent-color-border)',
-      lineHeight: 1
+      whiteSpace: 'nowrap'
     }}>
       {children}
     </kbd>
@@ -32,55 +40,77 @@ export const Kbd = ({ children, size = 'md' }) => {
 
 ## Examples
 
-### Basic Kbd
+### Basic Keys
 
 <div className="intent-demo">
-  <p>Press <Kbd>Cmd</Kbd> + <Kbd>K</Kbd> to open command palette</p>
-</div>
-
-```tsx
-<Text>
-  Press <Kbd>Cmd</Kbd> + <Kbd>K</Kbd> to open command palette
-</Text>
-```
-
-### Common Shortcuts
-
-<div className="intent-demo">
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div><Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> to copy</div>
-    <div><Kbd>Ctrl</Kbd> + <Kbd>V</Kbd> to paste</div>
-    <div><Kbd>Ctrl</Kbd> + <Kbd>Z</Kbd> to undo</div>
-    <div><Kbd>Ctrl</Kbd> + <Kbd>S</Kbd> to save</div>
+  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+    <Kbd>Ctrl</Kbd>
+    <span>+</span>
+    <Kbd>C</Kbd>
   </div>
 </div>
 
 ```tsx
-<Text><Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> to copy</Text>
-<Text><Kbd>Ctrl</Kbd> + <Kbd>V</Kbd> to paste</Text>
-<Text><Kbd>Ctrl</Kbd> + <Kbd>Z</Kbd> to undo</Text>
+<Kbd>Ctrl</Kbd> + <Kbd>C</Kbd>
 ```
 
 ### Sizes
 
 <div className="intent-demo">
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <div><Kbd size="sm">Small</Kbd> keyboard key</div>
-    <div><Kbd size="md">Medium</Kbd> keyboard key</div>
+  <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+    <Kbd size="sm">⌘</Kbd>
+    <Kbd size="md">⌘</Kbd>
+    <Kbd size="lg">⌘</Kbd>
   </div>
 </div>
 
 ```tsx
 <Kbd size="sm">Small</Kbd>
 <Kbd size="md">Medium</Kbd>
+<Kbd size="lg">Large</Kbd>
+```
+
+### Keyboard Shortcuts
+
+<div className="intent-demo">
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span>Copy</span>
+      <div style={{ display: 'flex', gap: '4px' }}>
+        <Kbd>Ctrl</Kbd>
+        <Kbd>C</Kbd>
+      </div>
+    </div>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span>Paste</span>
+      <div style={{ display: 'flex', gap: '4px' }}>
+        <Kbd>Ctrl</Kbd>
+        <Kbd>V</Kbd>
+      </div>
+    </div>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span>Save</span>
+      <div style={{ display: 'flex', gap: '4px' }}>
+        <Kbd>Ctrl</Kbd>
+        <Kbd>S</Kbd>
+      </div>
+    </div>
+  </div>
+</div>
+
+```tsx
+<div style={{ display: 'flex', gap: '4px' }}>
+  <Kbd>Ctrl</Kbd>
+  <Kbd>S</Kbd>
+</div>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `children` | `string` | required | Key label |
-| `size` | `'sm'` \| `'md'` | `'md'` | Key size |
+| `children` | `ReactNode` | - | Key label |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Key size |
 
 ## CSS Output
 
@@ -89,13 +119,25 @@ export const Kbd = ({ children, size = 'md' }) => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--intent-font-mono);
-  font-weight: 500;
+  padding: 4px 8px;
+  font-size: 0.875rem;
+  font-family: ui-monospace, monospace;
+  font-weight: 600;
+  color: var(--intent-color-foreground);
+  background: var(--intent-color-surface);
   border: 1px solid var(--intent-color-border);
-  border-radius: 6px;
-  background: var(--intent-color-surface-elevated);
+  border-radius: var(--intent-radius-md);
   box-shadow: 0 2px 0 var(--intent-color-border);
-  padding: 4px 10px;
-  font-size: 14px;
+  white-space: nowrap;
+}
+
+.intent-kbd--size-sm {
+  padding: 2px 6px;
+  font-size: 0.75rem;
+}
+
+.intent-kbd--size-lg {
+  padding: 6px 12px;
+  font-size: 1rem;
 }
 ```

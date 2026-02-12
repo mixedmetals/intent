@@ -1,0 +1,149 @@
+---
+sidebar_position: 62
+---
+import React from 'react';
+
+# NumberInput
+
+Input for numeric values with increment/decrement controls.
+
+export const NumberInput = ({ defaultValue = 0, min, max, step = 1, label }) => {
+  const [value, setValue] = React.useState(defaultValue)
+  
+  const increment = () => {
+    const newValue = value + step
+    if (max === undefined || newValue <= max) {
+      setValue(newValue)
+    }
+  }
+  
+  const decrement = () => {
+    const newValue = value - step
+    if (min === undefined || newValue >= min) {
+      setValue(newValue)
+    }
+  }
+  
+  return (
+    <div>
+      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>{label}</label>}
+      <div style={{ display: 'flex', alignItems: 'stretch' }}>
+        <button 
+          onClick={decrement}
+          disabled={min !== undefined && value <= min}
+          style={{
+            padding: '8px 12px',
+            border: '1px solid var(--intent-color-border)',
+            borderRight: 'none',
+            borderRadius: '8px 0 0 8px',
+            background: 'var(--intent-color-surface)',
+            cursor: 'pointer',
+            fontSize: '1rem'
+          }}
+        >
+          −
+        </button>
+        <input 
+          type="number"
+          value={value}
+          onChange={(e) => setValue(Number(e.target.value))}
+          min={min}
+          max={max}
+          step={step}
+          style={{
+            width: '80px',
+            padding: '8px 12px',
+            border: '1px solid var(--intent-color-border)',
+            textAlign: 'center',
+            fontSize: '0.875rem',
+            outline: 'none'
+          }}
+        />
+        <button 
+          onClick={increment}
+          disabled={max !== undefined && value >= max}
+          style={{
+            padding: '8px 12px',
+            border: '1px solid var(--intent-color-border)',
+            borderLeft: 'none',
+            borderRadius: '0 8px 8px 0',
+            background: 'var(--intent-color-surface)',
+            cursor: 'pointer',
+            fontSize: '1rem'
+          }}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  )
+}
+
+## Examples
+
+### Basic NumberInput
+
+<div className="intent-demo">
+  <NumberInput defaultValue={5} label="Quantity" />
+</div>
+
+```tsx
+<NumberInput defaultValue={5} label="Quantity" />
+```
+
+### With Min/Max
+
+<div className="intent-demo">
+  <NumberInput defaultValue={10} min={0} max={100} step={5} label="Percentage" />
+</div>
+
+```tsx
+<NumberInput defaultValue={10} min={0} max={100} step={5} />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | - | Controlled value |
+| `defaultValue` | `number` | `0` | Default value |
+| `min` | `number` | - | Minimum value |
+| `max` | `number` | - | Maximum value |
+| `step` | `number` | `1` | Step increment |
+| `label` | `string` | - | Input label |
+| `onChange` | `(value: number) => void` | - | Change handler |
+
+## CSS Output
+
+```css
+.intent-number-input {
+  display: flex;
+  align-items: stretch;
+}
+
+.intent-number-input__field {
+  width: 80px;
+  padding: 8px 12px;
+  border: 1px solid var(--intent-color-border);
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.intent-number-input__button {
+  padding: 8px 12px;
+  border: 1px solid var(--intent-color-border);
+  background: var(--intent-color-surface);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.intent-number-input__button:first-child {
+  border-radius: var(--intent-radius-md) 0 0 var(--intent-radius-md);
+  border-right: none;
+}
+
+.intent-number-input__button:last-child {
+  border-radius: 0 var(--intent-radius-md) var(--intent-radius-md) 0;
+  border-left: none;
+}
+```

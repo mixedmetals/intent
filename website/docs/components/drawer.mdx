@@ -1,220 +1,173 @@
 ---
-sidebar_position: 21
+sidebar_position: 51
 ---
-
-import { Stack, Button, Drawer, Text } from 'intent-react'
+import React from 'react';
 
 # Drawer
 
-Slide-out panel for navigation or supplementary content.
+Slide-out panels for navigation or forms.
 
-## Example
+export const Drawer = ({ title, children, isOpen, onClose, placement = 'right', footer }) => {
+  if (!isOpen) return null
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50 }}>
+      {/* Backdrop */}
+      <div 
+        style={{ 
+          position: 'absolute', 
+          inset: 0, 
+          background: 'rgba(0,0,0,0.5)', 
+          backdropFilter: 'blur(4px)' 
+        }} 
+        onClick={onClose}
+      />
+      {/* Drawer */}
+      <div style={{ 
+        position: 'absolute', 
+        top: 0,
+        bottom: 0,
+        [placement]: 0,
+        width: '100%',
+        maxWidth: '400px',
+        background: 'var(--intent-color-surface)', 
+        boxShadow: placement === 'right' ? '-4px 0 25px rgba(0,0,0,0.1)' : '4px 0 25px rgba(0,0,0,0.1)',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        {/* Header */}
+        <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>{title}</h3>
+          <button 
+            onClick={onClose}
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              fontSize: '1.5rem', 
+              cursor: 'pointer',
+              color: 'var(--intent-color-muted)'
+            }}
+          >
+            ×
+          </button>
+        </div>
+        {/* Body */}
+        <div style={{ padding: '24px', flex: 1, overflow: 'auto' }}>
+          {children}
+        </div>
+        {/* Footer */}
+        {footer && (
+          <div style={{ padding: '16px 24px', borderTop: '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+            {footer}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
-```tsx
-import { useState } from 'react'
-import { Button, Drawer, Text } from 'intent-react'
-
-function Example() {
-  const [open, setOpen] = useState(false)
-  
+export const DrawerDemo = () => {
+  const [isOpen, setIsOpen] = React.useState(false)
   return (
     <>
-      <Button onClick={() => setOpen(true)}>
-        Open Drawer
-      </Button>
-      
-      <Drawer
-        open={open}
-        onOpenChange={setOpen}
-        title="Drawer Title"
-        position="right"
+      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(true)}>Open Drawer</button>
+      <Drawer 
+        isOpen={isOpen} 
+        onClose={() => setIsOpen(false)}
+        title="Settings"
+        footer={
+          <>
+            <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Cancel</button>
+            <button className="intent-btn intent-btn--variant-primary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Save</button>
+          </>
+        }
       >
-        <Text>Drawer content goes here.</Text>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>Display Name</label>
+            <input type="text" placeholder="Enter name" style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px' }} />
+          </div>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>Email</label>
+            <input type="email" placeholder="Enter email" style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px' }} />
+          </div>
+          <div>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <input type="checkbox" />
+              <span>Enable notifications</span>
+            </label>
+          </div>
+        </div>
       </Drawer>
     </>
   )
 }
-```
 
-## Positions
+## Examples
 
-Drawers can slide in from any edge:
+### Basic Drawer
 
-| Position | Description |
-|----------|-------------|
-| `left` | Left side navigation |
-| `right` | Right side details |
-| `top` | Top banner/bar |
-| `bottom` | Bottom sheet (mobile) |
+<div className="intent-demo">
+  <DrawerDemo />
+</div>
 
 ```tsx
-<Drawer position="left" open={open} onOpenChange={setOpen}>
-  ...
+const [isOpen, setIsOpen] = useState(false)
+
+<Button onClick={() => setIsOpen(true)}>Open Drawer</Button>
+
+<Drawer 
+  isOpen={isOpen} 
+  onClose={() => setIsOpen(false)}
+  title="Settings"
+  footer={
+    <>
+      <Button variant="secondary">Cancel</Button>
+      <Button>Save</Button>
+    </>
+  }
+>
+  <Form>...</Form>
 </Drawer>
-
-<Drawer position="bottom" open={open} onOpenChange={setOpen}>
-  ...
-</Drawer>
-```
-
-## Sizes
-
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Button size="small">Small (320px)</Button>
-  <Button size="small">Medium (384px)</Button>
-  <Button size="small">Large (448px)</Button>
-  <Button size="small">Full (100%)</Button>
-</Stack>
-
-```tsx
-<Drawer size="sm" open={open} onOpenChange={setOpen}>...</Drawer>
-<Drawer size="md" open={open} onOpenChange={setOpen}>...</Drawer>
-<Drawer size="lg" open={open} onOpenChange={setOpen}>...</Drawer>
-<Drawer size="full" open={open} onOpenChange={setOpen}>...</Drawer>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `open` | `boolean` | - | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | - | State change callback |
-| `title` | `string` | - | Drawer header title |
-| `position` | `'left'` \| `'right'` \| `'top'` \| `'bottom'` | `'right'` | Drawer position |
-| `size` | `'sm'` \| `'md'` \| `'lg'` \| `'full'` | `'md'` | Drawer size |
-| `showClose` | `boolean` | `true` | Show close button |
-| `closeOnOverlay` | `boolean` | `true` | Close when clicking backdrop |
-
-## Pattern: Navigation Drawer
-
-```tsx
-function Layout() {
-  const [navOpen, setNavOpen] = useState(false)
-  
-  return (
-    <>
-      <Button 
-        importance="tertiary" 
-        icon="menu"
-        onClick={() => setNavOpen(true)}
-      >
-        Menu
-      </Button>
-      
-      <Drawer
-        position="left"
-        size="sm"
-        open={navOpen}
-        onOpenChange={setNavOpen}
-      >
-        <nav>
-          <NavLink href="/">Home</NavLink>
-          <NavLink href="/products">Products</NavLink>
-          <NavLink href="/about">About</NavLink>
-          <NavLink href="/contact">Contact</NavLink>
-        </nav>
-      </Drawer>
-    </>
-  )
-}
-```
-
-## Pattern: Details Drawer
-
-```tsx
-function ProductList() {
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  
-  return (
-    <>
-      {products.map(product => (
-        <ProductCard 
-          key={product.id} 
-          product={product}
-          onClick={() => setSelectedProduct(product)}
-        />
-      ))}
-      
-      <Drawer
-        position="right"
-        size="lg"
-        open={!!selectedProduct}
-        onOpenChange={() => setSelectedProduct(null)}
-        title={selectedProduct?.name}
-      >
-        {selectedProduct && (
-          <ProductDetails product={selectedProduct} />
-        )}
-      </Drawer>
-    </>
-  )
-}
-```
-
-## Pattern: Mobile Bottom Sheet
-
-```tsx
-<Drawer
-  position="bottom"
-  size="md"
-  open={open}
-  onOpenChange={setOpen}
->
-  <Stack gap="normal">
-    <Text weight="bold">Options</Text>
-    <Button fullWidth>Share</Button>
-    <Button fullWidth>Save</Button>
-    <Button fullWidth importance="tertiary">Cancel</Button>
-  </Stack>
-</Drawer>
-```
+| `isOpen` | `boolean` | `false` | Whether drawer is open |
+| `onClose` | `() => void` | - | Called when drawer closes |
+| `title` | `string` | - | Drawer title |
+| `placement` | `'left' \| 'right'` | `'right'` | Drawer position |
+| `children` | `ReactNode` | - | Drawer content |
+| `footer` | `ReactNode` | - | Footer content |
 
 ## CSS Output
 
 ```css
-.drawer {
-  position: fixed;
-  background: var(--intent-color-surface);
-  box-shadow: var(--intent-shadow-xl);
-  z-index: 50;
-}
-
-.drawer--position-right {
-  top: 0;
-  right: 0;
-  height: 100vh;
-}
-
-.drawer--size-md {
-  width: 384px;
-}
-
-.drawer__overlay {
+.intent-drawer__overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 40;
+  backdrop-filter: blur(4px);
+  z-index: 50;
 }
 
-.drawer-enter {
-  transform: translateX(100%);
+.intent-drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px;
+  background: var(--intent-color-surface);
+  box-shadow: -4px 0 25px rgba(0, 0, 0, 0.1);
+  z-index: 51;
 }
 
-.drawer-enter-active {
-  transform: translateX(0);
-  transition: transform 300ms ease;
+.intent-drawer--left {
+  left: 0;
+}
+
+.intent-drawer--right {
+  right: 0;
 }
 ```
-
-## Modal vs Drawer
-
-Use **Drawer** when:
-- Content is supplementary (not blocking)
-- Space is needed for forms or lists
-- Navigation on mobile/desktop
-- Persistent context is important
-
-Use **Modal** when:
-- User must make a decision
-- Critical information requires attention
-- Blocking the main content is acceptable

@@ -1,34 +1,78 @@
 ---
-sidebar_position: 50
+sidebar_position: 85
 ---
+import React from 'react';
 
 # Aspect
 
-Maintains a consistent aspect ratio for content.
+Maintain aspect ratios for responsive media.
 
-## Example
+export const Aspect = ({ ratio = 16 / 9, children }) => {
+  const paddingBottom = `${(1 / ratio) * 100}%`
+  
+  return (
+    <div style={{ position: 'relative', width: '100%' }}>
+      <div style={{ paddingBottom }} />
+      <div style={{ 
+        position: 'absolute', 
+        inset: 0, 
+        overflow: 'hidden',
+        borderRadius: '8px'
+      }}>
+        {children || (
+          <div style={{ 
+            width: '100%', 
+            height: '100%', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            fontWeight: 600
+          }}>
+            {ratio.toFixed(2)}:1 Ratio
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+## Examples
+
+### Video (16:9)
+
+<div className="intent-demo" style={{ maxWidth: '400px' }}>
+  <Aspect ratio={16 / 9} />
+</div>
 
 ```tsx
-import { Aspect, Image } from 'intent-react'
-
 <Aspect ratio={16 / 9}>
-  <Image src="/video-thumbnail.jpg" alt="Video" />
+  <video src="..." />
 </Aspect>
 ```
 
-### 1:1 Square
+### Square (1:1)
+
+<div className="intent-demo" style={{ maxWidth: '200px' }}>
+  <Aspect ratio={1} />
+</div>
 
 ```tsx
 <Aspect ratio={1}>
-  <Image src="/avatar.jpg" alt="Avatar" />
+  <img src="..." />
 </Aspect>
 ```
 
-### 4:3 Image
+### Portrait (4:5)
+
+<div className="intent-demo" style={{ maxWidth: '200px' }}>
+  <Aspect ratio={4 / 5} />
+</div>
 
 ```tsx
-<Aspect ratio={4 / 3}>
-  <div>Content here</div>
+<Aspect ratio={4 / 5}>
+  <img src="..." />
 </Aspect>
 ```
 
@@ -36,27 +80,24 @@ import { Aspect, Image } from 'intent-react'
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `ratio` | `number` | `1` | Aspect ratio (width / height) |
-| `children` | `ReactNode` | required | Content to contain |
+| `ratio` | `number` | `16/9` | Aspect ratio (width/height) |
+| `children` | `ReactNode` | - | Content to display |
 
 ## CSS Output
 
 ```css
-.aspect {
+.intent-aspect {
   position: relative;
   width: 100%;
 }
 
-.aspect::before {
-  content: '';
-  display: block;
-  padding-top: calc(100% / var(--aspect-ratio));
+.intent-aspect__spacer {
+  padding-bottom: 56.25%;
 }
 
-.aspect__content {
+.intent-aspect__content {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  overflow: hidden;
 }
 ```

@@ -1,102 +1,152 @@
 ---
-sidebar_position: 53
+sidebar_position: 61
 ---
 
-import { FileUpload, Button } from 'intent-react'
+import React from 'react';
 
 # FileUpload
 
-File input with drag and drop support.
+File upload component with drag and drop.
+
+export const FileUpload = ({ accept = '*', multiple = false, maxSize = '10MB' }) => {
+  const [isDragging, setIsDragging] = React.useState(false)
+  const [files, setFiles] = React.useState([])
+  
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+  
+  const handleDragLeave = () => {
+    setIsDragging(false)
+  }
+  
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const droppedFiles = Array.from(e.dataTransfer.files)
+    setFiles(prev => [...prev, ...droppedFiles])
+  }
+  
+  const handleFileSelect = (e) => {
+    const selectedFiles = Array.from(e.target.files)
+    setFiles(prev => [...prev, ...selectedFiles])
+  }
+  
+  const removeFile = (index) => {
+    setFiles(prev => prev.filter((_, i) => i !== index))
+  }
+  
+  return (
+    <div style={{ width: '100%' }}>
+      <div
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        style={{
+          border: `2px dashed ${isDragging ? 'var(--intent-color-primary)' : 'var(--intent-color-border)'}`,
+          borderRadius: '12px',
+          padding: '32px',
+          textAlign: 'center',
+          background: isDragging ? 'var(--intent-color-primary-subtle, #dbeafe)' : 'var(--intent-color-surface-elevated)',
+          transition: 'all 200ms',
+          cursor: 'pointer'
+        }}
+      >
+        <div style={{ fontSize: '2rem', marginBottom: '12px' }}>📁</div>
+        <div style={{ fontWeight: 500, marginBottom: '4px' }}>Drop files here or click to upload</div>
+        <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>
+          Supports {accept} • Max {maxSize}
+        </div>
+        <input
+          type="file"
+          accept={accept}
+          multiple={multiple}
+          onChange={handleFileSelect}
+          style={{ display: 'none' }}
+          id="file-input"
+        />
+        <label htmlFor="file-input" style={{ display: 'none' }} />
+      </div>
+      
+      {files.length > 0 && (
+        <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {files.map((file, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', background: 'var(--intent-color-surface)', border: '1px solid var(--intent-color-border)', borderRadius: '8px' }}>
+              <span>📄</span>
+              <span style={{ flex: 1, fontSize: '0.875rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>{file.name}</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>{(file.size / 1024).toFixed(1)} KB</span>
+              <button onClick={() => removeFile(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--intent-color-muted)' }}>×</button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 ## Examples
 
-### Basic Upload
+### Basic File Upload
 
-```tsx
-import { FileUpload } from 'intent-react'
-
-<FileUpload 
-  accept=".pdf,.doc,.docx"
-  onUpload={(files) => console.log(files)}
-/>
-```
-
-### With Preview
-
-```tsx
-<FileUpload 
-  accept="image/*"
-  preview
-  maxFiles={5}
-  onUpload={handleUpload}
-/>
-```
-
-### Restricted
+<div className="intent-demo">
+  <FileUpload accept=".jpg,.png,.pdf" maxSize="5MB" />
+</div>
 
 ```tsx
 <FileUpload 
   accept=".jpg,.png"
-  maxSize={5 * 1024 * 1024}  // 5MB
-  maxFiles={1}
-  onUpload={handleUpload}
-  onError={(error) => console.error(error)}
+  multiple
+  maxSize="5MB"
+  onUpload={(files) => console.log(files)}
 />
-```
-
-### Custom UI
-
-```tsx
-<FileUpload 
-  onUpload={handleUpload}
->
-  {(props) => (
-    <div {...props.getRootProps()}>
-      <input {...props.getInputProps()} />
-      <Button icon="upload">Drop files here</Button>
-    </div>
-  )}
-</FileUpload>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `accept` | `string` | - | Accepted file types |
-| `maxSize` | `number` | - | Max file size in bytes |
-| `maxFiles` | `number` | - | Max number of files |
-| `preview` | `boolean` | `false` | Show file previews |
-| `onUpload` | `(files: File[]) => void` | - | Upload callback |
-| `onError` | `(error: string) => void` | - | Error callback |
-| `children` | `(props) => ReactNode` | - | Custom render function |
+| `accept` | `string` | `'*'` | Accepted file types |
+| `multiple` | `boolean` | `false` | Allow multiple files |
+| `maxSize` | `string` | `'10MB'` | Maximum file size |
+| `onUpload` | `(files: File[]) => void` | - | Upload handler |
 
 ## CSS Output
 
 ```css
-.file-upload {
+.intent-file-upload {
+  width: 100%;
+}
+
+.intent-file-upload__dropzone {
   border: 2px dashed var(--intent-color-border);
-  border-radius: var(--intent-radius-lg);
-  padding: var(--intent-spacing-8);
+  border-radius: var(--intent-radius-xl);
+  padding: 32px;
   text-align: center;
+  background: var(--intent-color-surface-elevated);
+  transition: all 200ms;
   cursor: pointer;
-  transition: all 150ms ease;
 }
 
-.file-upload:hover {
+.intent-file-upload__dropzone--dragging {
   border-color: var(--intent-color-primary);
-  background: var(--intent-color-primary-alpha);
+  background: var(--intent-color-primary-subtle);
 }
 
-.file-upload--dragging {
-  border-color: var(--intent-color-primary);
-  background: var(--intent-color-primary-alpha);
-}
-
-.file-upload__preview {
+.intent-file-upload__file-list {
+  margin-top: 16px;
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--intent-spacing-2);
-  margin-top: var(--intent-spacing-4);
+  flex-direction: column;
+  gap: 8px;
+}
+
+.intent-file-upload__file {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
 }
 ```

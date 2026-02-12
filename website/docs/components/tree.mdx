@@ -1,147 +1,104 @@
 ---
-sidebar_position: 44
+sidebar_position: 93
 ---
 
-import { Tree } from 'intent-react'
+import React from 'react';
 
 # Tree
 
-Hierarchical data display with expand/collapse.
+Hierarchical tree view component.
 
-## Example
+export const Tree = ({ items, defaultExpanded = [] }) => {
+  const [expanded, setExpanded] = React.useState(new Set(defaultExpanded))
+  
+  const toggle = (id) => {
+    setExpanded(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+  
+  const renderItem = (item, level = 0) => {
+    const hasChildren = item.children && item.children.length > 0
+    const isExpanded = expanded.has(item.id)
+    
+    return (
+      <div key={item.id}>
+        <div 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '4px', 
+            padding: '6px 8px',
+            paddingLeft: `${level * 20 + 8}px`,
+            cursor: hasChildren ? 'pointer' : 'default',
+            borderRadius: '4px'
+          }}
+          onClick={() => hasChildren && toggle(item.id)}
+          onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
+          onMouseLeave={(e) => e.target.style.background = 'transparent'}
+        >
+          {hasChildren && (
+            <span style={{ 
+              fontSize: '0.75rem', 
+              width: '16px',
+              transform: isExpanded ? 'rotate(90deg)' : 'rotate(0)',
+              transition: 'transform 150ms'
+            }}>▶</span>
+          )}
+          {!hasChildren && <span style={{ width: '16px' }} />}
+          <span>{item.icon}</span>
+          <span style={{ fontSize: '0.875rem' }}>{item.label}</span>
+        </div>
+        {hasChildren && isExpanded && (
+          <div>
+            {item.children.map(child => renderItem(child, level + 1))}
+          </div>
+        )}
+      </div>
+    )
+  }
+  
+  return <div style={{ border: '1px solid var(--intent-color-border)', borderRadius: '8px', padding: '8px' }}>{items.map(item => renderItem(item))}</div>
+}
+
+## Examples
+
+### File Tree
+
+<div className="intent-demo">
+  <Tree 
+    items={[
+      { 
+        id: 'src', 
+        label: 'src', 
+        icon: '📁',
+        children: [
+          { id: 'components', label: 'components', icon: '📁', children: [
+            { id: 'button', label: 'Button.tsx', icon: '📄' },
+            { id: 'card', label: 'Card.tsx', icon: '📄' }
+          ]},
+          { id: 'utils', label: 'utils', icon: '📁', children: [
+            { id: 'helpers', label: 'helpers.ts', icon: '📄' }
+          ]},
+          { id: 'app', label: 'App.tsx', icon: '📄' }
+        ]
+      },
+      { id: 'package', label: 'package.json', icon: '📄' }
+    ]}
+    defaultExpanded={['src']}
+  />
+</div>
 
 ```tsx
-import { Tree } from 'intent-react'
-
-<Tree
-  data={[
-    {
-      id: '1',
-      label: 'src',
-      icon: 'folder',
-      children: [
-        {
-          id: '1-1',
-          label: 'components',
-          icon: 'folder',
-          children: [
-            { id: '1-1-1', label: 'Button.tsx', icon: 'file' },
-            { id: '1-1-2', label: 'Input.tsx', icon: 'file' },
-            { id: '1-1-3', label: 'index.ts', icon: 'file' },
-          ]
-        },
-        {
-          id: '1-2',
-          label: 'utils',
-          icon: 'folder',
-          children: [
-            { id: '1-2-1', label: 'format.ts', icon: 'file' },
-            { id: '1-2-2', label: 'validate.ts', icon: 'file' },
-          ]
-        },
-        { id: '1-3', label: 'App.tsx', icon: 'file' },
-        { id: '1-4', label: 'index.tsx', icon: 'file' },
-      ]
-    },
-    {
-      id: '2',
-      label: 'public',
-      icon: 'folder',
-      children: [
-        { id: '2-1', label: 'index.html', icon: 'file' },
-        { id: '2-2', label: 'favicon.ico', icon: 'file' },
-      ]
-    },
-    { id: '3', label: 'package.json', icon: 'file' },
-    { id: '4', label: 'tsconfig.json', icon: 'file' },
+<Tree 
+  items={[
+    { id: 'folder', label: 'Folder', icon: '📁', children: [
+      { id: 'file', label: 'File', icon: '📄' }
+    ]}
   ]}
-/>
-```
-
-## With Selection
-
-```tsx
-const [selectedId, setSelectedId] = useState(null)
-
-<Tree
-  selectable
-  selectedId={selectedId}
-  onSelect={setSelectedId}
-  data={[...]}
-/>
-```
-
-## With Checkboxes
-
-```tsx
-const [checkedIds, setCheckedIds] = useState([])
-
-<Tree
-  checkable
-  checkedIds={checkedIds}
-  onCheck={setCheckedIds}
-  data={[...]}
-/>
-```
-
-## Expand/Collapse Controls
-
-```tsx
-const [expandedIds, setExpandedIds] = useState(['1'])
-
-<Tree
-  expandedIds={expandedIds}
-  onToggle={setExpandedIds}
-  data={[...]}
-/>
-```
-
-## Lazy Loading
-
-```tsx
-<Tree
-  data={rootNodes}
-  loadChildren={async (node) => {
-    const children = await fetchChildren(node.id)
-    return children
-  }}
-/>
-```
-
-## Custom Node
-
-```tsx
-<Tree
-  data={files}
-  renderNode={(node, { isExpanded, isSelected, isChecked }) => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-      {node.icon === 'folder' ? (
-        <FolderIcon open={isExpanded} />
-      ) : (
-        <FileIcon type={node.fileType} />
-      )}
-      <span>{node.label}</span>
-      {node.size && (
-        <span style={{ color: 'muted', fontSize: 'sm' }}>
-          {node.size}
-        </span>
-      )}
-    </div>
-  )}
-/>
-```
-
-## Draggable
-
-```tsx
-<Tree
-  draggable
-  data={[...]}
-  onDragStart={(node) => console.log('Start:', node.id)}
-  onDragEnd={(node, targetNode, position) => {
-    // position: 'before' | 'after' | 'inside'
-    console.log('Moved:', node.id, 'to', targetNode.id, position)
-  }}
 />
 ```
 
@@ -149,94 +106,43 @@ const [expandedIds, setExpandedIds] = useState(['1'])
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `data` | `TreeNode[]` | required | Tree data |
-| `selectable` | `boolean` | `false` | Enable selection |
-| `selectedId` | `string` | - | Selected node ID |
-| `onSelect` | `(id: string) => void` | - | Select callback |
-| `checkable` | `boolean` | `false` | Enable checkboxes |
-| `checkedIds` | `string[]` | - | Checked node IDs |
-| `onCheck` | `(ids: string[]) => void` | - | Check callback |
-| `expandedIds` | `string[]` | - | Expanded node IDs |
-| `onToggle` | `(ids: string[]) => void` | - | Toggle callback |
-| `loadChildren` | `(node: TreeNode) => Promise<TreeNode[]>` | - | Lazy load function |
-| `draggable` | `boolean` | `false` | Enable drag and drop |
-| `renderNode` | `(node, state) => ReactNode` | - | Custom node renderer |
-
-### TreeNode Type
-
-```typescript
-interface TreeNode {
-  id: string
-  label: string
-  icon?: string
-  children?: TreeNode[]
-  disabled?: boolean
-  [key: string]: any
-}
-```
+| `items` | `Array<{id: string, label: string, icon?: ReactNode, children?: array}>` | `[]` | Tree items |
+| `defaultExpanded` | `string[]` | `[]` | Initially expanded item IDs |
+| `onSelect` | `(id: string) => void` | - | Selection handler |
 
 ## CSS Output
 
 ```css
-.tree {
-  user-select: none;
+.intent-tree {
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  padding: 8px;
 }
 
-.tree__node {
+.intent-tree__item {
   display: flex;
   align-items: center;
-  gap: var(--intent-spacing-1);
-  padding: var(--intent-spacing-1) var(--intent-spacing-2);
-  border-radius: var(--intent-radius-md);
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: var(--intent-radius-sm);
   cursor: pointer;
 }
 
-.tree__node:hover {
-  background: var(--intent-color-surface-elevated);
+.intent-tree__item:hover {
+  background: var(--intent-color-surface-hover);
 }
 
-.tree__node--selected {
-  background: var(--intent-color-primary-alpha);
-  color: var(--intent-color-primary);
-}
-
-.tree__node--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.tree__toggle {
+.intent-tree__toggle {
+  font-size: 0.75rem;
   width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--intent-color-text-muted);
+  transition: transform 150ms;
 }
 
-.tree__toggle--expanded {
+.intent-tree__toggle--expanded {
   transform: rotate(90deg);
 }
 
-.tree__indent {
-  width: 20px;
-}
-
-.tree__children {
-  margin-left: var(--intent-spacing-4);
-}
-
-.tree__checkbox {
-  margin-right: var(--intent-spacing-2);
-}
-
-.tree__icon {
-  width: 16px;
-  height: 16px;
-  margin-right: var(--intent-spacing-2);
-}
-
-.tree__label {
-  flex: 1;
+.intent-tree__label {
+  font-size: 0.875rem;
 }
 ```

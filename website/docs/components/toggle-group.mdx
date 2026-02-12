@@ -1,0 +1,135 @@
+---
+sidebar_position: 75
+---
+import React from 'react';
+
+# ToggleGroup
+
+Group of toggle buttons.
+
+export const ToggleGroup = ({ children, type = 'single', defaultValue }) => {
+  const [value, setValue] = React.useState(type === 'single' ? defaultValue : [defaultValue].filter(Boolean))
+  
+  return (
+    <div style={{ display: 'inline-flex', gap: '4px', padding: '4px', border: '1px solid var(--intent-color-border)', borderRadius: '8px', background: 'var(--intent-color-surface)' }}>
+      {React.Children.map(children, (child) => {
+        if (!child) return null
+        const isActive = type === 'single' ? value === child.props.value : value.includes(child.props.value)
+        return (
+          <button
+            onClick={() => {
+              if (type === 'single') {
+                setValue(child.props.value)
+              } else {
+                setValue(prev => 
+                  prev.includes(child.props.value) 
+                    ? prev.filter(v => v !== child.props.value)
+                    : [...prev, child.props.value]
+                )
+              }
+            }}
+            style={{
+              padding: '8px 12px',
+              borderRadius: '6px',
+              border: 'none',
+              background: isActive ? 'var(--intent-color-primary)' : 'transparent',
+              color: isActive ? 'white' : 'var(--intent-color-foreground)',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              cursor: 'pointer',
+              transition: 'all 150ms'
+            }}
+          >
+            {child.props.children}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+export const ToggleGroupItem = ({ children }) => children
+
+## Examples
+
+### Single Selection
+
+<div className="intent-demo">
+  <ToggleGroup type="single" defaultValue="center">
+    <ToggleGroupItem value="left">Left</ToggleGroupItem>
+    <ToggleGroupItem value="center">Center</ToggleGroupItem>
+    <ToggleGroupItem value="right">Right</ToggleGroupItem>
+  </ToggleGroup>
+</div>
+
+```tsx
+<ToggleGroup type="single" defaultValue="center">
+  <ToggleGroupItem value="left">Left</ToggleGroupItem>
+  <ToggleGroupItem value="center">Center</ToggleGroupItem>
+  <ToggleGroupItem value="right">Right</ToggleGroupItem>
+</ToggleGroup>
+```
+
+### Multiple Selection
+
+<div className="intent-demo">
+  <ToggleGroup type="multiple">
+    <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+    <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+    <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
+  </ToggleGroup>
+</div>
+
+```tsx
+<ToggleGroup type="multiple">
+  <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+  <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+  <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
+</ToggleGroup>
+```
+
+## Props
+
+### ToggleGroup
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `type` | `'single' \| 'multiple'` | `'single'` | Selection mode |
+| `value` | `string \| string[]` | - | Controlled value(s) |
+| `defaultValue` | `string \| string[]` | - | Default value(s) |
+| `onValueChange` | `(value) => void` | - | Change handler |
+| `children` | `ReactNode` | - | ToggleGroupItem components |
+
+### ToggleGroupItem
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Item value |
+| `children` | `ReactNode` | - | Item content |
+
+## CSS Output
+
+```css
+.intent-toggle-group {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+}
+
+.intent-toggle-group__item {
+  padding: 8px 12px;
+  border-radius: var(--intent-radius-sm);
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms;
+}
+
+.intent-toggle-group__item[data-state="on"] {
+  background: var(--intent-color-primary);
+  color: white;
+}
+```

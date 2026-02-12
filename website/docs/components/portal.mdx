@@ -1,108 +1,72 @@
 ---
-sidebar_position: 72
+sidebar_position: 97
 ---
-
-import { Portal } from 'intent-react'
+import React from 'react';
 
 # Portal
 
-Renders children into a DOM node outside the component hierarchy.
+Render content outside the component tree.
+
+export const Portal = ({ children }) => {
+  // Portal implementation would use ReactDOM.createPortal
+  // This is a simplified demo
+  return (
+    <div style={{ 
+      position: 'fixed', 
+      bottom: '20px', 
+      right: '20px', 
+      padding: '16px 24px',
+      background: 'var(--intent-color-surface)',
+      border: '1px solid var(--intent-color-border)',
+      borderRadius: '8px',
+      boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+      zIndex: 9999
+    }}>
+      <div style={{ fontWeight: 600, marginBottom: '4px' }}>Portal Content</div>
+      <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>
+        Rendered outside parent tree
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
 ### Basic Portal
 
-```tsx
-import { Portal } from 'intent-react'
-
-function Modal({ children, open }) {
-  if (!open) return null
-  
-  return (
-    <Portal>
-      <div className="modal-overlay">
-        <div className="modal-content">
-          {children}
-        </div>
-      </div>
-    </Portal>
-  )
-}
-```
-
-### Custom Container
+<div className="intent-demo" style={{ minHeight: '100px' }}>
+  <div style={{ padding: '16px', background: 'var(--intent-color-surface-elevated)', borderRadius: '8px' }}>
+    <div>Parent container content</div>
+    <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)', marginTop: '8px' }}>
+      Portal content appears fixed at bottom-right
+    </div>
+  </div>
+  <Portal>
+    <div>Portal Content</div>
+  </Portal>
+</div>
 
 ```tsx
-// First, create a container
-<div id="modal-root" />
-
-// Then portal to it
-<Portal containerId="modal-root">
-  <ModalContent />
+// Portal renders children to document.body
+<Portal>
+  <Modal />
 </Portal>
-```
 
-### Tooltip Portal
-
-```tsx
-function Tooltip({ children, content }) {
-  const [show, setShow] = useState(false)
-  
-  return (
-    <>
-      <span 
-        onMouseEnter={() => setShow(true)}
-        onMouseLeave={() => setShow(false)}
-      >
-        {children}
-      </span>
-      {show && (
-        <Portal>
-          <div className="tooltip" style={{ position: 'fixed', top: y, left: x }}>
-            {content}
-          </div>
-        </Portal>
-      )}
-    </>
-  )
-}
+// Or to a specific container
+<Portal container={document.getElementById('modal-root')}>
+  <Tooltip />
+</Portal>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `children` | `ReactNode` | required | Content to portal |
-| `containerId` | `string` | `'portal-root'` | Target container ID |
-
-## Setup
-
-Add a portal root to your HTML:
-
-```html
-<body>
-  <div id="root"></div>
-  <div id="portal-root"></div>
-</body>
-```
-
-Or let Portal create it automatically.
-
-## Why Use Portals?
-
-- Escape CSS stacking contexts (z-index)
-- Avoid overflow:hidden clipping
-- Keep DOM semantic (modals at body level)
-- Prevent event bubbling issues
+| `children` | `ReactNode` | - | Content to portal |
+| `container` | `Element` | `document.body` | Target container |
 
 ## CSS Output
 
-No specific CSS. Portal doesn't render any DOM elements itself.
-
 ```css
-/* Portal content inherits styles from target container */
-#portal-root {
-  position: relative;
-  z-index: 9999;
-}
+/* Portal doesn't generate CSS - it moves DOM elements */
 ```

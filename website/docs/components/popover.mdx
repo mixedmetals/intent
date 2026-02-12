@@ -1,198 +1,128 @@
 ---
-sidebar_position: 29
+sidebar_position: 55
 ---
-
-import { useState } from 'react'
-import { Stack, Button, Popover, Input, Select, Field } from 'intent-react'
-
-export function PopoverDemo() {
-  const [open, setOpen] = useState(false)
-  
-  return (
-    <Popover 
-      open={open}
-      onOpenChange={setOpen}
-      trigger={<Button>Filter</Button>}
-    >
-      <Stack gap="normal" style={{ width: 240 }}>
-        <Field label="Status">
-          <Select 
-            options={[
-              { value: 'all', label: 'All' },
-              { value: 'active', label: 'Active' },
-              { value: 'inactive', label: 'Inactive' },
-            ]}
-          />
-        </Field>
-        <Field label="Search">
-          <Input placeholder="Search..." />
-        </Field>
-        <Stack direction="row" gap="normal">
-          <Button importance="tertiary" fullWidth onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button importance="primary" fullWidth onClick={() => setOpen(false)}>
-            Apply
-          </Button>
-        </Stack>
-      </Stack>
-    </Popover>
-  )
-}
+import React from 'react';
 
 # Popover
 
-Floating content panel triggered by clicking an element.
+Floating content panels.
 
-## Example
-
-<PopoverDemo />
-
-```tsx
-import { useState } from 'react'
-import { Button, Popover, Stack, Field, Input } from 'intent-react'
-
-function FilterPopover() {
-  const [open, setOpen] = useState(false)
+export const Popover = ({ trigger, children, title }) => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const ref = React.useRef(null)
+  
+  React.useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
   
   return (
-    <Popover 
-      open={open}
-      onOpenChange={setOpen}
-      trigger={<Button>Filter</Button>}
-    >
-      <Stack gap="normal" style={{ width: 240 }}>
-        <Field label="Status">
-          <Select options={[...]} />
-        </Field>
-        <Stack direction="row" gap="normal">
-          <Button onClick={() => setOpen(false)}>Apply</Button>
-        </Stack>
-      </Stack>
-    </Popover>
+    <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
+      <div onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
+      {isOpen && (
+        <div style={{ 
+          position: 'absolute', 
+          top: '100%', 
+          left: 0, 
+          marginTop: '8px',
+          minWidth: '280px',
+          background: 'var(--intent-color-surface)', 
+          border: '1px solid var(--intent-color-border)',
+          borderRadius: '8px',
+          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+          zIndex: 50,
+          padding: title ? '0' : '16px'
+        }}>
+          {title && (
+            <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--intent-color-border)', fontWeight: 600 }}>
+              {title}
+            </div>
+          )}
+          <div style={{ padding: title ? '16px' : '0' }}>
+            {children}
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
-```
 
-## With Form
+export const PopoverDemo = () => (
+  <Popover 
+    trigger={<button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium">Open Popover</button>}
+    title="Dimensions"
+  >
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <label style={{ fontSize: '0.875rem' }}>Width</label>
+        <input type="text" defaultValue="100%" style={{ width: '80px', padding: '4px 8px', border: '1px solid var(--intent-color-border)', borderRadius: '4px' }} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <label style={{ fontSize: '0.875rem' }}>Height</label>
+        <input type="text" defaultValue="auto" style={{ width: '80px', padding: '4px 8px', border: '1px solid var(--intent-color-border)', borderRadius: '4px' }} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <label style={{ fontSize: '0.875rem' }}>Max Width</label>
+        <input type="text" defaultValue="none" style={{ width: '80px', padding: '4px 8px', border: '1px solid var(--intent-color-border)', borderRadius: '4px' }} />
+      </div>
+    </div>
+  </Popover>
+)
+
+## Examples
+
+### Basic Popover
+
+<div className="intent-demo">
+  <PopoverDemo />
+</div>
 
 ```tsx
-<Popover trigger={<Button>Add User</Button>}>
-  <form onSubmit={handleSubmit}>
-    <Stack gap="normal">
-      <Field label="Name">
-        <Input placeholder="Full name" />
-      </Field>
-      <Field label="Email">
-        <Input type="email" placeholder="Email address" />
-      </Field>
-      <Button type="submit" importance="primary" fullWidth>
-        Create User
-      </Button>
-    </Stack>
-  </form>
+<Popover 
+  trigger={<Button variant="secondary">Open Popover</Button>}
+  title="Dimensions"
+>
+  <Form>
+    <Field label="Width"><Input value="100%" /></Field>
+    <Field label="Height"><Input value="auto" /></Field>
+  </Form>
 </Popover>
-```
-
-## Positions
-
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Popover 
-    side="top"
-    trigger={<Button size="small">Top</Button>}
-  >
-    <div style={{ padding: 16 }}>Content appears above</div>
-  </Popover>
-  <Popover 
-    side="right"
-    trigger={<Button size="small">Right</Button>}
-  >
-    <div style={{ padding: 16 }}>Content appears to the right</div>
-  </Popover>
-  <Popover 
-    side="bottom"
-    trigger={<Button size="small">Bottom</Button>}
-  >
-    <div style={{ padding: 16 }}>Content appears below</div>
-  </Popover>
-  <Popover 
-    side="left"
-    trigger={<Button size="small">Left</Button>}
-  >
-    <div style={{ padding: 16 }}>Content appears to the left</div>
-  </Popover>
-</Stack>
-
-```tsx
-<Popover side="top" trigger={...}>...</Popover>
-<Popover side="right" trigger={...}>...</Popover>
-<Popover side="bottom" trigger={...}>...</Popover>
-<Popover side="left" trigger={...}>...</Popover>
-```
-
-## Alignment
-
-```tsx
-<Popover align="start" trigger={...}>...</Popover>
-<Popover align="center" trigger={...}>...</Popover>
-<Popover align="end" trigger={...}>...</Popover>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `trigger` | `ReactNode` | required | Element that opens the popover |
+| `trigger` | `ReactNode` | - | Trigger element |
 | `children` | `ReactNode` | - | Popover content |
-| `open` | `boolean` | - | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | - | Open state callback |
-| `side` | `'top'` \| `'right'` \| `'bottom'` \| `'left'` | `'bottom'` | Popover position |
-| `align` | `'start'` \| `'center'` \| `'end'` | `'center'` | Content alignment |
-| `modal` | `boolean` | `false` | Trap focus inside |
+| `title` | `string` | - | Optional header title |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'bottom'` | Position |
 
 ## CSS Output
 
 ```css
-.popover {
-  position: relative;
-  display: inline-block;
-}
-
-.popover__content {
+.intent-popover {
   position: absolute;
+  min-width: 280px;
   background: var(--intent-color-surface);
   border: 1px solid var(--intent-color-border);
   border-radius: var(--intent-radius-md);
-  box-shadow: var(--intent-shadow-lg);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   z-index: 50;
-  padding: var(--intent-spacing-4);
-  min-width: 200px;
 }
 
-.popover__content--side-bottom {
-  top: 100%;
-  margin-top: var(--intent-spacing-2);
+.intent-popover__header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--intent-color-border);
+  font-weight: 600;
 }
 
-.popover__content--align-center {
-  left: 50%;
-  transform: translateX(-50%);
+.intent-popover__body {
+  padding: 16px;
 }
 ```
-
-## Popover vs Tooltip vs Dropdown
-
-Use **Popover** for:
-- Interactive content (forms, buttons)
-- Rich content (images, formatted text)
-- Confirmations with context
-
-Use **Tooltip** for:
-- Simple text hints
-- Icon labels
-- Brief explanations
-
-Use **Dropdown** for:
-- Action menus
-- Navigation options
-- Selection from a list

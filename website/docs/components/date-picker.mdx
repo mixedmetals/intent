@@ -1,0 +1,126 @@
+---
+sidebar_position: 61
+---
+import React from 'react';
+
+# DatePicker
+
+Input for selecting dates.
+
+export const DatePicker = () => {
+  const [value, setValue] = React.useState('2024-01-15')
+  const [isOpen, setIsOpen] = React.useState(false)
+  
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '8px 12px',
+          border: '1px solid var(--intent-color-border)',
+          borderRadius: '8px',
+          background: 'var(--intent-color-surface)',
+          cursor: 'pointer',
+          minWidth: '150px'
+        }}
+      >
+        <span>📅</span>
+        <span>{value}</span>
+      </div>
+      {isOpen && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          marginTop: '8px',
+          padding: '16px',
+          background: 'var(--intent-color-surface)',
+          border: '1px solid var(--intent-color-border)',
+          borderRadius: '12px',
+          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+          zIndex: 50
+        }}>
+          <div style={{ textAlign: 'center', fontWeight: 600, marginBottom: '12px' }}>January 2024</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 32px)', gap: '4px', textAlign: 'center' }}>
+            {['Su','Mo','Tu','We','Th','Fr','Sa'].map(d => (
+              <div key={d} style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--intent-color-muted)' }}>{d}</div>
+            ))}
+            {Array.from({length: 31}, (_, i) => i + 1).map(day => (
+              <button
+                key={day}
+                onClick={() => {
+                  setValue(`2024-01-${String(day).padStart(2, '0')}`)
+                  setIsOpen(false)
+                }}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  border: 'none',
+                  borderRadius: '6px',
+                  background: day === 15 ? 'var(--intent-color-primary)' : 'transparent',
+                  color: day === 15 ? 'white' : 'var(--intent-color-foreground)',
+                  cursor: 'pointer',
+                  fontSize: '0.875rem'
+                }}
+              >
+                {day}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+## Examples
+
+### Basic DatePicker
+
+<div className="intent-demo">
+  <DatePicker />
+</div>
+
+```tsx
+<DatePicker 
+  value={date}
+  onChange={setDate}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `Date` | - | Selected date |
+| `onChange` | `(date: Date) => void` | - | Change handler |
+| `placeholder` | `string` | `"Pick a date"` | Placeholder text |
+| `disabled` | `boolean` | `false` | Disable input |
+| `format` | `string` | `"yyyy-MM-dd"` | Date format |
+
+## CSS Output
+
+```css
+.intent-date-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+  cursor: pointer;
+}
+
+.intent-date-picker__popover {
+  position: absolute;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-xl);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+```

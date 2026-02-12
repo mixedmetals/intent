@@ -1,70 +1,131 @@
 ---
-sidebar_position: 52
+sidebar_position: 84
 ---
-
-import { Label, Input } from 'intent-react'
 
 # Label
 
-Accessible form label component.
+Accessible form labels.
+
+export const Label = ({ children, required, htmlFor, disabled }) => (
+  <label 
+    htmlFor={htmlFor}
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '4px',
+      fontSize: '0.875rem',
+      fontWeight: 500,
+      color: disabled ? 'var(--intent-color-muted)' : 'var(--intent-color-foreground)',
+      cursor: disabled ? 'not-allowed' : 'pointer'
+    }}
+  >
+    {children}
+    {required && <span style={{ color: 'var(--intent-color-error, #ef4444)' }}>*</span>}
+  </label>
+)
 
 ## Examples
 
 ### Basic Label
 
-<div style={{ marginBottom: 24 }}>
+<div className="intent-demo">
   <Label htmlFor="email">Email Address</Label>
-  <Input id="email" placeholder="you@example.com" />
+  <input 
+    id="email" 
+    type="email" 
+    placeholder="Enter your email"
+    style={{ 
+      marginTop: '4px', 
+      width: '100%', 
+      padding: '8px 12px', 
+      border: '1px solid var(--intent-color-border)', 
+      borderRadius: '6px' 
+    }} 
+  />
 </div>
 
 ```tsx
-import { Label, Input } from 'intent-react'
-
 <Label htmlFor="email">Email Address</Label>
-<Input id="email" placeholder="you@example.com" />
+<Input id="email" type="email" />
 ```
 
-### Required
+### Required Field
 
-<div style={{ marginBottom: 24 }}>
-  <Label htmlFor="username" required>Username</Label>
-  <Input id="username" placeholder="johndoe" />
+<div className="intent-demo">
+  <Label htmlFor="name" required>Name</Label>
+  <input 
+    id="name" 
+    type="text" 
+    placeholder="Enter your name"
+    style={{ 
+      marginTop: '4px', 
+      width: '100%', 
+      padding: '8px 12px', 
+      border: '1px solid var(--intent-color-border)', 
+      borderRadius: '6px' 
+    }} 
+  />
 </div>
 
 ```tsx
-<Label htmlFor="username" required>Username</Label>
-<Input id="username" />
+<Label htmlFor="name" required>Name</Label>
+<Input id="name" required />
 ```
 
-### With Field
+### Disabled State
+
+<div className="intent-demo">
+  <Label htmlFor="disabled" disabled>Disabled Field</Label>
+  <input 
+    id="disabled" 
+    type="text" 
+    disabled
+    placeholder="This field is disabled"
+    style={{ 
+      marginTop: '4px', 
+      width: '100%', 
+      padding: '8px 12px', 
+      border: '1px solid var(--intent-color-border)', 
+      borderRadius: '6px',
+      opacity: 0.6
+    }} 
+  />
+</div>
 
 ```tsx
-<Field label={<Label required>Password</Label>}>
-  <Input type="password" />
-</Field>
+<Label htmlFor="disabled" disabled>Disabled Field</Label>
+<Input id="disabled" disabled />
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `children` | `ReactNode` | - | Label text |
 | `htmlFor` | `string` | - | Associated input ID |
 | `required` | `boolean` | `false` | Show required indicator |
-| `children` | `ReactNode` | required | Label text |
+| `disabled` | `boolean` | `false` | Disabled state styling |
 
 ## CSS Output
 
 ```css
-.label {
-  display: block;
-  font-size: var(--intent-font-size-sm);
+.intent-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--intent-color-text);
-  margin-bottom: var(--intent-spacing-1);
+  color: var(--intent-color-foreground);
+  cursor: pointer;
 }
 
-.label__required {
-  color: var(--intent-color-danger);
-  margin-left: var(--intent-spacing-1);
+.intent-label--required::after {
+  content: "*";
+  color: var(--intent-color-error);
+}
+
+.intent-label--disabled {
+  color: var(--intent-color-muted);
+  cursor: not-allowed;
 }
 ```

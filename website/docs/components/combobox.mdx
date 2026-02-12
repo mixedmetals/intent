@@ -1,80 +1,124 @@
 ---
-sidebar_position: 54
+sidebar_position: 64
 ---
-
-import { Combobox } from 'intent-react'
+import React from 'react';
 
 # Combobox
 
 Autocomplete input with dropdown suggestions.
 
+export const Combobox = ({ options, placeholder = "Search..." }) => {
+  const [value, setValue] = React.useState('')
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [selected, setSelected] = React.useState(null)
+  const filteredOptions = options.filter(o => 
+    o.label.toLowerCase().includes(value.toLowerCase())
+  )
+  
+  return (
+    <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+      <div style={{ position: 'relative' }}>
+        <input
+          type="text"
+          value={selected ? selected.label : value}
+          onChange={(e) => {
+            setValue(e.target.value)
+            setSelected(null)
+            setIsOpen(true)
+          }}
+          onFocus={() => setIsOpen(true)}
+          placeholder={placeholder}
+          style={{
+            width: '100%',
+            padding: '8px 36px 8px 12px',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            fontSize: '0.875rem',
+            outline: 'none',
+            background: 'var(--intent-color-surface)'
+          }}
+        />
+        <span style={{ 
+          position: 'absolute', 
+          right: '12px', 
+          top: '50%', 
+          transform: 'translateY(-50%)',
+          pointerEvents: 'none'
+        }}>🔽</span>
+      </div>
+      
+      {isOpen && filteredOptions.length > 0 && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          right: 0,
+          marginTop: '4px',
+          background: 'var(--intent-color-surface)',
+          border: '1px solid var(--intent-color-border)',
+          borderRadius: '8px',
+          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+          zIndex: 50,
+          maxHeight: '200px',
+          overflow: 'auto'
+        }}>
+          {filteredOptions.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => {
+                setSelected(option)
+                setValue(option.label)
+                setIsOpen(false)
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                width: '100%',
+                padding: '10px 12px',
+                textAlign: 'left',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+              onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
+              onMouseLeave={(e) => e.target.style.background = 'none'}
+            >
+              {option.icon && <span>{option.icon}</span>}
+              <span>{option.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 ## Examples
 
 ### Basic Combobox
 
-```tsx
-import { useState } from 'react'
-import { Combobox } from 'intent-react'
-
-const users = [
-  { id: '1', name: 'John Doe', email: 'john@example.com' },
-  { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
-  { id: '3', name: 'Bob Johnson', email: 'bob@example.com' },
-]
-
-function Example() {
-  const [selected, setSelected] = useState(null)
-  
-  return (
-    <Combobox
-      options={users}
-      value={selected}
-      onChange={setSelected}
-      getLabel={(user) => user.name}
-      placeholder="Select a user..."
-    />
-  )
-}
-```
-
-### Async Search
+<div className="intent-demo">
+  <Combobox 
+    options={[
+      { value: 'react', label: 'React', icon: '⚛️' },
+      { value: 'vue', label: 'Vue', icon: '💚' },
+      { value: 'angular', label: 'Angular', icon: '🅰️' },
+      { value: 'svelte', label: 'Svelte', icon: '🧡' },
+      { value: 'solid', label: 'SolidJS', icon: '🔵' }
+    ]}
+    placeholder="Select framework..."
+  />
+</div>
 
 ```tsx
-<Combobox
-  loadOptions={async (query) => {
-    const response = await fetch(`/api/users?q=${query}`)
-    return response.json()
-  }}
-  placeholder="Search users..."
-/>
-```
-
-### Multi-select
-
-```tsx
-const [selected, setSelected] = useState([])
-
-<Combobox
-  multiple
-  options={users}
-  value={selected}
-  onChange={setSelected}
-  getLabel={(user) => user.name}
-/>
-```
-
-### With Custom Item
-
-```tsx
-<Combobox
-  options={users}
-  getLabel={(user) => user.name}
-  renderItem={(user) => (
-    <div>
-      <div>{user.name}</div>
-      <div style={{ fontSize: 12, color: 'gray' }}>{user.email}</div>
-    </div>
-  )}
+<Combobox 
+  options={[
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' }
+  ]}
+  placeholder="Select framework..."
 />
 ```
 
@@ -82,54 +126,57 @@ const [selected, setSelected] = useState([])
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `T[]` | `[]` | Available options |
-| `value` | `T` \| `T[]` | - | Selected value(s) |
-| `onChange` | `(value) => void` | - | Change callback |
-| `getLabel` | `(option: T) => string` | - | Extract label |
-| `getValue` | `(option: T) => string` | - | Extract value |
-| `multiple` | `boolean` | `false` | Allow multiple selection |
-| `loadOptions` | `(query: string) => Promise<T[]>` | - | Async loader |
-| `placeholder` | `string` | - | Input placeholder |
-| `renderItem` | `(option: T) => ReactNode` | - | Custom item render |
-| `creatable` | `boolean` | `false` | Allow creating new options |
+| `options` | `Array<{value: string, label: string, icon?: ReactNode}>` | `[]` | Available options |
+| `value` | `string` | - | Selected value |
+| `placeholder` | `string` | `"Search..."` | Input placeholder |
+| `disabled` | `boolean` | `false` | Disable input |
+| `onChange` | `(value: string) => void` | - | Selection handler |
 
 ## CSS Output
 
 ```css
-.combobox {
+.intent-combobox {
   position: relative;
 }
 
-.combobox__input {
+.intent-combobox__input {
   width: 100%;
+  padding: 8px 36px 8px 12px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  font-size: 0.875rem;
+  background: var(--intent-color-surface);
 }
 
-.combobox__menu {
+.intent-combobox__listbox {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
+  margin-top: 4px;
   background: var(--intent-color-surface);
   border: 1px solid var(--intent-color-border);
   border-radius: var(--intent-radius-md);
-  box-shadow: var(--intent-shadow-lg);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   z-index: 50;
-  max-height: 300px;
-  overflow-y: auto;
+  max-height: 200px;
+  overflow: auto;
 }
 
-.combobox__item {
-  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+.intent-combobox__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  background: none;
+  border: none;
   cursor: pointer;
+  font-size: 0.875rem;
 }
 
-.combobox__item:hover,
-.combobox__item--highlighted {
-  background: var(--intent-color-surface-elevated);
-}
-
-.combobox__item--selected {
-  background: var(--intent-color-primary-alpha);
-  color: var(--intent-color-primary);
+.intent-combobox__option:hover {
+  background: var(--intent-color-surface-hover);
 }
 ```

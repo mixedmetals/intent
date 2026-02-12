@@ -1,0 +1,133 @@
+---
+sidebar_position: 57
+---
+import React from 'react';
+
+# Collapsible
+
+Expandable and collapsible content sections.
+
+export const Collapsible = ({ title, children, defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = React.useState(defaultOpen)
+  return (
+    <div style={{ border: '1px solid var(--intent-color-border)', borderRadius: '8px', overflow: 'hidden' }}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          width: '100%',
+          padding: '12px 16px',
+          textAlign: 'left',
+          background: 'var(--intent-color-surface)',
+          border: 'none',
+          cursor: 'pointer',
+          fontWeight: 500,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}
+      >
+        {title}
+        <span style={{ 
+          transform: isOpen ? 'rotate(180deg)' : 'rotate(0)', 
+          transition: 'transform 200ms' 
+        }}>▼</span>
+      </button>
+      <div style={{ 
+        maxHeight: isOpen ? '500px' : '0',
+        overflow: 'hidden',
+        transition: 'max-height 200ms ease-out'
+      }}>
+        <div style={{ padding: '16px', borderTop: '1px solid var(--intent-color-border)', background: 'var(--intent-color-surface-elevated)' }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+## Examples
+
+### Basic Collapsible
+
+<div className="intent-demo">
+  <Collapsible title="What is Intent Framework?">
+    <p style={{ margin: 0 }}>
+      Intent is a schema-first, AI-native CSS framework that bridges the gap between design intent and implementation. 
+      It provides a comprehensive design system with semantic tokens, components, and utilities.
+    </p>
+  </Collapsible>
+</div>
+
+```tsx
+<Collapsible title="Section Title">
+  <p>Collapsible content goes here...</p>
+</Collapsible>
+```
+
+### Default Open
+
+<div className="intent-demo">
+  <Collapsible title="Terms and Conditions" defaultOpen>
+    <p style={{ margin: '0 0 12px 0' }}>
+      By using this service, you agree to the following terms:
+    </p>
+    <ul style={{ margin: 0, paddingLeft: '20px' }}>
+      <li>Respect other users</li>
+      <li>Follow community guidelines</li>
+      <li>No spam or abuse</li>
+    </ul>
+  </Collapsible>
+</div>
+
+```tsx
+<Collapsible title="Terms" defaultOpen>
+  <p>Terms content...</p>
+</Collapsible>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | - | Collapsible header |
+| `children` | `ReactNode` | - | Collapsible content |
+| `defaultOpen` | `boolean` | `false` | Initial open state |
+
+## CSS Output
+
+```css
+.intent-collapsible {
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  overflow: hidden;
+}
+
+.intent-collapsible__trigger {
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  background: var(--intent-color-surface);
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.intent-collapsible__icon {
+  transition: transform 200ms;
+}
+
+.intent-collapsible__icon--open {
+  transform: rotate(180deg);
+}
+
+.intent-collapsible__content {
+  overflow: hidden;
+  transition: max-height 200ms ease-out;
+}
+
+.intent-collapsible__inner {
+  padding: 16px;
+  border-top: 1px solid var(--intent-color-border);
+  background: var(--intent-color-surface-elevated);
+}
+```

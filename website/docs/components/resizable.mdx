@@ -1,68 +1,109 @@
 ---
-sidebar_position: 64
+sidebar_position: 73
 ---
-
-import { Resizable } from 'intent-react'
+import React from 'react';
 
 # Resizable
 
-Container with draggable resize handles.
+Resizable panel layouts.
+
+export const Resizable = ({ children, defaultSize = 50, direction = 'horizontal' }) => {
+  const [size, setSize] = React.useState(defaultSize)
+  const [isDragging, setIsDragging] = React.useState(false)
+  const containerRef = React.useRef(null)
+  
+  const handleMouseDown = () => setIsDragging(true)
+  
+  const handleMouseMove = React.useCallback((e) => {
+    if (!isDragging || !containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const newSize = direction === 'horizontal' 
+      ? ((e.clientX - rect.left) / rect.width) * 100
+      : ((e.clientY - rect.top) / rect.height) * 100
+    setSize(Math.max(10, Math.min(90, newSize)))
+  }, [isDragging, direction])
+  
+  const handleMouseUp = () => setIsDragging(false)
+  
+  React.useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [isDragging, handleMouseMove])
+  
+  return (
+    <div 
+      ref={containerRef}
+      style={{ 
+        display: 'flex', 
+        flexDirection: direction === 'horizontal' ? 'row' : 'column',
+        height: '200px',
+        border: '1px solid var(--intent-color-border)',
+        borderRadius: '8px',
+        overflow: 'hidden'
+      }}
+    >
+      <div style={{ 
+        flex: `0 0 ${size}%`, 
+        padding: '16px',
+        background: 'var(--intent-color-surface)',
+        overflow: 'auto'
+      }}>
+        Panel A ({Math.round(size)}%)
+      </div>
+      <div 
+        onMouseDown={handleMouseDown}
+        style={{ 
+          flex: '0 0 4px',
+          background: isDragging ? 'var(--intent-color-primary)' : 'var(--intent-color-border)',
+          cursor: direction === 'horizontal' ? 'col-resize' : 'row-resize',
+          transition: 'background 150ms'
+        }}
+      />
+      <div style={{ 
+        flex: `0 0 ${100 - size - 0.5}%`, 
+        padding: '16px',
+        background: 'var(--intent-color-surface-elevated)',
+        overflow: 'auto'
+      }}>
+        Panel B ({Math.round(100 - size - 0.5)}%)
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
-### Basic Resizable
+### Horizontal Split
+
+<div className="intent-demo">
+  <Resizable direction="horizontal" defaultSize={50} />
+</div>
 
 ```tsx
-import { Resizable } from 'intent-react'
-
-<Resizable
-  defaultWidth={300}
-  defaultHeight={200}
-  minWidth={200}
-  minHeight={100}
->
-  <div style={{ padding: 16, background: '#f0f0f0' }}>
-    Resize me from the edges
-  </div>
+<Resizable direction="horizontal" defaultSize={50}>
+  <Resizable.Panel>Sidebar</Resizable.Panel>
+  <Resizable.Handle />
+  <Resizable.Panel>Main Content</Resizable.Panel>
 </Resizable>
 ```
 
-### Horizontal Only
+### Vertical Split
+
+<div className="intent-demo">
+  <Resizable direction="vertical" defaultSize={40} />
+</div>
 
 ```tsx
-<Resizable
-  direction="horizontal"
-  defaultWidth={300}
-  minWidth={200}
-  maxWidth={600}
->
-  <Sidebar />
-</Resizable>
-```
-
-### Vertical Only
-
-```tsx
-<Resizable
-  direction="vertical"
-  defaultHeight={400}
-  minHeight={200}
->
-  <Editor />
-</Resizable>
-```
-
-### With Save
-
-```tsx
-const [size, setSize] = useState({ width: 300, height: 400 })
-
-<Resizable
-  width={size.width}
-  height={size.height}
-  onResize={setSize}
->
-  <Panel />
+<Resizable direction="vertical" defaultSize={40}>
+  <Resizable.Panel>Header</Resizable.Panel>
+  <Resizable.Handle />
+  <Resizable.Panel>Content</Resizable.Panel>
 </Resizable>
 ```
 
@@ -70,57 +111,31 @@ const [size, setSize] = useState({ width: 300, height: 400 })
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `direction` | `'both'` \| `'horizontal'` \| `'vertical'` | `'both'` | Resize direction |
-| `defaultWidth` | `number` | - | Initial width |
-| `defaultHeight` | `number` | - | Initial height |
-| `width` | `number` | - | Controlled width |
-| `height` | `number` | - | Controlled height |
-| `minWidth` | `number` | `0` | Minimum width |
-| `minHeight` | `number` | `0` | Minimum height |
-| `maxWidth` | `number` | `Infinity` | Maximum width |
-| `maxHeight` | `number` | `Infinity` | Maximum height |
-| `onResize` | `({ width, height }) => void` | - | Resize callback |
-| `onResizeStart` | `() => void` | - | Start callback |
-| `onResizeEnd` | `() => void` | - | End callback |
+| `direction` | `'horizontal' \| 'vertical'` | `'horizontal'` | Resize direction |
+| `defaultSize` | `number` | `50` | Initial size percentage |
+| `children` | `ReactNode` | - | Panel content |
 
 ## CSS Output
 
 ```css
-.resizable {
-  position: relative;
+.intent-resizable {
+  display: flex;
+  overflow: hidden;
 }
 
-.resizable__handle {
-  position: absolute;
-  background: transparent;
-  z-index: 10;
+.intent-resizable__panel {
+  overflow: auto;
 }
 
-.resizable__handle--right {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 8px;
-  cursor: ew-resize;
+.intent-resizable__handle {
+  flex: 0 0 4px;
+  background: var(--intent-color-border);
+  cursor: col-resize;
+  transition: background 150ms;
 }
 
-.resizable__handle--bottom {
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 8px;
-  cursor: ns-resize;
-}
-
-.resizable__handle--corner {
-  right: 0;
-  bottom: 0;
-  width: 16px;
-  height: 16px;
-  cursor: nwse-resize;
-}
-
-.resizable__handle:hover {
-  background: var(--intent-color-primary-alpha);
+.intent-resizable__handle:hover,
+.intent-resizable__handle--dragging {
+  background: var(--intent-color-primary);
 }
 ```

@@ -1,0 +1,213 @@
+---
+sidebar_position: 79
+---
+import React from 'react';
+
+# Carousel
+
+Image and content carousels.
+
+export const Carousel = ({ slides, autoPlay = false, interval = 5000 }) => {
+  const [current, setCurrent] = React.useState(0)
+  
+  const next = () => setCurrent(prev => (prev + 1) % slides.length)
+  const prev = () => setCurrent(prev => (prev - 1 + slides.length) % slides.length)
+  
+  React.useEffect(() => {
+    if (!autoPlay) return
+    const timer = setInterval(next, interval)
+    return () => clearInterval(timer)
+  }, [autoPlay, interval, slides.length])
+  
+  return (
+    <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden' }}>
+      <div style={{ aspectRatio: '16/9', background: 'var(--intent-color-surface-elevated)' }}>
+        <div style={{ 
+          width: '100%', 
+          height: '100%', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          fontSize: '1.5rem',
+          fontWeight: 600,
+          color: 'white',
+          background: `linear-gradient(135deg, hsl(${current * 60}, 70%, 50%), hsl(${(current + 1) * 60}, 70%, 50%))`
+        }}>
+          {slides[current]}
+        </div>
+      </div>
+      
+      {/* Navigation */}
+      <button 
+        onClick={prev}
+        style={{
+          position: 'absolute',
+          left: '12px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          border: 'none',
+          background: 'rgba(0,0,0,0.5)',
+          color: 'white',
+          cursor: 'pointer',
+          fontSize: '1.25rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        ←
+      </button>
+      <button 
+        onClick={next}
+        style={{
+          position: 'absolute',
+          right: '12px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          border: 'none',
+          background: 'rgba(0,0,0,0.5)',
+          color: 'white',
+          cursor: 'pointer',
+          fontSize: '1.25rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        →
+      </button>
+      
+      {/* Indicators */}
+      <div style={{
+        position: 'absolute',
+        bottom: '16px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        display: 'flex',
+        gap: '8px'
+      }}>
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              border: 'none',
+              background: i === current ? 'white' : 'rgba(255,255,255,0.5)',
+              cursor: 'pointer'
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+## Examples
+
+### Image Carousel
+
+<div className="intent-demo">
+  <Carousel 
+    slides={['Slide 1', 'Slide 2', 'Slide 3']}
+  />
+</div>
+
+```tsx
+<Carousel 
+  slides={[
+    <img src="/image1.jpg" />,
+    <img src="/image2.jpg" />,
+    <img src="/image3.jpg" />
+  ]}
+/>
+```
+
+### Auto-play
+
+<div className="intent-demo">
+  <Carousel 
+    slides={['Auto 1', 'Auto 2', 'Auto 3']}
+    autoPlay
+    interval={3000}
+  />
+</div>
+
+```tsx
+<Carousel slides={[...]} autoPlay interval={3000} />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `slides` | `ReactNode[]` | `[]` | Slide content |
+| `autoPlay` | `boolean` | `false` | Auto-advance slides |
+| `interval` | `number` | `5000` | Auto-play interval (ms) |
+| `showDots` | `boolean` | `true` | Show dot indicators |
+| `showArrows` | `boolean` | `true` | Show navigation arrows |
+
+## CSS Output
+
+```css
+.intent-carousel {
+  position: relative;
+  border-radius: var(--intent-radius-xl);
+  overflow: hidden;
+}
+
+.intent-carousel__slide {
+  aspect-ratio: 16/9;
+}
+
+.intent-carousel__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  cursor: pointer;
+}
+
+.intent-carousel__arrow--prev {
+  left: 12px;
+}
+
+.intent-carousel__arrow--next {
+  right: 12px;
+}
+
+.intent-carousel__dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.intent-carousel__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.intent-carousel__dot--active {
+  background: white;
+}
+```

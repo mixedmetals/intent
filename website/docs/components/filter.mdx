@@ -2,74 +2,153 @@
 sidebar_position: 68
 ---
 
-import { Filter } from 'intent-react'
+import React from 'react';
 
 # Filter
 
 Advanced filtering interface for data.
 
+export const Filter = ({ fields, onChange }) => {
+  const [values, setValues] = React.useState({})
+  const [isOpen, setIsOpen] = React.useState(false)
+  
+  const handleChange = (key, value) => {
+    const newValues = { ...values, [key]: value }
+    setValues(newValues)
+    onChange?.(newValues)
+  }
+  
+  const clearFilters = () => {
+    setValues({})
+    onChange?.({})
+  }
+  
+  const activeCount = Object.values(values).filter(v => v && v !== 'all').length
+  
+  return (
+    <div style={{ position: 'relative' }}>
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '8px 16px',
+          border: '1px solid var(--intent-color-border)',
+          borderRadius: '8px',
+          background: 'var(--intent-color-surface)',
+          cursor: 'pointer',
+          fontSize: '0.875rem'
+        }}
+      >
+        <span>🔍</span>
+        <span>Filter</span>
+        {activeCount > 0 && (
+          <span style={{ 
+            padding: '2px 8px', 
+            background: 'var(--intent-color-primary)', 
+            color: 'white', 
+            borderRadius: '9999px', 
+            fontSize: '0.75rem' 
+          }}>
+            {activeCount}
+          </span>
+        )}
+      </button>
+      
+      {isOpen && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          marginTop: '8px',
+          minWidth: '280px',
+          background: 'var(--intent-color-surface)',
+          border: '1px solid var(--intent-color-border)',
+          borderRadius: '12px',
+          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+          zIndex: 50,
+          padding: '16px'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <span style={{ fontWeight: 600 }}>Filters</span>
+            {activeCount > 0 && (
+              <button 
+                onClick={clearFilters}
+                style={{ fontSize: '0.875rem', color: 'var(--intent-color-primary)', background: 'none', border: 'none', cursor: 'pointer' }}
+              >
+                Clear all
+              </button>
+            )}
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {fields.map(field => (
+              <div key={field.key}>
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>{field.label}</label>
+                {field.type === 'select' ? (
+                  <select
+                    value={values[field.key] || 'all'}
+                    onChange={(e) => handleChange(field.key, e.target.value === 'all' ? '' : e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid var(--intent-color-border)',
+                      borderRadius: '6px',
+                      fontSize: '0.875rem'
+                    }}
+                  >
+                    <option value="all">All</option>
+                    {field.options.map(opt => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                ) : field.type === 'text' ? (
+                  <input
+                    type="text"
+                    value={values[field.key] || ''}
+                    onChange={(e) => handleChange(field.key, e.target.value)}
+                    placeholder={`Search ${field.label.toLowerCase()}...`}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid var(--intent-color-border)',
+                      borderRadius: '6px',
+                      fontSize: '0.875rem'
+                    }}
+                  />
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 ## Examples
 
 ### Basic Filter
 
-```tsx
-import { useState } from 'react'
-import { Filter, Button } from 'intent-react'
-
-function Example() {
-  const [filters, setFilters] = useState({})
-  
-  return (
-    <Filter
-      fields={[
-        { key: 'status', label: 'Status', type: 'select', 
-          options: ['All', 'Active', 'Inactive'] },
-        { key: 'date', label: 'Date', type: 'date' },
-        { key: 'search', label: 'Search', type: 'text' },
-      ]}
-      values={filters}
-      onChange={setFilters}
-    >
-      <Button>Filter</Button>
-    </Filter>
-  )
-}
-```
-
-### With Groups
+<div className="intent-demo">
+  <Filter 
+    fields={[
+      { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Inactive', 'Pending'] },
+      { key: 'role', label: 'Role', type: 'select', options: ['Admin', 'Editor', 'Viewer'] },
+      { key: 'search', label: 'Search', type: 'text' }
+    ]}
+    onChange={(filters) => console.log(filters)}
+  />
+</div>
 
 ```tsx
-<Filter
-  groups={[
-    {
-      label: 'Status',
-      fields: [
-        { key: 'status', type: 'select', 
-          options: ['Active', 'Inactive', 'Pending'] },
-      ]
-    },
-    {
-      label: 'Date Range',
-      fields: [
-        { key: 'startDate', type: 'date', label: 'From' },
-        { key: 'endDate', type: 'date', label: 'To' },
-      ]
-    },
+<Filter 
+  fields={[
+    { key: 'status', label: 'Status', type: 'select', 
+      options: ['Active', 'Inactive'] },
+    { key: 'search', label: 'Search', type: 'text' }
   ]}
-  values={filters}
-  onChange={setFilters}
->
-  <Button icon="filter">Filters</Button>
-</Filter>
-```
-
-### Inline Filter
-
-```tsx
-<Filter
-  variant="inline"
-  fields={[...]}
-  values={filters}
   onChange={setFilters}
 />
 ```
@@ -78,57 +157,46 @@ function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `fields` | `FilterField[]` | - | Filter fields |
-| `groups` | `FilterGroup[]` | - | Grouped fields |
+| `fields` | `Array<{key: string, label: string, type: 'select' \| 'text' \| 'date', options?: string[]}>` | `[]` | Filter fields |
 | `values` | `object` | `{}` | Current filter values |
-| `onChange` | `(values: object) => void` | - | Change callback |
-| `variant` | `'popover'` \| `'inline'` | `'popover'` | Display variant |
-| `children` | `ReactNode` | - | Trigger element |
-
-### FilterField Type
-
-```typescript
-interface FilterField {
-  key: string
-  label?: string
-  type: 'text' | 'select' | 'date' | 'number' | 'checkbox' | 'radio'
-  options?: string[]  // For select/radio/checkbox
-  placeholder?: string
-}
-```
+| `onChange` | `(values: object) => void` | - | Filter change handler |
 
 ## CSS Output
 
 ```css
-.filter {
+.intent-filter {
+  position: relative;
+}
+
+.intent-filter__trigger {
   display: flex;
-  gap: var(--intent-spacing-2);
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+  cursor: pointer;
+  font-size: 0.875rem;
 }
 
-.filter__popover {
-  min-width: 300px;
-  padding: var(--intent-spacing-4);
+.intent-filter__badge {
+  padding: 2px 8px;
+  background: var(--intent-color-primary);
+  color: white;
+  border-radius: var(--intent-radius-full);
+  font-size: 0.75rem;
 }
 
-.filter__group {
-  margin-bottom: var(--intent-spacing-4);
-}
-
-.filter__group-label {
-  font-weight: 500;
-  margin-bottom: var(--intent-spacing-2);
-}
-
-.filter__field {
-  margin-bottom: var(--intent-spacing-3);
-}
-
-.filter__actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--intent-spacing-2);
-  margin-top: var(--intent-spacing-4);
-  padding-top: var(--intent-spacing-3);
-  border-top: 1px solid var(--intent-color-border);
+.intent-filter__popover {
+  position: absolute;
+  top: 100%;
+  min-width: 280px;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-xl);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  padding: 16px;
 }
 ```

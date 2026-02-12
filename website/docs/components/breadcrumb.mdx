@@ -1,0 +1,90 @@
+---
+sidebar_position: 53
+---
+
+# Breadcrumb
+
+Navigation breadcrumbs for showing page hierarchy.
+
+export const Breadcrumb = ({ items }) => (
+  <nav aria-label="Breadcrumb">
+    <ol style={{ display: 'flex', alignItems: 'center', gap: '8px', listStyle: 'none', padding: 0, margin: 0, fontSize: '0.875rem' }}>
+      {items.map((item, i) => (
+        <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {i > 0 && <span style={{ color: 'var(--intent-color-muted)' }}>/</span>}
+          {item.href ? (
+            <a href={item.href} style={{ color: 'var(--intent-color-primary)', textDecoration: 'none' }}>
+              {item.label}
+            </a>
+          ) : (
+            <span style={{ color: 'var(--intent-color-muted)' }}>{item.label}</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </nav>
+)
+
+## Examples
+
+### Basic Breadcrumb
+
+<div className="intent-demo">
+  <Breadcrumb 
+    items={[
+      { label: 'Home', href: '/' },
+      { label: 'Products', href: '/products' },
+      { label: 'Electronics', href: '/products/electronics' },
+      { label: 'Laptops' }
+    ]}
+  />
+</div>
+
+```tsx
+<Breadcrumb 
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'Laptops' }
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `Array<{label: string, href?: string}>` | `[]` | Breadcrumb items |
+| `separator` | `ReactNode` | `'/'` | Custom separator |
+
+## CSS Output
+
+```css
+.intent-breadcrumb {
+  font-size: 0.875rem;
+}
+
+.intent-breadcrumb__list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+
+.intent-breadcrumb__link {
+  color: var(--intent-color-primary);
+  text-decoration: none;
+}
+
+.intent-breadcrumb__link:hover {
+  text-decoration: underline;
+}
+
+.intent-breadcrumb__current {
+  color: var(--intent-color-muted);
+}
+
+.intent-breadcrumb__separator {
+  color: var(--intent-color-muted);
+}
+```

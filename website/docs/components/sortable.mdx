@@ -1,72 +1,90 @@
 ---
-sidebar_position: 65
+sidebar_position: 100
 ---
-
-import { Sortable } from 'intent-react'
+import React from 'react';
 
 # Sortable
 
-Drag and drop list reordering.
+Drag and drop sortable lists.
+
+export const Sortable = ({ items: initialItems }) => {
+  const [items, setItems] = React.useState(initialItems)
+  const [dragging, setDragging] = React.useState(null)
+  
+  const handleDragStart = (index) => {
+    setDragging(index)
+  }
+  
+  const handleDragOver = (e, index) => {
+    e.preventDefault()
+    if (dragging === null || dragging === index) return
+    
+    const newItems = [...items]
+    const item = newItems[dragging]
+    newItems.splice(dragging, 1)
+    newItems.splice(index, 0, item)
+    setDragging(index)
+    setItems(newItems)
+  }
+  
+  const handleDragEnd = () => {
+    setDragging(null)
+  }
+  
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      {items.map((item, index) => (
+        <div
+          key={item.id}
+          draggable
+          onDragStart={() => handleDragStart(index)}
+          onDragOver={(e) => handleDragOver(e, index)}
+          onDragEnd={handleDragEnd}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '12px 16px',
+            background: 'var(--intent-color-surface)',
+            border: '1px solid var(--intent-color-border)',
+            borderRadius: '8px',
+            cursor: 'grab',
+            opacity: dragging === index ? 0.5 : 1,
+            transition: 'all 150ms'
+          }}
+        >
+          <span style={{ color: 'var(--intent-color-muted)', cursor: 'grab' }}>⋮⋮</span>
+          <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
+          <span style={{ flex: 1, fontWeight: 500 }}>{item.label}</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--intent-color-muted)' }}>Drag to reorder</span>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 ## Examples
 
-### Basic Sortable
+### Sortable List
+
+<div className="intent-demo">
+  <Sortable 
+    items={[
+      { id: '1', label: 'Home', icon: '🏠' },
+      { id: '2', label: 'About', icon: 'ℹ️' },
+      { id: '3', label: 'Products', icon: '📦' },
+      { id: '4', label: 'Contact', icon: '📧' }
+    ]}
+  />
+</div>
 
 ```tsx
-import { useState } from 'react'
-import { Sortable } from 'intent-react'
-
-function Example() {
-  const [items, setItems] = useState([
-    { id: '1', name: 'Item 1' },
-    { id: '2', name: 'Item 2' },
-    { id: '3', name: 'Item 3' },
-  ])
-  
-  return (
-    <Sortable
-      items={items}
-      onReorder={setItems}
-      renderItem={(item) => (
-        <Card padding="normal">
-          <Text>{item.name}</Text>
-        </Card>
-      )}
-      getItemId={(item) => item.id}
-    />
-  )
-}
-```
-
-### Horizontal Sortable
-
-```tsx
-<Sortable
-  direction="horizontal"
-  items={items}
-  onReorder={setItems}
-  renderItem={(item) => (
-    <div style={{ width: 100, padding: 16, background: '#f0f0f0' }}>
-      {item.name}
-    </div>
-  )}
-/>
-```
-
-### With Handle
-
-```tsx
-<Sortable
-  items={items}
-  onReorder={setItems}
-  renderItem={(item, { dragHandleProps }) => (
-    <Card padding="normal">
-      <div {...dragHandleProps} style={{ cursor: 'grab' }}>
-        <Icon name="grip-vertical" />
-      </div>
-      <Text>{item.name}</Text>
-    </Card>
-  )}
+<Sortable 
+  items={[
+    { id: '1', label: 'Item 1' },
+    { id: '2', label: 'Item 2' }
+  ]}
+  onReorder={(items) => console.log(items)}
 />
 ```
 
@@ -74,41 +92,37 @@ function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `T[]` | required | Sortable items |
-| `onReorder` | `(items: T[]) => void` | required | Reorder callback |
-| `renderItem` | `(item: T, props) => ReactNode` | required | Item renderer |
-| `getItemId` | `(item: T) => string` | required | Get unique ID |
-| `direction` | `'vertical'` \| `'horizontal'` | `'vertical'` | Sort direction |
-| `disabled` | `boolean` | `false` | Disable sorting |
-
-### Render Item Props
-
-```typescript
-interface RenderItemProps {
-  dragHandleProps: object  // Props for drag handle
-  isDragging: boolean      // Currently dragging
-  isDragOver: boolean      // Drag over this item
-}
-```
+| `items` | `Array<{id: string, label: string, icon?: ReactNode}>` | `[]` | Sortable items |
+| `onReorder` | `(items) => void` | - | Reorder handler |
+| `axis` | `'x' \| 'y'` | `'y'` | Drag axis |
 
 ## CSS Output
 
 ```css
-.sortable {
+.intent-sortable {
   display: flex;
   flex-direction: column;
-  gap: var(--intent-spacing-2);
+  gap: 8px;
 }
 
-.sortable__item {
-  transition: transform 150ms ease;
+.intent-sortable__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  cursor: grab;
+  transition: all 150ms;
 }
 
-.sortable__item--dragging {
+.intent-sortable__item--dragging {
   opacity: 0.5;
 }
 
-.sortable__item--over {
-  border: 2px dashed var(--intent-color-primary);
+.intent-sortable__handle {
+  color: var(--intent-color-muted);
+  cursor: grab;
 }
 ```

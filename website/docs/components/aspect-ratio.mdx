@@ -1,0 +1,143 @@
+---
+sidebar_position: 72
+---
+
+# AspectRatio
+
+Maintain consistent aspect ratios for media.
+
+export const AspectRatio = ({ ratio = 16 / 9, children }) => {
+  const [width, height] = ratio.toString().includes('/') 
+    ? ratio.toString().split('/').map(Number)
+    : [16, 9]
+  const paddingBottom = `${(height / width) * 100}%`
+  
+  return (
+    <div style={{ position: 'relative', width: '100%' }}>
+      <div style={{ paddingBottom }} />
+      <div style={{ 
+        position: 'absolute', 
+        inset: 0, 
+        background: 'var(--intent-color-surface-elevated)',
+        borderRadius: '8px',
+        overflow: 'hidden'
+      }}>
+        {children || (
+          <div style={{ 
+            width: '100%', 
+            height: '100%', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            color: 'var(--intent-color-muted)'
+          }}>
+            {width}:{height} Aspect Ratio
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+## Examples
+
+### Video (16:9)
+
+<div className="intent-demo" style={{ maxWidth: '400px' }}>
+  <AspectRatio ratio={16 / 9}>
+    <div style={{ 
+      width: '100%', 
+      height: '100%', 
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'white',
+      fontWeight: 600
+    }}>
+      16:9 Video Placeholder
+    </div>
+  </AspectRatio>
+</div>
+
+```tsx
+<AspectRatio ratio={16 / 9}>
+  <video src="..." />
+</AspectRatio>
+```
+
+### Square (1:1)
+
+<div className="intent-demo" style={{ maxWidth: '200px' }}>
+  <AspectRatio ratio={1}>
+    <div style={{ 
+      width: '100%', 
+      height: '100%', 
+      background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'white',
+      fontWeight: 600
+    }}>
+      1:1
+    </div>
+  </AspectRatio>
+</div>
+
+```tsx
+<AspectRatio ratio={1}>
+  <img src="..." />
+</AspectRatio>
+```
+
+### Portrait (3:4)
+
+<div className="intent-demo" style={{ maxWidth: '200px' }}>
+  <AspectRatio ratio={3 / 4}>
+    <div style={{ 
+      width: '100%', 
+      height: '100%', 
+      background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'white',
+      fontWeight: 600
+    }}>
+      3:4 Portrait
+    </div>
+  </AspectRatio>
+</div>
+
+```tsx
+<AspectRatio ratio={3 / 4}>
+  <img src="..." />
+</AspectRatio>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ratio` | `number` | `16/9` | Aspect ratio (width/height) |
+| `children` | `ReactNode` | - | Content to display |
+
+## CSS Output
+
+```css
+.intent-aspect-ratio {
+  position: relative;
+  width: 100%;
+}
+
+.intent-aspect-ratio__spacer {
+  padding-bottom: 56.25%; /* Default 16:9 */
+}
+
+.intent-aspect-ratio__content {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+```

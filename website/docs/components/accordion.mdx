@@ -2,108 +2,68 @@
 sidebar_position: 24
 ---
 
-import { Accordion } from 'intent-react'
+import React from 'react';
 
 # Accordion
 
 Collapsible sections for organizing content.
 
-## Example
-
-<Accordion 
-  items={[
-    {
-      id: '1',
-      title: 'What is Intent Framework?',
-      content: 'Intent is a schema-first, AI-native CSS framework that bridges the gap between design intent and implementation. It uses schemas to define components and generates optimized CSS at build time.'
-    },
-    {
-      id: '2',
-      title: 'How do I get started?',
-      content: 'Install the intent-core and intent-react packages, import the theme CSS, and start using components. Check out our Quick Start guide for more details.'
-    },
-    {
-      id: '3',
-      title: 'Is Intent production ready?',
-      content: 'Yes! Intent is used in production by several teams. The framework provides 72 production-ready components with full TypeScript support and accessibility features.'
-    }
-  ]}
-  style={{ marginBottom: 24 }}
-/>
-
-```tsx
-import { Accordion } from 'intent-react'
-
-<Accordion 
-  items={[
-    {
-      id: '1',
-      title: 'What is Intent Framework?',
-      content: 'Intent is a schema-first CSS framework...'
-    },
-    {
-      id: '2',
-      title: 'How do I get started?',
-      content: 'Install intent-core and intent-react...'
-    }
-  ]}
-/>
-```
-
-## Allow Multiple Open
-
-<Accordion 
-  allowMultiple
-  items={[
-    {
-      id: '1',
-      title: 'Section One',
-      content: 'Content for section one. Multiple sections can be open at once.'
-    },
-    {
-      id: '2',
-      title: 'Section Two',
-      content: 'Content for section two.'
-    },
-    {
-      id: '3',
-      title: 'Section Three',
-      content: 'Content for section three.'
-    }
-  ]}
-  style={{ marginBottom: 24 }}
-/>
-
-```tsx
-<Accordion allowMultiple items={[...]} />
-```
-
-## Default Open Items
-
-```tsx
-<Accordion 
-  defaultOpen={['1', '2']}
-  items={[...]}
-/>
-```
-
-## Controlled Component
-
-```tsx
-import { useState } from 'react'
-import { Accordion } from 'intent-react'
-
-function ControlledAccordion() {
-  const [openItems, setOpenItems] = useState(['1'])
-  
+export const Accordion = ({ items }) => {
+  const [openId, setOpenId] = React.useState(null)
   return (
-    <Accordion 
-      openItems={openItems}
-      onChange={setOpenItems}
-      items={[...]}
-    />
+    <div style={{ border: '1px solid var(--intent-color-border)', borderRadius: '8px', overflow: 'hidden' }}>
+      {items.map((item) => (
+        <div key={item.id} style={{ borderBottom: '1px solid var(--intent-color-border)' }}>
+          <button
+            onClick={() => setOpenId(openId === item.id ? null : item.id)}
+            style={{
+              width: '100%',
+              padding: '12px 16px',
+              textAlign: 'left',
+              background: 'var(--intent-color-surface)',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 500,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            {item.title}
+            <span style={{ transform: openId === item.id ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 200ms' }}>▼</span>
+          </button>
+          {openId === item.id && (
+            <div style={{ padding: '12px 16px', background: 'var(--intent-color-surface-elevated)' }}>
+              {item.content}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
   )
 }
+
+## Examples
+
+### Basic Accordion
+
+<div className="intent-demo">
+  <Accordion 
+    items={[
+      { id: '1', title: 'What is Intent Framework?', content: 'Intent is a schema-first, AI-native CSS framework that bridges the gap between design intent and implementation.' },
+      { id: '2', title: 'How do I get started?', content: 'Install the intent-core and intent-react packages, import the theme CSS, and start using components.' },
+      { id: '3', title: 'Is Intent production ready?', content: 'Yes! Intent is used in production by several teams with full TypeScript support.' }
+    ]}
+  />
+</div>
+
+```tsx
+<Accordion 
+  items={[
+    { id: '1', title: 'Question 1', content: 'Answer 1' },
+    { id: '2', title: 'Question 2', content: 'Answer 2' }
+  ]}
+/>
 ```
 
 ## Props
@@ -111,11 +71,6 @@ function ControlledAccordion() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `items` | `Array<{id: string, title: string, content: ReactNode}>` | `[]` | Accordion items |
-| `allowMultiple` | `boolean` | `false` | Allow multiple open items |
-| `defaultOpen` | `string[]` | `[]` | Initially open item IDs |
-| `openItems` | `string[]` | - | Controlled open items |
-| `onChange` | `(items: string[]) => void` | - | Change callback |
-| `size` | `'sm'` \| `'md'` \| `'lg'` | `'md'` | Accordion size |
 
 ## CSS Output
 
@@ -126,51 +81,18 @@ function ControlledAccordion() {
   overflow: hidden;
 }
 
-.accordion__item {
-  border-bottom: 1px solid var(--intent-color-border);
-}
-
-.accordion__item:last-child {
-  border-bottom: none;
-}
-
 .accordion__trigger {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
-  padding: var(--intent-spacing-3) var(--intent-spacing-4);
-  background: transparent;
+  padding: 12px 16px;
+  text-align: left;
+  background: var(--intent-color-surface);
+  border: none;
   cursor: pointer;
-}
-
-.accordion__trigger:hover {
-  background: var(--intent-color-surface-elevated);
+  font-weight: 500;
 }
 
 .accordion__content {
-  padding: var(--intent-spacing-3) var(--intent-spacing-4);
-  color: var(--intent-color-text-muted);
-}
-
-.accordion__icon {
-  transition: transform 200ms ease;
-}
-
-.accordion__item--open .accordion__icon {
-  transform: rotate(180deg);
+  padding: 12px 16px;
+  background: var(--intent-color-surface-elevated);
 }
 ```
-
-## When to Use
-
-Use **Accordion** for:
-- FAQs
-- Settings panels with many sections
-- Hiding detailed content
-- Mobile-friendly content organization
-
-Use **Tabs** when:
-- Content is at the same level of importance
-- Users need to switch frequently
-- Space is limited

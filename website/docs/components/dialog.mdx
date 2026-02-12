@@ -1,227 +1,162 @@
 ---
-sidebar_position: 32
+sidebar_position: 70
 ---
-
-import { Stack, Button, Dialog, Text } from 'intent-react'
+import React from 'react';
 
 # Dialog
 
-Pre-configured modal for common confirmation patterns.
+Accessible modal dialogs.
 
-## Overview
+export const Dialog = ({ title, children, isOpen, onOpenChange, description }) => {
+  if (!isOpen) return null
+  
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div 
+        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }} 
+        onClick={() => onOpenChange(false)}
+      />
+      <div style={{ 
+        position: 'relative', 
+        background: 'var(--intent-color-surface)', 
+        borderRadius: '12px', 
+        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+        maxWidth: '450px',
+        width: '90%',
+        maxHeight: '85vh',
+        overflow: 'auto'
+      }}>
+        <div style={{ padding: '20px 24px', borderBottom: description ? 'none' : '1px solid var(--intent-color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h2 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>{title}</h2>
+            {description && <p style={{ margin: '4px 0 0 0', fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>{description}</p>}
+          </div>
+          <button 
+            onClick={() => onOpenChange(false)}
+            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--intent-color-muted)', padding: '4px' }}
+          >
+            ×
+          </button>
+        </div>
+        <div style={{ padding: '24px' }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}
 
-Dialog is a specialized Modal component with pre-built patterns for:
-- Alert dialogs (information, warnings, errors)
-- Confirmation dialogs (yes/no, ok/cancel)
-- Form dialogs with standard actions
-
-Think of Dialog as Modal with opinions, while Modal gives you full control.
-
-## Alert Dialog
-
-Simple notification with single action:
-
-```tsx
-import { useState } from 'react'
-import { Button, Dialog } from 'intent-react'
-
-function AlertExample() {
-  const [open, setOpen] = useState(false)
+export const DialogDemo = () => {
+  const [isOpen, setIsOpen] = React.useState(false)
   
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Show Alert</Button>
-      
-      <Dialog.Alert
-        open={open}
-        onOpenChange={setOpen}
-        title="Subscription Expired"
-        description="Your subscription has expired. Renew to continue accessing premium features."
-        action={{ label: 'Renew Now', onClick: handleRenew }}
-      />
+      <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(true)}>
+        Edit Profile
+      </button>
+      <Dialog 
+        isOpen={isOpen}
+        onOpenChange={setIsOpen}
+        title="Edit Profile"
+        description="Make changes to your profile here."
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>Name</label>
+            <input type="text" defaultValue="John Doe" style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px' }} />
+          </div>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>Username</label>
+            <input type="text" defaultValue="@johndoe" style={{ width: '100%', padding: '8px 12px', border: '1px solid var(--intent-color-border)', borderRadius: '6px' }} />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '8px' }}>
+            <button className="intent-btn intent-btn--variant-secondary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Cancel</button>
+            <button className="intent-btn intent-btn--variant-primary intent-btn--size-medium" onClick={() => setIsOpen(false)}>Save Changes</button>
+          </div>
+        </div>
+      </Dialog>
     </>
   )
 }
-```
 
-## Confirm Dialog
+## Examples
 
-Two-action confirmation:
+### Edit Profile Dialog
 
-```tsx
-<Dialog.Confirm
-  open={open}
-  onOpenChange={setOpen}
-  title="Delete Account"
-  description="Are you sure you want to delete your account? This action cannot be undone."
-  confirm={{ 
-    label: 'Delete', 
-    onClick: handleDelete,
-    danger: true 
-  }}
-  cancel={{ label: 'Keep Account' }}
-/>
-```
-
-## Form Dialog
-
-Dialog with form fields:
+<div className="intent-demo">
+  <DialogDemo />
+</div>
 
 ```tsx
-<Dialog.Form
-  open={open}
-  onOpenChange={setOpen}
-  title="Create Project"
-  description="Enter a name for your new project."
-  onSubmit={handleSubmit}
+const [isOpen, setIsOpen] = useState(false)
+
+<Button onClick={() => setIsOpen(true)}>Edit Profile</Button>
+
+<Dialog 
+  isOpen={isOpen}
+  onOpenChange={setIsOpen}
+  title="Edit Profile"
+  description="Make changes to your profile."
 >
-  <Field label="Project Name">
-    <Input placeholder="My Project" />
-  </Field>
-  <Field label="Description">
-    <Textarea placeholder="Optional description" />
-  </Field>
-</Dialog.Form>
-```
-
-## Dialog Variants
-
-### Info
-
-```tsx
-<Dialog.Alert
-  variant="info"
-  title="New Feature Available"
-  description="Check out the new dashboard layout!"
-  action={{ label: 'Take Tour' }}
-/>
-```
-
-### Success
-
-```tsx
-<Dialog.Alert
-  variant="success"
-  title="Payment Successful"
-  description="Your payment has been processed."
-  action={{ label: 'View Receipt' }}
-/>
-```
-
-### Warning
-
-```tsx
-<Dialog.Confirm
-  variant="warning"
-  title="Unsaved Changes"
-  description="You have unsaved changes. Are you sure you want to leave?"
-  confirm={{ label: 'Leave', danger: true }}
-  cancel={{ label: 'Stay' }}
-/>
-```
-
-### Danger
-
-```tsx
-<Dialog.Confirm
-  variant="danger"
-  title="Delete Repository"
-  description="This will permanently delete the repository and all associated data."
-  confirm={{ label: 'Delete', danger: true }}
-  cancel={{ label: 'Cancel' }}
-/>
+  <form>...</form>
+</Dialog>
 ```
 
 ## Props
 
-### Dialog.Alert
-
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `open` | `boolean` | - | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | - | State change callback |
-| `variant` | `'info'` \| `'success'` \| `'warning'` \| `'danger'` | `'info'` | Dialog style |
-| `title` | `string` | required | Dialog title |
+| `isOpen` | `boolean` | - | Dialog visibility |
+| `onOpenChange` | `(open: boolean) => void` | - | Visibility change handler |
+| `title` | `string` | - | Dialog title |
 | `description` | `string` | - | Dialog description |
-| `action` | `{ label: string, onClick?: () => void }` | required | Primary action |
-
-### Dialog.Confirm
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `open` | `boolean` | - | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | - | State change callback |
-| `variant` | `'default'` \| `'danger'` | `'default'` | Dialog style |
-| `title` | `string` | required | Dialog title |
-| `description` | `string` | - | Dialog description |
-| `confirm` | `{ label: string, onClick?: () => void, danger?: boolean }` | required | Confirm action |
-| `cancel` | `{ label: string, onClick?: () => void }` | required | Cancel action |
-
-### Dialog.Form
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `open` | `boolean` | - | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | - | State change callback |
-| `title` | `string` | required | Dialog title |
-| `description` | `string` | - | Dialog description |
-| `onSubmit` | `(e: FormEvent) => void` | required | Form submit handler |
-| `submitLabel` | `string` | `'Save'` | Submit button text |
-| `children` | `ReactNode` | - | Form content |
+| `children` | `ReactNode` | - | Dialog content |
 
 ## CSS Output
 
 ```css
-.dialog {
-  /* Same as Modal base styles */
+.intent-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 50;
 }
 
-.dialog__content {
-  max-width: 400px;
-  padding: var(--intent-spacing-6);
+.intent-dialog {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--intent-color-surface);
+  border-radius: var(--intent-radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 450px;
+  width: 90%;
+  max-height: 85vh;
+  z-index: 51;
 }
 
-.dialog__icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+.intent-dialog__header {
+  padding: 20px 24px;
   display: flex;
+  justifyContent: space-between;
   align-items: center;
-  justify-content: center;
-  margin-bottom: var(--intent-spacing-4);
 }
 
-.dialog__icon--danger {
-  background: var(--intent-color-danger-alpha);
-  color: var(--intent-color-danger);
-}
-
-.dialog__title {
-  font-size: var(--intent-font-size-xl);
+.intent-dialog__title {
+  margin: 0;
+  font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: var(--intent-spacing-2);
 }
 
-.dialog__description {
-  color: var(--intent-color-text-muted);
-  margin-bottom: var(--intent-spacing-6);
+.intent-dialog__description {
+  margin: 4px 0 0 0;
+  font-size: 0.875rem;
+  color: var(--intent-color-muted);
 }
 
-.dialog__actions {
-  display: flex;
-  gap: var(--intent-spacing-3);
-  justify-content: flex-end;
+.intent-dialog__body {
+  padding: 24px;
 }
 ```
-
-## Dialog vs Modal
-
-Use **Dialog** when:
-- You need standard confirmation patterns
-- Quick implementation with consistent styling
-- Simple alert/confirm/form use cases
-
-Use **Modal** when:
-- You need full control over content
-- Custom layouts or complex interactions
-- Non-standard dialog patterns

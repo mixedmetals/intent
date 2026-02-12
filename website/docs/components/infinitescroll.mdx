@@ -1,98 +1,133 @@
 ---
-sidebar_position: 66
+sidebar_position: 64
 ---
 
-import { InfiniteScroll } from 'intent-react'
+import React from 'react';
 
 # InfiniteScroll
 
-Load more content as user scrolls.
+Infinite scrolling list component.
+
+export const InfiniteScroll = ({ items, hasMore, onLoadMore }) => {
+  const [loading, setLoading] = React.useState(false)
+  const loaderRef = React.useRef(null)
+  
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          setLoading(true)
+          setTimeout(() => {
+            onLoadMore?.()
+            setLoading(false)
+          }, 1000)
+        }
+      },
+      { threshold: 0.1 }
+    )
+    
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current)
+    }
+    
+    return () => observer.disconnect()
+  }, [hasMore, loading, onLoadMore])
+  
+  return (
+    <div style={{ maxHeight: '300px', overflow: 'auto', border: '1px solid var(--intent-color-border)', borderRadius: '8px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {items.map((item, i) => (
+          <div 
+            key={i} 
+            style={{ 
+              padding: '16px', 
+              borderBottom: '1px solid var(--intent-color-border)',
+              background: i % 2 === 0 ? 'var(--intent-color-surface)' : 'var(--intent-color-surface-elevated)'
+            }}
+          >
+            <div style={{ fontWeight: 500 }}>{item.title}</div>
+            <div style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>{item.description}</div>
+          </div>
+        ))}
+      </div>
+      <div ref={loaderRef} style={{ padding: '20px', textAlign: 'center' }}>
+        {loading ? (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <div style={{ width: '16px', height: '16px', border: '2px solid var(--intent-color-border)', borderTopColor: 'var(--intent-color-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+            <span style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Loading more...</span>
+          </div>
+        ) : hasMore ? (
+          <span style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>Scroll for more</span>
+        ) : (
+          <span style={{ fontSize: '0.875rem', color: 'var(--intent-color-muted)' }}>No more items</span>
+        )}
+      </div>
+    </div>
+  )
+}
 
 ## Examples
 
-### Basic InfiniteScroll
+### Basic Infinite Scroll
+
+<div className="intent-demo">
+  <InfiniteScroll 
+    items={[
+      { title: 'Item 1', description: 'Description for item 1' },
+      { title: 'Item 2', description: 'Description for item 2' },
+      { title: 'Item 3', description: 'Description for item 3' },
+      { title: 'Item 4', description: 'Description for item 4' },
+      { title: 'Item 5', description: 'Description for item 5' }
+    ]}
+    hasMore={true}
+    onLoadMore={() => console.log('Loading more...')}
+  />
+</div>
 
 ```tsx
-import { useState } from 'react'
-import { InfiniteScroll, List, Spinner } from 'intent-react'
-
-function Example() {
-  const [items, setItems] = useState([])
-  const [hasMore, setHasMore] = useState(true)
-  const [loading, setLoading] = useState(false)
-  
-  const loadMore = async () => {
-    setLoading(true)
-    const newItems = await fetchItems(items.length)
-    setItems([...items, ...newItems])
-    setHasMore(newItems.length > 0)
-    setLoading(false)
-  }
-  
-  return (
-    <InfiniteScroll
-      onLoadMore={loadMore}
-      hasMore={hasMore}
-      loader={<Spinner />}
-    >
-      <List items={items} />
-    </InfiniteScroll>
-  )
-}
-```
-
-### With Threshold
-
-```tsx
-<InfiniteScroll
-  onLoadMore={loadMore}
+<InfiniteScroll 
+  items={items}
   hasMore={hasMore}
-  threshold={200}  // Load when 200px from bottom
->
-  <Grid columns={3}>
-    {items.map(item => <Card key={item.id}>{item.name}</Card>)}
-  </Grid>
-</InfiniteScroll>
-```
-
-### End Message
-
-```tsx
-<InfiniteScroll
-  onLoadMore={loadMore}
-  hasMore={hasMore}
-  endMessage={<Text align="center" color="muted">No more items</Text>}
->
-  {items.map(item => <Item key={item.id} {...item} />)}
-</InfiniteScroll>
+  onLoadMore={fetchMore}
+/>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `onLoadMore` | `() => void` \| `Promise<void>` | required | Load more callback |
-| `hasMore` | `boolean` | `true` | More items available |
-| `loader` | `ReactNode` | `<Spinner />` | Loading indicator |
-| `endMessage` | `ReactNode` | - | End of list message |
-| `threshold` | `number` | `100` | Trigger distance (px) |
-| `reverse` | `boolean` | `false` | Reverse scroll (chat) |
+| `items` | `Array<{title: string, description?: string}>` | `[]` | List items |
+| `hasMore` | `boolean` | `false` | Whether more items exist |
+| `onLoadMore` | `() => void` | - | Load more callback |
+| `threshold` | `number` | `0.8` | Trigger threshold |
+| `loader` | `ReactNode` | - | Custom loader |
 
 ## CSS Output
 
 ```css
-.infinite-scroll {
-  overflow-y: auto;
+.intent-infinite-scroll {
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
 }
 
-.infinite-scroll__loader {
-  display: flex;
-  justify-content: center;
-  padding: var(--intent-spacing-4);
+.intent-infinite-scroll__item {
+  padding: 16px;
+  border-bottom: 1px solid var(--intent-color-border);
 }
 
-.infinite-scroll__end {
-  padding: var(--intent-spacing-4);
+.intent-infinite-scroll__loader {
+  padding: 20px;
   text-align: center;
+}
+
+.intent-infinite-scroll__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--intent-color-border);
+  border-top-color: var(--intent-color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 ```
