@@ -39,7 +39,7 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={siteConfig.title}
-      description="Schema-first, AI-native CSS framework for React">
+      description="Schema-first, AI-native CSS framework for React. 72 production-ready components.">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
