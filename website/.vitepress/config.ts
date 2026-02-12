@@ -6,8 +6,6 @@ export default defineConfig({
   
   base: '/intent/',
   
-  ignoreDeadLinks: true,
-  
   head: [
     ['link', { rel: 'icon', href: '/intent/favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#3b82f6' }],
@@ -39,12 +37,8 @@ export default defineConfig({
         {
           text: 'Components',
           items: [
+            { text: 'All Components', link: '/docs/components/' },
             { text: 'Button', link: '/docs/components/button' },
-            { text: 'Input', link: '/docs/components/input' },
-            { text: 'Card', link: '/docs/components/card' },
-            { text: 'Alert', link: '/docs/components/alert' },
-            { text: 'Modal', link: '/docs/components/modal' },
-            { text: 'See All →', link: '/docs/components/' },
           ]
         },
         {
@@ -52,7 +46,6 @@ export default defineConfig({
           items: [
             { text: 'Schema Definition', link: '/docs/api/schema' },
             { text: 'Theming', link: '/docs/api/theme' },
-            { text: 'CLI', link: '/docs/api/cli' },
           ]
         }
       ]

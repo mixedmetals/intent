@@ -11,13 +11,13 @@ Intent provides 72 production-ready React components.
 - Divider - Visual separator
 
 ### Layout
-- [Stack](/docs/components/stack) - Flexbox layouts
+- Stack - Flexbox layouts
 - Container - Max-width wrapper
 - Grid - CSS Grid system
 - Box - Generic layout primitive
 
 ### Forms
-- [Input](/docs/components/input) - Text input
+- Input - Text input
 - Textarea - Multi-line input
 - Select - Dropdown
 - Checkbox / Radio - Selection

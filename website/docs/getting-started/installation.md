@@ -201,6 +201,6 @@ You should see:
 
 ## Next Steps
 
-- [Quick Start Tutorial](/docs/getting-started/quick-start) - Build your first component
+- [Quick Start Tutorial](/docs/getting-started/what-is-intent) - Learn more about Intent
 - [Theming Guide](/docs/api/theme) - Customize the default theme
-- [Component Docs](/docs/components/button) - Browse all components
+- [Component Docs](/docs/components/) - Browse all components

@@ -208,5 +208,5 @@ export const Button = (props) => {
 ## Next Steps
 
 - [Installation Guide](/docs/getting-started/installation)
-- [Quick Start Tutorial](/docs/getting-started/quick-start)
+- [All Components](/docs/components/)
 - [Component Documentation](/docs/components/button)
