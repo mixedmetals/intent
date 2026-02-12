@@ -420,13 +420,28 @@ export const RadioGroupSchema = defineComponent({
 
 export const SwitchSchema = defineComponent({
   name: 'Switch',
-  description: 'Toggle switch (checkbox alternative)',
+  description: 'Toggle switch (checkbox alternative) with schema-driven focus management',
   properties: {
     size: switchSizeProp,
     disabled: { type: 'boolean', default: false },
     required: { type: 'boolean', default: false },
+    /**
+     * Focus ring variant - automatically applied by schema
+     * LLM doesn't need to "remember" accessibility
+     */
+    focusVariant: { 
+      type: 'enum', 
+      values: ['default', 'inner', 'outer', 'none'], 
+      default: 'default' 
+    },
   },
-  constraints: [],
+  constraints: [
+    {
+      when: { disabled: true },
+      forbid: ['required'],
+      message: 'Disabled switch cannot be required',
+    },
+  ],
   mappings: {
     // Size
     'size=sm': { width: '1.75rem', height: '1rem' },
@@ -438,6 +453,20 @@ export const SwitchSchema = defineComponent({
       opacity: '0.5',
       cursor: 'not-allowed',
     },
+    
+    // Focus ring variants (schema-driven accessibility)
+    'focusVariant=default': {
+      focusClass: 'intent-switch--focus-default',
+    },
+    'focusVariant=inner': {
+      focusClass: 'intent-switch--focus-inner',
+    },
+    'focusVariant=outer': {
+      focusClass: 'intent-switch--focus-outer',
+    },
+    'focusVariant=none': {
+      focusClass: 'intent-switch--focus-none',
+    },
   },
   baseStyles: {
     appearance: 'none',
@@ -446,6 +475,10 @@ export const SwitchSchema = defineComponent({
     cursor: 'pointer',
     transition: 'background-color 150ms',
     position: 'relative',
+    // Default focus ring uses CSS custom properties
+    '--intent-focus-ring-width': '2px',
+    '--intent-focus-ring-offset': '2px',
+    '--intent-focus-ring-color': 'var(--intent-color-primary)',
   },
 });
 

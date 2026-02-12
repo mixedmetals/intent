@@ -94,6 +94,153 @@
 }
 
 /* ========================================
+   Accessibility Primitives (A11y)
+   ======================================== */
+
+/**
+ * Screen reader only content
+ * Visually hidden but accessible to assistive technologies
+ */
+.intent-sr-only,
+.intent-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/**
+ * Show screen reader content on focus
+ * Useful for skip links
+ */
+.intent-sr-only:focus,
+.intent-visually-hidden:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/**
+ * Focus Ring System
+ * Schema-driven focus states that respect prefers-reduced-motion
+ */
+
+/* Base focus ring token */
+:root {
+  --intent-focus-ring-width: 2px;
+  --intent-focus-ring-offset: 2px;
+  --intent-focus-ring-color: var(--intent-color-primary);
+  --intent-focus-ring-alpha: rgba(59, 130, 246, 0.4);
+}
+
+/* Focus Ring Variants */
+.intent-focus-ring {
+  outline: var(--intent-focus-ring-width) solid var(--intent-focus-ring-color);
+  outline-offset: var(--intent-focus-ring-offset);
+}
+
+.intent-focus-ring--inner {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--intent-focus-ring-width) var(--intent-focus-ring-color);
+}
+
+.intent-focus-ring--outer {
+  outline: none;
+  box-shadow: 0 0 0 var(--intent-focus-ring-offset) var(--intent-color-background),
+              0 0 0 calc(var(--intent-focus-ring-offset) + var(--intent-focus-ring-width)) var(--intent-focus-ring-color);
+}
+
+.intent-focus-ring--offset {
+  outline: var(--intent-focus-ring-width) solid var(--intent-focus-ring-color);
+  outline-offset: var(--intent-focus-ring-offset);
+}
+
+.intent-focus-ring--none {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* High contrast mode focus ring */
+@media (prefers-contrast: high) {
+  :root {
+    --intent-focus-ring-width: 3px;
+    --intent-focus-ring-color: CanvasText;
+  }
+  
+  .intent-focus-ring,
+  .intent-focus-ring--offset {
+    outline-style: solid;
+  }
+}
+
+/* Reduced motion: instant focus state */
+@media (prefers-reduced-motion: reduce) {
+  .intent-focus-ring,
+  .intent-focus-ring--inner,
+  .intent-focus-ring--outer,
+  .intent-focus-ring--offset {
+    transition: none;
+  }
+}
+
+/* Skip Link */
+.intent-skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--intent-z-skip-link, 9999);
+  padding: var(--intent-spacing-2) var(--intent-spacing-4);
+  background: var(--intent-color-primary);
+  color: white;
+  font-weight: var(--intent-font-weight-medium);
+  text-decoration: none;
+  border-radius: var(--intent-radius-md);
+  transition: top 0.2s;
+}
+
+.intent-skip-link:focus {
+  top: var(--intent-spacing-4);
+}
+
+/* ARIA Live Regions */
+.intent-aria-live {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.intent-aria-live--polite {
+  /* Screen readers announce when idle */
+}
+
+.intent-aria-live--assertive {
+  /* Screen readers announce immediately */
+}
+
+/* Reduced Motion Utilities */
+@media (prefers-reduced-motion: reduce) {
+  .intent-reduced-motion,
+  .intent-reduced-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
    Button
    ======================================== */
 
@@ -112,9 +259,27 @@
   line-height: 1.5;
 }
 
+/* Schema-driven focus ring for buttons */
 .intent-button:focus-visible {
-  outline: 2px solid var(--intent-color-primary);
-  outline-offset: 2px;
+  outline: var(--intent-focus-ring-width) solid var(--intent-focus-ring-color);
+  outline-offset: var(--intent-focus-ring-offset);
+}
+
+/* Button focus ring variants (set via schema) */
+.intent-button--focus-inner:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--intent-focus-ring-width) var(--intent-focus-ring-color);
+}
+
+.intent-button--focus-outer:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--intent-focus-ring-offset) var(--intent-color-background),
+              0 0 0 calc(var(--intent-focus-ring-offset) + var(--intent-focus-ring-width)) var(--intent-focus-ring-color);
+}
+
+.intent-button--focus-none:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .intent-button:disabled {
@@ -590,6 +755,90 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
+}
+
+/* ========================================
+   Switch
+   ======================================== */
+
+.intent-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--intent-spacing-3);
+  cursor: pointer;
+}
+
+.intent-switch--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.intent-switch__track {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: var(--intent-color-border);
+  border-radius: var(--intent-radius-full);
+  transition: background var(--intent-transition-fast);
+}
+
+.intent-switch__track--checked {
+  background: var(--intent-color-primary);
+}
+
+.intent-switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: var(--intent-shadow-sm);
+  transition: transform var(--intent-transition-fast);
+}
+
+.intent-switch__track--checked .intent-switch__thumb {
+  transform: translateX(20px);
+}
+
+/* Schema-driven focus ring for switches */
+.intent-switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.intent-switch__input:focus-visible + .intent-switch__track {
+  outline: var(--intent-focus-ring-width) solid var(--intent-focus-ring-color);
+  outline-offset: var(--intent-focus-ring-offset);
+}
+
+/* Inner focus variant for switches */
+.intent-switch--focus-inner .intent-switch__input:focus-visible + .intent-switch__track {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--intent-focus-ring-width) var(--intent-focus-ring-color);
+}
+
+/* Outer focus variant for switches */
+.intent-switch--focus-outer .intent-switch__input:focus-visible + .intent-switch__track {
+  outline: none;
+  box-shadow: 0 0 0 var(--intent-focus-ring-offset) var(--intent-color-background),
+              0 0 0 calc(var(--intent-focus-ring-offset) + var(--intent-focus-ring-width)) var(--intent-focus-ring-color);
+}
+
+/* No focus ring variant */
+.intent-switch--focus-none .intent-switch__input:focus-visible + .intent-switch__track {
+  outline: none;
+  box-shadow: none;
+}
+
+.intent-switch__label {
+  font-size: var(--intent-font-size-sm);
+  font-weight: var(--intent-font-weight-medium);
+  color: var(--intent-color-text);
+  user-select: none;
 }
 
 /* ========================================

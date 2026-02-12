@@ -5,6 +5,214 @@
 import { defineComponent } from './define.js';
 
 // ============================================================================
+// Button (Primary Action Component)
+// ============================================================================
+
+export const ButtonSchema = defineComponent({
+  name: 'Button',
+  description: 'Interactive button with schema-driven focus management and accessibility',
+  properties: {
+    /**
+     * Visual importance level
+     */
+    importance: { 
+      type: 'enum', 
+      values: ['primary', 'secondary', 'ghost', 'danger'], 
+      default: 'secondary',
+      description: 'Primary for main actions, secondary for alternatives, ghost for subtle, danger for destructive'
+    },
+    
+    /**
+     * Size affects touch target and visual weight
+     */
+    size: { 
+      type: 'enum', 
+      values: ['sm', 'md', 'lg'], 
+      default: 'md',
+      description: 'Small for dense UIs, medium default, large for emphasis'
+    },
+    
+    /**
+     * Loading state
+     */
+    loading: { 
+      type: 'boolean', 
+      default: false,
+      description: 'Shows spinner and disables interaction'
+    },
+    
+    /**
+     * Disabled state
+     */
+    disabled: { 
+      type: 'boolean', 
+      default: false,
+      description: 'Non-interactive state'
+    },
+    
+    /**
+     * Full width (block level)
+     */
+    fullWidth: { 
+      type: 'boolean', 
+      default: false,
+      description: 'Expands to fill container width'
+    },
+    
+    /**
+     * Focus ring variant - schema-driven accessibility
+     * LLM doesn't need to "remember" to add focus styles
+     */
+    focusVariant: { 
+      type: 'enum', 
+      values: ['default', 'inner', 'outer', 'none'], 
+      default: 'default',
+      description: 'Default uses outline offset, inner for inset shadow, outer for double shadow, none for no ring'
+    },
+    
+    /**
+     * Icon support
+     */
+    hasIcon: { 
+      type: 'boolean', 
+      default: false,
+      description: 'Whether button contains an icon (affects spacing)'
+    },
+    
+    /**
+     * Icon position
+     */
+    iconPosition: { 
+      type: 'enum', 
+      values: ['left', 'right'], 
+      default: 'left',
+      description: 'Icon placement relative to text'
+    },
+  },
+  
+  constraints: [
+    {
+      when: { disabled: true },
+      forbid: ['loading'],
+      message: 'Disabled button cannot also be loading (redundant)',
+    },
+    {
+      when: { importance: 'ghost' },
+      forbid: ['focusVariant=none'],
+      message: 'Ghost buttons require visible focus rings for accessibility',
+    },
+    {
+      when: { importance: 'danger' },
+      require: { size: ['md', 'lg'] },
+      message: 'Danger actions require larger touch targets for safety',
+    },
+  ],
+  
+  mappings: {
+    // Importance (visual weight)
+    'importance=primary': {
+      backgroundColor: 'var(--intent-color-primary-600)',
+      color: '#ffffff',
+      borderColor: 'transparent',
+    },
+    'importance=secondary': {
+      backgroundColor: 'transparent',
+      color: 'var(--intent-color-primary-600)',
+      borderColor: 'var(--intent-color-neutral-300)',
+    },
+    'importance=ghost': {
+      backgroundColor: 'transparent',
+      color: 'var(--intent-color-primary-600)',
+      borderColor: 'transparent',
+    },
+    'importance=danger': {
+      backgroundColor: 'var(--intent-color-error-600)',
+      color: '#ffffff',
+      borderColor: 'transparent',
+    },
+    
+    // Size (affects padding and touch target)
+    'size=sm': {
+      height: '2rem',
+      padding: '0 0.75rem',
+      fontSize: '0.875rem',
+      gap: '0.375rem',
+    },
+    'size=md': {
+      height: '2.5rem',
+      padding: '0 1rem',
+      fontSize: '1rem',
+      gap: '0.5rem',
+    },
+    'size=lg': {
+      height: '3rem',
+      padding: '0 1.25rem',
+      fontSize: '1.125rem',
+      gap: '0.625rem',
+    },
+    
+    // Loading state
+    'loading=true': {
+      cursor: 'wait',
+      opacity: '0.8',
+    },
+    
+    // Disabled state
+    'disabled=true': {
+      cursor: 'not-allowed',
+      opacity: '0.5',
+    },
+    
+    // Full width
+    'fullWidth=true': {
+      width: '100%',
+    },
+    
+    // Focus ring variants (schema-driven accessibility)
+    'focusVariant=default': {
+      focusClass: 'intent-button--focus-default',
+    },
+    'focusVariant=inner': {
+      focusClass: 'intent-button--focus-inner',
+    },
+    'focusVariant=outer': {
+      focusClass: 'intent-button--focus-outer',
+    },
+    'focusVariant=none': {
+      focusClass: 'intent-button--focus-none',
+    },
+    
+    // Icon adjustments
+    'hasIcon=true,iconPosition=left': {
+      paddingLeft: 'calc(var(--intent-button-padding-left, 1rem) - 0.125rem)',
+    },
+    'hasIcon=true,iconPosition=right': {
+      paddingRight: 'calc(var(--intent-button-padding-right, 1rem) - 0.125rem)',
+    },
+  },
+  
+  baseStyles: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'var(--intent-font-sans)',
+    fontWeight: '500',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderRadius: '0.375rem',
+    cursor: 'pointer',
+    transition: 'all 150ms ease',
+    textDecoration: 'none',
+    lineHeight: '1.5',
+    whiteSpace: 'nowrap',
+    // Default focus ring tokens (can be overridden by theme)
+    '--intent-focus-ring-width': '2px',
+    '--intent-focus-ring-offset': '2px',
+    '--intent-focus-ring-color': 'var(--intent-color-primary-500)',
+  },
+});
+
+// ============================================================================
 // Table
 // ============================================================================
 
