@@ -1262,6 +1262,7 @@
 }
 
 .intent-checkbox__box {
+  position: relative;
   width: 18px;
   height: 18px;
   background: var(--intent-surface-milled-bg);
@@ -1277,11 +1278,41 @@
   flex-shrink: 0;
 }
 
+/* Hairline border for Checkbox */
+.intent-checkbox__box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 0.5px;
+  background: linear-gradient(
+    var(--intent-light-angle, 145deg),
+    oklch(100% 0 0 / 0.18) 0%,
+    oklch(100% 0 0 / 0.06) 50%,
+    oklch(0% 0 0 / 0.22) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
 .intent-checkbox__box--checked {
   background: var(--intent-color-primary);
   box-shadow:
     inset 0 0.5px 0 oklch(100% 0 0 / 0.20),
     0 0 8px 0 var(--intent-color-primary-alpha);
+}
+
+.intent-checkbox__box--checked::before {
+  background: linear-gradient(
+    var(--intent-light-angle, 145deg),
+    oklch(100% 0 0 / 0.30) 0%,
+    oklch(100% 0 0 / 0.10) 50%,
+    oklch(0% 0 0 / 0.30) 100%
+  );
 }
 
 .intent-checkbox__check {
@@ -1297,6 +1328,7 @@
 }
 
 .intent-radio__dot-ring {
+  position: relative;
   width: 18px;
   height: 18px;
   background: var(--intent-surface-milled-bg);
@@ -1310,11 +1342,41 @@
   flex-shrink: 0;
 }
 
+/* Hairline border for Radio */
+.intent-radio__dot-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 0.5px;
+  background: linear-gradient(
+    var(--intent-light-angle, 145deg),
+    oklch(100% 0 0 / 0.18) 0%,
+    oklch(100% 0 0 / 0.06) 50%,
+    oklch(0% 0 0 / 0.22) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
 .intent-radio__dot-ring--checked {
   background: var(--intent-color-primary);
   box-shadow:
     inset 0 0.5px 0 oklch(100% 0 0 / 0.20),
     0 0 8px 0 var(--intent-color-primary-alpha);
+}
+
+.intent-radio__dot-ring--checked::before {
+  background: linear-gradient(
+    var(--intent-light-angle, 145deg),
+    oklch(100% 0 0 / 0.30) 0%,
+    oklch(100% 0 0 / 0.10) 50%,
+    oklch(0% 0 0 / 0.30) 100%
+  );
 }
 
 .intent-radio__dot {
