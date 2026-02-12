@@ -1,0 +1,98 @@
+---
+sidebar_position: 66
+---
+
+import { InfiniteScroll } from 'intent-react'
+
+# InfiniteScroll
+
+Load more content as user scrolls.
+
+## Examples
+
+### Basic InfiniteScroll
+
+```tsx
+import { useState } from 'react'
+import { InfiniteScroll, List, Spinner } from 'intent-react'
+
+function Example() {
+  const [items, setItems] = useState([])
+  const [hasMore, setHasMore] = useState(true)
+  const [loading, setLoading] = useState(false)
+  
+  const loadMore = async () => {
+    setLoading(true)
+    const newItems = await fetchItems(items.length)
+    setItems([...items, ...newItems])
+    setHasMore(newItems.length > 0)
+    setLoading(false)
+  }
+  
+  return (
+    <InfiniteScroll
+      onLoadMore={loadMore}
+      hasMore={hasMore}
+      loader={<Spinner />}
+    >
+      <List items={items} />
+    </InfiniteScroll>
+  )
+}
+```
+
+### With Threshold
+
+```tsx
+<InfiniteScroll
+  onLoadMore={loadMore}
+  hasMore={hasMore}
+  threshold={200}  // Load when 200px from bottom
+>
+  <Grid columns={3}>
+    {items.map(item => <Card key={item.id}>{item.name}</Card>)}
+  </Grid>
+</InfiniteScroll>
+```
+
+### End Message
+
+```tsx
+<InfiniteScroll
+  onLoadMore={loadMore}
+  hasMore={hasMore}
+  endMessage={<Text align="center" color="muted">No more items</Text>}
+>
+  {items.map(item => <Item key={item.id} {...item} />)}
+</InfiniteScroll>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onLoadMore` | `() => void` \| `Promise<void>` | required | Load more callback |
+| `hasMore` | `boolean` | `true` | More items available |
+| `loader` | `ReactNode` | `<Spinner />` | Loading indicator |
+| `endMessage` | `ReactNode` | - | End of list message |
+| `threshold` | `number` | `100` | Trigger distance (px) |
+| `reverse` | `boolean` | `false` | Reverse scroll (chat) |
+
+## CSS Output
+
+```css
+.infinite-scroll {
+  overflow-y: auto;
+}
+
+.infinite-scroll__loader {
+  display: flex;
+  justify-content: center;
+  padding: var(--intent-spacing-4);
+}
+
+.infinite-scroll__end {
+  padding: var(--intent-spacing-4);
+  text-align: center;
+}
+```

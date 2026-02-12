@@ -1,0 +1,112 @@
+---
+sidebar_position: 60
+---
+
+import { PhoneInput } from 'intent-react'
+
+# PhoneInput
+
+Phone number input with country code selection.
+
+## Examples
+
+### Basic PhoneInput
+
+```tsx
+import { useState } from 'react'
+import { PhoneInput } from 'intent-react'
+
+function Example() {
+  const [phone, setPhone] = useState('')
+  
+  return (
+    <PhoneInput 
+      value={phone}
+      onChange={setPhone}
+      defaultCountry="US"
+      placeholder="(555) 123-4567"
+    />
+  )
+}
+```
+
+### With Country Select
+
+```tsx
+<PhoneInput 
+  value={phone}
+  onChange={setPhone}
+  countries={['US', 'CA', 'GB', 'AU', 'DE']}
+  defaultCountry="US"
+/>
+```
+
+### With Validation
+
+```tsx
+<PhoneInput 
+  value={phone}
+  onChange={setPhone}
+  validation={isValid ? 'valid' : 'invalid'}
+  errorMessage={!isValid ? 'Please enter a valid phone number' : undefined}
+/>
+```
+
+### International Format
+
+```tsx
+<PhoneInput 
+  value={phone}
+  onChange={setPhone}
+  format="international"  // +1 (555) 123-4567
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Phone number value |
+| `onChange` | `(value: string) => void` | - | Change callback |
+| `defaultCountry` | `string` | `'US'` | Default country code |
+| `countries` | `string[]` | - | Allowed countries |
+| `format` | `'national'` \| `'international'` | `'national'` | Number format |
+| `placeholder` | `string` | - | Input placeholder |
+| `disabled` | `boolean` | `false` | Disable input |
+| `validation` | `'valid'` \| `'invalid'` \| `'none'` | `'none'` | Validation state |
+
+## CSS Output
+
+```css
+.phone-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+}
+
+.phone-input__country {
+  display: flex;
+  align-items: center;
+  gap: var(--intent-spacing-1);
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+  border-right: 1px solid var(--intent-color-border);
+  cursor: pointer;
+}
+
+.phone-input__flag {
+  font-size: 20px;
+}
+
+.phone-input__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+}
+
+.phone-input__input:focus {
+  outline: none;
+}
+```

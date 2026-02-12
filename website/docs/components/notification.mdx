@@ -1,0 +1,160 @@
+---
+sidebar_position: 62
+---
+
+import { Notification } from 'intent-react'
+
+# Notification
+
+Toast notification system with queue management.
+
+## Examples
+
+### Basic Usage
+
+```tsx
+import { useNotification } from 'intent-react'
+
+function Example() {
+  const notify = useNotification()
+  
+  const handleClick = () => {
+    notify({
+      title: 'Success!',
+      description: 'Your changes have been saved.',
+      variant: 'success',
+    })
+  }
+  
+  return <Button onClick={handleClick}>Show Notification</Button>
+}
+```
+
+### Different Variants
+
+```tsx
+// Success
+notify.success({
+  title: 'Saved!',
+  description: 'Changes saved successfully.',
+})
+
+// Error
+notify.error({
+  title: 'Error!',
+  description: 'Something went wrong.',
+})
+
+// Warning
+notify.warning({
+  title: 'Warning',
+  description: 'Please review your input.',
+})
+
+// Info
+notify.info({
+  title: 'FYI',
+  description: 'New features available.',
+})
+```
+
+### With Action
+
+```tsx
+notify({
+  title: 'Update Available',
+  description: 'A new version is ready.',
+  action: {
+    label: 'Update',
+    onClick: () => handleUpdate(),
+  },
+})
+```
+
+### Persistent
+
+```tsx
+notify({
+  title: 'Important',
+  description: 'This notification stays until dismissed.',
+  duration: Infinity,
+})
+```
+
+## Provider Setup
+
+```tsx
+import { NotificationProvider } from 'intent-react'
+
+function App() {
+  return (
+    <NotificationProvider 
+      max={5}
+      position="top-right"
+    >
+      <YourApp />
+    </NotificationProvider>
+  )
+}
+```
+
+## Props
+
+### notify options
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | required | Notification title |
+| `description` | `string` | - | Description text |
+| `variant` | `'success'` \| `'error'` \| `'warning'` \| `'info'` | `'info'` | Variant style |
+| `duration` | `number` | `5000` | Duration in ms |
+| `action` | `{ label: string, onClick: () => void }` | - | Action button |
+
+### NotificationProvider
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `max` | `number` | `5` | Max notifications shown |
+| `position` | `'top-left'` \| `'top-right'` \| `'bottom-left'` \| `'bottom-right'` | `'bottom-right'` | Position |
+
+## CSS Output
+
+```css
+.notification-container {
+  position: fixed;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: var(--intent-spacing-2);
+}
+
+.notification-container--top-right {
+  top: var(--intent-spacing-4);
+  right: var(--intent-spacing-4);
+}
+
+.notification {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--intent-spacing-3);
+  padding: var(--intent-spacing-4);
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  box-shadow: var(--intent-shadow-lg);
+  animation: notification-slide-in 200ms ease;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+@keyframes notification-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+```

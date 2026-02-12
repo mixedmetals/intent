@@ -1,0 +1,68 @@
+---
+sidebar_position: 70
+---
+
+# BadgeGroup
+
+Group of badges with overflow handling.
+
+## Example
+
+```tsx
+import { BadgeGroup } from 'intent-react'
+
+<BadgeGroup 
+  badges={[
+    { id: '1', label: 'React', variant: 'primary' },
+    { id: '2', label: 'TypeScript', variant: 'success' },
+    { id: '3', label: 'Node.js', variant: 'warning' },
+  ]}
+/>
+```
+
+### With Limit
+
+```tsx
+<BadgeGroup 
+  limit={3}
+  badges={[...]}
+/>
+```
+
+### Removable
+
+```tsx
+const [tags, setTags] = useState([...])
+
+<BadgeGroup 
+  badges={tags}
+  removable
+  onRemove={(id) => setTags(tags.filter(t => t.id !== id))}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `badges` | `Badge[]` | required | Array of badges |
+| `limit` | `number` | - | Max badges to show |
+| `removable` | `boolean` | `false` | Show remove button |
+| `onRemove` | `(id: string) => void` | - | Remove callback |
+| `size` | `'small'` \| `'medium'` | `'medium'` | Badge size |
+
+## CSS Output
+
+```css
+.badge-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--intent-spacing-1);
+}
+
+.badge-group__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--intent-spacing-1);
+}
+```

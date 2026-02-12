@@ -1,0 +1,160 @@
+---
+sidebar_position: 71
+---
+
+import { Chart } from 'intent-react'
+
+# Chart
+
+Data visualization component.
+
+## Examples
+
+### Line Chart
+
+```tsx
+import { Chart } from 'intent-react'
+
+<Chart
+  type="line"
+  data={{
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+    datasets: [{
+      label: 'Revenue',
+      data: [12000, 19000, 15000, 25000, 22000],
+    }]
+  }}
+/>
+```
+
+### Bar Chart
+
+```tsx
+<Chart
+  type="bar"
+  data={{
+    labels: ['Product A', 'Product B', 'Product C'],
+    datasets: [{
+      label: 'Sales',
+      data: [300, 450, 200],
+    }]
+  }}
+  options={{
+    colors: ['#3b82f6'],
+  }}
+/>
+```
+
+### Pie Chart
+
+```tsx
+<Chart
+  type="pie"
+  data={{
+    labels: ['Desktop', 'Mobile', 'Tablet'],
+    datasets: [{
+      data: [60, 30, 10],
+    }]
+  }}
+  options={{
+    colors: ['#3b82f6', '#10b981', '#f59e0b'],
+  }}
+/>
+```
+
+### Area Chart
+
+```tsx
+<Chart
+  type="area"
+  data={{
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+    datasets: [{
+      label: 'Visitors',
+      data: [120, 190, 150, 250, 220],
+    }]
+  }}
+  fill
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `type` | `'line'` \| `'bar'` \| `'pie'` \| `'area'` \| `'doughnut'` | required | Chart type |
+| `data` | `ChartData` | required | Chart data |
+| `options` | `ChartOptions` | `{}` | Chart options |
+| `height` | `number` | `300` | Chart height |
+| `width` | `number` | - | Chart width |
+| `fill` | `boolean` | `false` | Fill area (area charts) |
+
+### ChartData Type
+
+```typescript
+interface ChartData {
+  labels: string[]
+  datasets: {
+    label?: string
+    data: number[]
+    color?: string
+  }[]
+}
+```
+
+### ChartOptions Type
+
+```typescript
+interface ChartOptions {
+  colors?: string[]
+  legend?: boolean
+  grid?: boolean
+  tooltips?: boolean
+  animations?: boolean
+}
+```
+
+## CSS Output
+
+```css
+.chart {
+  position: relative;
+  width: 100%;
+}
+
+.chart__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.chart__tooltip {
+  position: absolute;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: var(--intent-shadow-md);
+}
+
+.chart__legend {
+  display: flex;
+  justify-content: center;
+  gap: var(--intent-spacing-4);
+  margin-top: var(--intent-spacing-4);
+}
+
+.chart__legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--intent-spacing-2);
+  font-size: var(--intent-font-size-sm);
+}
+
+.chart__legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+```

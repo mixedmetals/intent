@@ -1,0 +1,163 @@
+---
+sidebar_position: 69
+---
+
+import { DataGrid } from 'intent-react'
+
+# DataGrid
+
+Advanced data table with sorting, filtering, and pagination.
+
+## Examples
+
+### Basic DataGrid
+
+```tsx
+import { DataGrid } from 'intent-react'
+
+<DataGrid
+  columns={[
+    { key: 'name', title: 'Name', sortable: true },
+    { key: 'email', title: 'Email', sortable: true },
+    { key: 'role', title: 'Role' },
+    { key: 'status', title: 'Status' },
+  ]}
+  data={users}
+  pagination
+  pageSize={10}
+/>
+```
+
+### With Selection
+
+```tsx
+const [selected, setSelected] = useState([])
+
+<DataGrid
+  selectable
+  selectedRows={selected}
+  onSelectionChange={setSelected}
+  columns={[...]}
+  data={users}
+/>
+```
+
+### With Row Actions
+
+```tsx
+<DataGrid
+  columns={[...]}
+  data={users}
+  rowActions={[
+    { label: 'Edit', icon: 'edit', onClick: (row) => editUser(row) },
+    { label: 'Delete', icon: 'trash', danger: true, 
+      onClick: (row) => deleteUser(row) },
+  ]}
+/>
+```
+
+### Async Data
+
+```tsx
+<DataGrid
+  columns={[...]}
+  fetchData={async (params) => {
+    // params: { page, pageSize, sort, filters }
+    const response = await fetchUsers(params)
+    return {
+      data: response.users,
+      total: response.total,
+    }
+  }}
+  pagination
+/>
+```
+
+### Expandable Rows
+
+```tsx
+<DataGrid
+  columns={[...]}
+  data={orders}
+  expandable
+  renderExpandedRow={(order) => (
+    <div>
+      <h4>Order Items</h4>
+      {order.items.map(item => <div key={item.id}>{item.name}</div>)}
+    </div>
+  )}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `DataGridColumn[]` | required | Column definitions |
+| `data` | `object[]` | - | Table data |
+| `fetchData` | `(params) => Promise<{ data, total }>` | - | Async data loader |
+| `pagination` | `boolean` | `false` | Enable pagination |
+| `pageSize` | `number` | `10` | Rows per page |
+| `selectable` | `boolean` | `false` | Enable row selection |
+| `selectedRows` | `string[]` | - | Selected row IDs |
+| `onSelectionChange` | `(ids: string[]) => void` | - | Selection callback |
+| `rowActions` | `RowAction[]` | - | Row action buttons |
+| `expandable` | `boolean` | `false` | Enable expandable rows |
+| `renderExpandedRow` | `(row) => ReactNode` | - | Expanded content |
+| `loading` | `boolean` | `false` | Loading state |
+
+### DataGridColumn Type
+
+```typescript
+interface DataGridColumn {
+  key: string
+  title: string
+  sortable?: boolean
+  filterable?: boolean
+  width?: number | string
+  align?: 'left' | 'center' | 'right'
+  render?: (value, row) => ReactNode
+}
+```
+
+## CSS Output
+
+```css
+.data-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.data-grid__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--intent-spacing-3);
+  border-bottom: 1px solid var(--intent-color-border);
+}
+
+.data-grid__table {
+  flex: 1;
+  overflow: auto;
+}
+
+.data-grid__row--selected {
+  background: var(--intent-color-primary-alpha);
+}
+
+.data-grid__row--expanded {
+  background: var(--intent-color-surface-elevated);
+}
+
+.data-grid__expanded-content {
+  padding: var(--intent-spacing-4);
+}
+
+.data-grid__pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--intent-spacing-3);
+  border-top: 1px solid var(--intent-color-border);
+}
+```

@@ -20,7 +20,6 @@ import { Icon } from 'intent-react'
 
 ```tsx
 <Icon name="star" size={12} />
-<Icon name="star" size={16} />
 <Icon name="star" size={24} />
 <Icon name="star" size={32} />
 ```
@@ -28,26 +27,15 @@ import { Icon } from 'intent-react'
 ### Colors
 
 ```tsx
-<Icon name="circle" color="default" />
 <Icon name="circle" color="primary" />
 <Icon name="circle" color="success" />
-<Icon name="circle" color="warning" />
 <Icon name="circle" color="danger" />
-```
-
-### With Button
-
-```tsx
-<Button icon="save">Save</Button>
-<Button icon="trash" importance="tertiary">Delete</Button>
-<Button icon="arrow-right" iconPosition="right">Next</Button>
 ```
 
 ### Rotating
 
 ```tsx
 <Icon name="loader" spin />
-<Icon name="refresh-cw" spin />
 ```
 
 ## Props
@@ -55,10 +43,9 @@ import { Icon } from 'intent-react'
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `name` | `string` | required | Icon name |
-| `size` | `number` | `20` | Icon size in pixels |
-| `color` | `'default'` \| `'primary'` \| `'success'` \| `'warning'` \| `'danger'` \| `'muted'` | `'default'` | Icon color |
+| `size` | `number` | `20` | Icon size |
+| `color` | `string` | `'default'` | Icon color |
 | `spin` | `boolean` | `false` | Rotate animation |
-| `strokeWidth` | `number` | `2` | Stroke width |
 
 ## CSS Output
 
@@ -67,7 +54,6 @@ import { Icon } from 'intent-react'
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 
 .icon--spin {
@@ -78,19 +64,8 @@ import { Icon } from 'intent-react'
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
-.icon--color-primary {
-  color: var(--intent-color-primary);
-}
 ```
 
 ## Available Icons
 
-Intent includes a comprehensive icon set covering:
-- Interface icons (home, settings, user, etc.)
-- Navigation icons (arrow, chevron, menu, etc.)
-- Action icons (edit, delete, save, etc.)
-- Status icons (check, alert, info, etc.)
-- File icons (file, folder, image, etc.)
-
-Icons are imported from the [Lucide](https://lucide.dev/) icon library.
+Intent uses the [Lucide](https://lucide.dev/) icon library.

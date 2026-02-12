@@ -1,0 +1,130 @@
+---
+sidebar_position: 57
+---
+
+import { ColorPicker } from 'intent-react'
+
+# ColorPicker
+
+Input for selecting colors.
+
+## Examples
+
+### Basic ColorPicker
+
+```tsx
+import { useState } from 'react'
+import { ColorPicker } from 'intent-react'
+
+function Example() {
+  const [color, setColor] = useState('#3b82f6')
+  
+  return (
+    <ColorPicker 
+      value={color}
+      onChange={setColor}
+    />
+  )
+}
+```
+
+### With Presets
+
+```tsx
+<ColorPicker 
+  value={color}
+  onChange={setColor}
+  presets={[
+    '#ef4444', '#f97316', '#f59e0b', '#84cc16',
+    '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6',
+  ]}
+/>
+```
+
+### Different Formats
+
+```tsx
+<ColorPicker 
+  value={color}
+  onChange={setColor}
+  format="hex"     // #3b82f6
+/>
+
+<ColorPicker 
+  value={color}
+  onChange={setColor}
+  format="rgb"     // rgb(59, 130, 246)
+/>
+
+<ColorPicker 
+  value={color}
+  onChange={setColor}
+  format="hsl"     // hsl(217, 91%, 60%)
+/>
+```
+
+### Alpha Support
+
+```tsx
+<ColorPicker 
+  value={color}
+  onChange={setColor}
+  alpha
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Selected color |
+| `onChange` | `(color: string) => void` | - | Change callback |
+| `format` | `'hex'` \| `'rgb'` \| `'hsl'` | `'hex'` | Color format |
+| `alpha` | `boolean` | `false` | Allow alpha selection |
+| `presets` | `string[]` | - | Preset colors |
+| `disabled` | `boolean` | `false` | Disable picker |
+
+## CSS Output
+
+```css
+.color-picker {
+  position: relative;
+  display: inline-block;
+}
+
+.color-picker__trigger {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--intent-radius-md);
+  border: 1px solid var(--intent-color-border);
+  cursor: pointer;
+}
+
+.color-picker__popover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: var(--intent-spacing-1);
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-lg);
+  box-shadow: var(--intent-shadow-lg);
+  padding: var(--intent-spacing-4);
+  z-index: 50;
+}
+
+.color-picker__presets {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--intent-spacing-1);
+  margin-top: var(--intent-spacing-3);
+}
+
+.color-picker__preset {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--intent-radius-sm);
+  cursor: pointer;
+  border: 1px solid var(--intent-color-border);
+}
+```

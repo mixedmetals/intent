@@ -1,0 +1,120 @@
+---
+sidebar_position: 59
+---
+
+import { OTPInput } from 'intent-react'
+
+# OTPInput
+
+One-time password input with individual digit fields.
+
+## Examples
+
+### Basic OTPInput
+
+```tsx
+import { useState } from 'react'
+import { OTPInput } from 'intent-react'
+
+function Example() {
+  const [otp, setOtp] = useState('')
+  
+  return (
+    <OTPInput 
+      length={6}
+      value={otp}
+      onChange={setOtp}
+    />
+  )
+}
+```
+
+### With Verification
+
+```tsx
+const [otp, setOtp] = useState('')
+const [verifying, setVerifying] = useState(false)
+const [error, setError] = useState('')
+
+<OTPInput 
+  length={6}
+  value={otp}
+  onChange={(value) => {
+    setOtp(value)
+    setError('')
+    if (value.length === 6) {
+      verifyOTP(value)
+    }
+  }}
+  error={!!error}
+/>
+```
+
+### Numeric Only
+
+```tsx
+<OTPInput 
+  length={4}
+  type="numeric"
+  value={otp}
+  onChange={setOtp}
+/>
+```
+
+### Secure Input
+
+```tsx
+<OTPInput 
+  length={6}
+  secure  // Masks input like password
+  value={otp}
+  onChange={setOtp}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `length` | `number` | `6` | Number of digits |
+| `value` | `string` | - | Current value |
+| `onChange` | `(value: string) => void` | - | Change callback |
+| `type` | `'text'` \| `'numeric'` | `'text'` | Input type |
+| `secure` | `boolean` | `false` | Mask input |
+| `disabled` | `boolean` | `false` | Disable input |
+| `error` | `boolean` | `false` | Error state |
+| `autoFocus` | `boolean` | `true` | Auto-focus first field |
+
+## CSS Output
+
+```css
+.otp-input {
+  display: flex;
+  gap: var(--intent-spacing-2);
+}
+
+.otp-input__field {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: var(--intent-font-size-xl);
+  font-weight: 600;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  background: var(--intent-color-surface);
+}
+
+.otp-input__field:focus {
+  border-color: var(--intent-color-primary);
+  box-shadow: 0 0 0 2px var(--intent-color-primary-alpha);
+  outline: none;
+}
+
+.otp-input__field--error {
+  border-color: var(--intent-color-danger);
+}
+
+.otp-input__field--filled {
+  background: var(--intent-color-surface-elevated);
+}
+```

@@ -1,0 +1,137 @@
+---
+sidebar_position: 58
+---
+
+import { RangeSlider } from 'intent-react'
+
+# RangeSlider
+
+Dual-handle slider for selecting a range of values.
+
+## Examples
+
+### Basic RangeSlider
+
+```tsx
+import { useState } from 'react'
+import { RangeSlider } from 'intent-react'
+
+function Example() {
+  const [range, setRange] = useState([20, 80])
+  
+  return (
+    <RangeSlider 
+      value={range}
+      onChange={setRange}
+      min={0}
+      max={100}
+    />
+  )
+}
+```
+
+### With Labels
+
+```tsx
+<RangeSlider 
+  value={priceRange}
+  onChange={setPriceRange}
+  min={0}
+  max={1000}
+  step={10}
+  formatValue={(v) => `$${v}`}
+/>
+```
+
+### Single Handle (Slider mode)
+
+```tsx
+<RangeSlider 
+  value={[50]}
+  onChange={([value]) => setValue(value)}
+  min={0}
+  max={100}
+/>
+```
+
+### With Marks
+
+```tsx
+<RangeSlider 
+  value={range}
+  onChange={setRange}
+  min={0}
+  max={100}
+  marks={[
+    { value: 0, label: '0%' },
+    { value: 50, label: '50%' },
+    { value: 100, label: '100%' },
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number[]` | required | Selected range [min, max] |
+| `onChange` | `(value: number[]) => void` | - | Change callback |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `step` | `number` | `1` | Step increment |
+| `marks` | `Mark[]` | - | Mark labels |
+| `disabled` | `boolean` | `false` | Disable slider |
+| `formatValue` | `(value: number) => string` | - | Value formatter |
+
+### Mark Type
+
+```typescript
+interface Mark {
+  value: number
+  label?: string
+}
+```
+
+## CSS Output
+
+```css
+.range-slider {
+  position: relative;
+  height: 24px;
+  touch-action: none;
+}
+
+.range-slider__track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  background: var(--intent-color-border);
+  border-radius: 2px;
+}
+
+.range-slider__range {
+  position: absolute;
+  height: 100%;
+  background: var(--intent-color-primary);
+  border-radius: 2px;
+}
+
+.range-slider__thumb {
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  background: var(--intent-color-surface);
+  border: 2px solid var(--intent-color-primary);
+  border-radius: 50%;
+  cursor: grab;
+}
+
+.range-slider__thumb:active {
+  cursor: grabbing;
+}
+```

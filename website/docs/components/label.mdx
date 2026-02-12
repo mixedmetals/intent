@@ -1,0 +1,70 @@
+---
+sidebar_position: 52
+---
+
+import { Label, Input } from 'intent-react'
+
+# Label
+
+Accessible form label component.
+
+## Examples
+
+### Basic Label
+
+<div style={{ marginBottom: 24 }}>
+  <Label htmlFor="email">Email Address</Label>
+  <Input id="email" placeholder="you@example.com" />
+</div>
+
+```tsx
+import { Label, Input } from 'intent-react'
+
+<Label htmlFor="email">Email Address</Label>
+<Input id="email" placeholder="you@example.com" />
+```
+
+### Required
+
+<div style={{ marginBottom: 24 }}>
+  <Label htmlFor="username" required>Username</Label>
+  <Input id="username" placeholder="johndoe" />
+</div>
+
+```tsx
+<Label htmlFor="username" required>Username</Label>
+<Input id="username" />
+```
+
+### With Field
+
+```tsx
+<Field label={<Label required>Password</Label>}>
+  <Input type="password" />
+</Field>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `htmlFor` | `string` | - | Associated input ID |
+| `required` | `boolean` | `false` | Show required indicator |
+| `children` | `ReactNode` | required | Label text |
+
+## CSS Output
+
+```css
+.label {
+  display: block;
+  font-size: var(--intent-font-size-sm);
+  font-weight: 500;
+  color: var(--intent-color-text);
+  margin-bottom: var(--intent-spacing-1);
+}
+
+.label__required {
+  color: var(--intent-color-danger);
+  margin-left: var(--intent-spacing-1);
+}
+```

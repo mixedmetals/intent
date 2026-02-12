@@ -1,0 +1,49 @@
+---
+sidebar_position: 61
+---
+
+# Kbd
+
+Keyboard key indicator for shortcuts.
+
+## Example
+
+```tsx
+import { Kbd, Text } from 'intent-react'
+
+<Text>
+  Press <Kbd>Cmd</Kbd> + <Kbd>K</Kbd> to open command palette
+</Text>
+```
+
+### Common Shortcuts
+
+```tsx
+<Text><Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> to copy</Text>
+<Text><Kbd>Ctrl</Kbd> + <Kbd>V</Kbd> to paste</Text>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `string` | required | Key label |
+| `size` | `'sm'` \| `'md'` | `'md'` | Key size |
+
+## CSS Output
+
+```css
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--intent-font-mono);
+  font-weight: 500;
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-sm);
+  background: var(--intent-color-surface-elevated);
+  box-shadow: 0 2px 0 var(--intent-color-border);
+  padding: 4px 8px;
+  font-size: var(--intent-font-size-sm);
+}
+```

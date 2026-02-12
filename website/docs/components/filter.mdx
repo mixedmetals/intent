@@ -1,0 +1,134 @@
+---
+sidebar_position: 68
+---
+
+import { Filter } from 'intent-react'
+
+# Filter
+
+Advanced filtering interface for data.
+
+## Examples
+
+### Basic Filter
+
+```tsx
+import { useState } from 'react'
+import { Filter, Button } from 'intent-react'
+
+function Example() {
+  const [filters, setFilters] = useState({})
+  
+  return (
+    <Filter
+      fields={[
+        { key: 'status', label: 'Status', type: 'select', 
+          options: ['All', 'Active', 'Inactive'] },
+        { key: 'date', label: 'Date', type: 'date' },
+        { key: 'search', label: 'Search', type: 'text' },
+      ]}
+      values={filters}
+      onChange={setFilters}
+    >
+      <Button>Filter</Button>
+    </Filter>
+  )
+}
+```
+
+### With Groups
+
+```tsx
+<Filter
+  groups={[
+    {
+      label: 'Status',
+      fields: [
+        { key: 'status', type: 'select', 
+          options: ['Active', 'Inactive', 'Pending'] },
+      ]
+    },
+    {
+      label: 'Date Range',
+      fields: [
+        { key: 'startDate', type: 'date', label: 'From' },
+        { key: 'endDate', type: 'date', label: 'To' },
+      ]
+    },
+  ]}
+  values={filters}
+  onChange={setFilters}
+>
+  <Button icon="filter">Filters</Button>
+</Filter>
+```
+
+### Inline Filter
+
+```tsx
+<Filter
+  variant="inline"
+  fields={[...]}
+  values={filters}
+  onChange={setFilters}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `fields` | `FilterField[]` | - | Filter fields |
+| `groups` | `FilterGroup[]` | - | Grouped fields |
+| `values` | `object` | `{}` | Current filter values |
+| `onChange` | `(values: object) => void` | - | Change callback |
+| `variant` | `'popover'` \| `'inline'` | `'popover'` | Display variant |
+| `children` | `ReactNode` | - | Trigger element |
+
+### FilterField Type
+
+```typescript
+interface FilterField {
+  key: string
+  label?: string
+  type: 'text' | 'select' | 'date' | 'number' | 'checkbox' | 'radio'
+  options?: string[]  // For select/radio/checkbox
+  placeholder?: string
+}
+```
+
+## CSS Output
+
+```css
+.filter {
+  display: flex;
+  gap: var(--intent-spacing-2);
+}
+
+.filter__popover {
+  min-width: 300px;
+  padding: var(--intent-spacing-4);
+}
+
+.filter__group {
+  margin-bottom: var(--intent-spacing-4);
+}
+
+.filter__group-label {
+  font-weight: 500;
+  margin-bottom: var(--intent-spacing-2);
+}
+
+.filter__field {
+  margin-bottom: var(--intent-spacing-3);
+}
+
+.filter__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--intent-spacing-2);
+  margin-top: var(--intent-spacing-4);
+  padding-top: var(--intent-spacing-3);
+  border-top: 1px solid var(--intent-color-border);
+}
+```

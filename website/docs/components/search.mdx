@@ -1,0 +1,145 @@
+---
+sidebar_position: 67
+---
+
+import { Search } from 'intent-react'
+
+# Search
+
+Search input with suggestions and filters.
+
+## Examples
+
+### Basic Search
+
+```tsx
+import { useState } from 'react'
+import { Search } from 'intent-react'
+
+function Example() {
+  const [query, setQuery] = useState('')
+  
+  return (
+    <Search 
+      value={query}
+      onChange={setQuery}
+      placeholder="Search..."
+      onSearch={(q) => console.log('Search:', q)}
+    />
+  )
+}
+```
+
+### With Suggestions
+
+```tsx
+<Search 
+  value={query}
+  onChange={setQuery}
+  suggestions={[
+    { id: '1', label: 'Recent: Project Alpha' },
+    { id: '2', label: 'Recent: Dashboard' },
+  ]}
+  onSelectSuggestion={(s) => navigate(s.id)}
+/>
+```
+
+### With Filters
+
+```tsx
+<Search 
+  value={query}
+  onChange={setQuery}
+  filters={[
+    { key: 'type', label: 'Type', options: ['All', 'Document', 'Image'] },
+    { key: 'date', label: 'Date', options: ['Any', 'Today', 'Week'] },
+  ]}
+  onFilterChange={(filters) => applyFilters(filters)}
+/>
+```
+
+### Loading State
+
+```tsx
+<Search 
+  value={query}
+  onChange={setQuery}
+  loading={isSearching}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Search query |
+| `onChange` | `(value: string) => void` | - | Change callback |
+| `onSearch` | `(value: string) => void` | - | Search submit callback |
+| `placeholder` | `string` | `'Search...'` | Placeholder text |
+| `suggestions` | `Suggestion[]` | - | Search suggestions |
+| `filters` | `Filter[]` | - | Search filters |
+| `loading` | `boolean` | `false` | Loading state |
+| `clearable` | `boolean` | `true` | Show clear button |
+| `autoFocus` | `boolean` | `false` | Auto focus input |
+
+### Suggestion Type
+
+```typescript
+interface Suggestion {
+  id: string
+  label: string
+  icon?: string
+}
+```
+
+### Filter Type
+
+```typescript
+interface Filter {
+  key: string
+  label: string
+  options: string[]
+}
+```
+
+## CSS Output
+
+```css
+.search {
+  position: relative;
+}
+
+.search__input {
+  width: 100%;
+  padding-left: var(--intent-spacing-10);
+  padding-right: var(--intent-spacing-10);
+}
+
+.search__icon {
+  position: absolute;
+  left: var(--intent-spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--intent-color-text-muted);
+}
+
+.search__clear {
+  position: absolute;
+  right: var(--intent-spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.search__suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--intent-spacing-1);
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  box-shadow: var(--intent-shadow-lg);
+  z-index: 50;
+}
+```

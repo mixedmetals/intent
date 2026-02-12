@@ -1,0 +1,62 @@
+---
+sidebar_position: 50
+---
+
+# Aspect
+
+Maintains a consistent aspect ratio for content.
+
+## Example
+
+```tsx
+import { Aspect, Image } from 'intent-react'
+
+<Aspect ratio={16 / 9}>
+  <Image src="/video-thumbnail.jpg" alt="Video" />
+</Aspect>
+```
+
+### 1:1 Square
+
+```tsx
+<Aspect ratio={1}>
+  <Image src="/avatar.jpg" alt="Avatar" />
+</Aspect>
+```
+
+### 4:3 Image
+
+```tsx
+<Aspect ratio={4 / 3}>
+  <div>Content here</div>
+</Aspect>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ratio` | `number` | `1` | Aspect ratio (width / height) |
+| `children` | `ReactNode` | required | Content to contain |
+
+## CSS Output
+
+```css
+.aspect {
+  position: relative;
+  width: 100%;
+}
+
+.aspect::before {
+  content: '';
+  display: block;
+  padding-top: calc(100% / var(--aspect-ratio));
+}
+
+.aspect__content {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+```

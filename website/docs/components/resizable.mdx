@@ -1,0 +1,126 @@
+---
+sidebar_position: 64
+---
+
+import { Resizable } from 'intent-react'
+
+# Resizable
+
+Container with draggable resize handles.
+
+## Examples
+
+### Basic Resizable
+
+```tsx
+import { Resizable } from 'intent-react'
+
+<Resizable
+  defaultWidth={300}
+  defaultHeight={200}
+  minWidth={200}
+  minHeight={100}
+>
+  <div style={{ padding: 16, background: '#f0f0f0' }}>
+    Resize me from the edges
+  </div>
+</Resizable>
+```
+
+### Horizontal Only
+
+```tsx
+<Resizable
+  direction="horizontal"
+  defaultWidth={300}
+  minWidth={200}
+  maxWidth={600}
+>
+  <Sidebar />
+</Resizable>
+```
+
+### Vertical Only
+
+```tsx
+<Resizable
+  direction="vertical"
+  defaultHeight={400}
+  minHeight={200}
+>
+  <Editor />
+</Resizable>
+```
+
+### With Save
+
+```tsx
+const [size, setSize] = useState({ width: 300, height: 400 })
+
+<Resizable
+  width={size.width}
+  height={size.height}
+  onResize={setSize}
+>
+  <Panel />
+</Resizable>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `direction` | `'both'` \| `'horizontal'` \| `'vertical'` | `'both'` | Resize direction |
+| `defaultWidth` | `number` | - | Initial width |
+| `defaultHeight` | `number` | - | Initial height |
+| `width` | `number` | - | Controlled width |
+| `height` | `number` | - | Controlled height |
+| `minWidth` | `number` | `0` | Minimum width |
+| `minHeight` | `number` | `0` | Minimum height |
+| `maxWidth` | `number` | `Infinity` | Maximum width |
+| `maxHeight` | `number` | `Infinity` | Maximum height |
+| `onResize` | `({ width, height }) => void` | - | Resize callback |
+| `onResizeStart` | `() => void` | - | Start callback |
+| `onResizeEnd` | `() => void` | - | End callback |
+
+## CSS Output
+
+```css
+.resizable {
+  position: relative;
+}
+
+.resizable__handle {
+  position: absolute;
+  background: transparent;
+  z-index: 10;
+}
+
+.resizable__handle--right {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.resizable__handle--bottom {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.resizable__handle--corner {
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+}
+
+.resizable__handle:hover {
+  background: var(--intent-color-primary-alpha);
+}
+```

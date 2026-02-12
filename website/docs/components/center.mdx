@@ -1,0 +1,54 @@
+---
+sidebar_position: 51
+---
+
+# Center
+
+Centers content both horizontally and vertically.
+
+## Example
+
+```tsx
+import { Center, Card, Text } from 'intent-react'
+
+<div style={{ height: 200 }}>
+  <Center>
+    <Card padding="normal">
+      <Text>Centered Content</Text>
+    </Card>
+  </Center>
+</div>
+```
+
+### Inline
+
+```tsx
+<Center inline>
+  <span>Badge</span>
+</Center>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `inline` | `boolean` | `false` | Use inline-flex |
+| `children` | `ReactNode` | required | Content to center |
+
+## CSS Output
+
+```css
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.center--inline {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+}
+```

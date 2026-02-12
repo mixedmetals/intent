@@ -1,0 +1,102 @@
+---
+sidebar_position: 53
+---
+
+import { FileUpload, Button } from 'intent-react'
+
+# FileUpload
+
+File input with drag and drop support.
+
+## Examples
+
+### Basic Upload
+
+```tsx
+import { FileUpload } from 'intent-react'
+
+<FileUpload 
+  accept=".pdf,.doc,.docx"
+  onUpload={(files) => console.log(files)}
+/>
+```
+
+### With Preview
+
+```tsx
+<FileUpload 
+  accept="image/*"
+  preview
+  maxFiles={5}
+  onUpload={handleUpload}
+/>
+```
+
+### Restricted
+
+```tsx
+<FileUpload 
+  accept=".jpg,.png"
+  maxSize={5 * 1024 * 1024}  // 5MB
+  maxFiles={1}
+  onUpload={handleUpload}
+  onError={(error) => console.error(error)}
+/>
+```
+
+### Custom UI
+
+```tsx
+<FileUpload 
+  onUpload={handleUpload}
+>
+  {(props) => (
+    <div {...props.getRootProps()}>
+      <input {...props.getInputProps()} />
+      <Button icon="upload">Drop files here</Button>
+    </div>
+  )}
+</FileUpload>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `accept` | `string` | - | Accepted file types |
+| `maxSize` | `number` | - | Max file size in bytes |
+| `maxFiles` | `number` | - | Max number of files |
+| `preview` | `boolean` | `false` | Show file previews |
+| `onUpload` | `(files: File[]) => void` | - | Upload callback |
+| `onError` | `(error: string) => void` | - | Error callback |
+| `children` | `(props) => ReactNode` | - | Custom render function |
+
+## CSS Output
+
+```css
+.file-upload {
+  border: 2px dashed var(--intent-color-border);
+  border-radius: var(--intent-radius-lg);
+  padding: var(--intent-spacing-8);
+  text-align: center;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.file-upload:hover {
+  border-color: var(--intent-color-primary);
+  background: var(--intent-color-primary-alpha);
+}
+
+.file-upload--dragging {
+  border-color: var(--intent-color-primary);
+  background: var(--intent-color-primary-alpha);
+}
+
+.file-upload__preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--intent-spacing-2);
+  margin-top: var(--intent-spacing-4);
+}
+```

@@ -26,6 +26,7 @@ const sidebars: SidebarsConfig = {
             'components/text',
             'components/avatar',
             'components/divider',
+            'components/kbd',
           ],
         },
         {
@@ -38,6 +39,8 @@ const sidebars: SidebarsConfig = {
             'components/box',
             'components/spacer',
             'components/container',
+            'components/aspect',
+            'components/center',
           ],
         },
         {
@@ -45,12 +48,21 @@ const sidebars: SidebarsConfig = {
           label: 'Forms',
           items: [
             'components/field',
+            'components/label',
+            'components/form',
             'components/input',
             'components/textarea',
             'components/select',
+            'components/combobox',
+            'components/datepicker',
+            'components/fileupload',
             'components/checkbox',
             'components/radio',
             'components/switch',
+            'components/colorpicker',
+            'components/rangeslider',
+            'components/otpinput',
+            'components/phoneinput',
           ],
         },
         {
@@ -59,6 +71,7 @@ const sidebars: SidebarsConfig = {
           items: [
             'components/alert',
             'components/banner',
+            'components/notification',
             'components/spinner',
             'components/progress',
             'components/skeleton',
@@ -77,6 +90,7 @@ const sidebars: SidebarsConfig = {
             'components/tooltip',
             'components/dropdown',
             'components/menu',
+            'components/portal',
           ],
         },
         {
@@ -98,11 +112,14 @@ const sidebars: SidebarsConfig = {
           items: [
             'components/accordion',
             'components/table',
+            'components/datagrid',
             'components/timeline',
             'components/list',
             'components/tree',
             'components/stat',
+            'components/badgegroup',
             'components/calendar',
+            'components/chart',
           ],
         },
         {
@@ -111,6 +128,18 @@ const sidebars: SidebarsConfig = {
           items: [
             'components/icon',
             'components/image',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Advanced',
+          items: [
+            'components/virtuallist',
+            'components/resizable',
+            'components/sortable',
+            'components/infinitescroll',
+            'components/search',
+            'components/filter',
           ],
         },
       ],

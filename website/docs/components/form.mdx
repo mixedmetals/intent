@@ -1,0 +1,112 @@
+---
+sidebar_position: 56
+---
+
+import { Form, Field, Input, Button } from 'intent-react'
+
+# Form
+
+Form wrapper with validation and submission handling.
+
+## Examples
+
+### Basic Form
+
+```tsx
+import { Form, Field, Input, Button } from 'intent-react'
+
+<Form onSubmit={handleSubmit}>
+  <Field label="Email">
+    <Input type="email" name="email" required />
+  </Field>
+  <Field label="Password">
+    <Input type="password" name="password" required />
+  </Field>
+  <Button type="submit" importance="primary">
+    Sign In
+  </Button>
+</Form>
+```
+
+### With Validation
+
+```tsx
+<Form 
+  onSubmit={handleSubmit}
+  validate={(values) => {
+    const errors = {}
+    if (!values.email) errors.email = 'Required'
+    if (!values.password) errors.password = 'Required'
+    if (values.password?.length < 8) {
+      errors.password = 'Must be at least 8 characters'
+    }
+    return errors
+  }}
+>
+  <Field label="Email" name="email">
+    <Input type="email" />
+  </Field>
+  <Field label="Password" name="password">
+    <Input type="password" />
+  </Field>
+  <Button type="submit">Submit</Button>
+</Form>
+```
+
+### Controlled Form
+
+```tsx
+const [values, setValues] = useState({ name: '', email: '' })
+
+<Form 
+  values={values}
+  onChange={setValues}
+  onSubmit={handleSubmit}
+>
+  <Field label="Name">
+    <Input value={values.name} onChange={e => 
+      setValues(v => ({ ...v, name: e.target.value }))
+    } />
+  </Field>
+</Form>
+```
+
+### Loading State
+
+```tsx
+<Form onSubmit={handleSubmit} loading={isSubmitting}>
+  <Field label="Email">
+    <Input type="email" />
+  </Field>
+  <Button type="submit" loading={isSubmitting}>
+    Submit
+  </Button>
+</Form>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onSubmit` | `(values) => void` \| `Promise<void>` | - | Submit handler |
+| `onChange` | `(values) => void` | - | Change callback |
+| `validate` | `(values) => object` | - | Validation function |
+| `values` | `object` | - | Controlled values |
+| `initialValues` | `object` | `{}` | Initial form values |
+| `loading` | `boolean` | `false` | Loading state |
+| `children` | `ReactNode` | required | Form fields |
+
+## CSS Output
+
+```css
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--intent-spacing-4);
+}
+
+.form__error {
+  color: var(--intent-color-danger);
+  font-size: var(--intent-font-size-sm);
+}
+```

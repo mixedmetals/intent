@@ -1,0 +1,113 @@
+---
+sidebar_position: 63
+---
+
+import { VirtualList } from 'intent-react'
+
+# VirtualList
+
+High-performance list for large datasets.
+
+## Examples
+
+### Basic VirtualList
+
+```tsx
+import { VirtualList } from 'intent-react'
+
+const items = Array.from({ length: 10000 }, (_, i) => ({
+  id: i,
+  name: `Item ${i}`,
+}))
+
+<VirtualList
+  items={items}
+  itemHeight={50}
+  renderItem={(item) => (
+    <div style={{ padding: 16, borderBottom: '1px solid #eee' }}>
+      {item.name}
+    </div>
+  )}
+  height={400}
+/>
+```
+
+### With Variable Heights
+
+```tsx
+<VirtualList
+  items={items}
+  estimateItemHeight={50}
+  getItemHeight={(item) => item.expanded ? 100 : 50}
+  renderItem={(item) => (
+    <div style={{ padding: 16 }}>
+      <h4>{item.title}</h4>
+      {item.expanded && <p>{item.description}</p>}
+    </div>
+  )}
+  height={600}
+/>
+```
+
+### Horizontal Scroll
+
+```tsx
+<VirtualList
+  direction="horizontal"
+  items={items}
+  itemWidth={200}
+  renderItem={(item) => (
+    <Card padding="normal">
+      <Text>{item.name}</Text>
+    </Card>
+  )}
+  width={800}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `T[]` | required | List items |
+| `renderItem` | `(item: T, index: number) => ReactNode` | required | Item renderer |
+| `itemHeight` | `number` | required | Fixed item height |
+| `estimateItemHeight` | `number` | - | Estimated height (variable) |
+| `getItemHeight` | `(item: T) => number` | - | Get item height (variable) |
+| `itemWidth` | `number` | - | Fixed item width (horizontal) |
+| `height` | `number` | required | List container height |
+| `width` | `number` \| `'100%'` | `'100%'` | List container width |
+| `direction` | `'vertical'` \| `'horizontal'` | `'vertical'` | Scroll direction |
+| `overscan` | `number` | `3` | Items to render outside viewport |
+| `onScroll` | `(scrollTop: number) => void` | - | Scroll callback |
+
+## CSS Output
+
+```css
+.virtual-list {
+  overflow: auto;
+  position: relative;
+}
+
+.virtual-list__content {
+  position: relative;
+}
+
+.virtual-list__item {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+```
+
+## When to Use
+
+Use **VirtualList** when:
+- Rendering 100+ items
+- Items have consistent height
+- Performance is critical
+
+Don't use when:
+- Fewer than 50 items (use regular List)
+- Items need complex animations
+- Grid layout (use Grid instead)
