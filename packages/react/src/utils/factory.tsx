@@ -92,6 +92,43 @@ export function validateProps(
   }
 }
 
-// Note: The createIntentComponent factory is complex with TypeScript.
-// For now, components are defined manually in the components/ directory.
-// This utility file provides helper functions for prop handling.
+// ============================================================================
+// Component Factory
+// ============================================================================
+
+interface CreateComponentOptions {
+  /** Default className */
+  className?: string;
+  /** Default props */
+  defaultProps?: Record<string, unknown>;
+}
+
+/**
+ * Create a React component with Intent schema binding
+ * 
+ * @param name - Component name (used for className and data attributes)
+ * @param defaults - Default props for the component
+ * @returns React component with Intent styling
+ */
+export function createComponent<P extends object>(
+  name: string,
+  defaults?: Partial<P>
+): React.ForwardRefExoticComponent<React.PropsWithoutRef<P & { as?: ElementType; className?: string }> & React.RefAttributes<HTMLElement>> {
+  const baseClassName = generateIntentClassName(name);
+  
+  return React.forwardRef<HTMLElement, P & { as?: ElementType; className?: string }>(
+    ({ as: Component = 'div', className, ...props }, ref) => {
+      const mergedProps = { ...defaults, ...props } as Record<string, unknown>;
+      const finalClassName = className ? `${baseClassName} ${className}` : baseClassName;
+      
+      return React.createElement(Component as string, {
+        ref,
+        className: finalClassName,
+        'data-intent': name.toLowerCase(),
+        ...mergedProps,
+      });
+    }
+  ) as React.ForwardRefExoticComponent<React.PropsWithoutRef<P & { as?: ElementType; className?: string }> & React.RefAttributes<HTMLElement>>;
+}
+
+createComponent.displayName = 'createComponent';

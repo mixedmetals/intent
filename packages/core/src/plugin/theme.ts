@@ -194,11 +194,8 @@ export function createTheme(
 ): Theme {
   return {
     name,
-    tokens: {},
+    tokens: partial.tokens ?? {},
     ...partial,
-    tokens: {
-      ...partial.tokens,
-    },
   };
 }
 
@@ -235,101 +232,19 @@ export function extendTheme(
 // Built-in Themes
 // ============================================================================
 
-/**
- * Default Intent theme with essential tokens
- */
-export const defaultTheme: Theme = {
-  name: 'intent-default',
-  tokens: {
-    color: {
-      'brand-primary': '#3B82F6',
-      'brand-secondary': '#64748B',
-      'brand-accent': '#8B5CF6',
-      
-      'neutral-0': '#FFFFFF',
-      'neutral-50': '#F8FAFC',
-      'neutral-100': '#F1F5F9',
-      'neutral-200': '#E2E8F0',
-      'neutral-300': '#CBD5E1',
-      'neutral-400': '#94A3B8',
-      'neutral-500': '#64748B',
-      'neutral-600': '#475569',
-      'neutral-700': '#334155',
-      'neutral-800': '#1E293B',
-      'neutral-900': '#0F172A',
-      'neutral-950': '#020617',
-      
-      'success-500': '#22C55E',
-      'warning-500': '#F59E0B',
-      'error-500': '#EF4444',
-      'info-500': '#3B82F6',
-    },
-    space: {
-      '0': '0px',
-      'px': '1px',
-      '0.5': '0.125rem',
-      '1': '0.25rem',
-      '2': '0.5rem',
-      '3': '0.75rem',
-      '4': '1rem',
-      '5': '1.25rem',
-      '6': '1.5rem',
-      '8': '2rem',
-      '10': '2.5rem',
-      '12': '3rem',
-      '16': '4rem',
-      '20': '5rem',
-      '24': '6rem',
-    },
-    elevation: {
-      'none': '0 0 #0000',
-      'sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-      'DEFAULT': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-      'md': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-      'lg': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-      'xl': '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-    },
-    radius: {
-      'none': '0px',
-      'sm': '0.125rem',
-      'DEFAULT': '0.25rem',
-      'md': '0.375rem',
-      'lg': '0.5rem',
-      'xl': '0.75rem',
-      'full': '9999px',
-    },
-    typography: {
-      'font-sans': 'ui-sans-serif, system-ui, sans-serif',
-      'font-mono': 'ui-monospace, monospace',
-      
-      'text-xs': '0.75rem',
-      'text-sm': '0.875rem',
-      'text-base': '1rem',
-      'text-lg': '1.125rem',
-      'text-xl': '1.25rem',
-      'text-2xl': '1.5rem',
-      'text-3xl': '1.875rem',
-    },
-  },
-  darkTokens: {
-    color: {
-      'brand-primary': '#60A5FA',
-      'neutral-0': '#0F172A',
-      'neutral-50': '#1E293B',
-      'neutral-100': '#334155',
-      'neutral-200': '#475569',
-      'neutral-800': '#F1F5F9',
-      'neutral-900': '#F8FAFC',
-      'neutral-950': '#FFFFFF',
-    },
-  },
-  settings: {
-    cssPrefix: 'intent',
-  },
-};
+// Note: The comprehensive default theme is defined in theme/default-theme.ts
+// This is registered there to avoid circular dependencies
 
-// Register the default theme
-registerTheme(defaultTheme);
+// Placeholder for the default theme - will be populated when theme/default-theme.ts is loaded
+export let defaultTheme: Theme | undefined = undefined;
+
+/**
+ * Set the default theme (called by theme/default-theme.ts)
+ * @internal
+ */
+export function setDefaultTheme(theme: Theme): void {
+  defaultTheme = theme;
+}
 
 // ============================================================================
 // Utility Functions

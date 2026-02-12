@@ -250,7 +250,7 @@ export async function checkAccessibility(
   for (const attr of required) {
     const hasAttr = await page.locator(`[data-intent="${component.name.toLowerCase()}"]`)
       .getAttribute(attr)
-      .then(v => v !== null)
+      .then((v: string | null) => v !== null)
       .catch(() => false);
     
     if (!hasAttr) {

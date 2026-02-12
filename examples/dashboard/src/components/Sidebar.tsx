@@ -23,7 +23,7 @@ export const Sidebar: FC = () => {
       style={{ width: '240px', minHeight: '100vh' }}
     >
       <Stack direction="column" gap="loose">
-        <Text size="xl" weight="bold" color="brand">Intent Dashboard</Text>
+        <Text size="xl" weight="bold" color="primary">Intent Dashboard</Text>
         
         <Stack direction="column" gap="tight">
           {navItems.map((item) => (

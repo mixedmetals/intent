@@ -97,7 +97,7 @@ export class PluginManager {
     
     // Call teardown hook
     if (registration.plugin.teardown) {
-      const context = this.createContext(registration.options);
+      const context = this.createContext(registration.options ?? {});
       registration.plugin.teardown(context);
     }
     
@@ -195,7 +195,7 @@ export class PluginManager {
       ) => typeof result | void | Promise<typeof result | void>;
       
       if (hook) {
-        const context = this.createContext(registration.options, config);
+        const context = this.createContext(registration.options ?? {}, config);
         const hookResult = await hook(result, context);
         if (hookResult !== undefined) {
           result = hookResult;

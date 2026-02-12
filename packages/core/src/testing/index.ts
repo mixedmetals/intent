@@ -45,13 +45,5 @@ export type {
   PlaywrightVisualTestOptions,
 } from './playwright.js';
 
-// Re-export Playwright functions if Playwright is available
-try {
-  // This will be tree-shaken if Playwright is not installed
-  const playwrightModule = require('./playwright.js');
-  export const intentVisualTest = playwrightModule.intentVisualTest;
-  export const checkAccessibility = playwrightModule.checkAccessibility;
-  export type { A11yViolation } from './playwright.js';
-} catch {
-  // Playwright not installed, exports will be undefined
-}
+// Playwright functions are available via direct import from './playwright.js'
+// This avoids conditional exports which are not supported in ES modules

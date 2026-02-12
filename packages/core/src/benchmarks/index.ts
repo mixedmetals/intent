@@ -442,3 +442,34 @@ export function formatBytes(bytes: number): string {
 export function printBenchmarkResults(suite: BenchmarkSuite): void {
   console.log(formatBenchmarkReport(suite));
 }
+
+// ============================================================================
+// Dashboard Exports
+// ============================================================================
+
+export {
+  // Config
+  createDashboardConfig,
+  defaultDashboardConfig,
+  // Snapshots
+  loadSnapshots,
+  saveSnapshots,
+  addSnapshot,
+  getLatestSnapshot,
+  // Analysis
+  calculateTrend,
+  generateRecommendations,
+  generateReport,
+  // Output
+  formatDashboardReport,
+  generateHTMLDashboard,
+  printDashboard,
+  saveHTMLDashboard,
+} from './dashboard.js';
+
+export type {
+  SizeSnapshot,
+  DashboardConfig,
+  SizeTrend,
+  DashboardReport,
+} from './dashboard.js';

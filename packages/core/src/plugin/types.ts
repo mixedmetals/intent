@@ -239,6 +239,8 @@ export interface Theme {
   components?: Record<string, Partial<ComponentSchema>>;
   settings?: {
     cssPrefix?: string;
+    prefix?: string;
+    darkMode?: 'class' | 'media' | 'data' | false;
   };
 }
 

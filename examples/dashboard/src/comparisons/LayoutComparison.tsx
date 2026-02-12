@@ -14,12 +14,12 @@ export const IntentLayout: FC = () => {
       <Stack direction="row" gap="relaxed" align="center" justify="between">
         <Stack direction="column" gap="tight">
           <Text size="lg" weight="semibold">Project Dashboard</Text>
-          <Text size="sm" color="subtle">Manage your projects and tasks</Text>
+          <Text size="sm" color="muted">Manage your projects and tasks</Text>
         </Stack>
         
         <Stack direction="row" gap="normal" align="center">
           <Badge importance="success" size="sm">Active</Badge>
-          <Text size="sm" color="subtle">Last updated: 2m ago</Text>
+          <Text size="sm" color="muted">Last updated: 2m ago</Text>
         </Stack>
       </Stack>
     </Surface>
@@ -53,16 +53,16 @@ export const LayoutComparison: FC = () => {
       <Text size="lg" weight="semibold">Layout Comparison</Text>
       
       <Stack direction="column" gap="tight">
-        <Text size="sm" color="subtle">Intent (Semantic)</Text>
+        <Text size="sm" color="muted">Intent (Semantic)</Text>
         <IntentLayout />
       </Stack>
       
       <Stack direction="column" gap="tight">
-        <Text size="sm" color="subtle">Tailwind (Utility Classes)</Text>
+        <Text size="sm" color="muted">Tailwind (Utility Classes)</Text>
         <TailwindLayout />
       </Stack>
       
-      <Text size="sm" color="subtle">
+      <Text size="sm" color="muted">
         Intent: 8 semantic props vs Tailwind: 20+ utility classes.
         Refactoring "relaxed" spacing updates 1 token instead of 12 class values.
       </Text>

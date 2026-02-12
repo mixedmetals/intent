@@ -24,7 +24,7 @@ export const StatCard: FC<StatCardProps> = ({ label, value, change, trend }) => 
   return (
     <Surface elevation="low" padding="relaxed" radius="lg" background="elevated">
       <Stack direction="column" gap="tight">
-        <Text size="sm" color="subtle">{label}</Text>
+        <Text size="sm" color="muted">{label}</Text>
         <Stack direction="row" gap="normal" align="start">
           <Text size="2xl" weight="bold">{value}</Text>
           <Badge importance={importanceMap[trend]} size="sm">

@@ -12,8 +12,8 @@ import {
   extendTheme,
   generateThemeCSSVariables,
   getTokenVariableName,
-  defaultTheme,
 } from './theme.js';
+import { defaultTheme } from '../theme/default-theme.js';
 import type { Theme } from './types.js';
 
 describe('Theme Registry', () => {
@@ -339,8 +339,8 @@ describe('defaultTheme', () => {
   
   it('should have required token categories', () => {
     expect(defaultTheme.tokens.color).toBeDefined();
-    expect(defaultTheme.tokens.space).toBeDefined();
-    expect(defaultTheme.tokens.elevation).toBeDefined();
+    expect(defaultTheme.tokens.spacing).toBeDefined();
+    expect(defaultTheme.tokens.shadows).toBeDefined();
     expect(defaultTheme.tokens.radius).toBeDefined();
     expect(defaultTheme.tokens.typography).toBeDefined();
   });
@@ -350,7 +350,7 @@ describe('defaultTheme', () => {
   });
   
   it('should be resolvable', () => {
-    const resolved = resolveTheme('intent-default');
-    expect(resolved.tokens.color?.['brand-primary']).toBe('#3B82F6');
+    const resolved = resolveTheme('default');
+    expect(resolved.tokens.color?.primary).toBeDefined();
   });
 });

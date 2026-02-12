@@ -20,7 +20,7 @@ export const Dashboard: FC = () => {
         <Stack direction="row" gap="normal" align="center" justify="between">
           <Stack direction="column" gap="tight">
             <Text size="2xl" weight="bold">Dashboard</Text>
-            <Text size="sm" color="subtle">Welcome back! Here's what's happening.</Text>
+            <Text size="sm" color="muted">Welcome back! Here's what's happening.</Text>
           </Stack>
           
           <Stack direction="row" gap="normal">
@@ -62,8 +62,8 @@ export const Dashboard: FC = () => {
                       style={{ width: '40px', height: '40px' }}
                     />
                     <Stack direction="column" gap="tight" style={{ flex: 1 }}>
-                      <Text size="md" weight="medium">Project Update {i}</Text>
-                      <Text size="sm" color="subtle">Modified 2 hours ago by Team Member</Text>
+                      <Text size="base" weight="medium">Project Update {i}</Text>
+                      <Text size="sm" color="muted">Modified 2 hours ago by Team Member</Text>
                     </Stack>
                     <Button importance="ghost" size="sm">View</Button>
                   </Stack>

@@ -109,8 +109,7 @@ export const GridSchema = defineComponent({
   },
   constraints: [
     {
-      when: { columns: 'none' },
-      require: { rows: { ne: 'none' } },
+      when: { columns: 'none', rows: 'none' },
       message: 'Grid must have either columns or rows defined',
     },
   ],
@@ -255,11 +254,6 @@ export const BoxSchema = defineComponent({
     position: positionProp,
     width: widthProp,
     height: heightProp,
-    minWidth,
-    maxWidth,
-    minHeight,
-    maxHeight,
-    inset,
     zIndex: zIndexProp,
     overflow: overflowProp,
   },

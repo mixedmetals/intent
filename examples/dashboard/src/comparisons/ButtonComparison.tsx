@@ -48,16 +48,16 @@ export const ButtonComparison: FC = () => {
       <Text size="lg" weight="semibold">Button Component Comparison</Text>
       
       <Stack direction="column" gap="tight">
-        <Text size="sm" color="subtle">Intent (Semantic Props)</Text>
+        <Text size="sm" color="muted">Intent (Semantic Props)</Text>
         <IntentButtons />
       </Stack>
       
       <Stack direction="column" gap="tight">
-        <Text size="sm" color="subtle">Tailwind (Utility Classes)</Text>
+        <Text size="sm" color="muted">Tailwind (Utility Classes)</Text>
         <TailwindButtons />
       </Stack>
       
-      <Text size="sm" color="subtle">
+      <Text size="sm" color="muted">
         Intent uses 20 tokens vs Tailwind's 60+ tokens for equivalent UI.
         More importantly: Intent guarantees valid output; Tailwind allows any combination.
       </Text>

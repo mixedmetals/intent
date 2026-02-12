@@ -72,10 +72,6 @@ class ComponentBuilder {
 // ============================================================================
 
 export function defineComponent(
-  config: (builder: ComponentBuilder) => ComponentBuilder
-): ComponentSchema;
-export function defineComponent(config: Partial<ComponentSchema>): ComponentSchema;
-export function defineComponent(
   config: Partial<ComponentSchema> | ((builder: ComponentBuilder) => ComponentBuilder)
 ): ComponentSchema {
   if (typeof config === 'function') {

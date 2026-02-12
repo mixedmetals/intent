@@ -25,7 +25,6 @@
 export { Stack, VStack, HStack } from './components/Stack.js';
 export { Button } from './components/Button.js';
 export { Surface } from './components/Surface.js';
-export { Input } from './components/Input.js';
 export { Card } from './components/Card.js';
 export { Badge } from './components/Badge.js';
 export { Divider } from './components/Divider.js';
@@ -98,6 +97,9 @@ export {
   Spinner,
   Skeleton,
   SkeletonText,
+  Toast,
+  ToastProvider,
+  useToast,
 } from './components/feedback/index.js';
 
 // Overlay Components
@@ -110,13 +112,73 @@ export {
   MenuItem,
 } from './components/overlay/index.js';
 
+// Navigation Components
+export {
+  Tabs,
+  Tab,
+  TabPanel,
+  Breadcrumbs,
+  BreadcrumbItem,
+  Pagination,
+  PaginationItem,
+  Link,
+  Nav,
+  NavItem,
+  Command,
+  CommandDialog,
+  Steps,
+  Step,
+  Sidebar,
+  SidebarSection,
+  SidebarItem,
+  Navbar,
+  NavbarItem,
+} from './components/navigation/index.js';
+
+// Data Display Components
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableCell,
+  Stat,
+  StatLabel,
+  StatValue,
+  StatHelpText,
+  StatGroup,
+  Timeline,
+  TimelineItem,
+  DescriptionList,
+  DescriptionTerm,
+  DescriptionDetail,
+  DescriptionGroup,
+  Tree,
+  TreeItem,
+  TreeBranch,
+  Calendar,
+  CalendarDay,
+  CardMedia,
+  CardHeader,
+  CardFooter,
+  CardBody,
+  HorizontalCard,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  Avatar,
+  AvatarGroup,
+  AvatarBadge,
+} from './components/data/index.js';
+
 // Types
 export type {
   IntentComponentProps,
   StackProps,
   ButtonProps,
   SurfaceProps,
-  InputProps,
   CardProps,
   BadgeProps,
   DividerProps,
@@ -171,6 +233,10 @@ export type {
   SpinnerProps,
   SkeletonProps,
   SkeletonTextProps,
+  ToastProps,
+  ToastItem,
+  ToastProviderProps,
+  ToastContextValue,
 } from './components/feedback/index.js';
 
 // Overlay Types
@@ -184,6 +250,70 @@ export type {
   MenuItemData,
 } from './components/overlay/index.js';
 
+// Navigation Types
+export type {
+  TabsProps,
+  TabProps,
+  TabPanelProps,
+  BreadcrumbsProps,
+  BreadcrumbItemProps,
+  PaginationProps,
+  PaginationItemProps,
+  LinkProps,
+  NavProps,
+  NavItemProps,
+  CommandProps,
+  CommandDialogProps,
+  CommandItem,
+  CommandSection,
+  StepsProps,
+  StepProps,
+  SidebarProps,
+  SidebarSectionProps,
+  SidebarItemProps,
+  NavbarProps,
+  NavbarItemProps,
+} from './components/navigation/index.js';
+
+// Data Display Types
+export type {
+  TableProps,
+  TableHeaderProps,
+  TableBodyProps,
+  TableFooterProps,
+  TableRowProps,
+  TableCellProps,
+  StatProps,
+  StatLabelProps,
+  StatValueProps,
+  StatHelpTextProps,
+  StatGroupProps,
+  TimelineProps,
+  TimelineItemProps,
+  DescriptionListProps,
+  DescriptionTermProps,
+  DescriptionDetailProps,
+  DescriptionGroupProps,
+  TreeProps,
+  TreeItemProps,
+  TreeBranchProps,
+  CalendarProps,
+  CalendarDayProps,
+  DayRenderProps,
+  CardMediaProps,
+  CardHeaderProps,
+  CardFooterProps,
+  CardBodyProps,
+  HorizontalCardProps,
+  AccordionProps,
+  AccordionItemProps,
+  AccordionTriggerProps,
+  AccordionContentProps,
+  AvatarProps,
+  AvatarGroupProps,
+  AvatarBadgeProps,
+} from './components/data/index.js';
+
 // Utils
 export {
   intentPropsToDataAttributes,
@@ -193,4 +323,4 @@ export {
 } from './utils/factory.js';
 
 // Version
-export const VERSION = '0.1.0';
+export const VERSION = '1.0.0';

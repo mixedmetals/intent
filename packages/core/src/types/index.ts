@@ -4,10 +4,17 @@
 
 export type TokenValue = string | number;
 
-export type TokenCategory = 'color' | 'space' | 'elevation' | 'typography' | 'radius' | 'border' | 'zIndex' | 'opacity' | 'transition';
+export type TokenCategory = 'color' | 'space' | 'elevation' | 'typography' | 'radius' | 'border' | 'zIndex' | 'opacity' | 'transition' | 'spacing' | 'shadows' | 'breakpoints' | 'component';
 
 export type TokenRegistry = {
   [K in TokenCategory]?: Record<string, TokenValue>;
+} & {
+  // Allow nested color palettes (e.g., color.primary.500)
+  color?: Record<string, TokenValue | Record<string, TokenValue>>;
+  // Allow nested typography (e.g., typography.fontSize.lg)
+  typography?: Record<string, Record<string, TokenValue>>;
+  // Allow nested component tokens (e.g., component.button.primary-bg)
+  component?: Record<string, Record<string, TokenValue>>;
 };
 
 export type PropertyType = 'enum' | 'boolean' | 'string' | 'number';
@@ -65,6 +72,7 @@ export interface Constraint {
   when: ConstraintCondition;
   forbid?: string[];
   require?: Record<string, string[]>;
+  suggest?: Record<string, string>;
   message?: string;
 }
 
@@ -158,7 +166,7 @@ export interface ComponentUsage {
 export interface CompiledStyles {
   css: string;
   classes: string[];
-  sourceMap?: Record<string, string>;
+  sourceMap?: string;
 }
 
 export interface ComponentCompilation {

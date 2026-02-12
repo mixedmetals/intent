@@ -58,6 +58,3 @@ export const Show = createComponent<ShowProps>('Show', {});
  * ```
  */
 export const Hide = createComponent<HideProps>('Hide', {});
-
-// Convenience exports
-export { Show, Hide };

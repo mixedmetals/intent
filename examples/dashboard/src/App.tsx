@@ -25,7 +25,7 @@ export default function App() {
       {/* Navigation */}
       <Surface elevation="low" padding="normal" background="elevated">
         <Stack direction="row" gap="normal" align="center" justify="between">
-          <Text size="xl" weight="bold" color="brand">Intent Framework Demo</Text>
+          <Text size="xl" weight="bold" color="primary">Intent Framework Demo</Text>
           
           <Stack direction="row" gap="normal">
             <Button 
@@ -72,22 +72,22 @@ export default function App() {
                 <Text size="lg" weight="semibold">Token Efficiency Analysis</Text>
                 
                 <Stack direction="column" gap="tight">
-                  <Text size="md" weight="medium">Dashboard Implementation</Text>
+                  <Text size="base" weight="medium">Dashboard Implementation</Text>
                   <Stack direction="row" gap="loose">
                     <Stack direction="column" gap="tight">
-                      <Text size="sm" color="subtle">Intent</Text>
-                      <Text size="2xl" weight="bold" color="brand">~45 tokens</Text>
-                      <Text size="xs" color="subtle">Semantic props only</Text>
+                      <Text size="sm" color="muted">Intent</Text>
+                      <Text size="2xl" weight="bold" color="primary">~45 tokens</Text>
+                      <Text size="xs" color="muted">Semantic props only</Text>
                     </Stack>
                     <Stack direction="column" gap="tight">
-                      <Text size="sm" color="subtle">Tailwind</Text>
-                      <Text size="2xl" weight="bold" color="brand">~180 tokens</Text>
-                      <Text size="xs" color="subtle">Utility classes</Text>
+                      <Text size="sm" color="muted">Tailwind</Text>
+                      <Text size="2xl" weight="bold" color="primary">~180 tokens</Text>
+                      <Text size="xs" color="muted">Utility classes</Text>
                     </Stack>
                   </Stack>
                 </Stack>
                 
-                <Text size="sm" color="subtle">
+                <Text size="sm" color="muted">
                   Intent achieves 75% token reduction vs Tailwind for equivalent UI.
                   More importantly: Intent prevents invalid states at compile time,
                   while Tailwind allows any class combination (including broken ones).

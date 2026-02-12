@@ -171,7 +171,6 @@ export {
   extendTheme,
   generateThemeCSSVariables,
   getTokenVariableName,
-  defaultTheme,
 } from './plugin/index.js';
 
 export type {
@@ -235,5 +234,40 @@ export type {
   DashboardReport,
 } from './benchmarks/index.js';
 
+// Component Schema Collections
+export {
+  LayoutSchemas,
+} from './schema/layout-components.js';
+
+export {
+  TypographySchemas,
+} from './schema/typography-components.js';
+
+export {
+  FormSchemas,
+} from './schema/form-components.js';
+
+export {
+  FeedbackSchemas,
+} from './schema/feedback-components.js';
+
+export {
+  OverlaySchemas,
+} from './schema/overlay-components.js';
+
+export {
+  NavigationSchemas,
+} from './schema/navigation-components.js';
+
+export {
+  DataDisplaySchemas,
+} from './schema/data-components.js';
+
+// Default Theme
+export {
+  defaultTheme,
+  generateThemeCSS,
+} from './theme/default-theme.js';
+
 // Version
-export const VERSION = '0.1.0';
+export const VERSION = '1.0.0';
