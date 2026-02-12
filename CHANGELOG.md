@@ -106,8 +106,6 @@ Initial release of the Intent Framework — a schema-first, AI-native styling sy
 - **Center**: Flexbox centering helper (horizontal, vertical, or both)
 - **Spacer**: Flexible spacing element with size and grow options
 - **Show/Hide**: Responsive visibility toggles by breakpoint
-- `compareBundleSizes()` - Intent vs Tailwind
-- `runBenchmarks()` full suite with reporting
 
 ### Bundle Size Dashboard
 - Historical snapshot tracking with git metadata
@@ -115,3 +113,23 @@ Initial release of the Intent Framework — a schema-first, AI-native styling sy
 - Interactive HTML dashboard with Chart.js
 - Recommendations engine based on bundle analysis
 - `generateHTMLDashboard()`, `saveHTMLDashboard()`
+
+## Phase 3: Typography System (v0.4.0)
+
+### Typography Props
+- **Font**: `fontSize`, `fontWeight`, `lineHeight`, `letterSpacing`
+- **Text**: `align`, `transform`, `decoration`, `decorationStyle`
+- **Overflow**: `textOverflow`, `truncate`, `wrap`, `break`, `hyphens`
+- **Style**: `fontStyle`, `fontVariantNumeric`, `italic`
+- **Accessibility**: `srOnly` for screen reader only text
+
+### Typography Components
+- **Heading**: H1-H6 with size, weight, lineHeight, letterSpacing, truncate
+- **Paragraph**: Body text with lead/caption/small variants
+- **Text**: Extended with decoration, wrap, break, hyphens, srOnly
+- **List/ListItem**: Unordered/ordered with marker styles (disc, decimal, roman, etc.)
+- **Code**: Inline and block variants with language support
+- **Quote**: Default, bordered, pull quote variants with citation
+- **Prose**: Markdown content wrapper (Tailwind Typography-like)
+- **Kbd**: Keyboard key styling for shortcuts documentation
+- **Mark**: Highlight text with variant colors (default, primary, success, warning, error)

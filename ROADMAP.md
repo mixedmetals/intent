@@ -97,31 +97,52 @@ prop('height', enum('auto', 'full', 'screen', 'min', 'max', 'fit'))
 
 ---
 
-## Phase 3: Typography System (v0.4.0) - Q2 2026
+## Phase 3: Typography System (v0.4.0) - ✅ COMPLETE
 
 ### Typography Components
-| Component | Priority | Description |
-|-----------|----------|-------------|
-| `Heading` | P0 | H1-H6 with consistent scale |
-| `Paragraph` | P0 | Body text with lead/caption variants |
-| `Text` (enhanced) | P0 | Extended with alignment, transform, decoration |
-| `List` / `ListItem` | P0 | Ordered/unordered/description lists |
-| `Code` | P1 | Inline and block code with syntax highlighting hooks |
-| `Quote` | P1 | Blockquote with citation |
-| `Prose` | P1 | Markdown content wrapper (like Tailwind Typography) |
-| `Kbd` | P2 | Keyboard input styling |
-| `Mark` | P2 | Highlight/mark text |
+| Component | Status | Priority | Description |
+|-----------|--------|----------|-------------|
+| `Heading` | ✅ | P0 | H1-H6 with size, weight, lineHeight, letterSpacing |
+| `Paragraph` | ✅ | P0 | Body text with lead/caption/small variants |
+| `Text` | ✅ | P0 | Extended with decoration, wrap, break, hyphens, srOnly |
+| `List` / `ListItem` | ✅ | P0 | Ordered/unordered with marker styles |
+| `Code` | ✅ | P1 | Inline and block with language support |
+| `Quote` | ✅ | P1 | Blockquote with default/bordered/pull variants |
+| `Prose` | ✅ | P1 | Markdown content wrapper (Tailwind Typography-like) |
+| `Kbd` | ✅ | P2 | Keyboard key styling |
+| `Mark` | ✅ | P2 | Highlight text with variant colors |
 
-### Typography Props
+### Typography Props - ✅ Complete
 ```typescript
-// Extended text props
-prop('align', enum('left', 'center', 'right', 'justify'))
+// Font properties
+prop('fontSize', enum('xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'))
+prop('fontWeight', enum('thin', 'light', 'normal', 'medium', 'semibold', 'bold', 'black'))
+prop('lineHeight', enum('none', 'tight', 'snug', 'normal', 'relaxed', 'loose'))
+prop('letterSpacing', enum('tighter', 'tight', 'normal', 'wide', 'wider', 'widest'))
+
+// Text styling
+prop('align', enum('left', 'center', 'right', 'justify', 'start', 'end'))
 prop('transform', enum('none', 'uppercase', 'lowercase', 'capitalize'))
-prop('decoration', enum('none', 'underline', 'line-through'))
-prop('truncate', enum('none', 'single', 'multi'))
-prop('whitespace', enum('normal', 'nowrap', 'pre', 'pre-wrap'))
-prop('break', enum('normal', 'words', 'all'))
-```
+prop('decoration', enum('none', 'underline', 'line-through', 'overline'))
+prop('decorationStyle', enum('solid', 'double', 'dotted', 'dashed', 'wavy'))
+
+// Text overflow and wrapping
+prop('textOverflow', enum('clip', 'ellipsis'))
+prop('truncate', boolean())
+prop('wrap', enum('wrap', 'nowrap', 'balance', 'pretty'))
+prop('break', enum('normal', 'words', 'all', 'keep'))
+prop('hyphens', enum('none', 'manual', 'auto'))
+
+// Style variants
+prop('fontStyle', enum('normal', 'italic'))
+prop('fontVariantNumeric', enum('normal', 'ordinal', 'lining-nums', 'oldstyle-nums', 'tabular-nums'))
+
+// List styles
+prop('listStyleType', enum('none', 'disc', 'circle', 'square', 'decimal', 'lower-roman', 'upper-roman', 'lower-alpha', 'upper-alpha'))
+prop('listStylePosition', enum('inside', 'outside'))
+
+// Accessibility
+prop('srOnly', boolean()) // Screen reader only text
 
 ---
 
