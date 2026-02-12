@@ -41,6 +41,21 @@
       "import": "./dist/components/motion/index.js",
       "default": "./dist/components/motion/index.js"
     },
+    "./components/data": {
+      "types": "./dist/components/data/index.d.ts",
+      "import": "./dist/components/data/index.js",
+      "default": "./dist/components/data/index.js"
+    },
+    "./components/navigation": {
+      "types": "./dist/components/navigation/index.d.ts",
+      "import": "./dist/components/navigation/index.js",
+      "default": "./dist/components/navigation/index.js"
+    },
+    "./components/form": {
+      "types": "./dist/components/form/index.d.ts",
+      "import": "./dist/components/form/index.js",
+      "default": "./dist/components/form/index.js"
+    },
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",

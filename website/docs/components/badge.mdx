@@ -2,22 +2,11 @@
 sidebar_position: 5
 ---
 
+import { Badge, Stack } from 'intent-react';
+
 # Badge
 
-Small status indicators for UI elements.
-
-export const Badge = ({ children, variant = 'default', size = 'medium', pill, dot }) => (
-  <span className={`intent-badge intent-badge--variant-${variant} intent-badge--size-${size} ${pill ? 'intent-badge--pill' : ''}`}>
-    {dot && <span className="intent-badge__dot" />}
-    {children}
-  </span>
-)
-
-export const Stack = ({ children, direction = 'row', gap = 'normal', align }) => (
-  <div className={`intent-stack intent-stack--direction-${direction} intent-stack--gap-${gap} ${align ? `intent-stack--align-${align}` : ''}`}>
-    {children}
-  </div>
-)
+Small status indicators for UI elements. Uses the **Flat** archetype with subtle tints.
 
 ## Examples
 
@@ -25,7 +14,7 @@ export const Stack = ({ children, direction = 'row', gap = 'normal', align }) =>
 
 <div className="intent-demo">
   <Stack direction="row" gap="normal">
-    <Badge variant="default">Default</Badge>
+    <Badge>Default</Badge>
     <Badge variant="primary">Primary</Badge>
     <Badge variant="success">Success</Badge>
     <Badge variant="warning">Warning</Badge>
@@ -34,87 +23,34 @@ export const Stack = ({ children, direction = 'row', gap = 'normal', align }) =>
 </div>
 
 ```tsx
-<Badge variant="default">Default</Badge>
+import { Badge } from 'intent-react';
+
+<Badge>Default</Badge>
 <Badge variant="primary">Primary</Badge>
 <Badge variant="success">Success</Badge>
 <Badge variant="warning">Warning</Badge>
 <Badge variant="danger">Danger</Badge>
 ```
 
-### Sizes
+### Usage Examples
 
 <div className="intent-demo">
   <Stack direction="row" gap="normal" align="center">
-    <Badge size="small">Small</Badge>
-    <Badge size="medium">Medium</Badge>
-    <Badge size="large">Large</Badge>
+    <span>New features <Badge variant="primary">Beta</Badge></span>
+    <span>Status: <Badge variant="success">Active</Badge></span>
+    <span>Priority: <Badge variant="danger">High</Badge></span>
   </Stack>
 </div>
 
 ```tsx
-<Badge size="small">Small</Badge>
-<Badge size="medium">Medium</Badge>
-<Badge size="large">Large</Badge>
-```
-
-### With Dots
-
-<div className="intent-demo">
-  <Stack direction="row" gap="normal">
-    <Badge dot variant="success">Online</Badge>
-    <Badge dot variant="warning">Away</Badge>
-    <Badge dot variant="danger">Busy</Badge>
-  </Stack>
-</div>
-
-```tsx
-<Badge dot variant="success">Online</Badge>
-<Badge dot variant="warning">Away</Badge>
-<Badge dot variant="danger">Busy</Badge>
-```
-
-### Pills
-
-<div className="intent-demo">
-  <Stack direction="row" gap="normal">
-    <Badge pill>React</Badge>
-    <Badge pill variant="primary">TypeScript</Badge>
-    <Badge pill variant="success">Shipped</Badge>
-  </Stack>
-</div>
-
-```tsx
-<Badge pill>React</Badge>
-<Badge pill variant="primary">TypeScript</Badge>
-<Badge pill variant="success">Shipped</Badge>
+<span>New features <Badge variant="primary">Beta</Badge></span>
+<span>Status: <Badge variant="success">Active</Badge></span>
+<span>Priority: <Badge variant="danger">High</Badge></span>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'default'` \| `'primary'` \| `'success'` \| `'warning'` \| `'danger'` | `'default'` | Color variant |
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Badge size |
-| `pill` | `boolean` | `false` | Rounded pill style |
-| `dot` | `boolean` | `false` | Show status dot |
-
-## CSS Output
-
-```css
-.intent-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 500;
-  border-radius: 6px;
-}
-
-.intent-badge--primary {
-  background: var(--intent-color-primary-alpha);
-  color: var(--intent-color-primary);
-}
-
-.intent-badge--pill {
-  border-radius: 9999px;
-}
-```
+| `variant` | `'default' \| 'primary' \| 'success' \| 'warning' \| 'danger'` | `'default'` | Visual style |
+| `children` | `ReactNode` | - | Badge content |

@@ -1,113 +1,101 @@
 ---
 sidebar_position: 83
 ---
+
 import React from 'react';
+import { Textarea, Stack } from 'intent-react';
 
 # Textarea
 
-Multi-line text input.
+Multi-line text input. Uses the **Milled** archetype with hairline borders.
 
-export const Textarea = ({ label, placeholder = "Enter text...", rows = 4, disabled = false, error }) => {
-  const [value, setValue] = React.useState('')
+export const TextareaDemo = ({ placeholder, rows = 4, disabled = false, readOnly = false, defaultValue = '' }) => {
+  const [value, setValue] = React.useState(defaultValue);
   
   return (
-    <div style={{ width: '100%' }}>
-      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>{label}</label>}
-      <textarea
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={placeholder}
-        rows={rows}
-        disabled={disabled}
-        style={{
-          width: '100%',
-          padding: '10px 12px',
-          border: `1px solid ${error ? 'var(--intent-color-error, #ef4444)' : 'var(--intent-color-border)'}`,
-          borderRadius: '8px',
-          fontSize: '0.875rem',
-          fontFamily: 'inherit',
-          resize: 'vertical',
-          outline: 'none',
-          opacity: disabled ? 0.6 : 1,
-          background: disabled ? 'var(--intent-color-surface-elevated)' : 'var(--intent-color-surface)'
-        }}
-      />
-      {error && <div style={{ fontSize: '0.75rem', color: 'var(--intent-color-error, #ef4444)', marginTop: '4px' }}>{error}</div>}
-    </div>
-  )
-}
+    <Textarea
+      placeholder={placeholder}
+      rows={rows}
+      disabled={disabled}
+      readOnly={readOnly}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+};
 
 ## Examples
 
 ### Basic Textarea
 
 <div className="intent-demo">
-  <Textarea label="Description" placeholder="Enter a description..." />
+  <TextareaDemo placeholder="Enter your message..." />
 </div>
 
 ```tsx
-<Textarea label="Description" placeholder="Enter a description..." />
+import { Textarea } from 'intent-react';
+
+<Textarea placeholder="Enter your message..." />
 ```
 
-### With Error
+### Rows
 
 <div className="intent-demo">
-  <Textarea label="Bio" error="Bio must be at least 50 characters" />
+  <Stack gap="normal">
+    <TextareaDemo placeholder="3 rows" rows={3} />
+    <TextareaDemo placeholder="4 rows (default)" rows={4} />
+    <TextareaDemo placeholder="6 rows" rows={6} />
+  </Stack>
 </div>
 
 ```tsx
-<Textarea label="Bio" error="Bio must be at least 50 characters" />
+<Textarea rows={3} placeholder="3 rows" />
+<Textarea rows={4} placeholder="4 rows" />
+<Textarea rows={6} placeholder="6 rows" />
 ```
 
-### Disabled
+### States
 
 <div className="intent-demo">
-  <Textarea label="Comments" disabled value="Comments are closed" />
+  <Stack gap="normal">
+    <TextareaDemo placeholder="Normal textarea" />
+    <TextareaDemo placeholder="Disabled textarea" disabled />
+    <TextareaDemo placeholder="Read-only textarea" readOnly defaultValue="This is read-only" />
+  </Stack>
 </div>
 
 ```tsx
-<Textarea label="Comments" disabled />
+<Textarea placeholder="Normal" />
+<Textarea placeholder="Disabled" disabled />
+<Textarea placeholder="Read-only" readOnly />
+```
+
+### With Content
+
+<div className="intent-demo">
+  <TextareaDemo 
+    placeholder="Enter description..." 
+    rows={6}
+    defaultValue="This is a longer text that demonstrates how the textarea handles multi-line content with the milled archetype styling, including the hairline border and subtle shadows."
+  />
+</div>
+
+```tsx
+<Textarea 
+  rows={6}
+  value={description}
+  onChange={(e) => setDescription(e.target.value)}
+/>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | - | Controlled value |
-| `label` | `string` | - | Input label |
-| `placeholder` | `string` | `""` | Placeholder text |
+| `placeholder` | `string` | - | Placeholder text |
 | `rows` | `number` | `4` | Number of rows |
-| `disabled` | `boolean` | `false` | Disable input |
-| `error` | `string` | - | Error message |
-| `onChange` | `(value: string) => void` | - | Change handler |
-
-## CSS Output
-
-```css
-.intent-textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  font-size: 0.875rem;
-  font-family: inherit;
-  resize: vertical;
-  background: var(--intent-color-surface);
-}
-
-.intent-textarea:focus {
-  outline: none;
-  border-color: var(--intent-color-primary);
-  box-shadow: 0 0 0 3px var(--intent-color-primary-subtle);
-}
-
-.intent-textarea--error {
-  border-color: var(--intent-color-error);
-}
-
-.intent-textarea:disabled {
-  opacity: 0.6;
-  background: var(--intent-color-surface-elevated);
-  cursor: not-allowed;
-}
-```
+| `value` | `string` | - | Controlled value |
+| `defaultValue` | `string` | - | Uncontrolled default |
+| `disabled` | `boolean` | `false` | Disable textarea |
+| `readOnly` | `boolean` | `false` | Read-only state |
+| `onChange` | `(e: ChangeEvent) => void` | - | Change handler |

@@ -1,131 +1,145 @@
 ---
 sidebar_position: 82
 ---
+
 import React from 'react';
+import { Select, Stack } from 'intent-react';
 
 # Select
 
-Dropdown selection input.
+Dropdown selection input. Uses the **Milled** archetype with hairline borders.
 
-export const Select = ({ label, options, placeholder = "Select an option..." }) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [selected, setSelected] = React.useState(null)
+export const SelectDemo = ({ placeholder, size = 'md', variant = 'outline', validation = 'none', disabled = false }) => {
+  const [value, setValue] = React.useState('');
+  
+  const options = [
+    { value: 'apple', label: 'Apple' },
+    { value: 'banana', label: 'Banana' },
+    { value: 'cherry', label: 'Cherry' },
+    { value: 'date', label: 'Date' },
+  ];
   
   return (
-    <div className="intent-select-wrapper" style={{ width: '100%', maxWidth: '300px' }}>
-      {label && <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px', color: 'oklch(75% 0 0)' }}>{label}</label>}
-      <button
-        className="intent-select"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span style={{ opacity: selected ? 1 : 0.5 }}>
-          {selected ? selected.label : placeholder}
-        </span>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" style={{ transition: 'transform 150ms', transform: isOpen ? 'rotate(180deg)' : 'rotate(0)' }}>
-          <path d="M3 5l3 3 3-3" />
-        </svg>
-      </button>
-      
-      {isOpen && (
-        <div className="intent-select__dropdown">
-          {options.map((option) => (
-            <button
-              key={option.value}
-              className={`intent-select__option ${selected?.value === option.value ? 'intent-select__option--selected' : ''}`}
-              onClick={() => {
-                setSelected(option)
-                setIsOpen(false)
-              }}
-            >
-              {selected?.value === option.value && <span>✓</span>}
-              <span>{option.label}</span>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
+    <Select
+      options={options}
+      placeholder={placeholder}
+      size={size}
+      variant={variant}
+      validation={validation}
+      disabled={disabled}
+      value={value}
+      onChange={(v) => setValue(v)}
+    />
+  );
+};
 
 ## Examples
 
 ### Basic Select
 
 <div className="intent-demo">
-  <Select 
-    label="Favorite Fruit"
-    options={[
-      { value: 'apple', label: 'Apple' },
-      { value: 'banana', label: 'Banana' },
-      { value: 'cherry', label: 'Cherry' },
-      { value: 'date', label: 'Date' },
-      { value: 'elderberry', label: 'Elderberry' }
-    ]}
-  />
+  <SelectDemo placeholder="Select a fruit..." />
 </div>
 
 ```tsx
-<Select 
-  label="Favorite Fruit"
-  options={[
-    { value: 'apple', label: 'Apple' },
-    { value: 'banana', label: 'Banana' }
-  ]}
-/>
+import { Select } from 'intent-react';
+
+const options = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+];
+
+<Select options={options} placeholder="Select a fruit..." />
+```
+
+### Sizes
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <SelectDemo placeholder="Extra small" size="xs" />
+    <SelectDemo placeholder="Small" size="sm" />
+    <SelectDemo placeholder="Medium (default)" size="md" />
+    <SelectDemo placeholder="Large" size="lg" />
+    <SelectDemo placeholder="Extra large" size="xl" />
+  </Stack>
+</div>
+
+```tsx
+<Select size="xs" options={options} placeholder="Extra small" />
+<Select size="sm" options={options} placeholder="Small" />
+<Select size="md" options={options} placeholder="Medium" />
+<Select size="lg" options={options} placeholder="Large" />
+<Select size="xl" options={options} placeholder="Extra large" />
+```
+
+### Variants
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <SelectDemo placeholder="Outline (default)" variant="outline" />
+    <SelectDemo placeholder="Filled" variant="filled" />
+    <SelectDemo placeholder="Flushed" variant="flushed" />
+  </Stack>
+</div>
+
+```tsx
+<Select variant="outline" options={options} />
+<Select variant="filled" options={options} />
+<Select variant="flushed" options={options} />
+```
+
+### Validation States
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <SelectDemo placeholder="Default state" validation="none" />
+    <SelectDemo placeholder="Valid selection" validation="valid" />
+    <SelectDemo placeholder="Invalid selection" validation="invalid" />
+    <SelectDemo placeholder="Warning state" validation="warning" />
+  </Stack>
+</div>
+
+```tsx
+<Select validation="none" options={options} />
+<Select validation="valid" options={options} />
+<Select validation="invalid" options={options} />
+<Select validation="warning" options={options} />
+```
+
+### States
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <SelectDemo placeholder="Normal select" />
+    <SelectDemo placeholder="Disabled select" disabled />
+  </Stack>
+</div>
+
+```tsx
+<Select placeholder="Normal" options={options} />
+<Select placeholder="Disabled" options={options} disabled />
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `string` | - | Select label |
+| `options` | `SelectOption[]` | - | Array of options |
+| `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Select size |
+| `variant` | `'outline' \| 'filled' \| 'flushed'` | `'outline'` | Visual variant |
+| `validation` | `'none' \| 'valid' \| 'invalid' \| 'warning'` | `'none'` | Validation state |
+| `placeholder` | `string` | - | Placeholder text |
 | `value` | `string` | - | Selected value |
-| `options` | `Array<{value: string, label: string}>` | `[]` | Available options |
-| `placeholder` | `string` | `"Select..."` | Placeholder text |
 | `disabled` | `boolean` | `false` | Disable select |
 | `onChange` | `(value: string) => void` | - | Change handler |
 
-## CSS Output
+## SelectOption
 
-```css
-.intent-select {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 40px;
-  padding: 0 12px;
-  background: var(--intent-surface-milled-bg);
-  box-shadow: var(--intent-surface-milled-shadow);
-  border-radius: var(--intent-radius-md);
-  cursor: pointer;
-  transition: all 100ms cubic-bezier(0.2, 0, 0, 1);
-}
-
-.intent-select__dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  z-index: 50;
-  background: var(--intent-surface-elevated-bg);
-  border: 0.5px solid var(--intent-surface-elevated-border);
-  box-shadow: 0 0 0 0.5px oklch(0% 0 0 / 0.3),
-    4px 8px 16px -2px oklch(0% 0 0 / 0.25);
-  border-radius: var(--intent-radius-lg);
-  backdrop-filter: blur(20px) saturate(180%);
-  padding: 4px;
-  animation: intent-dropdown-open 100ms;
-}
-
-.intent-select__option {
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 75ms;
-}
-
-.intent-select__option:hover {
-  background: oklch(100% 0 0 / 0.06);
+```ts
+interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
 }
 ```

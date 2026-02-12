@@ -3,124 +3,151 @@ sidebar_position: 18
 ---
 
 import React from 'react';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'intent-react/components/navigation';
+import { Stack } from 'intent-react';
 
 # Tabs
 
-Organize content into tabbed sections.
+Organize content into tabbed sections. Uses compound component pattern.
 
-export const TabsDemo = ({ variant }) => {
-  const [activeTab, setActiveTab] = React.useState('account')
-  
-  const tabs = [
-    { id: 'account', label: 'Account', content: 'Manage your account settings and preferences.' },
-    { id: 'password', label: 'Password', content: 'Change your password and security settings.' },
-    { id: 'notifications', label: 'Notifications', content: 'Configure how you receive notifications.' }
-  ]
+export const TabsDemo = ({ variant = 'line' }) => {
+  const [value, setValue] = React.useState(0);
   
   return (
-    <div className={`intent-tabs ${variant === 'line' ? 'intent-tabs--line' : ''}`}>
-      <div className="intent-tabs__list">
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`intent-tabs__tab ${activeTab === tab.id ? 'intent-tabs__tab--active' : ''}`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-      <div className="intent-tabs__panel">
-        {tabs.find(t => t.id === activeTab)?.content}
-      </div>
-    </div>
-  )
-}
+    <Tabs value={value} onValueChange={setValue} variant={variant}>
+      <TabList>
+        <Tab>Account</Tab>
+        <Tab>Password</Tab>
+        <Tab>Notifications</Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel>
+          Manage your account settings and preferences.
+        </TabPanel>
+        <TabPanel>
+          Change your password and security settings.
+        </TabPanel>
+        <TabPanel>
+          Configure how you receive notifications.
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
+};
 
 ## Examples
 
-### Pill Tabs
-
-<div className="intent-demo">
-  <TabsDemo />
-</div>
-
-```tsx
-const [activeTab, setActiveTab] = useState('account')
-
-<Tabs value={activeTab} onChange={setActiveTab}>
-  <Tabs.List>
-    <Tabs.Trigger value="account">Account</Tabs.Trigger>
-    <Tabs.Trigger value="password">Password</Tabs.Trigger>
-  </Tabs.List>
-  <Tabs.Content value="account">
-    <Text>Account settings...</Text>
-  </Tabs.Content>
-</Tabs>
-```
-
-### Line Tabs
+### Line Tabs (Default)
 
 <div className="intent-demo">
   <TabsDemo variant="line" />
 </div>
 
 ```tsx
-<Tabs variant="line" value={activeTab} onChange={setActiveTab}>
-  <Tabs.List>
-    <Tabs.Trigger value="account">Account</Tabs.Trigger>
-    <Tabs.Trigger value="password">Password</Tabs.Trigger>
-  </Tabs.List>
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'intent-react';
+
+<Tabs>
+  <TabList>
+    <Tab>Account</Tab>
+    <Tab>Password</Tab>
+    <Tab>Notifications</Tab>
+  </TabList>
+  <TabPanels>
+    <TabPanel>Account settings...</TabPanel>
+    <TabPanel>Password settings...</TabPanel>
+    <TabPanel>Notification settings...</TabPanel>
+  </TabPanels>
 </Tabs>
+```
+
+### Enclosed Tabs
+
+<div className="intent-demo">
+  <TabsDemo variant="enclosed" />
+</div>
+
+```tsx
+<Tabs variant="enclosed">
+  <TabList>
+    <Tab>Account</Tab>
+    <Tab>Password</Tab>
+  </TabList>
+  <TabPanels>
+    <TabPanel>Content...</TabPanel>
+  </TabPanels>
+</Tabs>
+```
+
+### Soft Rounded Tabs
+
+<div className="intent-demo">
+  <TabsDemo variant="soft-rounded" />
+</div>
+
+```tsx
+<Tabs variant="soft-rounded">
+  <TabList>
+    <Tab>Account</Tab>
+    <Tab>Password</Tab>
+  </TabList>
+  <TabPanels>
+    <TabPanel>Content...</TabPanel>
+  </TabPanels>
+</Tabs>
+```
+
+### Sizes
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Tabs size="sm">
+      <TabList>
+        <Tab>Small</Tab>
+        <Tab>Tab</Tab>
+      </TabList>
+    </Tabs>
+    <Tabs size="md">
+      <TabList>
+        <Tab>Medium</Tab>
+        <Tab>Tab</Tab>
+      </TabList>
+    </Tabs>
+    <Tabs size="lg">
+      <TabList>
+        <Tab>Large</Tab>
+        <Tab>Tab</Tab>
+      </TabList>
+    </Tabs>
+  </Stack>
+</div>
+
+```tsx
+<Tabs size="sm">...</Tabs>
+<Tabs size="md">...</Tabs>
+<Tabs size="lg">...</Tabs>
 ```
 
 ## Props
 
 ### Tabs
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `defaultValue` | `string` | - | Default active tab |
-| `value` | `string` | - | Controlled active tab |
-| `onChange` | `(value: string) => void` | - | Tab change handler |
-| `variant` | `'pill' \| 'line'` | `'pill'` | Tab style variant |
+| `variant` | `'line' \| 'enclosed' \| 'enclosed-colored' \| 'soft-rounded' \| 'solid-rounded'` | `'line'` | Visual style |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Tab size |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Layout direction |
+| `value` | `number` | - | Controlled selected index |
+| `onValueChange` | `(value: number) => void` | - | Change handler |
 
-### Tabs.Trigger
+### Tab
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | required | Tab value |
-| `children` | `ReactNode` | - | Tab label |
+| `selected` | `boolean` | - | Selected state (internal) |
+| `disabled` | `boolean` | `false` | Disable tab |
 
-### Tabs.Content
+### TabPanel
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | required | Associated tab value |
-| `children` | `ReactNode` | - | Tab content |
-
-## CSS Output
-
-```css
-.intent-tabs__list {
-  display: flex;
-  gap: 2px;
-  padding: 3px;
-  background: var(--intent-surface-flat-bg);
-  border: 0.5px solid var(--intent-surface-flat-border);
-  border-radius: var(--intent-radius-lg);
-}
-
-.intent-tabs__tab {
-  flex: 1;
-  padding: 8px 16px;
-  background: transparent;
-  border: none;
-  border-radius: calc(var(--intent-radius-lg) - 3px);
-  cursor: pointer;
-  transition: all 100ms cubic-bezier(0.2, 0, 0, 1);
-}
-
-.intent-tabs__tab--active {
-  background: var(--intent-surface-milled-bg);
-  box-shadow: var(--intent-surface-milled-shadow);
-  color: oklch(95% 0 0);
-}
-```
+| `children` | `ReactNode` | - | Panel content |
