@@ -68,6 +68,12 @@ const config: Config = {
       disableSwitch: false,
       respectPrefersColorScheme: false,
     },
+    metadata: [
+      {
+        name: 'Content-Security-Policy',
+        content: "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';",
+      },
+    ],
     image: 'img/intent-social-card.jpg',
     navbar: {
       title: 'Intent',
