@@ -164,3 +164,26 @@ Initial release of the Intent Framework — a schema-first, AI-native styling sy
 - Forward ref support for all inputs (react-hook-form compatible)
 - Horizontal, vertical, and inline field layouts
 - Validation state inheritance from Form to Field to Input
+
+## Phase 5: Feedback & Overlay (v0.6.0)
+
+### Feedback Components
+- **Alert**: Status messages (info/success/warning/error) with subtle/solid/left-accent/top-accent variants
+- **Progress**: Linear and circular progress bars with sizes (xs/sm/md/lg) and colors
+- **Spinner**: Loading indicator with sizes (xs/sm/md/lg/xl), colors, thickness options
+- **Skeleton**: Content loading placeholders with text/circle/rectangle variants
+
+### Overlay Components
+- **Modal**: Focus-trapped dialog with sizes (xs/sm/md/lg/xl/full), placements (center/top)
+- **Drawer**: Sliding side panel with placements (left/right/top/bottom) and sizes
+- **Tooltip**: Hover popup with 4 placements (top/right/bottom/left)
+- **Popover**: Click-triggered popup with 8 placements and sizes (sm/md/lg)
+- **Menu**: Dropdown menu system with items, icons, keyboard shortcuts
+- **MenuItem**: Individual menu item with disabled state and shortcut display
+
+### Overlay Features
+- Position-based CSS mappings for all overlay types
+- Z-index management (backdrop: 40, overlays: 50)
+- Animation-ready style structures
+- Focus trap support for Modal
+- Click-outside detection support

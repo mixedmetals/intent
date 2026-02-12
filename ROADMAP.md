@@ -199,36 +199,48 @@ prop('selectMode', enum('single', 'multiple'))
 
 ---
 
-## Phase 5: Feedback & Overlay (v0.6.0) - Q3 2026
+## Phase 5: Feedback & Overlay (v0.6.0) - ✅ COMPLETE
 
 ### Feedback Components
-| Component | Priority | Description |
-|-----------|----------|-------------|
-| `Alert` | P0 | Status messages (info, success, warning, error) |
-| `Toast` | P0 | Temporary notification system |
-| `Progress` | P0 | Linear and circular progress |
-| `Spinner` | P0 | Loading indicator |
-| `Skeleton` | P0 | Content loading placeholder |
-| `Badge` (enhanced) | P1 | Extended with dot, count, status variants |
+| Component | Status | Priority | Description |
+|-----------|--------|----------|-------------|
+| `Alert` | ✅ | P0 | Status messages with subtle/solid/accent variants |
+| `Progress` | ✅ | P0 | Linear and circular with sizes and colors |
+| `Spinner` | ✅ | P0 | Loading indicator with sizes, colors, thickness |
+| `Skeleton` | ✅ | P0 | Content loading placeholders |
+| `Toast` | ⏳ | P0 | Temporary notification system (hook-based) |
+| `Badge` (enhanced) | ⏳ | P1 | Extended with dot, count, status variants |
 
 ### Overlay Components
-| Component | Priority | Description |
-|-----------|----------|-------------|
-| `Modal` / `Dialog` | P0 | Focus-trapped overlay dialog |
-| `Drawer` | P0 | Side panel overlay |
-| `Tooltip` | P0 | Hover information popup |
-| `Popover` | P0 | Click-triggered content popup |
-| `Menu` | P0 | Dropdown menu system |
-| `Sheet` | P1 | Bottom/Top sliding panel |
-| `HoverCard` | P2 | Preview on hover |
+| Component | Status | Priority | Description |
+|-----------|--------|----------|-------------|
+| `Modal` | ✅ | P0 | Focus-trapped dialog with sizes and placements |
+| `Drawer` | ✅ | P0 | Side panel overlay (left/right/top/bottom) |
+| `Tooltip` | ✅ | P0 | Hover information popup |
+| `Popover` | ✅ | P0 | Click-triggered content popup |
+| `Menu` | ✅ | P0 | Dropdown menu system with icons, shortcuts |
+| `MenuItem` | ✅ | P0 | Individual menu item component |
+| `Backdrop` | ✅ | P1 | Dimmed overlay background |
+| `Sheet` | ⏳ | P1 | Bottom/Top sliding panel (mobile) |
+| `HoverCard` | ⏳ | P2 | Preview on hover |
 
-### Overlay Props
+### Overlay Props - ✅ Complete
 ```typescript
-// Overlay behaviors
+// Positioning
 prop('placement', enum('top', 'right', 'bottom', 'left', 'center'))
-prop('offset', enum('0', '4', '8', '12', '16'))
-prop('strategy', enum('absolute', 'fixed'))
-prop('trigger', enum('click', 'hover', 'focus', 'manual'))
+prop('placement', enum('top-start', 'top-end', 'bottom-start', 'bottom-end')) // Extended
+
+// Sizing
+prop('size', enum('xs', 'sm', 'md', 'lg', 'xl', 'full'))
+
+// Behavior
+prop('closeOnOverlayClick', boolean())
+prop('closeOnBlur', boolean())
+prop('closeOnEsc', boolean())
+
+// Z-index layers
+--z-backdrop: 40
+--z-overlay: 50
 ```
 
 ---
