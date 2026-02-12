@@ -73,6 +73,15 @@ const sidebars: SidebarsConfig = {
           label: 'Navigation',
           items: [
             'components/tabs',
+            'components/breadcrumbs',
+            'components/pagination',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Data Display',
+          items: [
+            'components/accordion',
           ],
         },
       ],

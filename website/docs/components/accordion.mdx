@@ -1,0 +1,176 @@
+---
+sidebar_position: 24
+---
+
+import { Accordion } from 'intent-react'
+
+# Accordion
+
+Collapsible sections for organizing content.
+
+## Example
+
+<Accordion 
+  items={[
+    {
+      id: '1',
+      title: 'What is Intent Framework?',
+      content: 'Intent is a schema-first, AI-native CSS framework that bridges the gap between design intent and implementation. It uses schemas to define components and generates optimized CSS at build time.'
+    },
+    {
+      id: '2',
+      title: 'How do I get started?',
+      content: 'Install the intent-core and intent-react packages, import the theme CSS, and start using components. Check out our Quick Start guide for more details.'
+    },
+    {
+      id: '3',
+      title: 'Is Intent production ready?',
+      content: 'Yes! Intent is used in production by several teams. The framework provides 72 production-ready components with full TypeScript support and accessibility features.'
+    }
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+import { Accordion } from 'intent-react'
+
+<Accordion 
+  items={[
+    {
+      id: '1',
+      title: 'What is Intent Framework?',
+      content: 'Intent is a schema-first CSS framework...'
+    },
+    {
+      id: '2',
+      title: 'How do I get started?',
+      content: 'Install intent-core and intent-react...'
+    }
+  ]}
+/>
+```
+
+## Allow Multiple Open
+
+<Accordion 
+  allowMultiple
+  items={[
+    {
+      id: '1',
+      title: 'Section One',
+      content: 'Content for section one. Multiple sections can be open at once.'
+    },
+    {
+      id: '2',
+      title: 'Section Two',
+      content: 'Content for section two.'
+    },
+    {
+      id: '3',
+      title: 'Section Three',
+      content: 'Content for section three.'
+    }
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+<Accordion allowMultiple items={[...]} />
+```
+
+## Default Open Items
+
+```tsx
+<Accordion 
+  defaultOpen={['1', '2']}
+  items={[...]}
+/>
+```
+
+## Controlled Component
+
+```tsx
+import { useState } from 'react'
+import { Accordion } from 'intent-react'
+
+function ControlledAccordion() {
+  const [openItems, setOpenItems] = useState(['1'])
+  
+  return (
+    <Accordion 
+      openItems={openItems}
+      onChange={setOpenItems}
+      items={[...]}
+    />
+  )
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `Array<{id: string, title: string, content: ReactNode}>` | `[]` | Accordion items |
+| `allowMultiple` | `boolean` | `false` | Allow multiple open items |
+| `defaultOpen` | `string[]` | `[]` | Initially open item IDs |
+| `openItems` | `string[]` | - | Controlled open items |
+| `onChange` | `(items: string[]) => void` | - | Change callback |
+| `size` | `'sm'` \| `'md'` \| `'lg'` | `'md'` | Accordion size |
+
+## CSS Output
+
+```css
+.accordion {
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  overflow: hidden;
+}
+
+.accordion__item {
+  border-bottom: 1px solid var(--intent-color-border);
+}
+
+.accordion__item:last-child {
+  border-bottom: none;
+}
+
+.accordion__trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: var(--intent-spacing-3) var(--intent-spacing-4);
+  background: transparent;
+  cursor: pointer;
+}
+
+.accordion__trigger:hover {
+  background: var(--intent-color-surface-elevated);
+}
+
+.accordion__content {
+  padding: var(--intent-spacing-3) var(--intent-spacing-4);
+  color: var(--intent-color-text-muted);
+}
+
+.accordion__icon {
+  transition: transform 200ms ease;
+}
+
+.accordion__item--open .accordion__icon {
+  transform: rotate(180deg);
+}
+```
+
+## When to Use
+
+Use **Accordion** for:
+- FAQs
+- Settings panels with many sections
+- Hiding detailed content
+- Mobile-friendly content organization
+
+Use **Tabs** when:
+- Content is at the same level of importance
+- Users need to switch frequently
+- Space is limited
