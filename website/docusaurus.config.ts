@@ -63,6 +63,11 @@ const config: Config = {
   ],
 
   themeConfig: {
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: false,
+      respectPrefersColorScheme: false,
+    },
     image: 'img/intent-social-card.jpg',
     navbar: {
       title: 'Intent',
