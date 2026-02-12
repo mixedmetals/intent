@@ -25,7 +25,6 @@
 export { Stack, VStack, HStack } from './components/Stack.js';
 export { Button } from './components/Button.js';
 export { Surface } from './components/Surface.js';
-export { Text, Heading } from './components/Text.js';
 export { Input } from './components/Input.js';
 export { Card } from './components/Card.js';
 export { Badge } from './components/Badge.js';
@@ -44,13 +43,39 @@ export {
   Hide,
 } from './components/layout/index.js';
 
+// Typography Components
+export {
+  Heading,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  Paragraph,
+  P,
+  Text,
+  List,
+  ListItem,
+  Ul,
+  Ol,
+  Li,
+  Code,
+  Quote,
+  Blockquote,
+  Prose,
+  Kbd,
+  Mark,
+  Highlight,
+  SearchHighlight,
+} from './components/typography/index.js';
+
 // Types
 export type {
   IntentComponentProps,
   StackProps,
   ButtonProps,
   SurfaceProps,
-  TextProps,
   InputProps,
   CardProps,
   BadgeProps,
@@ -69,6 +94,20 @@ export type {
   ShowProps,
   HideProps,
 } from './components/layout/index.js';
+
+// Typography Types
+export type {
+  HeadingProps,
+  ParagraphProps,
+  TextProps,
+  ListProps,
+  ListItemProps,
+  CodeProps,
+  QuoteProps,
+  ProseProps,
+  KbdProps,
+  MarkProps,
+} from './components/typography/index.js';
 
 // Utils
 export {
