@@ -65,7 +65,9 @@ const sidebars: SidebarsConfig = {
           items: [
             'components/modal',
             'components/drawer',
+            'components/popover',
             'components/tooltip',
+            'components/dropdown',
           ],
         },
         {
@@ -82,6 +84,7 @@ const sidebars: SidebarsConfig = {
           label: 'Data Display',
           items: [
             'components/accordion',
+            'components/table',
           ],
         },
       ],

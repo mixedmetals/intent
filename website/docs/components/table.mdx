@@ -1,0 +1,224 @@
+---
+sidebar_position: 27
+---
+
+import { Table, Badge } from 'intent-react'
+
+# Table
+
+Display tabular data with sorting and selection.
+
+## Example
+
+<Table 
+  columns={[
+    { key: 'name', title: 'Name' },
+    { key: 'email', title: 'Email' },
+    { key: 'role', title: 'Role' },
+    { key: 'status', title: 'Status', render: (value) => (
+      <Badge variant={value === 'Active' ? 'success' : 'default'}>{value}</Badge>
+    )}
+  ]}
+  data={[
+    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Editor', status: 'Active' },
+    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Viewer', status: 'Inactive' },
+    { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Editor', status: 'Active' },
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+import { Table, Badge } from 'intent-react'
+
+<Table 
+  columns={[
+    { key: 'name', title: 'Name' },
+    { key: 'email', title: 'Email' },
+    { key: 'role', title: 'Role' },
+    { 
+      key: 'status', 
+      title: 'Status',
+      render: (value) => (
+        <Badge variant={value === 'Active' ? 'success' : 'default'}>
+          {value}
+        </Badge>
+      )
+    }
+  ]}
+  data={[...]}
+/>
+```
+
+## Striped Rows
+
+<Table 
+  striped
+  columns={[
+    { key: 'name', title: 'Product' },
+    { key: 'category', title: 'Category' },
+    { key: 'price', title: 'Price' },
+    { key: 'stock', title: 'Stock' }
+  ]}
+  data={[
+    { id: 1, name: 'MacBook Pro', category: 'Laptops', price: '$1,999', stock: 12 },
+    { id: 2, name: 'iPhone 15', category: 'Phones', price: '$999', stock: 45 },
+    { id: 3, name: 'AirPods Pro', category: 'Audio', price: '$249', stock: 78 },
+    { id: 4, name: 'iPad Air', category: 'Tablets', price: '$599', stock: 23 },
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+<Table striped columns={[...]} data={[...]} />
+```
+
+## Bordered
+
+<Table 
+  bordered
+  columns={[
+    { key: 'feature', title: 'Feature' },
+    { key: 'free', title: 'Free', align: 'center' },
+    { key: 'pro', title: 'Pro', align: 'center' },
+    { key: 'enterprise', title: 'Enterprise', align: 'center' }
+  ]}
+  data={[
+    { id: 1, feature: 'Projects', free: '3', pro: 'Unlimited', enterprise: 'Unlimited' },
+    { id: 2, feature: 'Storage', free: '1GB', pro: '100GB', enterprise: '1TB' },
+    { id: 3, feature: 'Support', free: 'Community', pro: 'Email', enterprise: '24/7 Phone' },
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+<Table bordered columns={[...]} data={[...]} />
+```
+
+## Compact
+
+<Table 
+  compact
+  columns={[
+    { key: 'id', title: 'ID', width: 60 },
+    { key: 'action', title: 'Action' },
+    { key: 'user', title: 'User' },
+    { key: 'time', title: 'Time' }
+  ]}
+  data={[
+    { id: 1, action: 'Login', user: 'john@example.com', time: '2 min ago' },
+    { id: 2, action: 'Update profile', user: 'jane@example.com', time: '15 min ago' },
+    { id: 3, action: 'Create project', user: 'bob@example.com', time: '1 hour ago' },
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+<Table compact columns={[...]} data={[...]} />
+```
+
+## Sortable
+
+```tsx
+import { useState } from 'react'
+import { Table } from 'intent-react'
+
+function SortableTable() {
+  const [sortKey, setSortKey] = useState('name')
+  const [sortOrder, setSortOrder] = useState('asc')
+  
+  const handleSort = (key) => {
+    if (sortKey === key) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortKey(key)
+      setSortOrder('asc')
+    }
+  }
+  
+  const sortedData = [...data].sort((a, b) => {
+    const aVal = a[sortKey]
+    const bVal = b[sortKey]
+    const order = sortOrder === 'asc' ? 1 : -1
+    return aVal > bVal ? order : -order
+  })
+  
+  return (
+    <Table 
+      sortable
+      sortKey={sortKey}
+      sortOrder={sortOrder}
+      onSort={handleSort}
+      columns={[...]}
+      data={sortedData}
+    />
+  )
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `Array<Column>` | `[]` | Column definitions |
+| `data` | `Array<object>` | `[]` | Table data |
+| `striped` | `boolean` | `false` | Alternating row colors |
+| `bordered` | `boolean` | `false` | Border around table |
+| `compact` | `boolean` | `false` | Reduced padding |
+| `hover` | `boolean` | `false` | Row hover effect |
+| `sortable` | `boolean` | `false` | Enable sorting |
+| `sortKey` | `string` | - | Current sort column |
+| `sortOrder` | `'asc'` \| `'desc'` | - | Current sort order |
+| `onSort` | `(key: string) => void` | - | Sort callback |
+
+### Column Type
+
+```typescript
+interface Column {
+  key: string
+  title: string
+  width?: number | string
+  align?: 'left' | 'center' | 'right'
+  render?: (value: any, row: object) => ReactNode
+}
+```
+
+## CSS Output
+
+```css
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table__head {
+  background: var(--intent-color-surface-elevated);
+}
+
+.table__th {
+  padding: var(--intent-spacing-3) var(--intent-spacing-4);
+  text-align: left;
+  font-weight: 600;
+  color: var(--intent-color-text);
+  border-bottom: 1px solid var(--intent-color-border);
+}
+
+.table__td {
+  padding: var(--intent-spacing-3) var(--intent-spacing-4);
+  border-bottom: 1px solid var(--intent-color-border);
+}
+
+.table--striped .table__tr:nth-child(even) {
+  background: var(--intent-color-surface-elevated);
+}
+
+.table--bordered {
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+}
+
+.table--compact .table__th,
+.table--compact .table__td {
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+}
+```

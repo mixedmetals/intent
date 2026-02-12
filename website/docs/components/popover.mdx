@@ -1,0 +1,198 @@
+---
+sidebar_position: 29
+---
+
+import { useState } from 'react'
+import { Stack, Button, Popover, Input, Select, Field } from 'intent-react'
+
+export function PopoverDemo() {
+  const [open, setOpen] = useState(false)
+  
+  return (
+    <Popover 
+      open={open}
+      onOpenChange={setOpen}
+      trigger={<Button>Filter</Button>}
+    >
+      <Stack gap="normal" style={{ width: 240 }}>
+        <Field label="Status">
+          <Select 
+            options={[
+              { value: 'all', label: 'All' },
+              { value: 'active', label: 'Active' },
+              { value: 'inactive', label: 'Inactive' },
+            ]}
+          />
+        </Field>
+        <Field label="Search">
+          <Input placeholder="Search..." />
+        </Field>
+        <Stack direction="row" gap="normal">
+          <Button importance="tertiary" fullWidth onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button importance="primary" fullWidth onClick={() => setOpen(false)}>
+            Apply
+          </Button>
+        </Stack>
+      </Stack>
+    </Popover>
+  )
+}
+
+# Popover
+
+Floating content panel triggered by clicking an element.
+
+## Example
+
+<PopoverDemo />
+
+```tsx
+import { useState } from 'react'
+import { Button, Popover, Stack, Field, Input } from 'intent-react'
+
+function FilterPopover() {
+  const [open, setOpen] = useState(false)
+  
+  return (
+    <Popover 
+      open={open}
+      onOpenChange={setOpen}
+      trigger={<Button>Filter</Button>}
+    >
+      <Stack gap="normal" style={{ width: 240 }}>
+        <Field label="Status">
+          <Select options={[...]} />
+        </Field>
+        <Stack direction="row" gap="normal">
+          <Button onClick={() => setOpen(false)}>Apply</Button>
+        </Stack>
+      </Stack>
+    </Popover>
+  )
+}
+```
+
+## With Form
+
+```tsx
+<Popover trigger={<Button>Add User</Button>}>
+  <form onSubmit={handleSubmit}>
+    <Stack gap="normal">
+      <Field label="Name">
+        <Input placeholder="Full name" />
+      </Field>
+      <Field label="Email">
+        <Input type="email" placeholder="Email address" />
+      </Field>
+      <Button type="submit" importance="primary" fullWidth>
+        Create User
+      </Button>
+    </Stack>
+  </form>
+</Popover>
+```
+
+## Positions
+
+<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
+  <Popover 
+    side="top"
+    trigger={<Button size="small">Top</Button>}
+  >
+    <div style={{ padding: 16 }}>Content appears above</div>
+  </Popover>
+  <Popover 
+    side="right"
+    trigger={<Button size="small">Right</Button>}
+  >
+    <div style={{ padding: 16 }}>Content appears to the right</div>
+  </Popover>
+  <Popover 
+    side="bottom"
+    trigger={<Button size="small">Bottom</Button>}
+  >
+    <div style={{ padding: 16 }}>Content appears below</div>
+  </Popover>
+  <Popover 
+    side="left"
+    trigger={<Button size="small">Left</Button>}
+  >
+    <div style={{ padding: 16 }}>Content appears to the left</div>
+  </Popover>
+</Stack>
+
+```tsx
+<Popover side="top" trigger={...}>...</Popover>
+<Popover side="right" trigger={...}>...</Popover>
+<Popover side="bottom" trigger={...}>...</Popover>
+<Popover side="left" trigger={...}>...</Popover>
+```
+
+## Alignment
+
+```tsx
+<Popover align="start" trigger={...}>...</Popover>
+<Popover align="center" trigger={...}>...</Popover>
+<Popover align="end" trigger={...}>...</Popover>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `trigger` | `ReactNode` | required | Element that opens the popover |
+| `children` | `ReactNode` | - | Popover content |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Open state callback |
+| `side` | `'top'` \| `'right'` \| `'bottom'` \| `'left'` | `'bottom'` | Popover position |
+| `align` | `'start'` \| `'center'` \| `'end'` | `'center'` | Content alignment |
+| `modal` | `boolean` | `false` | Trap focus inside |
+
+## CSS Output
+
+```css
+.popover {
+  position: relative;
+  display: inline-block;
+}
+
+.popover__content {
+  position: absolute;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  box-shadow: var(--intent-shadow-lg);
+  z-index: 50;
+  padding: var(--intent-spacing-4);
+  min-width: 200px;
+}
+
+.popover__content--side-bottom {
+  top: 100%;
+  margin-top: var(--intent-spacing-2);
+}
+
+.popover__content--align-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+```
+
+## Popover vs Tooltip vs Dropdown
+
+Use **Popover** for:
+- Interactive content (forms, buttons)
+- Rich content (images, formatted text)
+- Confirmations with context
+
+Use **Tooltip** for:
+- Simple text hints
+- Icon labels
+- Brief explanations
+
+Use **Dropdown** for:
+- Action menus
+- Navigation options
+- Selection from a list
