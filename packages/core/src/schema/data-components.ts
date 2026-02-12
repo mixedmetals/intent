@@ -88,6 +88,27 @@ export const ButtonSchema = defineComponent({
       default: 'left',
       description: 'Icon placement relative to text'
     },
+    
+    /**
+     * Animation style - "Heavy & Mechanical" motion system
+     * Automatically respects prefers-reduced-motion
+     */
+    animation: {
+      type: 'enum',
+      values: ['mechanical', 'heavy', 'spring', 'smooth', 'none'],
+      default: 'mechanical',
+      description: 'mechanical for standard UI, heavy for large movements, spring for playful, smooth for subtle, none for instant'
+    },
+    
+    /**
+     * Animation duration
+     */
+    animationDuration: {
+      type: 'enum',
+      values: ['micro', 'fast', 'normal', 'slow', 'deliberate'],
+      default: 'fast',
+      description: 'Duration preset for transitions'
+    },
   },
   
   constraints: [
@@ -189,6 +210,31 @@ export const ButtonSchema = defineComponent({
     'hasIcon=true,iconPosition=right': {
       paddingRight: 'calc(var(--intent-button-padding-right, 1rem) - 0.125rem)',
     },
+    
+    // Animation - Motion System tokens
+    'animation=mechanical': {
+      transitionTimingFunction: 'var(--intent-easing-mechanical)',
+    },
+    'animation=heavy': {
+      transitionTimingFunction: 'var(--intent-easing-heavy)',
+    },
+    'animation=spring': {
+      transitionTimingFunction: 'var(--intent-easing-spring)',
+    },
+    'animation=smooth': {
+      transitionTimingFunction: 'var(--intent-easing-smooth)',
+    },
+    'animation=none': {
+      transitionDuration: '0s',
+      transitionTimingFunction: 'step-end',
+    },
+    
+    // Animation Duration
+    'animationDuration=micro': { transitionDuration: 'var(--intent-duration-micro)' },
+    'animationDuration=fast': { transitionDuration: 'var(--intent-duration-fast)' },
+    'animationDuration=normal': { transitionDuration: 'var(--intent-duration-normal)' },
+    'animationDuration=slow': { transitionDuration: 'var(--intent-duration-slow)' },
+    'animationDuration=deliberate': { transitionDuration: 'var(--intent-duration-deliberate)' },
   },
   
   baseStyles: {
@@ -201,7 +247,10 @@ export const ButtonSchema = defineComponent({
     borderStyle: 'solid',
     borderRadius: '0.375rem',
     cursor: 'pointer',
-    transition: 'all 150ms ease',
+    // Motion system - uses tokens that respect prefers-reduced-motion
+    transitionProperty: 'all',
+    transitionDuration: 'var(--intent-duration-fast, 150ms)',
+    transitionTimingFunction: 'var(--intent-easing-mechanical, cubic-bezier(0.4, 0, 0.2, 1))',
     textDecoration: 'none',
     lineHeight: '1.5',
     whiteSpace: 'nowrap',
@@ -209,7 +258,22 @@ export const ButtonSchema = defineComponent({
     '--intent-focus-ring-width': '2px',
     '--intent-focus-ring-offset': '2px',
     '--intent-focus-ring-color': 'var(--intent-color-primary-500)',
+    // Motion tokens
+    '--intent-animation': 'mechanical',
+    '--intent-animation-duration': 'fast',
   },
+  
+  // Theme-level constraint: Reduced motion overrides all animation values
+  themeConstraints: [
+    {
+      when: { 'theme.reducedMotion': true },
+      override: {
+        animation: 'none',
+        animationDuration: 'micro',
+      },
+      message: 'Theme-level reduced motion: all animations disabled',
+    },
+  ],
 });
 
 // ============================================================================

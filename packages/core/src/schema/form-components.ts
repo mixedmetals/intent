@@ -420,7 +420,7 @@ export const RadioGroupSchema = defineComponent({
 
 export const SwitchSchema = defineComponent({
   name: 'Switch',
-  description: 'Toggle switch (checkbox alternative) with schema-driven focus management',
+  description: 'Toggle switch (checkbox alternative) with schema-driven focus management and mechanical motion',
   properties: {
     size: switchSizeProp,
     disabled: { type: 'boolean', default: false },
@@ -433,6 +433,15 @@ export const SwitchSchema = defineComponent({
       type: 'enum', 
       values: ['default', 'inner', 'outer', 'none'], 
       default: 'default' 
+    },
+    /**
+     * Animation style - "Heavy & Mechanical" motion system
+     */
+    animation: {
+      type: 'enum',
+      values: ['mechanical', 'heavy', 'spring', 'smooth', 'none'],
+      default: 'mechanical',
+      description: 'mechanical for tactile feel, heavy for deliberate, spring for bouncy, smooth for subtle, none for instant'
     },
   },
   constraints: [
@@ -467,19 +476,53 @@ export const SwitchSchema = defineComponent({
     'focusVariant=none': {
       focusClass: 'intent-switch--focus-none',
     },
+    
+    // Animation - Motion System tokens
+    'animation=mechanical': {
+      transitionTimingFunction: 'var(--intent-easing-mechanical)',
+    },
+    'animation=heavy': {
+      transitionTimingFunction: 'var(--intent-easing-heavy)',
+    },
+    'animation=spring': {
+      transitionTimingFunction: 'var(--intent-easing-spring)',
+    },
+    'animation=smooth': {
+      transitionTimingFunction: 'var(--intent-easing-smooth)',
+    },
+    'animation=none': {
+      transitionDuration: '0s',
+      transitionTimingFunction: 'step-end',
+    },
   },
   baseStyles: {
     appearance: 'none',
     borderRadius: '9999px',
     backgroundColor: 'var(--intent-color-neutral-300)',
     cursor: 'pointer',
-    transition: 'background-color 150ms',
+    // Motion system - uses tokens that respect prefers-reduced-motion
+    transitionProperty: 'background-color, transform',
+    transitionDuration: 'var(--intent-duration-fast, 150ms)',
+    transitionTimingFunction: 'var(--intent-easing-mechanical, cubic-bezier(0.4, 0, 0.2, 1))',
     position: 'relative',
     // Default focus ring uses CSS custom properties
     '--intent-focus-ring-width': '2px',
     '--intent-focus-ring-offset': '2px',
     '--intent-focus-ring-color': 'var(--intent-color-primary)',
+    // Motion tokens
+    '--intent-animation': 'mechanical',
   },
+  
+  // Theme-level constraint: Reduced motion overrides all animation values
+  themeConstraints: [
+    {
+      when: { 'theme.reducedMotion': true },
+      override: {
+        animation: 'none',
+      },
+      message: 'Theme-level reduced motion: switch animation disabled',
+    },
+  ],
 });
 
 // ============================================================================
