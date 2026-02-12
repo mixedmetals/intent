@@ -146,37 +146,55 @@ prop('srOnly', boolean()) // Screen reader only text
 
 ---
 
-## Phase 4: Form Components (v0.5.0) - Q2 2026
+## Phase 4: Form Components (v0.5.0) - ✅ COMPLETE
 
 ### Form Components
-| Component | Priority | Description |
-|-----------|----------|-------------|
-| `Input` (enhanced) | P0 | All HTML5 input types |
-| `Textarea` | P0 | Multi-line text input |
-| `Select` | P0 | Dropdown with single/multi select |
-| `Checkbox` | P0 | Single and group checkboxes |
-| `Radio` | P0 | Radio button group |
-| `Switch` | P0 | Toggle switch (checkbox alternative) |
-| `Label` | P0 | Form label with required indicator |
-| `Field` | P0 | Label + input + error wrapper |
-| `Form` | P1 | Form context provider |
-| `Combobox` | P1 | Autocomplete dropdown |
-| `MultiSelect` | P1 | Tag-style multi selection |
-| `DatePicker` | P2 | Calendar date selection |
-| `FileUpload` | P2 | Drag-drop file input |
-| `Slider` | P2 | Range slider input |
-| `Rating` | P2 | Star rating input |
+| Component | Status | Priority | Description |
+|-----------|--------|----------|-------------|
+| `Input` | ✅ | P0 | All HTML5 types with 4 variants, validation states |
+| `Textarea` | ✅ | P0 | Multi-line with resize control, validation |
+| `Select` | ✅ | P0 | Dropdown with single/multiple, clearable, searchable |
+| `Checkbox` | ✅ | P0 | Single checkbox with indeterminate state |
+| `CheckboxGroup` | ✅ | P0 | Group layout (vertical/horizontal/inline) |
+| `Radio` | ✅ | P0 | Radio button input |
+| `RadioGroup` | ✅ | P0 | Shared layout for radio buttons |
+| `Switch` | ✅ | P0 | Toggle switch (checkbox alternative) |
+| `Label` | ✅ | P0 | Form label with required indicator (*) |
+| `Field` | ✅ | P0 | Wrapper with label, help text, error message |
+| `Form` | ✅ | P1 | Context provider with layout, spacing, state |
+| `HelperText` | ✅ | P1 | Validation/help message display |
+| `Combobox` | ⏳ | P1 | Autocomplete dropdown (v0.6.0) |
+| `MultiSelect` | ⏳ | P1 | Tag-style multi selection (v0.6.0) |
+| `DatePicker` | ⏳ | P2 | Calendar date selection (v0.7.0) |
+| `FileUpload` | ⏳ | P2 | Drag-drop file input (v0.7.0) |
+| `Slider` | ⏳ | P2 | Range slider input (v0.7.0) |
+| `Rating` | ⏳ | P2 | Star rating input (v0.7.0) |
 
-### Form Props
+### Form Props - ✅ Complete
 ```typescript
-// Form-specific props
-prop('size', enum('xs', 'sm', 'md', 'lg', 'xl'))  // Extended from current
-prop('variant', enum('outline', 'filled', 'flushed', 'unstyled'))
-prop('validation', enum('none', 'valid', 'invalid', 'warning'))
-prop('required', boolean())
+// Sizing & Variants
+prop('formSize', enum('xs', 'sm', 'md', 'lg', 'xl'))
+prop('formVariant', enum('outline', 'filled', 'flushed', 'unstyled'))
+prop('checkSize', enum('sm', 'md', 'lg'))
+prop('switchSize', enum('sm', 'md', 'lg'))
+
+// Validation & State
+prop('validationState', enum('none', 'valid', 'invalid', 'warning'))
 prop('disabled', boolean())
 prop('readOnly', boolean())
+prop('required', boolean())
 prop('loading', boolean())
+
+// Input-specific
+prop('inputType', enum('text', 'password', 'email', 'number', 'tel', 'url', 'search', 'date', 'datetime-local', 'month', 'week', 'time'))
+prop('autocomplete', enum(...)) // All HTML5 autocomplete values
+prop('resize', enum('none', 'both', 'horizontal', 'vertical'))
+
+// Layout
+prop('labelPosition', enum('top', 'left', 'right', 'bottom', 'floating'))
+prop('fieldLayout', enum('vertical', 'horizontal', 'inline'))
+prop('formSpacing', enum('none', 'xs', 'sm', 'md', 'lg', 'xl'))
+prop('selectMode', enum('single', 'multiple'))
 ```
 
 ---

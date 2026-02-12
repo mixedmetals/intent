@@ -133,3 +133,34 @@ Initial release of the Intent Framework — a schema-first, AI-native styling sy
 - **Prose**: Markdown content wrapper (Tailwind Typography-like)
 - **Kbd**: Keyboard key styling for shortcuts documentation
 - **Mark**: Highlight text with variant colors (default, primary, success, warning, error)
+
+## Phase 4: Form Components (v0.5.0)
+
+### Form Props
+- **Sizing**: `formSize`, `checkSize`, `switchSize` (xs/sm/md/lg/xl)
+- **Variants**: `formVariant` (outline/filled/flushed/unstyled)
+- **Validation**: `validationState` (none/valid/invalid/warning)
+- **Input**: `inputType`, `autocomplete` (all HTML5 values)
+- **Layout**: `labelPosition`, `fieldLayout`, `formSpacing`
+
+### Form Components
+- **Input**: All HTML5 input types with 4 variants, validation states
+- **Textarea**: Multi-line input with resize control (none/both/horizontal/vertical)
+- **Select**: Dropdown with single/multiple mode, clearable, searchable
+- **Checkbox**: Single checkbox with indeterminate state, 3 sizes
+- **CheckboxGroup**: Group layout (vertical/horizontal/inline) with spacing
+- **Radio**: Radio button with grouping support
+- **RadioGroup**: Shared layout container for radio buttons
+- **Switch**: Toggle switch (checkbox alternative), 3 sizes
+- **Label**: Form label with required indicator (*) and disabled state
+- **Field**: Complete field wrapper with label, input, help text, error message
+- **Form**: Context provider with layout, spacing, and state management
+- **HelperText**: Validation/help message with color variants
+
+### Form Features
+- Form context for consistent field styling across components
+- `useFormContext()` hook for accessing form state
+- `useFormField()` hook for field registration
+- Forward ref support for all inputs (react-hook-form compatible)
+- Horizontal, vertical, and inline field layouts
+- Validation state inheritance from Form to Field to Input
