@@ -2,119 +2,94 @@
 sidebar_position: 13
 ---
 
+import React from 'react';
+import { Checkbox, Stack } from 'intent-react';
+
 # Checkbox
 
-Boolean toggle for multiple selections.
+Boolean toggle for multiple selections. Uses the **Milled** archetype with hairline borders and tactile feedback.
 
-export const Checkbox = ({ label, description, size = 'medium', checked, disabled }) => (
-  <label className="intent-checkbox">
-    <input 
-      type="checkbox"
-      className="intent-checkbox__input"
+export const CheckboxDemo = ({ label, defaultChecked = false, disabled = false, size = 'md' }) => {
+  const [checked, setChecked] = React.useState(defaultChecked);
+  
+  return (
+    <Checkbox
+      label={label}
       checked={checked}
+      onChange={(e) => setChecked(e.target.checked)}
       disabled={disabled}
+      size={size}
     />
-    <div>
-      <div className="intent-checkbox__label">{label}</div>
-      {description && <div style={{ fontSize: '14px', color: 'var(--intent-color-text-muted)', marginTop: '2px' }}>{description}</div>}
-    </div>
-  </label>
-)
-
-export const Stack = ({ children, gap = 'normal' }) => (
-  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`}>
-    {children}
-  </div>
-)
+  );
+};
 
 ## Examples
 
 ### Basic Checkbox
 
 <div className="intent-demo">
-  <Stack gap="normal">
-    <Checkbox label="Accept terms and conditions" />
-    <Checkbox label="Subscribe to newsletter" />
-  </Stack>
+  <CheckboxDemo label="Enable notifications" defaultChecked />
 </div>
 
 ```tsx
-<Checkbox label="Accept terms and conditions" />
-<Checkbox label="Subscribe to newsletter" />
-```
+import { Checkbox } from 'intent-react';
 
-### Checked State
-
-<div className="intent-demo">
-  <Stack gap="normal">
-    <Checkbox label="Checked by default" checked readOnly />
-    <Checkbox label="Unchecked" />
-  </Stack>
-</div>
-
-```tsx
-<Checkbox label="Checked by default" defaultChecked />
-<Checkbox label="Unchecked" />
-```
-
-### Disabled
-
-<div className="intent-demo">
-  <Stack gap="normal">
-    <Checkbox disabled label="Disabled unchecked" />
-    <Checkbox disabled checked label="Disabled checked" />
-  </Stack>
-</div>
-
-```tsx
-<Checkbox disabled label="Disabled unchecked" />
-<Checkbox disabled checked label="Disabled checked" />
-```
-
-### With Description
-
-<div className="intent-demo">
-  <Checkbox 
-    label="Enable notifications"
-    description="Receive updates about your account activity"
-  />
-</div>
-
-```tsx
 <Checkbox 
-  label="Enable notifications"
-  description="Receive updates about your account activity"
+  label="Enable notifications" 
+  checked={enabled}
+  onChange={setEnabled}
 />
+```
+
+### Sizes
+
+Three sizes for different contexts:
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <CheckboxDemo label="Small checkbox" size="sm" />
+    <CheckboxDemo label="Medium checkbox (default)" size="md" />
+    <CheckboxDemo label="Large checkbox" size="lg" />
+  </Stack>
+</div>
+
+```tsx
+<Stack gap="normal">
+  <Checkbox label="Small" size="sm" />
+  <Checkbox label="Medium" size="md" />
+  <Checkbox label="Large" size="lg" />
+</Stack>
+```
+
+### States
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <CheckboxDemo label="Unchecked" />
+    <CheckboxDemo label="Checked" defaultChecked />
+    <CheckboxDemo label="Disabled" disabled />
+    <CheckboxDemo label="Disabled checked" defaultChecked disabled />
+  </Stack>
+</div>
+
+```tsx
+<Stack gap="normal">
+  <Checkbox label="Unchecked" />
+  <Checkbox label="Checked" checked />
+  <Checkbox label="Disabled" disabled />
+  <Checkbox label="Disabled checked" checked disabled />
+</Stack>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `string` | - | Checkbox label |
-| `description` | `string` | - | Helper text |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Checkbox size |
+| `variant` | `'default' \| 'filled' \| 'outline'` | `'default'` | Visual variant |
 | `checked` | `boolean` | - | Controlled checked state |
-| `disabled` | `boolean` | `false` | Disable checkbox |
-| `onChange` | `(e: ChangeEvent) => void` | - | Change handler |
-
-## CSS Output
-
-```css
-.intent-checkbox {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.intent-checkbox__input {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  margin-top: 2px;
-}
-
-.intent-checkbox__label {
-  font-weight: 500;
-}
-```
+| `defaultChecked` | `boolean` | - | Uncontrolled default state |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `indeterminate` | `boolean` | `false` | Indeterminate state (parent checkbox) |
+| `label` | `string` | - | Label text |
+| `onChange` | `(checked: boolean) => void` | - | Change handler |
