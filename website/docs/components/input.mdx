@@ -2,104 +2,158 @@
 sidebar_position: 3
 ---
 
+import React from 'react';
+import { Input, Stack } from 'intent-react';
+
 # Input
 
-Text input component with validation states.
+Text input component with validation states. Uses the **Milled** archetype with hairline borders and inner shadows.
 
-export const Input = ({ type = 'text', size = 'medium', validation = 'none', placeholder, value, readOnly, ...props }) => (
-  <div className={`intent-input intent-input--size-${size} intent-input--validation-${validation}`}>
-    <input 
+export const InputDemo = ({ placeholder, type = 'text', size = 'md', validation = 'none', disabled = false, defaultValue = '' }) => {
+  const [value, setValue] = React.useState(defaultValue);
+  
+  return (
+    <Input
       type={type}
-      className="intent-input__field"
+      size={size}
+      validation={validation}
       placeholder={placeholder}
       value={value}
-      readOnly={readOnly}
-      {...props}
+      onChange={(e) => setValue(e.target.value)}
+      disabled={disabled}
     />
-  </div>
-)
-
-export const Stack = ({ children, gap = 'normal', style }) => (
-  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`} style={style}>
-    {children}
-  </div>
-)
+  );
+};
 
 ## Examples
 
 ### Basic Input
 
 <div className="intent-demo">
-  <Input placeholder="Type something..." />
+  <InputDemo placeholder="Type something..." />
 </div>
 
 ```tsx
+import { Input } from 'intent-react';
+
 <Input placeholder="Type something..." />
 ```
 
 ### Sizes
 
+Five sizes for different contexts:
+
 <div className="intent-demo">
-  <Stack gap="normal" align="center">
-    <Input size="small" placeholder="Small input" />
-    <Input size="medium" placeholder="Medium input" />
-    <Input size="large" placeholder="Large input" />
+  <Stack gap="normal">
+    <InputDemo placeholder="Extra small" size="xs" />
+    <InputDemo placeholder="Small" size="sm" />
+    <InputDemo placeholder="Medium (default)" size="md" />
+    <InputDemo placeholder="Large" size="lg" />
+    <InputDemo placeholder="Extra large" size="xl" />
   </Stack>
 </div>
 
 ```tsx
-<Input size="small" placeholder="Small" />
-<Input size="medium" placeholder="Medium" />
-<Input size="large" placeholder="Large" />
+<Stack gap="normal">
+  <Input placeholder="Extra small" size="xs" />
+  <Input placeholder="Small" size="sm" />
+  <Input placeholder="Medium" size="md" />
+  <Input placeholder="Large" size="lg" />
+  <Input placeholder="Extra large" size="xl" />
+</Stack>
+```
+
+### Variants
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <InputDemo placeholder="Outline (default)" variant="outline" />
+    <InputDemo placeholder="Filled" variant="filled" />
+    <InputDemo placeholder="Flushed" variant="flushed" />
+  </Stack>
+</div>
+
+```tsx
+<Stack gap="normal">
+  <Input placeholder="Outline" variant="outline" />
+  <Input placeholder="Filled" variant="filled" />
+  <Input placeholder="Flushed" variant="flushed" />
+</Stack>
 ```
 
 ### Validation States
 
 <div className="intent-demo">
   <Stack gap="normal">
-    <Input validation="valid" value="valid@email.com" readOnly />
-    <Input validation="invalid" value="invalid input" readOnly />
+    <InputDemo placeholder="Default state" validation="none" />
+    <InputDemo placeholder="Valid input" validation="valid" defaultValue="Valid value" />
+    <InputDemo placeholder="Invalid input" validation="invalid" />
+    <InputDemo placeholder="Warning state" validation="warning" />
   </Stack>
 </div>
 
 ```tsx
-<Input validation="valid" value="valid@email.com" />
-<Input validation="invalid" value="invalid" />
+<Stack gap="normal">
+  <Input placeholder="Default" validation="none" />
+  <Input placeholder="Valid" validation="valid" />
+  <Input placeholder="Invalid" validation="invalid" />
+  <Input placeholder="Warning" validation="warning" />
+</Stack>
+```
+
+### States
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <InputDemo placeholder="Normal input" />
+    <InputDemo placeholder="Disabled input" disabled />
+    <InputDemo placeholder="Read-only" defaultValue="Read-only value" readOnly />
+  </Stack>
+</div>
+
+```tsx
+<Stack gap="normal">
+  <Input placeholder="Normal" />
+  <Input placeholder="Disabled" disabled />
+  <Input placeholder="Read-only" readOnly />
+</Stack>
+```
+
+### Input Types
+
+<div className="intent-demo">
+  <Stack gap="normal">
+    <InputDemo placeholder="Text input" type="text" />
+    <InputDemo placeholder="Email address" type="email" />
+    <InputDemo placeholder="Password" type="password" />
+    <InputDemo placeholder="Number" type="number" />
+    <InputDemo placeholder="Search..." type="search" />
+  </Stack>
+</div>
+
+```tsx
+<Stack gap="normal">
+  <Input type="text" placeholder="Text" />
+  <Input type="email" placeholder="Email" />
+  <Input type="password" placeholder="Password" />
+  <Input type="number" placeholder="Number" />
+  <Input type="search" placeholder="Search" />
+</Stack>
 ```
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `type` | `'text'` \| `'email'` \| `'password'` \| `'number'` \| `'tel'` \| `'url'` | `'text'` | Input type |
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Input size |
-| `validation` | `'valid'` \| `'invalid'` \| `'none'` | `'none'` | Validation state |
-| `icon` | `string` | - | Left icon name |
-| `disabled` | `boolean` | `false` | Disable input |
+| `type` | `'text' \| 'password' \| 'email' \| 'number' \| ...` | `'text'` | Input type |
+| `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Input size |
+| `variant` | `'outline' \| 'filled' \| 'flushed' \| 'unstyled'` | `'outline'` | Visual variant |
+| `validation` | `'none' \| 'valid' \| 'invalid' \| 'warning'` | `'none'` | Validation state |
 | `placeholder` | `string` | - | Placeholder text |
-
-## CSS Output
-
-```css
-.intent-input {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  background: var(--intent-color-surface);
-}
-
-.intent-input:focus-within {
-  border-color: var(--intent-color-primary);
-  box-shadow: 0 0 0 3px var(--intent-color-primary-alpha);
-}
-
-.intent-input--valid {
-  border-color: var(--intent-color-success);
-}
-
-.intent-input--invalid {
-  border-color: var(--intent-color-danger);
-}
-```
+| `value` | `string` | - | Controlled value |
+| `defaultValue` | `string` | - | Uncontrolled default value |
+| `disabled` | `boolean` | `false` | Disable input |
+| `readOnly` | `boolean` | `false` | Read-only state |
+| `loading` | `boolean` | `false` | Loading state |
+| `fullWidth` | `boolean` | `false` | Full width |
+| `onChange` | `(value: string) => void` | - | Change handler |
