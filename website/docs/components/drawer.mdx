@@ -1,0 +1,220 @@
+---
+sidebar_position: 21
+---
+
+import { Stack, Button, Drawer, Text } from 'intent-react'
+
+# Drawer
+
+Slide-out panel for navigation or supplementary content.
+
+## Example
+
+```tsx
+import { useState } from 'react'
+import { Button, Drawer, Text } from 'intent-react'
+
+function Example() {
+  const [open, setOpen] = useState(false)
+  
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>
+        Open Drawer
+      </Button>
+      
+      <Drawer
+        open={open}
+        onOpenChange={setOpen}
+        title="Drawer Title"
+        position="right"
+      >
+        <Text>Drawer content goes here.</Text>
+      </Drawer>
+    </>
+  )
+}
+```
+
+## Positions
+
+Drawers can slide in from any edge:
+
+| Position | Description |
+|----------|-------------|
+| `left` | Left side navigation |
+| `right` | Right side details |
+| `top` | Top banner/bar |
+| `bottom` | Bottom sheet (mobile) |
+
+```tsx
+<Drawer position="left" open={open} onOpenChange={setOpen}>
+  ...
+</Drawer>
+
+<Drawer position="bottom" open={open} onOpenChange={setOpen}>
+  ...
+</Drawer>
+```
+
+## Sizes
+
+<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
+  <Button size="small">Small (320px)</Button>
+  <Button size="small">Medium (384px)</Button>
+  <Button size="small">Large (448px)</Button>
+  <Button size="small">Full (100%)</Button>
+</Stack>
+
+```tsx
+<Drawer size="sm" open={open} onOpenChange={setOpen}>...</Drawer>
+<Drawer size="md" open={open} onOpenChange={setOpen}>...</Drawer>
+<Drawer size="lg" open={open} onOpenChange={setOpen}>...</Drawer>
+<Drawer size="full" open={open} onOpenChange={setOpen}>...</Drawer>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | State change callback |
+| `title` | `string` | - | Drawer header title |
+| `position` | `'left'` \| `'right'` \| `'top'` \| `'bottom'` | `'right'` | Drawer position |
+| `size` | `'sm'` \| `'md'` \| `'lg'` \| `'full'` | `'md'` | Drawer size |
+| `showClose` | `boolean` | `true` | Show close button |
+| `closeOnOverlay` | `boolean` | `true` | Close when clicking backdrop |
+
+## Pattern: Navigation Drawer
+
+```tsx
+function Layout() {
+  const [navOpen, setNavOpen] = useState(false)
+  
+  return (
+    <>
+      <Button 
+        importance="tertiary" 
+        icon="menu"
+        onClick={() => setNavOpen(true)}
+      >
+        Menu
+      </Button>
+      
+      <Drawer
+        position="left"
+        size="sm"
+        open={navOpen}
+        onOpenChange={setNavOpen}
+      >
+        <nav>
+          <NavLink href="/">Home</NavLink>
+          <NavLink href="/products">Products</NavLink>
+          <NavLink href="/about">About</NavLink>
+          <NavLink href="/contact">Contact</NavLink>
+        </nav>
+      </Drawer>
+    </>
+  )
+}
+```
+
+## Pattern: Details Drawer
+
+```tsx
+function ProductList() {
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  
+  return (
+    <>
+      {products.map(product => (
+        <ProductCard 
+          key={product.id} 
+          product={product}
+          onClick={() => setSelectedProduct(product)}
+        />
+      ))}
+      
+      <Drawer
+        position="right"
+        size="lg"
+        open={!!selectedProduct}
+        onOpenChange={() => setSelectedProduct(null)}
+        title={selectedProduct?.name}
+      >
+        {selectedProduct && (
+          <ProductDetails product={selectedProduct} />
+        )}
+      </Drawer>
+    </>
+  )
+}
+```
+
+## Pattern: Mobile Bottom Sheet
+
+```tsx
+<Drawer
+  position="bottom"
+  size="md"
+  open={open}
+  onOpenChange={setOpen}
+>
+  <Stack gap="normal">
+    <Text weight="bold">Options</Text>
+    <Button fullWidth>Share</Button>
+    <Button fullWidth>Save</Button>
+    <Button fullWidth importance="tertiary">Cancel</Button>
+  </Stack>
+</Drawer>
+```
+
+## CSS Output
+
+```css
+.drawer {
+  position: fixed;
+  background: var(--intent-color-surface);
+  box-shadow: var(--intent-shadow-xl);
+  z-index: 50;
+}
+
+.drawer--position-right {
+  top: 0;
+  right: 0;
+  height: 100vh;
+}
+
+.drawer--size-md {
+  width: 384px;
+}
+
+.drawer__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+.drawer-enter {
+  transform: translateX(100%);
+}
+
+.drawer-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms ease;
+}
+```
+
+## Modal vs Drawer
+
+Use **Drawer** when:
+- Content is supplementary (not blocking)
+- Space is needed for forms or lists
+- Navigation on mobile/desktop
+- Persistent context is important
+
+Use **Modal** when:
+- User must make a decision
+- Critical information requires attention
+- Blocking the main content is acceptable

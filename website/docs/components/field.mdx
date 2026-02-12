@@ -1,0 +1,173 @@
+---
+sidebar_position: 23
+---
+
+import { Stack, Field, Input, Switch } from 'intent-react'
+
+# Field
+
+Label and validation wrapper for form inputs.
+
+## Examples
+
+### Basic Field
+
+<div style={{ marginBottom: 24 }}>
+  <Field label="Email Address">
+    <Input type="email" placeholder="you@example.com" />
+  </Field>
+</div>
+
+```tsx
+<Field label="Email Address">
+  <Input type="email" placeholder="you@example.com" />
+</Field>
+```
+
+### With Hint
+
+<div style={{ marginBottom: 24 }}>
+  <Field label="Username" hint="Must be unique and 3-20 characters">
+    <Input placeholder="johndoe" />
+  </Field>
+</div>
+
+```tsx
+<Field label="Username" hint="Must be unique and 3-20 characters">
+  <Input placeholder="johndoe" />
+</Field>
+```
+
+### With Error
+
+<div style={{ marginBottom: 24 }}>
+  <Field 
+    label="Password" 
+    error="Password must be at least 8 characters"
+  >
+    <Input type="password" validation="invalid" />
+  </Field>
+</div>
+
+```tsx
+<Field 
+  label="Password" 
+  error="Password must be at least 8 characters"
+>
+  <Input type="password" validation="invalid" />
+</Field>
+```
+
+### Required
+
+<div style={{ marginBottom: 24 }}>
+  <Field label="Full Name" required>
+    <Input placeholder="John Doe" />
+  </Field>
+</div>
+
+```tsx
+<Field label="Full Name" required>
+  <Input placeholder="John Doe" />
+</Field>
+```
+
+### Horizontal Layout
+
+<div style={{ marginBottom: 24 }}>
+  <Field label="Enable notifications" layout="horizontal">
+    <Switch />
+  </Field>
+</div>
+
+```tsx
+<Field label="Enable notifications" layout="horizontal">
+  <Switch />
+</Field>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | Field label |
+| `hint` | `string` | - | Helper text |
+| `error` | `string` | - | Error message |
+| `required` | `boolean` | `false` | Show required indicator |
+| `layout` | `'vertical'` \| `'horizontal'` | `'vertical'` | Label position |
+| `children` | `ReactNode` | - | Input element |
+
+## Accessibility
+
+- Associates label with input via `htmlFor`
+- Error message linked via `aria-describedby`
+- Required field indicated visually and via `aria-required`
+
+## CSS Output
+
+```css
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--intent-spacing-1);
+}
+
+.field--horizontal {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.field__label {
+  font-weight: 500;
+  color: var(--intent-color-text);
+}
+
+.field__required {
+  color: var(--intent-color-danger);
+  margin-left: var(--intent-spacing-1);
+}
+
+.field__hint {
+  font-size: var(--intent-font-size-sm);
+  color: var(--intent-color-text-muted);
+}
+
+.field__error {
+  font-size: var(--intent-font-size-sm);
+  color: var(--intent-color-danger);
+}
+```
+
+## Usage with Validation
+
+```tsx
+import { useState } from 'react'
+import { Field, Input } from 'intent-react'
+
+function ValidatedField() {
+  const [value, setValue] = useState('')
+  const [error, setError] = useState('')
+  
+  const validate = (val) => {
+    if (val.length < 3) {
+      setError('Must be at least 3 characters')
+    } else {
+      setError('')
+    }
+  }
+  
+  return (
+    <Field label="Username" error={error} required>
+      <Input 
+        value={value}
+        onChange={(e) => {
+          setValue(e.target.value)
+          validate(e.target.value)
+        }}
+        validation={error ? 'invalid' : 'none'}
+      />
+    </Field>
+  )
+}
+```

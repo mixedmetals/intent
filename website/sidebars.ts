@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
             'components/badge',
             'components/card',
             'components/text',
+            'components/avatar',
           ],
         },
         {
@@ -38,10 +39,12 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'Forms',
           items: [
+            'components/field',
             'components/input',
             'components/textarea',
             'components/select',
             'components/checkbox',
+            'components/radio',
             'components/switch',
           ],
         },
@@ -52,6 +55,7 @@ const sidebars: SidebarsConfig = {
             'components/alert',
             'components/spinner',
             'components/progress',
+            'components/skeleton',
             'components/toast',
           ],
         },
@@ -60,6 +64,7 @@ const sidebars: SidebarsConfig = {
           label: 'Overlay',
           items: [
             'components/modal',
+            'components/drawer',
             'components/tooltip',
           ],
         },
