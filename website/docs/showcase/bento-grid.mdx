@@ -1,0 +1,343 @@
+---
+sidebar_position: 1
+title: Bento Grid Showcase
+id: bento-grid
+description: A showcase of the Intent design system using useStagger for orchestrated animations
+---
+
+import React from 'react';
+import { useStagger } from 'intent-react/hooks';
+import { Card, Button, Switch, Badge } from 'intent-react';
+
+# Bento Grid Showcase
+
+This page demonstrates the **"Subtle Tactility"** aesthetic of the Intent design system—a Linear-esque design language featuring radial gradient surfaces, light-catcher borders, and inner depth highlights.
+
+## The Design Philosophy
+
+The Subtle Tactility theme applies these principles across all 92 components:
+
+1. **Surface Depth** — Radial gradients create perceived elevation
+2. **Light-Catcher Borders** — 1px borders with top-to-bottom gradients
+3. **Inner Depth** — Inset highlights on interactive elements
+4. **Mechanical Motion** — Precise, industrial-feeling transitions
+
+## Animated Bento Grid
+
+This grid uses the `useStagger` hook to orchestrate entrance animations. Each card staggers in with a 50ms delay, creating a fluid, cascading effect.
+
+export function BentoGridShowcase() {
+  const items = [
+    { id: 'stats', size: 'large', title: 'Revenue Overview', type: 'chart' },
+    { id: 'users', size: 'small', title: 'Active Users', value: '24.5K', change: '+12%' },
+    { id: 'conversion', size: 'small', title: 'Conversion', value: '3.2%', change: '+0.4%' },
+    { id: 'table', size: 'wide', title: 'Recent Transactions', type: 'table' },
+    { id: 'settings', size: 'small', title: 'Settings', type: 'settings' },
+    { id: 'activity', size: 'medium', title: 'Activity Feed', type: 'list' },
+  ];
+
+  const { getItemProps, containerProps } = useStagger({
+    count: items.length,
+    staggerDelay: 50,
+    duration: 500,
+    easing: 'spring',
+    trigger: 'inView',
+  });
+
+  return (
+    <div 
+      {...containerProps}
+      className="intent-bento-grid"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '1rem',
+        maxWidth: '1200px',
+      }}
+    >
+      {items.map((item, index) => (
+        <BentoCard 
+          key={item.id} 
+          {...getItemProps(index)}
+          item={item}
+          className={`intent-bento-item intent-bento-item--${item.size}`}
+        />
+      ))}
+    </div>
+  );
+}
+
+### Component Code
+
+```tsx
+import { useStagger } from 'intent-react/hooks';
+import { Card, Button, Badge } from 'intent-react';
+
+function BentoGrid() {
+  const items = [
+    { id: 'stats', size: 'large', title: 'Revenue Overview' },
+    { id: 'users', size: 'small', title: 'Active Users', value: '24.5K' },
+    // ... more items
+  ];
+
+  const { getItemProps, containerProps } = useStagger({
+    count: items.length,
+    staggerDelay: 50,    // 50ms between each item
+    duration: 500,       // 500ms animation duration
+    easing: 'spring',    // Bouncy spring animation
+    trigger: 'inView',   // Start when scrolled into view
+  });
+
+  return (
+    <div {...containerProps} className="bento-grid">
+      {items.map((item, index) => (
+        <Card 
+          key={item.id} 
+          {...getItemProps(index)}
+          className="intent-stagger-fade-up"
+        >
+          {item.title}
+        </Card>
+      ))}
+    </div>
+  );
+}
+```
+
+## Tactile Switch Component
+
+The Switch component showcases the Subtle Tactility aesthetic with:
+
+- **Radial surface gradient** on the track
+- **Light-catcher border** (top lighter than bottom)
+- **Inner depth** via inset shadows
+- **Spring animation** on the thumb
+
+export function SwitchShowcase() {
+  const [checked, setChecked] = React.useState(true);
+  
+  return (
+    <div className="intent-stack intent-stack--direction-row intent-stack--gap-relaxed">
+      <label className="intent-switch">
+        <input 
+          type="checkbox" 
+          className="intent-switch__input"
+          checked={checked}
+          onChange={(e) => setChecked(e.target.checked)}
+        />
+        <span className={`intent-switch__track ${checked ? 'intent-switch__track--checked' : ''}`}>
+          <span className="intent-switch__thumb" />
+        </span>
+        <span className="intent-switch__label">Notifications</span>
+      </label>
+      
+      <label className="intent-switch">
+        <input 
+          type="checkbox" 
+          className="intent-switch__input"
+          defaultChecked={false}
+        />
+        <span className="intent-switch__track">
+          <span className="intent-switch__thumb" />
+        </span>
+        <span className="intent-switch__label">Dark Mode</span>
+      </label>
+    </div>
+  );
+}
+
+<SwitchShowcase />
+
+### Switch Visual Description
+
+When rendered, the Switch component displays:
+
+- **Track (Unchecked)**: A soft gray pill shape with an inset shadow creating depth. The top edge is slightly lighter, simulating ambient light.
+- **Track (Checked)**: A vibrant blue gradient with a subtle outer glow. The inset shadow remains, maintaining depth perception.
+- **Thumb**: A white circular knob with a soft drop shadow. When checked, it slides with a spring physics animation and the shadow intensifies.
+
+## Data Table with Tabular Numbers
+
+Tables use `font-variant-numeric: tabular-nums` to ensure numbers align perfectly—essential for financial data.
+
+export function TableShowcase() {
+  const transactions = [
+    { id: 'TX-001', date: '2024-01-15', amount: 1249.00, status: 'completed' },
+    { id: 'TX-002', date: '2024-01-14', amount: 856.50, status: 'pending' },
+    { id: 'TX-003', date: '2024-01-14', amount: 2340.00, status: 'completed' },
+    { id: 'TX-004', date: '2024-01-13', amount: 45.99, status: 'failed' },
+    { id: 'TX-005', date: '2024-01-12', amount: 1890.25, status: 'completed' },
+  ];
+
+  return (
+    <div className="intent-card intent-card--padding-none" style={{ overflow: 'hidden' }}>
+      <table className="intent-table">
+        <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th>Date</th>
+            <th style={{ textAlign: 'right' }}>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transactions.map((tx) => (
+            <tr key={tx.id}>
+              <td><code>{tx.id}</code></td>
+              <td>{tx.date}</td>
+              <td style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
+                ${tx.amount.toFixed(2)}
+              </td>
+              <td>
+                <Badge variant={tx.status === 'completed' ? 'success' : tx.status === 'pending' ? 'warning' : 'danger'}>
+                  {tx.status}
+                </Badge>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+<TableShowcase />
+
+### Tabular Numbers
+
+Notice how the amounts align perfectly:
+
+```css
+.intent-table td {
+  font-variant-numeric: tabular-nums;
+}
+```
+
+This ensures that `$1,249.00` and `$45.99` have the same width, creating clean vertical alignment.
+
+## Cards with Balance Headlines
+
+Cards use `text-wrap: balance` for headlines to prevent "orphan" words on short lines.
+
+export function CardShowcase() {
+  return (
+    <div style={{ 
+      display: 'grid', 
+      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+      gap: '1.5rem'
+    }}>
+      <div className="intent-card intent-card--padding-relaxed intent-card--interactive">
+        <h3 className="intent-text intent-text--size-xl intent-text--weight-semibold intent-text--balance" style={{ marginBottom: '0.5rem' }}>
+          Revenue Optimization Strategy
+        </h3>
+        <p className="intent-text intent-text--size-sm intent-text--color-muted intent-text--clamp-2" style={{ marginBottom: '1rem' }}>
+          Our comprehensive approach to maximizing revenue streams across all channels 
+          while maintaining sustainable growth and customer satisfaction metrics.
+        </p>
+        <Button importance="secondary" size="small">Learn More</Button>
+      </div>
+      
+      <div className="intent-card intent-card--padding-relaxed intent-card--interactive">
+        <h3 className="intent-text intent-text--size-xl intent-text--weight-semibold intent-text--balance" style={{ marginBottom: '0.5rem' }}>
+          Advanced Analytics Dashboard
+        </h3>
+        <p className="intent-text intent-text--size-sm intent-text--color-muted intent-text--clamp-2" style={{ marginBottom: '1rem' }}>
+          Real-time insights into your business performance with predictive modeling 
+          and actionable recommendations powered by machine learning algorithms.
+        </p>
+        <Button importance="secondary" size="small">View Demo</Button>
+      </div>
+    </div>
+  );
+}
+
+<CardShowcase />
+
+### Text Features
+
+- **`text-wrap: balance`** — Distributes text evenly across lines
+- **`-webkit-line-clamp: 2`** — Truncates after 2 lines with ellipsis
+- **Tabular nums** — For numeric data alignment
+
+## CSS Token Reference
+
+### Surface Tokens
+
+```css
+:root {
+  /* Radial gradient for surface depth */
+  --intent-surface-gradient: radial-gradient(
+    ellipse at top,
+    rgba(255, 255, 255, 0.9) 0%,
+    transparent 70%
+  );
+  
+  /* Light-catcher border */
+  --intent-border-light-catcher: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  
+  /* Inner depth highlight */
+  --intent-inner-depth: inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+}
+```
+
+### Motion Tokens
+
+```css
+:root {
+  /* Mechanical easing - industrial feel */
+  --intent-easing-mechanical: cubic-bezier(0.2, 0, 0, 1);
+  
+  /* Spring easing - bouncy */
+  --intent-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Duration scale */
+  --intent-duration-fast: 100ms;
+  --intent-duration-normal: 150ms;
+  --intent-duration-slow: 200ms;
+}
+```
+
+## Accessibility
+
+All components respect `prefers-reduced-motion`:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+And support high contrast mode:
+
+```css
+@media (prefers-contrast: high) {
+  --intent-focus-ring-width: 3px;
+  --intent-focus-ring-color: CanvasText;
+}
+```
+
+## Print Styles
+
+Components automatically adapt for printing with the Print System:
+
+- Shadows are removed
+- Backgrounds become solid white
+- Borders switch to solid black
+- Tabular numbers ensure data alignment
+
+```css
+@media print {
+  .intent-card {
+    box-shadow: none;
+    border: 1px solid #000;
+    background: #fff;
+  }
+}
+```

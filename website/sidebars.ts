@@ -146,6 +146,13 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Showcase',
+      items: [
+        'showcase/bento-grid',
+      ],
+    },
+    {
+      type: 'category',
       label: 'API Reference',
       items: [
         'api/schema',

@@ -29,6 +29,33 @@ export { Card } from './components/Card.js';
 export { Badge } from './components/Badge.js';
 export { Divider } from './components/Divider.js';
 
+// Icon Components
+export {
+  Icon,
+  IconText,
+  iconRegistry,
+  getIcon,
+  hasIcon,
+  getIconNames,
+  registerIcon,
+  registerIcons,
+  IconSizeScale,
+} from './components/icon/index.js';
+
+// Motion Components
+export {
+  Transition,
+  Fade,
+  FadeUp,
+  FadeDown,
+  Scale,
+  ScaleSpring,
+  Slide,
+} from './components/motion/Transition.js';
+export {
+  AnimatePresence,
+} from './components/motion/AnimatePresence.js';
+
 // Layout Components
 export {
   Container,
@@ -183,6 +210,27 @@ export type {
   BadgeProps,
   DividerProps,
 } from './types.js';
+
+// Icon Types
+export type {
+  IconProps,
+  IconTextProps,
+  IconDefinition,
+  IconSize,
+} from './components/icon/index.js';
+
+// Motion Types
+export type {
+  TransitionConfig,
+  AnimatedProperty,
+  IntentEasingName,
+  IntentDurationName,
+} from './components/motion/Transition.js';
+export type {
+  AnimatePresenceConfig,
+  AnimatePresenceItemConfig,
+  StaggerConfig,
+} from './components/motion/AnimatePresence.js';
 
 // Layout Types
 export type {

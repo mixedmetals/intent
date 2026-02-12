@@ -513,16 +513,6 @@ export const SwitchSchema = defineComponent({
     '--intent-animation': 'mechanical',
   },
   
-  // Theme-level constraint: Reduced motion overrides all animation values
-  themeConstraints: [
-    {
-      when: { 'theme.reducedMotion': true },
-      override: {
-        animation: 'none',
-      },
-      message: 'Theme-level reduced motion: switch animation disabled',
-    },
-  ],
 });
 
 // ============================================================================

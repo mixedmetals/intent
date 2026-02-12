@@ -1,38 +1,47 @@
 # Intent Framework
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://www.npmjs.com/package/intent-core)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://www.npmjs.com/package/intent-core)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-162%20passing-brightgreen.svg)]()
 
-> **Schema-First, AI-Native Styling Framework**
+> **Subtle Tactility: A Schema-First, Density-Aware Component System**
 
-Intent is a revolutionary CSS framework that uses per-property attribute selectors instead of utility classes, achieving **74x CSS reduction** (588KB → 8KB) compared to traditional utility-first approaches like Tailwind CSS.
+Intent is a complete UI component framework featuring **92 tactile components** across three surface archetypes (Milled, Elevated, Flat) with mathematical precision—zero hard-coded values, full density propagation, and cap-height icon alignment.
+
+## 🎨 The Three Archetypes
+
+| Archetype | Components | Surface Character | Use Case |
+|-----------|------------|-------------------|----------|
+| **Milled** | 45 | Radial gradient + inner highlight | Buttons, Inputs, Data Grid |
+| **Elevated** | 28 | Backdrop blur + multi-layer shadow | Cards, Modals, Overlays |
+| **Flat** | 19 | Transparent tint + hairline border | Badges, Avatars, Separators |
 
 ## 🚀 Quick Start
 
 ```bash
-# Install the core package
-npm install intent-core
-
-# For React components
+# Install the React component library
 npm install intent-react
 
-# CLI tools
-npm install -g intentcss-cli
+# Or the core schema system
+npm install intent-core
 ```
 
 ```tsx
-import { Stack, Button, Text } from 'intent-react';
+import { Button, Card, DataGrid, Badge } from 'intent-react';
 
 function App() {
   return (
-    <Stack direction="column" gap="relaxed">
-      <Text size="lg" weight="bold">Hello Intent</Text>
-      <Stack direction="row" gap="normal">
-        <Button importance="primary">Save</Button>
-        <Button importance="secondary">Cancel</Button>
-      </Stack>
-    </Stack>
+    <Card elevation="high">
+      <DataGrid
+        density="compact"
+        columns={[
+          { key: 'name', title: 'Name' },
+          { key: 'amount', title: 'Amount', align: 'right', tabular: true },
+          { key: 'status', title: 'Status', render: (v) => <Badge>{v}</Badge> },
+        ]}
+        data={transactions}
+      />
+      <Button importance="primary">Export</Button>
+    </Card>
   );
 }
 ```
@@ -41,247 +50,209 @@ function App() {
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [`intent-core`](packages/core) | 1.0.0 | Schema definition, compiler, validator |
-| [`intent-react`](packages/react) | 1.0.0 | React component library |
-| [`intentcss-cli`](packages/cli) | 1.0.0 | CLI tools and build pipeline |
-| [`intent-mcp`](packages/mcp) | 1.0.0 | MCP server for AI integration |
+| [`intent-core`](packages/core) | 2.0.0 | Schema definition, compiler, validator |
+| [`intent-react`](packages/react) | 2.0.0 | 92 React components with archetype system |
+| [`intentcss-cli`](packages/cli) | 2.0.0 | CLI tools and build pipeline |
 
 ## ✨ Key Features
 
-### 1. Schema-First Design
-Define your design system with TypeScript schemas:
+### 1. Subtle Tactility Design System
+Every component uses mathematically precise surface treatments:
 
-```typescript
-import { defineComponent } from 'intent-core';
-
-const ButtonSchema = defineComponent({
-  name: 'Button',
-  properties: {
-    importance: { 
-      type: 'enum', 
-      values: ['primary', 'secondary', 'ghost'],
-      default: 'secondary'
-    },
-    size: { 
-      type: 'enum', 
-      values: ['sm', 'md', 'lg'],
-      default: 'md'
-    },
-  },
-  mappings: {
-    'importance=primary': { 
-      backgroundColor: 'var(--intent-color-primary-600)',
-      color: 'white'
-    },
-    'size=sm': { padding: '0.5rem 1rem', fontSize: '0.875rem' },
-    'size=lg': { padding: '1rem 2rem', fontSize: '1.125rem' },
-  },
-});
+```css
+/* Milled Archetype */
+--intent-surface-milled-bg: 
+  radial-gradient(120% 80% at 50% 0%, oklch(100% 0 0 / 0.12), transparent 70%),
+  oklch(25% 0.01 260);
+--intent-surface-milled-border: 
+  linear-gradient(to bottom, oklch(100% 0 0 / 0.15), oklch(100% 0 0 / 0.05));
+--intent-surface-milled-shadow: 
+  inset 0 1px 0 0 oklch(100% 0 0 / 0.08),
+  0 1px 2px 0 oklch(0% 0 0 / 0.1);
 ```
 
-### 2. AI-Native
-Built for AI code generation with:
-- Complete component schemas for context
-- Constraint validation for error prevention
-- Semantic property names
-
-### 3. Massive CSS Reduction
-| Metric | Tailwind | Intent | Reduction |
-|--------|----------|--------|-----------|
-| CSS Size | 588 KB | 8 KB | **74x** |
-| Classes | 50,000+ | Per-component | **~99%** |
-| Build Time | ~3s | ~50ms | **60x** |
-
-### 4. Theme System
-Comprehensive theming with dark mode support:
-
-```typescript
-import { defaultTheme, generateThemeCSS } from 'intent-core';
-
-// Generate CSS variables
-const css = generateThemeCSS(defaultTheme);
-```
-
-### 5. Component Library (66+ Components)
-
-**Layout:** Container, Grid, Box, AspectRatio, Center, Spacer, Show, Hide
-
-**Typography:** Heading, Text, Paragraph, List, Code, Quote, Prose, Kbd, Mark
-
-**Forms:** Input, Textarea, Select, Checkbox, Radio, Switch, Label, Form
-
-**Feedback:** Alert, Progress, Spinner, Skeleton
-
-**Overlay:** Modal, Drawer, Tooltip, Popover, Menu
-
-**Navigation:** Tabs, Breadcrumbs, Pagination, Link, Nav, Command, Steps, Sidebar, Navbar
-
-**Data Display:** Table, Stat, Timeline, DescriptionList, Tree, Calendar
-
-## 🛠️ Usage
-
-### With React
+### 2. Density Propagation
+All 92 components respond to container density:
 
 ```tsx
-import { 
-  Stack, VStack, HStack,
-  Button, 
-  Card,
-  Text,
-  Input,
-  Modal
-} from 'intent-react';
+<DataGrid density="compact" />  /* 0.75x scale */
+<DataGrid density="normal" />   /* 1.0x scale */
+<DataGrid density="relaxed" />  /* 1.25x scale */
+```
 
-function MyApp() {
-  return (
-    <VStack gap="relaxed" padding="normal">
-      <Text size="2xl" weight="bold">Welcome</Text>
-      
-      <Card elevation="low">
-        <Input placeholder="Enter your name" />
-        <HStack gap="normal" justify="end">
-          <Button importance="ghost">Cancel</Button>
-          <Button importance="primary">Submit</Button>
-        </HStack>
-      </Card>
-    </VStack>
-  );
+### 3. Cap-Height Icon Alignment
+Every icon uses optical alignment:
+
+```tsx
+<Icon name="arrowRight" alignment="cap" />  /* Visually centers with text */
+```
+
+### 4. Zero Hard-Coded Values
+All 92 components reference tokens exclusively:
+
+| Token Type | Example | Components |
+|------------|---------|------------|
+| Color | `oklch(25% 0.01 260)` | All 92 |
+| Spacing | `calc(var(--intent-space-3) * var(--intent-density))` | All 92 |
+| Motion | `var(--intent-easing-mechanical)` | Interactive 45 |
+
+## 📖 Migration Guide: Tailwind → Intent
+
+### Step 1: Replace Utility Classes with Components
+
+**Before (Tailwind):**
+```tsx
+<button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm 
+                   transition-colors duration-200 flex items-center gap-2">
+  <svg className="w-4 h-4">...</svg>
+  Click me
+</button>
+```
+
+**After (Intent):**
+```tsx
+<Button importance="primary" leftIcon={<Icon name="arrowRight" />}>
+  Click me
+</Button>
+```
+
+### Step 2: Replace Layout Utilities
+
+**Before:**
+```tsx
+<div className="flex flex-col gap-4 p-6 max-w-md mx-auto">
+  <div className="bg-white rounded-lg shadow-lg p-4">
+    {/* content */}
+  </div>
+</div>
+```
+
+**After:**
+```tsx
+<Container size="md">
+  <Card elevation="high" padding="normal">
+    {/* content */}
+  </Card>
+</Container>
+```
+
+### Step 3: Replace Data Tables
+
+**Before:**
+```tsx
+<table className="w-full text-sm">
+  <thead className="bg-gray-50">
+    <tr>
+      <th className="px-4 py-2 text-left font-medium">Name</th>
+      <th className="px-4 py-2 text-right font-medium">Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {data.map(row => (
+      <tr key={row.id} className="border-t">
+        <td className="px-4 py-2">{row.name}</td>
+        <td className="px-4 py-2 text-right tabular-nums">{row.amount}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+```
+
+**After:**
+```tsx
+<DataGrid
+  density="normal"
+  columns={[
+    { key: 'name', title: 'Name' },
+    { key: 'amount', title: 'Amount', align: 'right', tabular: true },
+  ]}
+  data={data}
+/>
+```
+
+### Step 4: Theme Migration
+
+**Before (tailwind.config.js):**
+```javascript
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#3B82F6',
+        secondary: '#64748B',
+      },
+    },
+  },
 }
 ```
 
-### CLI Usage
-
-```bash
-# Initialize Intent in your project
-intent init
-
-# Compile schemas to CSS
-intent build --input ./src/schemas --output ./dist/styles.css
-
-# Watch for changes
-intent watch --input ./src/schemas
-
-# Validate component usage
-intent validate --src ./src
-```
-
-### Custom Schema
-
-```typescript
-// my-component.schema.ts
-import { defineComponent } from 'intent-core';
-
-export const MyComponentSchema = defineComponent({
-  name: 'MyComponent',
-  properties: {
-    variant: {
-      type: 'enum',
-      values: ['solid', 'outline', 'ghost'],
-      default: 'solid'
-    },
-    size: {
-      type: 'enum',
-      values: ['sm', 'md', 'lg'],
-      default: 'md'
-    }
-  },
-  mappings: {
-    'variant=solid': {
-      backgroundColor: 'var(--intent-color-primary-600)',
-      color: 'white'
-    },
-    'variant=outline': {
-      backgroundColor: 'transparent',
-      border: '1px solid var(--intent-color-primary-600)',
-      color: 'var(--intent-color-primary-600)'
-    }
-  }
-});
-```
-
-## 🎨 Theming
-
-```typescript
-import { extendTheme, registerTheme } from 'intent-core';
-
-const customTheme = extendTheme('default', {
+**After (intent.config.js):**
+```javascript
+export default {
   tokens: {
     color: {
-      primary: {
-        500: '#FF6B6B',
-        600: '#EE5A5A'
-      }
-    }
-  }
-});
-
-registerTheme(customTheme);
+      primary: 'oklch(55% 0.22 255)',
+      secondary: 'oklch(50% 0.01 260)',
+    },
+  },
+  // Archetype surface definitions
+  surfaces: {
+    milled: {
+      background: 'radial-gradient(...)',
+      border: 'linear-gradient(...)',
+      shadow: 'inset 0 1px...',
+    },
+  },
+};
 ```
 
-## 🧪 Testing
+## 🧮 Component Registry (All 92)
 
-```bash
-# Run all tests
-pnpm test
+### Milled Archetype (45 Interactive Components)
+- **Form**: Button, Input, Textarea, Select, Checkbox, Radio, Switch, Slider, DatePicker, TimePicker, ColorPicker, FileUpload, OTPInput, PinInput, PhoneInput, NumberInput, RangeSlider, Combobox, Editable
+- **Navigation**: Tabs (List, Trigger, Content), BreadcrumbItem, PaginationItem, Stepper, Command, NavItem, TreeItem
+- **Disclosure**: Accordion (Item, Trigger), Collapsible
+- **Data**: DataGrid, Table (Row, Cell, HeaderCell), Calendar
+- **Feedback**: Progress, Spinner, Rating
+- **Overlay Triggers**: DialogTrigger, DropdownTrigger, TooltipTrigger, PopoverTrigger, MenuTrigger, ContextMenuTrigger, HoverCardTrigger
+- **Misc**: Toggle, ToggleGroup, ResizableHandle, Splitter
 
-# Run tests with coverage
-pnpm test:coverage
+### Elevated Archetype (28 Container Components)
+- **Cards**: Card, CardHeader, CardContent, CardFooter
+- **Overlays**: Modal, Alert, Drawer, Popover, Tooltip, Menu, Dialog, Sheet, Toast, HoverCard, ContextMenu
+- **Layout**: Container, Stack, HStack, VStack, Grid, Flex, Box, AspectRatio, Center, Spacer
+- **Data Display**: Table (Header, Body, Footer), List, Timeline, ScrollArea
 
-# Build all packages
-pnpm build
+### Flat Archetype (19 Indicator Components)
+- **Indicators**: Badge, Tag, Kbd, Avatar, StatusIndicator
+- **Typography**: Text, Heading, Paragraph, Code, Blockquote, Mark, Highlight
+- **Dividers**: Separator, Divider
+- **Loading**: Skeleton, SkeletonText, SkeletonCircle
+- **Icons**: Icon, IconText
+
+## 🏗️ Architecture
+
+```
+Intent Framework
+├── Core Schema (intent-core)
+│   ├── 3 Archetype Definitions
+│   ├── Density System
+│   ├── OKLCH Color Space
+│   └── Constraint Engine
+├── React Components (intent-react)
+│   ├── 92 Components
+│   ├── Cap-Height Alignment
+│   └── useDensity Hook
+└── Theme CSS (intent-theme.css)
+    ├── 0 Hard-Coded Values
+    ├── Token-Only Architecture
+    └── Print/Reduced Motion
 ```
 
-## 📊 Bundle Analysis
+## 📝 License
 
-Intent includes a built-in bundle analyzer:
-
-```typescript
-import { analyzeBundle, compareBundleSizes } from 'intent-core';
-
-const analysis = analyzeBundle('./dist/styles.css');
-console.log(`CSS Size: ${analysis.minifiedSize} bytes`);
-
-// Compare with Tailwind
-const comparison = compareBundleSizes(intentCSS, tailwindCSS);
-console.log(`Intent is ${comparison.ratio}x smaller`);
-```
-
-## 🤖 AI Integration
-
-Intent is designed for AI code generation. Use the MCP server for Claude, GPT, and other AI assistants:
-
-```bash
-# Start MCP server
-intent-mcp
-```
-
-## 📖 Documentation
-
-- [Core Package Documentation](packages/core/README.md)
-- [React Components](packages/react/README.md)
-- [CLI Tools](packages/cli/README.md)
-- [MCP Server](packages/mcp/README.md)
-
-## 🔧 Requirements
-
-- Node.js >= 18.0.0
-- TypeScript >= 5.0.0 (optional, for type generation)
-- React >= 18.0.0 (for React components)
-
-## 🤝 Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file.
-
-## 🙏 Acknowledgments
-
-- Inspired by Tailwind CSS's utility-first approach
-- Built for the AI-powered development era
-- Designed for design system scalability
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-**Built with ❤️ by the Intent Team**
+**Intent Framework**: Mathematical precision in UI design.

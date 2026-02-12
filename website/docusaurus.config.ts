@@ -36,6 +36,31 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+  
+  plugins: [
+    function resolveJsExtensionPlugin(context, options) {
+      return {
+        name: 'resolve-js-extension',
+        configureWebpack(config, isServer) {
+          return {
+            resolve: {
+              fullySpecified: false,
+            },
+            module: {
+              rules: [
+                {
+                  test: /\.m?js/,
+                  resolve: {
+                    fullySpecified: false,
+                  },
+                },
+              ],
+            },
+          };
+        },
+      };
+    },
+  ],
 
   themeConfig: {
     image: 'img/intent-social-card.jpg',

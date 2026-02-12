@@ -159,6 +159,12 @@ importers:
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
+      intent-core:
+        specifier: ^1.0.0
+        version: link:../packages/core
+      intent-react:
+        specifier: ^1.0.0
+        version: link:../packages/react
       prism-react-renderer:
         specifier: ^2.3.0
         version: 2.4.1(react@19.2.4)

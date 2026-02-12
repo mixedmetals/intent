@@ -44,17 +44,22 @@ import { useState, useEffect, useRef, useCallback, RefObject } from 'react';
 // Types
 // ============================================================================
 
+export interface ResizeObserverSize {
+  inlineSize: number;
+  blockSize: number;
+}
+
 export interface ResizeObserverEntry {
   /** Target element */
   target: Element;
   /** Content rectangle */
   contentRect: DOMRectReadOnly;
   /** Border box size */
-  borderBoxSize?: ResizeObserverSize[];
+  borderBoxSize?: readonly ResizeObserverSize[];
   /** Content box size */
-  contentBoxSize?: ResizeObserverSize[];
+  contentBoxSize?: readonly ResizeObserverSize[];
   /** Device pixel content box size */
-  devicePixelContentBoxSize?: ResizeObserverSize[];
+  devicePixelContentBoxSize?: readonly ResizeObserverSize[];
 }
 
 export interface UseResizeObserverResult {
@@ -91,18 +96,18 @@ const hasResizeObserver = isBrowser && typeof ResizeObserver !== 'undefined';
 /**
  * Debounce function for performance optimization.
  */
-function debounce<T extends (...args: unknown[]) => unknown>(
-  fn: T,
+function debounce(
+  fn: (entries: globalThis.ResizeObserverEntry[]) => void,
   delay: number
-): (...args: Parameters<T>) => void {
+): (entries: globalThis.ResizeObserverEntry[]) => void {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   
-  return (...args: Parameters<T>) => {
+  return (entries: globalThis.ResizeObserverEntry[]) => {
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
     timeoutId = setTimeout(() => {
-      fn(...args);
+      fn(entries);
       timeoutId = null;
     }, delay);
   };
@@ -193,12 +198,6 @@ export function useResizeObserver<T extends Element = HTMLElement>(
     [onResize]
   );
   
-  // Debounced version if requested
-  const debouncedHandler = useCallback(
-    debounceMs > 0 ? debounce(handleResize, debounceMs) : handleResize,
-    [handleResize, debounceMs]
-  );
-  
   // Set up ResizeObserver
   useEffect(() => {
     const element = ref.current;
@@ -209,7 +208,8 @@ export function useResizeObserver<T extends Element = HTMLElement>(
     
     // Use native ResizeObserver if available
     if (hasResizeObserver) {
-      const observer = new ResizeObserver(debounceMs > 0 ? debouncedHandler : handleResize);
+      const callback = debounceMs > 0 ? debounce(handleResize, debounceMs) : handleResize;
+      const observer = new ResizeObserver(callback);
       observer.observe(element);
       
       return () => {
@@ -222,136 +222,147 @@ export function useResizeObserver<T extends Element = HTMLElement>(
       if (!element) return;
       
       const rect = element.getBoundingClientRect();
-      const fallbackEntry: globalThis.ResizeObserverEntry = {
-        target: element,
-        contentRect: {
-          width: rect.width,
-          height: rect.height,
-          top: rect.top,
-          right: rect.right,
-          bottom: rect.bottom,
-          left: rect.left,
-          x: rect.x,
-          y: rect.y,
-          toJSON: () => ({}),
+      const newSize: UseResizeObserverResult = {
+        width: rect.width,
+        height: rect.height,
+        entry: {
+          target: element,
+          contentRect: rect as unknown as DOMRectReadOnly,
         },
-        borderBoxSize: [{ inlineSize: rect.width, blockSize: rect.height }],
-        contentBoxSize: [{ inlineSize: rect.width, blockSize: rect.height }],
-        devicePixelContentBoxSize: undefined,
-      } as globalThis.ResizeObserverEntry;
+      };
       
-      handleResize([fallbackEntry]);
+      lastSizeRef.current = newSize;
+      setSize(newSize);
+      onResize?.(newSize);
     };
     
     // Initial measurement
     handleWindowResize();
     
+    // Listen for window resize
     window.addEventListener('resize', handleWindowResize);
+    
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-  }, [ref, handleResize, debouncedHandler, debounceMs]);
+  }, [ref, debounceMs, handleResize, onResize]);
   
   return size;
 }
 
 // ============================================================================
-// Convenience: useElementSize
+// useElementSize - Simplified hook
 // ============================================================================
 
 /**
- * Simplified hook that just returns width/height.
+ * Simplified hook that returns just width and height.
  * 
- * Schema Example:
- * ```
- * // Stat component switches to vertical layout when narrow
- * properties: {
- *   layout: prop.enum(['horizontal', 'vertical']),
- * },
- * responsive: {
- *   layout: {
- *     'containerWidth < 150px': 'vertical',
- *     'containerWidth >= 150px': 'horizontal',
- *   }
- * }
+ * @example
+ * ```tsx
+ * const { ref, width, height } = useElementSize<HTMLDivElement>();
+ * 
+ * return <div ref={ref}>{width}x{height}</div>;
  * ```
  */
-export function useElementSize<T extends Element = HTMLElement>(
-  ref: RefObject<T>,
-  options?: { debounce?: number; initialWidth?: number; initialHeight?: number }
-): { width: number; height: number } {
-  const { width, height } = useResizeObserver(ref, options);
-  return { width, height };
+export function useElementSize<T extends HTMLElement = HTMLElement>(): {
+  ref: RefObject<T>;
+  width: number;
+  height: number;
+} {
+  const ref = useRef<T>(null);
+  const { width, height } = useResizeObserver(ref);
+  
+  return { ref, width, height };
 }
 
 // ============================================================================
-// Convenience: useContainerQuery
+// Container Query Conditions
 // ============================================================================
 
-export type ContainerQueryCondition = 
-  | { type: 'min-width'; value: number }
-  | { type: 'max-width'; value: number }
-  | { type: 'min-height'; value: number }
-  | { type: 'max-height'; value: number }
-  | { type: 'aspect-ratio'; value: number; operator: '>' | '<' | '=' };
+export interface ContainerConditions {
+  /** Minimum width in pixels */
+  minWidth?: number;
+  /** Maximum width in pixels */
+  maxWidth?: number;
+  /** Minimum height in pixels */
+  minHeight?: number;
+  /** Maximum height in pixels */
+  maxHeight?: number;
+  /** Aspect ratio range (width/height) */
+  aspectRatio?: { min?: number; max?: number };
+}
+
+export interface ContainerMatches {
+  /** Whether minWidth condition is met */
+  minWidth: boolean;
+  /** Whether maxWidth condition is met */
+  maxWidth: boolean;
+  /** Whether minHeight condition is met */
+  minHeight: boolean;
+  /** Whether maxHeight condition is met */
+  maxHeight: boolean;
+  /** Whether aspectRatio condition is met */
+  aspectRatio: boolean;
+  /** Whether all conditions are met */
+  matches: boolean;
+}
 
 /**
- * Evaluate container query conditions against current size.
+ * Hook for container query-like functionality.
+ * Checks if the element matches the specified size conditions.
  * 
- * Schema Example:
- * ```
- * // Complex conditional layout
- * properties: {
- *   variant: prop.enum(['banner', 'card', 'chip']),
- * },
- * responsive: {
- *   variant: [
- *     { when: 'width > 600 && aspect-ratio > 2', then: 'banner' },
- *     { when: 'width > 300', then: 'card' },
- *     { when: 'width <= 300', then: 'chip' },
- *   ]
- * }
+ * @example
+ * ```tsx
+ * // Switch to horizontal layout when container is wide
+ * const { ref, matches } = useContainerQuery<HTMLDivElement>({
+ *   minWidth: 400,
+ * });
+ * 
+ * return (
+ *   <div 
+ *     ref={ref}
+ *     className={intent('card', {
+ *       'card--horizontal': matches,
+ *     })}
+ *   >
+ *     ...
+ *   </div>
+ * );
  * ```
  */
-export function useContainerQuery(
-  ref: RefObject<Element>,
-  conditions: ContainerQueryCondition[],
-  options?: UseResizeObserverOptions
-): { matches: boolean; size: { width: number; height: number } } {
-  const { width, height } = useResizeObserver(ref, options);
+export function useContainerQuery<T extends HTMLElement = HTMLElement>(
+  conditions: ContainerConditions
+): {
+  ref: RefObject<T>;
+  matches: ContainerMatches;
+} {
+  const ref = useRef<T>(null);
+  const { width, height } = useResizeObserver(ref);
   
-  const matches = conditions.every((condition) => {
-    switch (condition.type) {
-      case 'min-width':
-        return width >= condition.value;
-      case 'max-width':
-        return width <= condition.value;
-      case 'min-height':
-        return height >= condition.value;
-      case 'max-height':
-        return height <= condition.value;
-      case 'aspect-ratio':
-        const ratio = width / (height || 1);
-        switch (condition.operator) {
-          case '>':
-            return ratio > condition.value;
-          case '<':
-            return ratio < condition.value;
-          case '=':
-            return Math.abs(ratio - condition.value) < 0.01;
-          default:
-            return false;
-        }
-      default:
-        return false;
-    }
-  });
+  // Calculate aspect ratio
+  const aspectRatio = height > 0 ? width / height : 0;
   
-  return { matches, size: { width, height } };
+  // Check each condition
+  const minWidthMatch = conditions.minWidth === undefined || width >= conditions.minWidth;
+  const maxWidthMatch = conditions.maxWidth === undefined || width <= conditions.maxWidth;
+  const minHeightMatch = conditions.minHeight === undefined || height >= conditions.minHeight;
+  const maxHeightMatch = conditions.maxHeight === undefined || height <= conditions.maxHeight;
+  
+  const aspectRatioMatch =
+    conditions.aspectRatio === undefined ||
+    (
+      (conditions.aspectRatio.min === undefined || aspectRatio >= conditions.aspectRatio.min) &&
+      (conditions.aspectRatio.max === undefined || aspectRatio <= conditions.aspectRatio.max)
+    );
+  
+  const matches: ContainerMatches = {
+    minWidth: minWidthMatch,
+    maxWidth: maxWidthMatch,
+    minHeight: minHeightMatch,
+    maxHeight: maxHeightMatch,
+    aspectRatio: aspectRatioMatch,
+    matches: minWidthMatch && maxWidthMatch && minHeightMatch && maxHeightMatch && aspectRatioMatch,
+  };
+  
+  return { ref, matches };
 }
-
-// ============================================================================
-// Export
-// ============================================================================
-
-export default useResizeObserver;

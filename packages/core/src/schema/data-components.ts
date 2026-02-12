@@ -263,17 +263,6 @@ export const ButtonSchema = defineComponent({
     '--intent-animation-duration': 'fast',
   },
   
-  // Theme-level constraint: Reduced motion overrides all animation values
-  themeConstraints: [
-    {
-      when: { 'theme.reducedMotion': true },
-      override: {
-        animation: 'none',
-        animationDuration: 'micro',
-      },
-      message: 'Theme-level reduced motion: all animations disabled',
-    },
-  ],
 });
 
 // ============================================================================

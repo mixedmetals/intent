@@ -28,11 +28,6 @@ export {
   AnimatePresenceItem,
   useStaggerDelay,
 } from './AnimatePresence.js';
-export type {
-  AnimatePresenceConfig,
-  AnimatePresenceItemConfig,
-  StaggerConfig,
-} from './AnimatePresence.js';
 
 export {
   Transition,
@@ -45,6 +40,17 @@ export {
   IntentEasing,
   IntentDuration,
 } from './Transition.js';
+
+// ============================================================================
+// Types
+// ============================================================================
+
+export type {
+  AnimatePresenceConfig,
+  AnimatePresenceItemConfig,
+  StaggerConfig,
+} from './AnimatePresence.js';
+
 export type {
   TransitionConfig,
   AnimatedProperty,
@@ -86,20 +92,3 @@ export type {
  * </Transition>
  * ```
  */
-
-// ============================================================================
-// Re-export Types
-// ============================================================================
-
-export type {
-  // AnimatePresence
-  AnimatePresenceConfig as IntentAnimatePresenceConfig,
-  AnimatePresenceItemConfig as IntentAnimatePresenceItemConfig,
-  StaggerConfig as IntentStaggerConfig,
-  
-  // Transition
-  TransitionConfig as IntentTransitionConfig,
-  AnimatedProperty as IntentAnimatedProperty,
-  IntentEasingName as IntentEasingName,
-  IntentDurationName as IntentDurationName,
-} from './index.js';

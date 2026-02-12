@@ -24,18 +24,21 @@ export interface EnumProperty {
   values: string[];
   required?: boolean;
   default?: string;
+  description?: string;
 }
 
 export interface BooleanProperty {
   type: 'boolean';
   required?: boolean;
   default?: boolean;
+  description?: string;
 }
 
 export interface StringProperty {
   type: 'string';
   required?: boolean;
   default?: string;
+  description?: string;
 }
 
 export interface NumberProperty {
@@ -44,6 +47,7 @@ export interface NumberProperty {
   default?: number;
   min?: number;
   max?: number;
+  description?: string;
 }
 
 export type PropertyDefinition = EnumProperty | BooleanProperty | StringProperty | NumberProperty;
