@@ -31,11 +31,27 @@ jobs:
         with:
           version: 8
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - name: Build packages
-        run: pnpm run build
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages (core)
+        run: pnpm --filter intent-core run build
+
+      - name: Build packages (react)
+        run: pnpm --filter intent-react run build
 
       - name: Build website
         run: pnpm --filter website run build
