@@ -11,29 +11,20 @@ Collapsible sections for organizing content.
 export const Accordion = ({ items }) => {
   const [openId, setOpenId] = React.useState(null)
   return (
-    <div style={{ border: '1px solid var(--intent-color-border)', borderRadius: '8px', overflow: 'hidden' }}>
+    <div className="intent-accordion">
       {items.map((item) => (
-        <div key={item.id} style={{ borderBottom: '1px solid var(--intent-color-border)' }}>
+        <div key={item.id} className={`intent-accordion__item ${openId === item.id ? 'intent-accordion__item--open' : ''}`}>
           <button
+            className="intent-accordion__trigger"
             onClick={() => setOpenId(openId === item.id ? null : item.id)}
-            style={{
-              width: '100%',
-              padding: '12px 16px',
-              textAlign: 'left',
-              background: 'var(--intent-color-surface)',
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: 500,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
           >
             {item.title}
-            <span style={{ transform: openId === item.id ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 200ms' }}>▼</span>
+            <svg className="intent-accordion__chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 6l4 4 4-4" />
+            </svg>
           </button>
           {openId === item.id && (
-            <div style={{ padding: '12px 16px', background: 'var(--intent-color-surface-elevated)' }}>
+            <div className="intent-accordion__content">
               {item.content}
             </div>
           )}
@@ -50,9 +41,9 @@ export const Accordion = ({ items }) => {
 <div className="intent-demo">
   <Accordion 
     items={[
-      { id: '1', title: 'What is Intent Framework?', content: 'Intent is a schema-first, AI-native CSS framework that bridges the gap between design intent and implementation.' },
-      { id: '2', title: 'How do I get started?', content: 'Install the intent-core and intent-react packages, import the theme CSS, and start using components.' },
-      { id: '3', title: 'Is Intent production ready?', content: 'Yes! Intent is used in production by several teams with full TypeScript support.' }
+      { id: '1', title: 'What is Intent Framework?', content: 'Intent is a schema-first, AI-native CSS framework that bridges the gap between design intent and implementation. It uses constrained component schemas to generate optimized CSS.' },
+      { id: '2', title: 'How do I get started?', content: 'Install the intent-core and intent-react packages, import the theme CSS, and start using components. Run `npm install intent-core intent-react` to begin.' },
+      { id: '3', title: 'Is Intent production ready?', content: 'Yes! Intent is used in production by several teams with full TypeScript support, 162 passing tests, and comprehensive documentation.' }
     ]}
   />
 </div>
@@ -75,24 +66,37 @@ export const Accordion = ({ items }) => {
 ## CSS Output
 
 ```css
-.accordion {
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
+.intent-accordion {
+  border-radius: var(--intent-radius-lg);
   overflow: hidden;
+  border: 0.5px solid var(--intent-surface-elevated-border);
 }
 
-.accordion__trigger {
+.intent-accordion__trigger {
   width: 100%;
-  padding: 12px 16px;
-  text-align: left;
-  background: var(--intent-color-surface);
+  padding: 16px;
+  background: var(--intent-surface-milled-bg);
   border: none;
-  cursor: pointer;
   font-weight: 500;
+  cursor: pointer;
+  transition: background 100ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-.accordion__content {
-  padding: 12px 16px;
-  background: var(--intent-color-surface-elevated);
+.intent-accordion__trigger:hover {
+  background: var(--intent-surface-milled-hover-bg);
+}
+
+.intent-accordion__chevron {
+  transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.intent-accordion__item--open .intent-accordion__chevron {
+  transform: rotate(180deg);
+}
+
+.intent-accordion__content {
+  padding: 0 16px 16px;
+  background: var(--intent-surface-elevated-bg);
+  animation: intent-accordion-open 150ms;
 }
 ```

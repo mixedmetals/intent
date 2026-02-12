@@ -2,47 +2,23 @@
 sidebar_position: 21
 ---
 import React from 'react';
+import { Switch } from 'intent-react';
 
 # Switch
 
-Toggle switch for boolean values.
+Toggle switch for boolean values. Uses the **milled archetype** with spring-physics thumb animation and a 0.5px sub-pixel hairline light-catcher.
 
-export const Switch = ({ label, defaultChecked = false, disabled = false }) => {
+export const SwitchDemo = ({ label, defaultChecked = false, disabled = false, size = 'md' }) => {
   const [checked, setChecked] = React.useState(defaultChecked)
   
   return (
-    <label style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: '12px', 
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      opacity: disabled ? 0.5 : 1
-    }}>
-      <div 
-        onClick={() => !disabled && setChecked(!checked)}
-        style={{
-          width: '44px',
-          height: '24px',
-          background: checked ? 'var(--intent-color-primary)' : 'var(--intent-color-border)',
-          borderRadius: '12px',
-          position: 'relative',
-          transition: 'background 150ms'
-        }}
-      >
-        <div style={{
-          position: 'absolute',
-          top: '2px',
-          left: checked ? '22px' : '2px',
-          width: '20px',
-          height: '20px',
-          background: 'white',
-          borderRadius: '50%',
-          transition: 'left 150ms',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-        }} />
-      </div>
-      {label && <span style={{ fontSize: '0.875rem', fontWeight: 500 }}>{label}</span>}
-    </label>
+    <Switch
+      label={label}
+      checked={checked}
+      onChange={(e) => setChecked(e.target.checked)}
+      disabled={disabled}
+      size={size}
+    />
   )
 }
 
@@ -51,29 +27,51 @@ export const Switch = ({ label, defaultChecked = false, disabled = false }) => {
 ### Basic Switch
 
 <div className="intent-demo">
-  <Switch label="Enable notifications" defaultChecked />
+  <SwitchDemo label="Enable notifications" defaultChecked />
 </div>
 
 ```tsx
-<Switch label="Enable notifications" defaultChecked />
+import { Switch } from 'intent-react';
+
+<Switch 
+  label="Enable notifications" 
+  checked={enabled}
+  onChange={setEnabled}
+/>
 ```
 
 ### Without Label
 
 <div className="intent-demo">
-  <Switch defaultChecked />
+  <SwitchDemo defaultChecked />
 </div>
 
 ```tsx
-<Switch defaultChecked />
+<Switch checked={enabled} onChange={setEnabled} />
+```
+
+### Sizes
+
+<div className="intent-demo">
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <SwitchDemo label="Small" size="sm" defaultChecked />
+    <SwitchDemo label="Medium (default)" size="md" defaultChecked />
+    <SwitchDemo label="Large" size="lg" defaultChecked />
+  </div>
+</div>
+
+```tsx
+<Switch size="sm" label="Small" />
+<Switch size="md" label="Medium" />
+<Switch size="lg" label="Large" />
 ```
 
 ### Disabled
 
 <div className="intent-demo">
-  <Switch label="Auto-save" disabled />
-  <div style={{ marginTop: '12px' }}>
-    <Switch label="Auto-save (on)" defaultChecked disabled />
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <SwitchDemo label="Auto-save" disabled />
+    <SwitchDemo label="Auto-save (on)" defaultChecked disabled />
   </div>
 </div>
 
@@ -82,52 +80,64 @@ export const Switch = ({ label, defaultChecked = false, disabled = false }) => {
 <Switch label="Auto-save (on)" defaultChecked disabled />
 ```
 
+## Design Details
+
+| Feature | Implementation |
+|---------|---------------|
+| **Archetype** | Milled — inset shadows, directional light |
+| **Light Source** | 145° gradient on hairline and thumb |
+| **Hairline** | 0.5px pseudo-element with `mask-composite: exclude` |
+| **Thumb** | Metallic gradient, layered 3-depth shadow |
+| **Animation** | Spring easing via `cubic-bezier(0.34, 1.56, 0.64, 1)` |
+| **Active State** | Thumb width expands (stretch effect) |
+
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `checked` | `boolean` | - | Controlled value |
 | `defaultChecked` | `boolean` | `false` | Default checked state |
-| `label` | `string` | - | Switch label |
+| `label` | `ReactNode` | - | Switch label |
+| `labelPosition` | `'left' \| 'right'` | `'right'` | Label placement |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size scale |
 | `disabled` | `boolean` | `false` | Disable interaction |
-| `onChange` | `(checked: boolean) => void` | - | Change handler |
+| `onChange` | `ChangeEventHandler` | - | Native input change handler |
 
 ## CSS Output
 
 ```css
-.intent-switch {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 .intent-switch__track {
-  width: 44px;
-  height: 24px;
-  background: var(--intent-color-border);
-  border-radius: var(--intent-radius-full);
-  transition: background 150ms;
+  position: relative;
+  background: oklch(22% 0.012 275); /* OKLCH 0.12 chroma */
+  box-shadow:
+    inset 0 1px 2px 0 oklch(0% 0 0 / 0.30),
+    inset 0 0 0 0.5px oklch(100% 0 0 / 0.06);
 }
 
-.intent-switch__track--checked {
-  background: var(--intent-color-primary);
+/* 0.5px hairline via mask-composite */
+.intent-switch__track::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 0.5px solid transparent;
+  background: linear-gradient(145deg,
+    oklch(100% 0 0 / 0.18),
+    oklch(100% 0 0 / 0.04)) border-box;
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0) border-box;
+  mask-composite: exclude;
 }
 
 .intent-switch__thumb {
-  width: 20px;
-  height: 20px;
-  background: white;
-  border-radius: 50%;
-  transition: transform 150ms;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.intent-switch__thumb--checked {
-  transform: translateX(20px);
-}
-
-.intent-switch--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  /* 145° metallic gradient */
+  background: linear-gradient(145deg,
+    oklch(100% 0 0) 0%,
+    oklch(92% 0.005 275) 100%);
+  box-shadow:
+    0 0 0 0.5px oklch(0% 0 0 / 0.08),
+    0 1px 2px 0 oklch(0% 0 0 / 0.15),
+    0 3px 6px -1px oklch(0% 0 0 / 0.10);
+  transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 ```

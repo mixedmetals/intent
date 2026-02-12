@@ -12,78 +12,37 @@ export const Select = ({ label, options, placeholder = "Select an option..." }) 
   const [selected, setSelected] = React.useState(null)
   
   return (
-    <div style={{ width: '100%', maxWidth: '300px' }}>
-      {label && <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px' }}>{label}</label>}
-      <div style={{ position: 'relative' }}>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          style={{
-            width: '100%',
-            padding: '8px 36px 8px 12px',
-            border: '1px solid var(--intent-color-border)',
-            borderRadius: '8px',
-            background: 'var(--intent-color-surface)',
-            textAlign: 'left',
-            fontSize: '0.875rem',
-            cursor: 'pointer',
-            color: selected ? 'var(--intent-color-foreground)' : 'var(--intent-color-muted)'
-          }}
-        >
+    <div className="intent-select-wrapper" style={{ width: '100%', maxWidth: '300px' }}>
+      {label && <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px', color: 'oklch(75% 0 0)' }}>{label}</label>}
+      <button
+        className="intent-select"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span style={{ opacity: selected ? 1 : 0.5 }}>
           {selected ? selected.label : placeholder}
-        </button>
-        <span style={{ 
-          position: 'absolute', 
-          right: '12px', 
-          top: '50%', 
-          transform: 'translateY(-50%)',
-          pointerEvents: 'none',
-          fontSize: '0.75rem'
-        }}>▼</span>
-        
-        {isOpen && (
-          <div style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            marginTop: '4px',
-            background: 'var(--intent-color-surface)',
-            border: '1px solid var(--intent-color-border)',
-            borderRadius: '8px',
-            boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-            zIndex: 50,
-            maxHeight: '200px',
-            overflow: 'auto'
-          }}>
-            {options.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => {
-                  setSelected(option)
-                  setIsOpen(false)
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  textAlign: 'left',
-                  background: selected?.value === option.value ? 'var(--intent-color-surface-hover)' : 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '0.875rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
-                onMouseEnter={(e) => e.target.style.background = 'var(--intent-color-surface-hover)'}
-                onMouseLeave={(e) => e.target.style.background = selected?.value === option.value ? 'var(--intent-color-surface-hover)' : 'transparent'}
-              >
-                {selected?.value === option.value && <span>✓</span>}
-                <span>{option.label}</span>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+        </span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" style={{ transition: 'transform 150ms', transform: isOpen ? 'rotate(180deg)' : 'rotate(0)' }}>
+          <path d="M3 5l3 3 3-3" />
+        </svg>
+      </button>
+      
+      {isOpen && (
+        <div className="intent-select__dropdown">
+          {options.map((option) => (
+            <button
+              key={option.value}
+              className={`intent-select__option ${selected?.value === option.value ? 'intent-select__option--selected' : ''}`}
+              onClick={() => {
+                setSelected(option)
+                setIsOpen(false)
+              }}
+            >
+              {selected?.value === option.value && <span>✓</span>}
+              <span>{option.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -130,48 +89,43 @@ export const Select = ({ label, options, placeholder = "Select an option..." }) 
 
 ```css
 .intent-select {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-}
-
-.intent-select__trigger {
-  width: 100%;
-  padding: 8px 36px 8px 12px;
-  border: 1px solid var(--intent-color-border);
+  min-height: 40px;
+  padding: 0 12px;
+  background: var(--intent-surface-milled-bg);
+  box-shadow: var(--intent-surface-milled-shadow);
   border-radius: var(--intent-radius-md);
-  background: var(--intent-color-surface);
-  text-align: left;
-  font-size: 0.875rem;
   cursor: pointer;
+  transition: all 100ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-.intent-select__listbox {
+.intent-select__dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   left: 0;
   right: 0;
-  margin-top: 4px;
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-md);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   z-index: 50;
-  max-height: 200px;
-  overflow: auto;
+  background: var(--intent-surface-elevated-bg);
+  border: 0.5px solid var(--intent-surface-elevated-border);
+  box-shadow: 0 0 0 0.5px oklch(0% 0 0 / 0.3),
+    4px 8px 16px -2px oklch(0% 0 0 / 0.25);
+  border-radius: var(--intent-radius-lg);
+  backdrop-filter: blur(20px) saturate(180%);
+  padding: 4px;
+  animation: intent-dropdown-open 100ms;
 }
 
 .intent-select__option {
-  width: 100%;
-  padding: 10px 12px;
-  text-align: left;
-  background: none;
-  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 0.875rem;
+  transition: background 75ms;
 }
 
-.intent-select__option:hover,
-.intent-select__option--selected {
-  background: var(--intent-color-surface-hover);
+.intent-select__option:hover {
+  background: oklch(100% 0 0 / 0.06);
 }
 ```

@@ -7,10 +7,10 @@ sidebar_position: 9
 Important messages that attract user attention.
 
 export const Alert = ({ children, variant = 'info', title }) => (
-  <div className={`intent-alert intent-alert--variant-${variant}`}>
-    <div className="intent-alert__content">
+  <div className={`intent-alert intent-alert--${variant}`}>
+    <div className="intent-alert__body">
       {title && <div className="intent-alert__title">{title}</div>}
-      {children}
+      <div style={{ fontSize: '13px', lineHeight: 1.5 }}>{children}</div>
     </div>
   </div>
 )

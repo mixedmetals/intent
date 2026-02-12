@@ -8,7 +8,7 @@ import React from 'react';
 
 Organize content into tabbed sections.
 
-export const TabsDemo = () => {
+export const TabsDemo = ({ variant }) => {
   const [activeTab, setActiveTab] = React.useState('account')
   
   const tabs = [
@@ -18,29 +18,19 @@ export const TabsDemo = () => {
   ]
   
   return (
-    <div>
-      <div style={{ display: 'flex', gap: '4px', borderBottom: '1px solid var(--intent-color-border)', marginBottom: '16px' }}>
+    <div className={`intent-tabs ${variant === 'line' ? 'intent-tabs--line' : ''}`}>
+      <div className="intent-tabs__list">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            style={{
-              padding: '10px 16px',
-              border: 'none',
-              borderBottom: `2px solid ${activeTab === tab.id ? 'var(--intent-color-primary)' : 'transparent'}`,
-              background: 'none',
-              color: activeTab === tab.id ? 'var(--intent-color-primary)' : 'var(--intent-color-muted)',
-              fontWeight: 500,
-              fontSize: '0.875rem',
-              cursor: 'pointer',
-              marginBottom: '-1px'
-            }}
+            className={`intent-tabs__tab ${activeTab === tab.id ? 'intent-tabs__tab--active' : ''}`}
           >
             {tab.label}
           </button>
         ))}
       </div>
-      <div style={{ padding: '8px 0' }}>
+      <div className="intent-tabs__panel">
         {tabs.find(t => t.id === activeTab)?.content}
       </div>
     </div>
@@ -49,7 +39,7 @@ export const TabsDemo = () => {
 
 ## Examples
 
-### Basic Tabs
+### Pill Tabs
 
 <div className="intent-demo">
   <TabsDemo />
@@ -69,6 +59,21 @@ const [activeTab, setActiveTab] = useState('account')
 </Tabs>
 ```
 
+### Line Tabs
+
+<div className="intent-demo">
+  <TabsDemo variant="line" />
+</div>
+
+```tsx
+<Tabs variant="line" value={activeTab} onChange={setActiveTab}>
+  <Tabs.List>
+    <Tabs.Trigger value="account">Account</Tabs.Trigger>
+    <Tabs.Trigger value="password">Password</Tabs.Trigger>
+  </Tabs.List>
+</Tabs>
+```
+
 ## Props
 
 ### Tabs
@@ -77,6 +82,7 @@ const [activeTab, setActiveTab] = useState('account')
 | `defaultValue` | `string` | - | Default active tab |
 | `value` | `string` | - | Controlled active tab |
 | `onChange` | `(value: string) => void` | - | Tab change handler |
+| `variant` | `'pill' \| 'line'` | `'pill'` | Tab style variant |
 
 ### Tabs.Trigger
 | Prop | Type | Default | Description |
@@ -95,26 +101,26 @@ const [activeTab, setActiveTab] = useState('account')
 ```css
 .intent-tabs__list {
   display: flex;
-  gap: 4px;
-  border-bottom: 1px solid var(--intent-color-border);
+  gap: 2px;
+  padding: 3px;
+  background: var(--intent-surface-flat-bg);
+  border: 0.5px solid var(--intent-surface-flat-border);
+  border-radius: var(--intent-radius-lg);
 }
 
-.intent-tabs__trigger {
-  padding: 10px 16px;
+.intent-tabs__tab {
+  flex: 1;
+  padding: 8px 16px;
+  background: transparent;
   border: none;
-  border-bottom: 2px solid transparent;
-  background: none;
-  font-weight: 500;
+  border-radius: calc(var(--intent-radius-lg) - 3px);
   cursor: pointer;
-  margin-bottom: -1px;
+  transition: all 100ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-.intent-tabs__trigger--active {
-  border-bottom-color: var(--intent-color-primary);
-  color: var(--intent-color-primary);
-}
-
-.intent-tabs__content {
-  padding-top: 16px;
+.intent-tabs__tab--active {
+  background: var(--intent-surface-milled-bg);
+  box-shadow: var(--intent-surface-milled-shadow);
+  color: oklch(95% 0 0);
 }
 ```

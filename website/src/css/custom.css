@@ -444,3 +444,155 @@ table td {
   border: 1px solid var(--intent-surface-flat-border);
   font-weight: var(--intent-font-weight-medium);
 }
+
+/* ===== P1: GLOBAL DEMO CONTAINER POLISH ===== */
+
+/* Catch native form elements inside demos */
+.intent-demo input[type="text"],
+.intent-demo input[type="email"],
+.intent-demo input[type="password"],
+.intent-demo input[type="search"],
+.intent-demo input[type="number"],
+.intent-demo input[type="tel"],
+.intent-demo input[type="url"],
+.intent-demo input:not([type]),
+.intent-demo select,
+.intent-demo textarea {
+  background: var(--intent-surface-milled-bg);
+  border: none;
+  box-shadow: var(--intent-surface-milled-shadow);
+  border-radius: var(--intent-radius-md);
+  color: oklch(95% 0 0);
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: var(--intent-font-size-sm, 13px);
+  min-height: 40px;
+  transition: box-shadow var(--intent-duration-fast) var(--intent-easing-mechanical);
+}
+
+.intent-demo input:focus,
+.intent-demo select:focus,
+.intent-demo textarea:focus {
+  outline: none;
+  box-shadow:
+    inset 0 0.5px 0 oklch(100% 0 0 / 0.15),
+    0 0 0 2px var(--intent-color-primary-alpha),
+    1px 2px 3px -1px oklch(0% 0 0 / 0.25);
+}
+
+/* Catch inline-styled button elements inside demos */
+.intent-demo button:not(.intent-button):not([class*="intent-btn"]) {
+  background: var(--intent-surface-milled-bg);
+  border: none;
+  box-shadow: var(--intent-surface-milled-shadow);
+  border-radius: var(--intent-radius-md);
+  color: oklch(95% 0 0);
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: var(--intent-font-size-sm, 13px);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--intent-duration-fast) var(--intent-easing-mechanical),
+    box-shadow var(--intent-duration-fast) var(--intent-easing-mechanical),
+    transform var(--intent-duration-fast) var(--intent-easing-mechanical);
+}
+
+.intent-demo button:not(.intent-button):not([class*="intent-btn"]):hover {
+  background: var(--intent-surface-milled-hover-bg);
+  box-shadow: var(--intent-surface-milled-hover-shadow);
+  transform: translateY(-0.5px);
+}
+
+.intent-demo button:not(.intent-button):not([class*="intent-btn"]):active {
+  background: var(--intent-surface-milled-active-bg);
+  box-shadow: var(--intent-surface-milled-active-shadow);
+  transform: translateY(0.5px);
+}
+
+/* Style inline-styled divs that look like cards/panels inside demos */
+.intent-demo > div[style*="border-radius"] {
+  border: 0.5px solid var(--intent-surface-elevated-border) !important;
+}
+
+/* Style inline-styled containers that act as alerts/banners */
+.intent-demo > div[style*="padding"][style*="border-radius"][style*="background"] {
+  box-shadow: var(--intent-surface-elevated-shadow);
+  backdrop-filter: var(--intent-surface-elevated-backdrop);
+}
+
+/* Enhance kbd elements in demos */
+.intent-demo kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  padding: 2px 6px;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--intent-surface-flat-bg);
+  border: 0.5px solid var(--intent-surface-flat-border);
+  border-bottom-width: 2px;
+  border-radius: var(--intent-radius-sm);
+  color: oklch(80% 0 0);
+}
+
+/* Demo container subtle inner glow */
+.intent-demo {
+  position: relative;
+}
+
+.intent-demo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 10%, oklch(100% 0 0 / 0.08) 50%, transparent 90%);
+  border-radius: var(--intent-radius-xl) var(--intent-radius-xl) 0 0;
+  pointer-events: none;
+}
+
+/* ===== HOMEPAGE HERO IMPROVEMENTS ===== */
+.hero--primary {
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%, oklch(65% 0.12 275 / 0.25), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 80% 60%, oklch(55% 0.10 300 / 0.10), transparent 60%),
+    var(--intent-surface-elevated-bg) !important;
+  border-bottom: 0.5px solid var(--intent-surface-elevated-border);
+  padding: 5rem 0 !important;
+}
+
+.hero--primary .hero__title {
+  background: linear-gradient(145deg, oklch(98% 0 0) 0%, oklch(80% 0.04 275) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Feature cards on homepage */
+.features_src-components-HomepageFeatures-styles-module,
+[class*="features"] {
+  background: transparent;
+}
+
+[class*="featureSvg"] {
+  display: none;
+}
+
+/* Make feature list items look like elevated cards */
+.col[class*="col--4"] .text--center {
+  background: var(--intent-surface-elevated-bg);
+  border: 0.5px solid var(--intent-surface-elevated-border);
+  box-shadow: var(--intent-surface-elevated-shadow);
+  border-radius: var(--intent-radius-xl);
+  padding: 1.5rem;
+  transition: all var(--intent-duration-normal) var(--intent-easing-mechanical);
+}
+
+.col[class*="col--4"] .text--center:hover {
+  box-shadow: var(--intent-surface-elevated-hover-shadow);
+  transform: translateY(-2px);
+}

@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-import { Stack } from 'intent-react'
+import { Stack, Button } from 'intent-react'
 
 # Button
 
@@ -12,16 +12,6 @@ Buttons trigger actions or navigate to different pages.
 
 The Button component uses the **Milled** archetype with radial gradient backgrounds, light-catcher borders, and inset shadows for a tactile, pressed-metal aesthetic.
 
-export const Button = ({ children, importance = 'secondary', size = 'medium', fullWidth, disabled, ...props }) => (
-  <button 
-    className={`intent-button intent-button--importance-${importance} intent-button--size-${size} ${fullWidth ? 'intent-button--full-width' : ''}`}
-    disabled={disabled}
-    {...props}
-  >
-    {children}
-  </button>
-)
-
 ## Examples
 
 ### Importance Levels
@@ -29,18 +19,20 @@ export const Button = ({ children, importance = 'secondary', size = 'medium', fu
 Three visual weights for different hierarchy needs:
 
 <div className="intent-demo">
-  <div className="intent-stack intent-stack--direction-row intent-stack--gap-normal">
+  <Stack direction="row" gap="normal">
     <Button importance="primary">Primary</Button>
     <Button importance="secondary">Secondary</Button>
-    <Button importance="tertiary">Tertiary</Button>
-  </div>
+    <Button importance="ghost">Ghost</Button>
+  </Stack>
 </div>
 
 ```tsx
+import { Button, Stack } from 'intent-react';
+
 <Stack direction="row" gap="normal">
   <Button importance="primary">Primary</Button>
   <Button importance="secondary">Secondary</Button>
-  <Button importance="tertiary">Tertiary</Button>
+  <Button importance="ghost">Ghost</Button>
 </Stack>
 ```
 
@@ -49,18 +41,18 @@ Three visual weights for different hierarchy needs:
 Three sizes to fit different contexts:
 
 <div className="intent-demo">
-  <div className="intent-stack intent-stack--direction-row intent-stack--gap-normal intent-stack--align-center">
-    <Button size="small">Small</Button>
-    <Button size="medium">Medium</Button>
-    <Button size="large">Large</Button>
-  </div>
+  <Stack direction="row" gap="normal" align="center">
+    <Button size="sm">Small</Button>
+    <Button size="md">Medium</Button>
+    <Button size="lg">Large</Button>
+  </Stack>
 </div>
 
 ```tsx
 <Stack direction="row" gap="normal" align="center">
-  <Button size="small">Small</Button>
-  <Button size="medium">Medium</Button>
-  <Button size="large">Large</Button>
+  <Button size="sm">Small</Button>
+  <Button size="md">Medium</Button>
+  <Button size="lg">Large</Button>
 </Stack>
 ```
 
@@ -78,15 +70,41 @@ Expand to fill the container:
 </Button>
 ```
 
+### Loading State
+
+<div className="intent-demo">
+  <Stack direction="row" gap="normal">
+    <Button importance="primary" loading>Saving...</Button>
+    <Button importance="secondary" loading>Loading</Button>
+  </Stack>
+</div>
+
+```tsx
+<Button importance="primary" loading>Saving...</Button>
+```
+
+### Danger
+
+<div className="intent-demo">
+  <Stack direction="row" gap="normal">
+    <Button importance="danger">Delete</Button>
+    <Button importance="danger" disabled>Delete (disabled)</Button>
+  </Stack>
+</div>
+
+```tsx
+<Button importance="danger">Delete</Button>
+```
+
 ### Disabled State
 
 Disabled buttons reduce opacity and saturation:
 
 <div className="intent-demo">
-  <div className="intent-stack intent-stack--direction-row intent-stack--gap-normal">
+  <Stack direction="row" gap="normal">
     <Button disabled>Disabled</Button>
     <Button importance="primary" disabled>Disabled Primary</Button>
-  </div>
+  </Stack>
 </div>
 
 ```tsx
@@ -100,9 +118,12 @@ Disabled buttons reduce opacity and saturation:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `importance` | `'primary' \| 'secondary' \| 'tertiary'` | `'secondary'` | Visual weight of the button |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the button |
+| `importance` | `'primary' \| 'secondary' \| 'ghost' \| 'danger'` | `'secondary'` | Visual weight of the button |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the button |
 | `fullWidth` | `boolean` | `false` | Whether to expand to full width |
+| `loading` | `boolean` | `false` | Shows spinner and disables interaction |
+| `leftIcon` | `ReactNode` | - | Icon element before text |
+| `rightIcon` | `ReactNode` | - | Icon element after text |
 | `disabled` | `boolean` | `false` | Whether the button is disabled |
 
 ## Design Tokens

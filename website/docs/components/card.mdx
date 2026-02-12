@@ -2,32 +2,11 @@
 sidebar_position: 6
 ---
 import React from 'react';
+import { Card, CardHeader, CardContent, CardFooter, Button, Stack, Text } from 'intent-react';
 
 # Card
 
-Content container with elevation and padding options.
-
-export const Card = ({ children, elevation = 'medium', padding = 'normal', interactive, onClick }) => (
-  <div 
-    className={`intent-card intent-card--elevation-${elevation} intent-card--padding-${padding} ${interactive ? 'intent-card--interactive' : ''}`}
-    onClick={onClick}
-    style={interactive ? { cursor: 'pointer' } : {}}
-  >
-    {children}
-  </div>
-)
-
-export const Stack = ({ children, direction = 'column', gap = 'normal' }) => (
-  <div className={`intent-stack intent-stack--direction-${direction} intent-stack--gap-${gap}`}>
-    {children}
-  </div>
-)
-
-export const Text = ({ children, weight, size = 'base' }) => (
-  <span className={`intent-text intent-text--size-${size} ${weight ? `intent-text--weight-${weight}` : ''}`}>
-    {children}
-  </span>
-)
+Content container with elevation and padding options. Uses the **Elevated** archetype with backdrop blur, layered shadows, and hairline borders.
 
 ## Examples
 
@@ -40,8 +19,38 @@ export const Text = ({ children, weight, size = 'base' }) => (
 </div>
 
 ```tsx
+import { Card, Text } from 'intent-react';
+
 <Card padding="normal">
   <Text>Card content goes here.</Text>
+</Card>
+```
+
+### With Header and Footer
+
+<div className="intent-demo">
+  <Card padding="normal">
+    <Card.Header title="Settings" subtitle="Manage your account preferences" />
+    <Card.Content>
+      <Text>Configure your notification preferences, privacy settings, and account details from this panel.</Text>
+    </Card.Content>
+    <Card.Footer>
+      <Button importance="secondary">Cancel</Button>
+      <Button importance="primary">Save Changes</Button>
+    </Card.Footer>
+  </Card>
+</div>
+
+```tsx
+<Card padding="normal">
+  <Card.Header title="Settings" subtitle="Manage your account" />
+  <Card.Content>
+    <Text>Configure your preferences...</Text>
+  </Card.Content>
+  <Card.Footer>
+    <Button importance="secondary">Cancel</Button>
+    <Button importance="primary">Save</Button>
+  </Card.Footer>
 </Card>
 ```
 
@@ -51,28 +60,28 @@ export const Text = ({ children, weight, size = 'base' }) => (
   <Stack gap="normal">
     <Card elevation="none" padding="normal">
       <Text weight="semibold">No Elevation</Text>
-      <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>Flat card with border</Text>
+      <Text size="sm" style={{ color: 'oklch(60% 0 0)' }}>Flat card with border</Text>
     </Card>
     <Card elevation="low" padding="normal">
       <Text weight="semibold">Low Elevation</Text>
-      <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>Subtle shadow for grouping</Text>
+      <Text size="sm" style={{ color: 'oklch(60% 0 0)' }}>Subtle shadow for grouping</Text>
     </Card>
     <Card elevation="medium" padding="normal">
       <Text weight="semibold">Medium Elevation</Text>
-      <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>Default for most cards</Text>
+      <Text size="sm" style={{ color: 'oklch(60% 0 0)' }}>Default for most cards</Text>
     </Card>
     <Card elevation="high" padding="normal">
       <Text weight="semibold">High Elevation</Text>
-      <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>For modals and popovers</Text>
+      <Text size="sm" style={{ color: 'oklch(60% 0 0)' }}>For modals and popovers</Text>
     </Card>
   </Stack>
 </div>
 
 ```tsx
-<Card elevation="none" padding="normal">...</Card>
-<Card elevation="low" padding="normal">...</Card>
-<Card elevation="medium" padding="normal">...</Card>
-<Card elevation="high" padding="normal">...</Card>
+<Card elevation="none">...</Card>
+<Card elevation="low">...</Card>
+<Card elevation="medium">...</Card>
+<Card elevation="high">...</Card>
 ```
 
 ### Padding Sizes
@@ -102,14 +111,14 @@ export const Text = ({ children, weight, size = 'base' }) => (
 <div className="intent-demo">
   <Card elevation="low" padding="normal" interactive onClick={() => alert('Card clicked!')}>
     <Text weight="semibold">Clickable Card</Text>
-    <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>This card responds to clicks and hover states.</Text>
+    <Text size="sm" style={{ color: 'oklch(60% 0 0)' }}>This card responds to clicks and hover states.</Text>
   </Card>
 </div>
 
 ```tsx
 <Card elevation="low" padding="normal" interactive onClick={handleClick}>
   <Text weight="semibold">Clickable Card</Text>
-  <Text size="sm">This card responds to clicks.</Text>
+  <Text size="sm">Responds to clicks and hover.</Text>
 </Card>
 ```
 
@@ -117,8 +126,8 @@ export const Text = ({ children, weight, size = 'base' }) => (
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `elevation` | `'none'` \| `'low'` \| `'medium'` \| `'high'` | `'medium'` | Shadow depth |
-| `padding` | `'none'` \| `'compact'` \| `'normal'` \| `'relaxed'` | `'normal'` | Inner padding |
+| `elevation` | `'none' \| 'low' \| 'medium' \| 'high'` | `'medium'` | Shadow depth |
+| `padding` | `'none' \| 'compact' \| 'normal' \| 'relaxed'` | `'normal'` | Inner padding |
 | `interactive` | `boolean` | `false` | Enable hover/focus states |
 | `onClick` | `() => void` | - | Click handler |
 
@@ -126,18 +135,19 @@ export const Text = ({ children, weight, size = 'base' }) => (
 
 ```css
 .intent-card {
-  background: var(--intent-color-surface);
-  border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-lg);
-  transition: box-shadow 150ms ease;
+  background: var(--intent-surface-elevated-bg);
+  border: 0.5px solid var(--intent-surface-elevated-border);
+  border-radius: var(--intent-radius-xl);
+  backdrop-filter: var(--intent-surface-elevated-backdrop);
+  transition: all 150ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .intent-card--elevation-medium {
-  box-shadow: var(--intent-shadow-md);
+  box-shadow: var(--intent-surface-elevated-shadow);
 }
 
 .intent-card--interactive:hover {
-  box-shadow: var(--intent-shadow-lg);
+  box-shadow: var(--intent-surface-elevated-hover-shadow);
   transform: translateY(-1px);
 }
 ```
