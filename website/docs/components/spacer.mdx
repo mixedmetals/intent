@@ -1,0 +1,103 @@
+---
+sidebar_position: 41
+---
+
+import { Stack, Button, Spacer } from 'intent-react'
+
+# Spacer
+
+Pushes adjacent elements apart in flex layouts.
+
+## Example
+
+<Stack direction="row" gap="normal" style={{ padding: 16, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8, marginBottom: 24 }}>
+  <Button>Left Button</Button>
+  <Spacer />
+  <Button importance="secondary">Right Button</Button>
+</Stack>
+
+```tsx
+<Stack direction="row">
+  <Button>Left</Button>
+  <Spacer />
+  <Button>Right</Button>
+</Stack>
+```
+
+## Pushes Multiple Items
+
+<Stack direction="row" gap="normal" style={{ padding: 16, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8, marginBottom: 24 }}>
+  <Button size="small">First</Button>
+  <Button size="small">Second</Button>
+  <Spacer />
+  <Button size="small" importance="tertiary">Cancel</Button>
+  <Button size="small" importance="primary">Save</Button>
+</Stack>
+
+```tsx
+<Stack direction="row">
+  <Button>First</Button>
+  <Button>Second</Button>
+  <Spacer />
+  <Button>Cancel</Button>
+  <Button importance="primary">Save</Button>
+</Stack>
+```
+
+## With Minimum Size
+
+```tsx
+<Stack direction="row">
+  <Button>Left</Button>
+  <Spacer min={100} />
+  <Button>Right</Button>
+</Stack>
+```
+
+## In Navbar
+
+```tsx
+<Navbar>
+  <Navbar.Logo><Logo /></Navbar.Logo>
+  <Spacer />
+  <Navbar.Items>
+    <NavLink href="/">Home</NavLink>
+    <NavLink href="/about">About</NavLink>
+  </Navbar.Items>
+  <Spacer />
+  <Button>Sign In</Button>
+</Navbar>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `min` | `number` \| `string` | `0` | Minimum size |
+| `flex` | `number` \| `string` | `1` | Flex grow value |
+
+## CSS Output
+
+```css
+.spacer {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.spacer--with-min {
+  min-width: var(--spacer-min);
+  min-height: var(--spacer-min);
+}
+```
+
+## When to Use
+
+Use **Spacer** when:
+- You need to push elements to opposite sides
+- Creating space between groups of elements
+- In toolbars, navbars, and card headers
+
+Don't use for:
+- General spacing (use `gap` on Stack/Flex)
+- Margins (use Box or style props)

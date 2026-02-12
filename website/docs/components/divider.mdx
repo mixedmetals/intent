@@ -1,0 +1,125 @@
+---
+sidebar_position: 39
+---
+
+import { Stack, Button, Divider, Text } from 'intent-react'
+
+# Divider
+
+Visual separator between content sections.
+
+## Examples
+
+### Horizontal Divider
+
+<div style={{ marginBottom: 24 }}>
+  <Text>Content above</Text>
+  <Divider style={{ margin: '16px 0' }} />
+  <Text>Content below</Text>
+</div>
+
+```tsx
+<Text>Content above</Text>
+<Divider />
+<Text>Content below</Text>
+```
+
+### With Label
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Button fullWidth importance="primary">Sign in with Email</Button>
+  <Divider label="OR" />
+  <Button fullWidth>Sign in with Google</Button>
+</Stack>
+
+```tsx
+<Button>Sign in with Email</Button>
+<Divider label="OR" />
+<Button>Sign in with Google</Button>
+```
+
+### Vertical
+
+<Stack direction="row" gap="normal" align="center" style={{ height: 60, marginBottom: 24 }}>
+  <Text>Left</Text>
+  <Divider orientation="vertical" />
+  <Text>Right</Text>
+</Stack>
+
+```tsx
+<Stack direction="row">
+  <Text>Left</Text>
+  <Divider orientation="vertical" />
+  <Text>Right</Text>
+</Stack>
+```
+
+### Different Styles
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Text>Solid (default)</Text>
+  <Divider variant="solid" />
+  <Text>Dashed</Text>
+  <Divider variant="dashed" />
+  <Text>Dotted</Text>
+  <Divider variant="dotted" />
+</Stack>
+
+```tsx
+<Divider variant="solid" />
+<Divider variant="dashed" />
+<Divider variant="dotted" />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `'horizontal'` \| `'vertical'` | `'horizontal'` | Divider direction |
+| `variant` | `'solid'` \| `'dashed'` \| `'dotted'` | `'solid'` | Line style |
+| `label` | `string` | - | Center label text |
+| `spacing` | `'compact'` \| `'normal'` \| `'relaxed'` | `'normal'` | Space around divider |
+
+## CSS Output
+
+```css
+.divider {
+  border: 0;
+  margin: 0;
+}
+
+.divider--horizontal {
+  width: 100%;
+  border-top: 1px solid var(--intent-color-border);
+}
+
+.divider--horizontal.divider--dashed {
+  border-top-style: dashed;
+}
+
+.divider--vertical {
+  height: 100%;
+  border-left: 1px solid var(--intent-color-border);
+  align-self: stretch;
+}
+
+.divider--with-label {
+  display: flex;
+  align-items: center;
+  gap: var(--intent-spacing-3);
+}
+
+.divider__label {
+  font-size: var(--intent-font-size-xs);
+  color: var(--intent-color-text-muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.divider--with-label::before,
+.divider--with-label::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--intent-color-border);
+}
+```

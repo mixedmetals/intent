@@ -25,6 +25,7 @@ const sidebars: SidebarsConfig = {
             'components/card',
             'components/text',
             'components/avatar',
+            'components/divider',
           ],
         },
         {
@@ -33,7 +34,9 @@ const sidebars: SidebarsConfig = {
           items: [
             'components/stack',
             'components/grid',
+            'components/flex',
             'components/box',
+            'components/spacer',
             'components/container',
           ],
         },
@@ -72,6 +75,7 @@ const sidebars: SidebarsConfig = {
             'components/popover',
             'components/tooltip',
             'components/dropdown',
+            'components/menu',
           ],
         },
         {
@@ -84,6 +88,7 @@ const sidebars: SidebarsConfig = {
             'components/breadcrumbs',
             'components/pagination',
             'components/stepper',
+            'components/command',
           ],
         },
         {
@@ -94,6 +99,8 @@ const sidebars: SidebarsConfig = {
             'components/table',
             'components/timeline',
             'components/list',
+            'components/tree',
+            'components/stat',
           ],
         },
       ],

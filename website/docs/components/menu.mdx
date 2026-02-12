@@ -1,0 +1,221 @@
+---
+sidebar_position: 42
+---
+
+import { Menu } from 'intent-react'
+
+# Menu
+
+Vertical navigation menu with nested support.
+
+## Example
+
+```tsx
+import { Menu } from 'intent-react'
+
+<Menu
+  items={[
+    { 
+      id: 'dashboard',
+      label: 'Dashboard', 
+      icon: 'layout-dashboard',
+      active: true 
+    },
+    { 
+      id: 'projects',
+      label: 'Projects', 
+      icon: 'folder',
+      badge: 5
+    },
+    { 
+      id: 'tasks',
+      label: 'Tasks', 
+      icon: 'check-square'
+    },
+    { 
+      id: 'settings',
+      label: 'Settings', 
+      icon: 'settings'
+    },
+  ]}
+  onSelect={(item) => console.log('Selected:', item.id)}
+/>
+```
+
+## With Nested Items
+
+```tsx
+<Menu
+  items={[
+    { 
+      id: 'home',
+      label: 'Home', 
+      icon: 'home'
+    },
+    { 
+      id: 'products',
+      label: 'Products', 
+      icon: 'package',
+      items: [
+        { id: 'all', label: 'All Products' },
+        { id: 'categories', label: 'Categories' },
+        { id: 'inventory', label: 'Inventory' },
+      ]
+    },
+    { 
+      id: 'orders',
+      label: 'Orders', 
+      icon: 'shopping-cart',
+      expanded: true,
+      items: [
+        { id: 'pending', label: 'Pending', badge: 3 },
+        { id: 'completed', label: 'Completed' },
+        { id: 'refunded', label: 'Refunded' },
+      ]
+    },
+  ]}
+/>
+```
+
+## Compact
+
+```tsx
+<Menu
+  compact
+  items={[
+    { id: 'edit', label: 'Edit', icon: 'edit' },
+    { id: 'copy', label: 'Copy', icon: 'copy' },
+    { id: 'delete', label: 'Delete', icon: 'trash', danger: true },
+  ]}
+/>
+```
+
+## Collapsible Groups
+
+```tsx
+<Menu
+  collapsible
+  items={[
+    {
+      id: 'workspace',
+      label: 'Workspace',
+      icon: 'briefcase',
+      items: [
+        { id: 'projects', label: 'Projects' },
+        { id: 'tasks', label: 'Tasks' },
+      ]
+    },
+    {
+      id: 'admin',
+      label: 'Administration',
+      icon: 'shield',
+      items: [
+        { id: 'users', label: 'Users' },
+        { id: 'billing', label: 'Billing' },
+      ]
+    },
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `MenuItem[]` | required | Menu items |
+| `compact` | `boolean` | `false` | Compact style |
+| `collapsible` | `boolean` | `false` | Allow collapsing groups |
+| `onSelect` | `(item: MenuItem) => void` | - | Item select callback |
+| `onToggle` | `(item: MenuItem) => void` | - | Group toggle callback |
+
+### MenuItem Type
+
+```typescript
+interface MenuItem {
+  id: string
+  label: string
+  icon?: string
+  badge?: string | number
+  danger?: boolean
+  disabled?: boolean
+  active?: boolean
+  expanded?: boolean
+  href?: string
+  onClick?: () => void
+  items?: MenuItem[]
+}
+```
+
+## CSS Output
+
+```css
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--intent-spacing-1);
+}
+
+.menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--intent-spacing-3);
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+  border-radius: var(--intent-radius-md);
+  color: var(--intent-color-text-muted);
+  cursor: pointer;
+}
+
+.menu__item:hover:not(.menu__item--disabled) {
+  background: var(--intent-color-surface-elevated);
+  color: var(--intent-color-text);
+}
+
+.menu__item--active {
+  background: var(--intent-color-primary-alpha);
+  color: var(--intent-color-primary);
+}
+
+.menu__item--danger {
+  color: var(--intent-color-danger);
+}
+
+.menu__item--danger:hover {
+  background: var(--intent-color-danger-alpha);
+}
+
+.menu__item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menu__item-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.menu__item-badge {
+  margin-left: auto;
+}
+
+.menu__submenu {
+  margin-left: var(--intent-spacing-6);
+  margin-top: var(--intent-spacing-1);
+}
+
+.menu--compact .menu__item {
+  padding: var(--intent-spacing-1) var(--intent-spacing-2);
+}
+```
+
+## Menu vs Dropdown
+
+Use **Menu** for:
+- Sidebar navigation
+- Context menus
+- Command palettes
+- Static navigation lists
+
+Use **Dropdown** for:
+- Action menus
+- Selection from options
+- Temporary overlays

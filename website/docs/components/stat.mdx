@@ -1,0 +1,244 @@
+---
+sidebar_position: 45
+---
+
+import { Grid, Stat } from 'intent-react'
+
+# Stat
+
+Display a single statistic with label and trend.
+
+## Example
+
+<Grid columns={3} gap="normal" style={{ marginBottom: 24 }}>
+  <Stat 
+    label="Total Revenue"
+    value="$45,231"
+    trend={{ value: 12.5, direction: 'up' }}
+  />
+  <Stat 
+    label="Active Users"
+    value="2,345"
+    trend={{ value: 8.2, direction: 'up' }}
+  />
+  <Stat 
+    label="Bounce Rate"
+    value="42.3%"
+    trend={{ value: 2.1, direction: 'down' }}
+  />
+</Grid>
+
+```tsx
+import { Grid, Stat } from 'intent-react'
+
+<Grid columns={3} gap="normal">
+  <Stat 
+    label="Total Revenue"
+    value="$45,231"
+    trend={{ value: 12.5, direction: 'up' }}
+  />
+  <Stat 
+    label="Active Users"
+    value="2,345"
+    trend={{ value: 8.2, direction: 'up' }}
+  />
+  <Stat 
+    label="Bounce Rate"
+    value="42.3%"
+    trend={{ value: 2.1, direction: 'down' }}
+  />
+</Grid>
+```
+
+## Without Trend
+
+<Grid columns={4} gap="normal" style={{ marginBottom: 24 }}>
+  <Stat label="Total Orders" value="1,234" />
+  <Stat label="Pending" value="56" />
+  <Stat label="Completed" value="1,100" />
+  <Stat label="Cancelled" value="78" />
+</Grid>
+
+```tsx
+<Stat label="Total Orders" value="1,234" />
+<Stat label="Pending" value="56" />
+```
+
+## With Helper Text
+
+<Grid columns={2} gap="normal" style={{ marginBottom: 24 }}>
+  <Stat 
+    label="Monthly Recurring Revenue"
+    value="$12,450"
+    helperText="Based on last 30 days"
+    trend={{ value: 5.4, direction: 'up' }}
+  />
+  <Stat 
+    label="Churn Rate"
+    value="2.4%"
+    helperText="Industry average: 5%"
+    trend={{ value: 0.8, direction: 'down' }}
+  />
+</Grid>
+
+```tsx
+<Stat 
+  label="Monthly Recurring Revenue"
+  value="$12,450"
+  helperText="Based on last 30 days"
+  trend={{ value: 5.4, direction: 'up' }}
+/>
+```
+
+## Sizes
+
+<Grid columns={3} gap="normal" style={{ marginBottom: 24 }}>
+  <Stat 
+    size="small"
+    label="Small"
+    value="$1.2K"
+  />
+  <Stat 
+    size="medium"
+    label="Medium"
+    value="$12.5K"
+  />
+  <Stat 
+    size="large"
+    label="Large"
+    value="$125K"
+  />
+</Grid>
+
+```tsx
+<Stat size="small" label="Small" value="$1.2K" />
+<Stat size="medium" label="Medium" value="$12.5K" />
+<Stat size="large" label="Large" value="$125K" />
+```
+
+## With Icon
+
+<Grid columns={3} gap="normal" style={{ marginBottom: 24 }}>
+  <Stat 
+    label="Revenue"
+    value="$54.2K"
+    icon="dollar-sign"
+    trend={{ value: 14.2, direction: 'up' }}
+  />
+  <Stat 
+    label="Users"
+    value="1,429"
+    icon="users"
+    trend={{ value: 7.3, direction: 'up' }}
+  />
+  <Stat 
+    label="Active Now"
+    value="284"
+    icon="activity"
+  />
+</Grid>
+
+```tsx
+<Stat 
+  label="Revenue"
+  value="$54.2K"
+  icon="dollar-sign"
+  trend={{ value: 14.2, direction: 'up' }}
+/>
+```
+
+## In Card
+
+```tsx
+<Card padding="relaxed">
+  <Stat 
+    label="Conversion Rate"
+    value="3.24%"
+    helperText="From 12,450 visitors"
+    trend={{ value: 0.8, direction: 'up' }}
+  />
+</Card>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | required | Statistic label |
+| `value` | `string` \| `number` | required | Statistic value |
+| `helperText` | `string` | - | Helper/description text |
+| `icon` | `string` | - | Icon name |
+| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Stat size |
+| `trend` | `{ value: number, direction: 'up' \| 'down' }` | - | Trend indicator |
+
+## CSS Output
+
+```css
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--intent-spacing-1);
+}
+
+.stat--with-icon {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--intent-spacing-3);
+}
+
+.stat__icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--intent-color-primary-alpha);
+  color: var(--intent-color-primary);
+  border-radius: var(--intent-radius-md);
+}
+
+.stat__content {
+  flex: 1;
+}
+
+.stat__label {
+  font-size: var(--intent-font-size-sm);
+  color: var(--intent-color-text-muted);
+}
+
+.stat__value {
+  font-size: var(--intent-font-size-2xl);
+  font-weight: 700;
+  color: var(--intent-color-text);
+  line-height: 1.2;
+}
+
+.stat--size-small .stat__value {
+  font-size: var(--intent-font-size-lg);
+}
+
+.stat--size-large .stat__value {
+  font-size: var(--intent-font-size-3xl);
+}
+
+.stat__helper {
+  font-size: var(--intent-font-size-xs);
+  color: var(--intent-color-text-muted);
+}
+
+.stat__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--intent-spacing-1);
+  font-size: var(--intent-font-size-sm);
+  font-weight: 500;
+}
+
+.stat__trend--up {
+  color: var(--intent-color-success);
+}
+
+.stat__trend--down {
+  color: var(--intent-color-danger);
+}
+```

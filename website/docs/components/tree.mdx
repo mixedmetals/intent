@@ -1,0 +1,242 @@
+---
+sidebar_position: 44
+---
+
+import { Tree } from 'intent-react'
+
+# Tree
+
+Hierarchical data display with expand/collapse.
+
+## Example
+
+```tsx
+import { Tree } from 'intent-react'
+
+<Tree
+  data={[
+    {
+      id: '1',
+      label: 'src',
+      icon: 'folder',
+      children: [
+        {
+          id: '1-1',
+          label: 'components',
+          icon: 'folder',
+          children: [
+            { id: '1-1-1', label: 'Button.tsx', icon: 'file' },
+            { id: '1-1-2', label: 'Input.tsx', icon: 'file' },
+            { id: '1-1-3', label: 'index.ts', icon: 'file' },
+          ]
+        },
+        {
+          id: '1-2',
+          label: 'utils',
+          icon: 'folder',
+          children: [
+            { id: '1-2-1', label: 'format.ts', icon: 'file' },
+            { id: '1-2-2', label: 'validate.ts', icon: 'file' },
+          ]
+        },
+        { id: '1-3', label: 'App.tsx', icon: 'file' },
+        { id: '1-4', label: 'index.tsx', icon: 'file' },
+      ]
+    },
+    {
+      id: '2',
+      label: 'public',
+      icon: 'folder',
+      children: [
+        { id: '2-1', label: 'index.html', icon: 'file' },
+        { id: '2-2', label: 'favicon.ico', icon: 'file' },
+      ]
+    },
+    { id: '3', label: 'package.json', icon: 'file' },
+    { id: '4', label: 'tsconfig.json', icon: 'file' },
+  ]}
+/>
+```
+
+## With Selection
+
+```tsx
+const [selectedId, setSelectedId] = useState(null)
+
+<Tree
+  selectable
+  selectedId={selectedId}
+  onSelect={setSelectedId}
+  data={[...]}
+/>
+```
+
+## With Checkboxes
+
+```tsx
+const [checkedIds, setCheckedIds] = useState([])
+
+<Tree
+  checkable
+  checkedIds={checkedIds}
+  onCheck={setCheckedIds}
+  data={[...]}
+/>
+```
+
+## Expand/Collapse Controls
+
+```tsx
+const [expandedIds, setExpandedIds] = useState(['1'])
+
+<Tree
+  expandedIds={expandedIds}
+  onToggle={setExpandedIds}
+  data={[...]}
+/>
+```
+
+## Lazy Loading
+
+```tsx
+<Tree
+  data={rootNodes}
+  loadChildren={async (node) => {
+    const children = await fetchChildren(node.id)
+    return children
+  }}
+/>
+```
+
+## Custom Node
+
+```tsx
+<Tree
+  data={files}
+  renderNode={(node, { isExpanded, isSelected, isChecked }) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      {node.icon === 'folder' ? (
+        <FolderIcon open={isExpanded} />
+      ) : (
+        <FileIcon type={node.fileType} />
+      )}
+      <span>{node.label}</span>
+      {node.size && (
+        <span style={{ color: 'muted', fontSize: 'sm' }}>
+          {node.size}
+        </span>
+      )}
+    </div>
+  )}
+/>
+```
+
+## Draggable
+
+```tsx
+<Tree
+  draggable
+  data={[...]}
+  onDragStart={(node) => console.log('Start:', node.id)}
+  onDragEnd={(node, targetNode, position) => {
+    // position: 'before' | 'after' | 'inside'
+    console.log('Moved:', node.id, 'to', targetNode.id, position)
+  }}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `data` | `TreeNode[]` | required | Tree data |
+| `selectable` | `boolean` | `false` | Enable selection |
+| `selectedId` | `string` | - | Selected node ID |
+| `onSelect` | `(id: string) => void` | - | Select callback |
+| `checkable` | `boolean` | `false` | Enable checkboxes |
+| `checkedIds` | `string[]` | - | Checked node IDs |
+| `onCheck` | `(ids: string[]) => void` | - | Check callback |
+| `expandedIds` | `string[]` | - | Expanded node IDs |
+| `onToggle` | `(ids: string[]) => void` | - | Toggle callback |
+| `loadChildren` | `(node: TreeNode) => Promise<TreeNode[]>` | - | Lazy load function |
+| `draggable` | `boolean` | `false` | Enable drag and drop |
+| `renderNode` | `(node, state) => ReactNode` | - | Custom node renderer |
+
+### TreeNode Type
+
+```typescript
+interface TreeNode {
+  id: string
+  label: string
+  icon?: string
+  children?: TreeNode[]
+  disabled?: boolean
+  [key: string]: any
+}
+```
+
+## CSS Output
+
+```css
+.tree {
+  user-select: none;
+}
+
+.tree__node {
+  display: flex;
+  align-items: center;
+  gap: var(--intent-spacing-1);
+  padding: var(--intent-spacing-1) var(--intent-spacing-2);
+  border-radius: var(--intent-radius-md);
+  cursor: pointer;
+}
+
+.tree__node:hover {
+  background: var(--intent-color-surface-elevated);
+}
+
+.tree__node--selected {
+  background: var(--intent-color-primary-alpha);
+  color: var(--intent-color-primary);
+}
+
+.tree__node--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tree__toggle {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--intent-color-text-muted);
+}
+
+.tree__toggle--expanded {
+  transform: rotate(90deg);
+}
+
+.tree__indent {
+  width: 20px;
+}
+
+.tree__children {
+  margin-left: var(--intent-spacing-4);
+}
+
+.tree__checkbox {
+  margin-right: var(--intent-spacing-2);
+}
+
+.tree__icon {
+  width: 16px;
+  height: 16px;
+  margin-right: var(--intent-spacing-2);
+}
+
+.tree__label {
+  flex: 1;
+}
+```

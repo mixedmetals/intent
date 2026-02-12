@@ -1,0 +1,273 @@
+---
+sidebar_position: 43
+---
+
+import { Command } from 'intent-react'
+
+# Command
+
+Command palette for quick actions and navigation.
+
+## Example
+
+```tsx
+import { useState } from 'react'
+import { Command, Button } from 'intent-react'
+
+function Example() {
+  const [open, setOpen] = useState(false)
+  
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>
+        Open Command Palette
+      </Button>
+      
+      <Command
+        open={open}
+        onOpenChange={setOpen}
+        placeholder="Type a command or search..."
+        groups={[
+          {
+            heading: 'Navigation',
+            items: [
+              { id: 'home', label: 'Go to Home', icon: 'home', shortcut: '⌘H' },
+              { id: 'projects', label: 'Go to Projects', icon: 'folder', shortcut: '⌘P' },
+              { id: 'settings', label: 'Go to Settings', icon: 'settings', shortcut: '⌘,' },
+            ]
+          },
+          {
+            heading: 'Actions',
+            items: [
+              { id: 'new', label: 'New Project', icon: 'plus', shortcut: '⌘N' },
+              { id: 'search', label: 'Search Files', icon: 'search', shortcut: '⌘F' },
+              { id: 'theme', label: 'Toggle Theme', icon: 'sun', shortcut: '⌘T' },
+            ]
+          },
+        ]}
+        onSelect={(item) => {
+          console.log('Selected:', item.id)
+          setOpen(false)
+        }}
+      />
+    </>
+  )
+}
+```
+
+## With Search
+
+```tsx
+<Command
+  open={open}
+  onOpenChange={setOpen}
+  searchable
+  placeholder="Search commands..."
+  groups={[...]}
+/>
+```
+
+## With Recent Items
+
+```tsx
+<Command
+  open={open}
+  onOpenChange={setOpen}
+  recent={[
+    { id: 'recent-1', label: 'Project Alpha', icon: 'folder' },
+    { id: 'recent-2', label: 'User Settings', icon: 'user' },
+  ]}
+  groups={[...]}
+/>
+```
+
+## Empty State
+
+```tsx
+<Command
+  open={open}
+  onOpenChange={setOpen}
+  emptyMessage="No commands found. Try a different search."
+  groups={[
+    {
+      heading: 'Results',
+      items: filteredItems
+    }
+  ]}
+/>
+```
+
+## Custom Item
+
+```tsx
+<Command
+  open={open}
+  onOpenChange={setOpen}
+  groups={[
+    {
+      heading: 'Users',
+      items: users.map(user => ({
+        id: user.id,
+        label: user.name,
+        description: user.email,
+        icon: <Avatar src={user.avatar} size="sm" />,
+      }))
+    }
+  ]}
+/>
+```
+
+## Keyboard Shortcut
+
+Bind to keyboard shortcut:
+
+```tsx
+import { useEffect } from 'react'
+
+function App() {
+  const [open, setOpen] = useState(false)
+  
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setOpen(true)
+      }
+    }
+    
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+  
+  return <Command open={open} onOpenChange={setOpen} ... />
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | required | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Open state callback |
+| `placeholder` | `string` | `'Search...'` | Input placeholder |
+| `searchable` | `boolean` | `true` | Enable search filtering |
+| `groups` | `CommandGroup[]` | `[]` | Command groups |
+| `recent` | `CommandItem[]` | - | Recent items |
+| `emptyMessage` | `string` | `'No results found'` | Empty state message |
+| `onSelect` | `(item: CommandItem) => void` | - | Selection callback |
+
+### CommandGroup Type
+
+```typescript
+interface CommandGroup {
+  heading: string
+  items: CommandItem[]
+}
+
+interface CommandItem {
+  id: string
+  label: string
+  description?: string
+  icon?: string | ReactNode
+  shortcut?: string
+  disabled?: boolean
+  onClick?: () => void
+}
+```
+
+## CSS Output
+
+```css
+.command {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 640px;
+  max-width: 90vw;
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-lg);
+  box-shadow: var(--intent-shadow-xl);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.command__input {
+  width: 100%;
+  padding: var(--intent-spacing-4);
+  border: none;
+  border-bottom: 1px solid var(--intent-color-border);
+  font-size: var(--intent-font-size-lg);
+  background: transparent;
+}
+
+.command__input:focus {
+  outline: none;
+}
+
+.command__list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: var(--intent-spacing-2);
+}
+
+.command__group {
+  margin-bottom: var(--intent-spacing-2);
+}
+
+.command__group-heading {
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+  font-size: var(--intent-font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--intent-color-text-muted);
+}
+
+.command__item {
+  display: flex;
+  align-items: center;
+  gap: var(--intent-spacing-3);
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+  border-radius: var(--intent-radius-md);
+  cursor: pointer;
+}
+
+.command__item:hover:not(.command__item--disabled) {
+  background: var(--intent-color-surface-elevated);
+}
+
+.command__item--selected {
+  background: var(--intent-color-primary-alpha);
+}
+
+.command__item-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--intent-color-text-muted);
+}
+
+.command__item-label {
+  flex: 1;
+}
+
+.command__item-description {
+  font-size: var(--intent-font-size-sm);
+  color: var(--intent-color-text-muted);
+}
+
+.command__item-shortcut {
+  font-size: var(--intent-font-size-xs);
+  color: var(--intent-color-text-muted);
+  background: var(--intent-color-surface-elevated);
+  padding: var(--intent-spacing-1) var(--intent-spacing-2);
+  border-radius: var(--intent-radius-sm);
+}
+
+.command__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+```
