@@ -291,8 +291,9 @@
       oklch(0% 0 0 / 0.30) 100%);
 }
 
-/* Card - Elevated */
+/* Card - Elevated with hairline border */
 .intent-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: calc(var(--intent-space-4) * var(--intent-density));
@@ -300,16 +301,46 @@
   background: var(--intent-surface-elevated-bg);
   -webkit-backdrop-filter: var(--intent-surface-elevated-backdrop);
   backdrop-filter: var(--intent-surface-elevated-backdrop);
-  border: var(--intent-surface-elevated-border-width) solid var(--intent-surface-elevated-border);
+  border: none;
   box-shadow: var(--intent-surface-elevated-shadow);
   border-radius: var(--intent-radius-lg);
   transition: box-shadow var(--intent-duration-normal) var(--intent-easing-smooth),
     transform var(--intent-duration-normal) var(--intent-easing-smooth);
 }
 
+/* Hairline border for Card (0.5px) */
+.intent-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 0.5px;
+  background: linear-gradient(
+    var(--intent-light-angle, 145deg),
+    oklch(100% 0 0 / 0.15) 0%,
+    oklch(100% 0 0 / 0.06) 50%,
+    oklch(0% 0 0 / 0.25) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
 .intent-card--interactive:hover {
   box-shadow: var(--intent-surface-elevated-hover-shadow);
   transform: translateY(-2px);
+}
+
+.intent-card--interactive:hover::before {
+  background: linear-gradient(
+    var(--intent-light-angle, 145deg),
+    oklch(100% 0 0 / 0.18) 0%,
+    oklch(100% 0 0 / 0.08) 50%,
+    oklch(0% 0 0 / 0.28) 100%
+  );
 }
 
 /* Input - Milled with hairline border */
