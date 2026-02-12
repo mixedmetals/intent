@@ -2,85 +2,153 @@
  * Intent Framework - Docusaurus Custom Styles
  */
 
-/* Override Docusaurus to use Intent tokens where possible */
+/* Import Intent Theme */
+@import './intent-theme.css';
+
+/* Override Docusaurus to use Intent tokens */
 :root {
-  /* Intent-like color tokens mapped to Docusaurus */
-  --ifm-color-primary: #3b82f6;
-  --ifm-color-primary-dark: #2563eb;
-  --ifm-color-primary-darker: #1d4ed8;
+  --ifm-color-primary: var(--intent-color-primary);
+  --ifm-color-primary-dark: var(--intent-color-primary-hover);
+  --ifm-color-primary-darker: var(--intent-color-primary-active);
   --ifm-color-primary-darkest: #1e40af;
   --ifm-color-primary-light: #60a5fa;
   --ifm-color-primary-lighter: #93c5fd;
   --ifm-color-primary-lightest: #dbeafe;
   
-  /* Intent spacing tokens */
-  --intent-spacing-1: 4px;
-  --intent-spacing-2: 8px;
-  --intent-spacing-4: 16px;
-  --intent-spacing-6: 24px;
+  --ifm-background-color: var(--intent-color-background);
+  --ifm-background-surface-color: var(--intent-color-surface);
   
-  /* Ifm spacing */
-  --ifm-spacing-vertical: 1rem;
-  --ifm-spacing-horizontal: 1rem;
+  --ifm-font-family-base: var(--intent-font-sans);
+  --ifm-font-family-monospace: var(--intent-font-mono);
   
-  /* Radius */
-  --ifm-global-radius: 0.5rem;
+  --ifm-spacing-horizontal: var(--intent-spacing-4);
+  --ifm-spacing-vertical: var(--intent-spacing-4);
   
-  /* Fonts */
-  --ifm-font-family-base: system-ui, -apple-system, sans-serif;
-  --ifm-heading-font-family: system-ui, -apple-system, sans-serif;
-  --ifm-code-font-family: ui-monospace, SFMono-Regular, monospace;
+  --ifm-global-radius: var(--intent-radius-md);
   
-  /* Font sizes */
-  --ifm-font-size-base: 1rem;
-  --ifm-h1-font-size: 2.25rem;
-  --ifm-h2-font-size: 1.875rem;
-  --ifm-h3-font-size: 1.5rem;
+  --ifm-code-background: var(--intent-color-surface-elevated);
+  --ifm-code-border-radius: var(--intent-radius-md);
 }
 
-/* Dark mode adjustments */
 [data-theme='dark'] {
-  --ifm-color-primary: #60a5fa;
-  --ifm-color-primary-dark: #3b82f6;
-  --ifm-color-primary-darker: #2563eb;
+  --ifm-color-primary: var(--intent-color-primary);
+  --ifm-background-color: var(--intent-color-background);
+  --ifm-background-surface-color: var(--intent-color-surface);
 }
 
-/* Code blocks */
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Code blocks styling */
 pre {
-  border-radius: 0.5rem;
+  border-radius: var(--intent-radius-lg);
+  background: var(--intent-color-surface-elevated) !important;
 }
 
-/* Cards */
-.card {
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+code {
+  font-family: var(--intent-font-mono);
+  font-size: 0.875em;
 }
 
-/* Navigation */
+/* Navbar styling */
 .navbar {
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: var(--intent-shadow-sm);
+  background: var(--intent-color-surface);
 }
 
-/* Sidebar */
+.navbar__title {
+  font-weight: var(--intent-font-weight-bold);
+}
+
+/* Sidebar styling */
 .sidebarItemLink {
-  border-radius: 0.5rem;
+  border-radius: var(--intent-radius-md);
+  transition: background var(--intent-transition-fast);
+}
+
+.sidebarItemLink:hover {
+  background: var(--intent-color-surface-elevated);
 }
 
 /* Tables */
 table {
-  border-radius: 0.5rem;
+  border-radius: var(--intent-radius-lg);
   overflow: hidden;
+  border: 1px solid var(--intent-color-border);
+}
+
+table thead tr {
+  background: var(--intent-color-surface-elevated);
+}
+
+table th,
+table td {
+  border-bottom: 1px solid var(--intent-color-border);
+}
+
+/* Cards in docs */
+.card {
+  border-radius: var(--intent-radius-lg);
+  box-shadow: var(--intent-shadow-sm);
+  border: 1px solid var(--intent-color-border);
+  background: var(--intent-color-surface);
 }
 
 /* Alerts */
 .alert {
-  border-radius: 0.5rem;
+  border-radius: var(--intent-radius-md);
 }
 
-/* Intent component demos */
+/* Hero section */
+.hero {
+  background: linear-gradient(135deg, var(--intent-color-primary) 0%, var(--intent-color-primary-hover) 100%);
+}
+
+.hero__title {
+  font-weight: var(--intent-font-weight-bold);
+}
+
+/* Footer */
+.footer {
+  background: var(--intent-color-surface-elevated);
+  border-top: 1px solid var(--intent-color-border);
+}
+
+/* Doc item content */
+.theme-doc-markdown {
+  font-size: var(--intent-font-size-base);
+  line-height: 1.7;
+}
+
+/* Component demo containers */
 .intent-demo {
-  padding: 1rem;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 0.75rem;
-  margin-bottom: 1rem;
+  padding: var(--intent-spacing-6);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-lg);
+  background: var(--intent-color-background);
+  margin-bottom: var(--intent-spacing-6);
+}
+
+/* Props table styling */
+.theme-doc-markdown table {
+  font-size: var(--intent-font-size-sm);
+}
+
+.theme-doc-markdown table th {
+  font-weight: var(--intent-font-weight-semibold);
+  text-align: left;
+}
+
+/* Pagination */
+.pagination-nav__link {
+  border-radius: var(--intent-radius-lg);
+  border: 1px solid var(--intent-color-border);
+}
+
+/* Search */
+.searchBar {
+  --ifm-navbar-search-input-background: var(--intent-color-surface-elevated);
+  --ifm-navbar-search-input-border-radius: var(--intent-radius-md);
 }

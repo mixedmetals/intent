@@ -2,11 +2,44 @@
 sidebar_position: 2
 ---
 
-import { Stack, Button, Card, Text } from 'intent-react'
-
 # Stack
 
 The foundation of Intent layouts. Stack provides vertical and horizontal spacing with consistent, theme-aware gaps.
+
+export const Stack = ({ children, direction = 'column', gap = 'normal', align, justify, padding, style, ...props }) => {
+  const className = [
+    'intent-stack',
+    `intent-stack--direction-${direction}`,
+    `intent-stack--gap-${gap}`,
+    align && `intent-stack--align-${align}`,
+    justify && `intent-stack--justify-${justify}`,
+  ].filter(Boolean).join(' ');
+  
+  const paddingStyles = padding ? {
+    compact: '4px',
+    normal: '8px',
+    relaxed: '16px',
+    loose: '24px'
+  }[padding] : undefined;
+  
+  return (
+    <div className={className} style={{ padding: paddingStyles, ...style }} {...props}>
+      {children}
+    </div>
+  )
+}
+
+export const Card = ({ children, padding = 'normal', style }) => (
+  <div className={`intent-card intent-card--padding-${padding} intent-card--elevation-low`} style={style}>
+    {children}
+  </div>
+)
+
+export const Button = ({ children, importance = 'secondary', size = 'medium', ...props }) => (
+  <button className={`intent-button intent-button--importance-${importance} intent-button--size-${size}`} {...props}>
+    {children}
+  </button>
+)
 
 ## Overview
 
@@ -16,26 +49,30 @@ Stack is the most fundamental layout component in Intent. It handles spacing bet
 
 ### Vertical Stack (Default)
 
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <div style={{ padding: 12, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8 }}>Item 1</div>
-  <div style={{ padding: 12, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8 }}>Item 2</div>
-  <div style={{ padding: 12, background: 'var(--ifm-color-emphasis-100)', borderRadius: 8 }}>Item 3</div>
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Card padding="normal">Card 1</Card>
+    <Card padding="normal">Card 2</Card>
+    <Card padding="normal">Card 3</Card>
+  </Stack>
+</div>
 
 ```tsx
 <Stack gap="normal">
-  <Card>Card 1</Card>
-  <Card>Card 2</Card>
-  <Card>Card 3</Card>
+  <Card padding="normal">Card 1</Card>
+  <Card padding="normal">Card 2</Card>
+  <Card padding="normal">Card 3</Card>
 </Stack>
 ```
 
 ### Horizontal Stack
 
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Button importance="secondary">Cancel</Button>
-  <Button importance="primary">Submit</Button>
-</Stack>
+<div className="intent-demo">
+  <Stack direction="row" gap="normal">
+    <Button importance="secondary">Cancel</Button>
+    <Button importance="primary">Submit</Button>
+  </Stack>
+</div>
 
 ```tsx
 <Stack direction="row" gap="normal">
@@ -46,24 +83,26 @@ Stack is the most fundamental layout component in Intent. It handles spacing bet
 
 ### Gap Sizes
 
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Stack direction="row" gap="compact">
-    <Button size="small">Compact</Button>
-    <Button size="small">Gap</Button>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Stack direction="row" gap="compact">
+      <Button size="small">Compact</Button>
+      <Button size="small">Gap</Button>
+    </Stack>
+    <Stack direction="row" gap="normal">
+      <Button size="small">Normal</Button>
+      <Button size="small">Gap</Button>
+    </Stack>
+    <Stack direction="row" gap="relaxed">
+      <Button size="small">Relaxed</Button>
+      <Button size="small">Gap</Button>
+    </Stack>
+    <Stack direction="row" gap="loose">
+      <Button size="small">Loose</Button>
+      <Button size="small">Gap</Button>
+    </Stack>
   </Stack>
-  <Stack direction="row" gap="normal">
-    <Button size="small">Normal</Button>
-    <Button size="small">Gap</Button>
-  </Stack>
-  <Stack direction="row" gap="relaxed">
-    <Button size="small">Relaxed</Button>
-    <Button size="small">Gap</Button>
-  </Stack>
-  <Stack direction="row" gap="loose">
-    <Button size="small">Loose</Button>
-    <Button size="small">Gap</Button>
-  </Stack>
-</Stack>
+</div>
 
 ```tsx
 <Stack direction="row" gap="compact">...</Stack>
@@ -74,16 +113,13 @@ Stack is the most fundamental layout component in Intent. It handles spacing bet
 
 ### Alignment
 
-<Stack direction="row" gap="normal" justify="between" style={{ 
-  padding: 16, 
-  background: 'var(--ifm-color-emphasis-100)',
-  borderRadius: 8,
-  marginBottom: 24 
-}}>
-  <Button size="small">Left</Button>
-  <Button size="small">Center</Button>
-  <Button size="small">Right</Button>
-</Stack>
+<div className="intent-demo">
+  <Stack direction="row" gap="normal" justify="between" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px' }}>
+    <Button size="small">Left</Button>
+    <Button size="small">Center</Button>
+    <Button size="small">Right</Button>
+  </Stack>
+</div>
 
 ```tsx
 <Stack direction="row" gap="normal" justify="between">
@@ -113,15 +149,18 @@ Stack is the most fundamental layout component in Intent. It handles spacing bet
 | `relaxed` | 16px | Form sections |
 | `loose` | 24px | Page sections |
 
-## Best Practices
+## CSS Output
 
-1. **Use Stack for spacing** - Prefer Stack over manual margins
-2. **Nest intentionally** - Deep nesting can impact performance
-3. **Choose appropriate gaps** - Use consistent spacing tokens
-4. **Consider responsive needs** - Stack works with responsive props
+```css
+.intent-stack {
+  display: flex;
+}
 
-## Related
+.intent-stack--column {
+  flex-direction: column;
+}
 
-- Box - Single element wrapper (coming soon)
-- Container - Max-width wrapper (coming soon)
-- Grid - Two-dimensional layouts (coming soon)
+.intent-stack--gap-normal {
+  gap: var(--intent-spacing-normal);
+}
+```

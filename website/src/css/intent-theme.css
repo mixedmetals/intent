@@ -1,0 +1,609 @@
+/**
+ * Intent Framework Theme CSS
+ * Complete styling for all Intent components
+ */
+
+/* ========================================
+   Design Tokens
+   ======================================== */
+
+:root {
+  /* Colors */
+  --intent-color-primary: #3b82f6;
+  --intent-color-primary-hover: #2563eb;
+  --intent-color-primary-active: #1d4ed8;
+  --intent-color-primary-alpha: rgba(59, 130, 246, 0.1);
+  
+  --intent-color-success: #10b981;
+  --intent-color-success-alpha: rgba(16, 185, 129, 0.1);
+  --intent-color-warning: #f59e0b;
+  --intent-color-warning-alpha: rgba(245, 158, 11, 0.1);
+  --intent-color-danger: #ef4444;
+  --intent-color-danger-alpha: rgba(239, 68, 68, 0.1);
+  
+  --intent-color-background: #ffffff;
+  --intent-color-surface: #ffffff;
+  --intent-color-surface-elevated: #f8fafc;
+  --intent-color-border: #e2e8f0;
+  --intent-color-text: #0f172a;
+  --intent-color-text-muted: #64748b;
+  
+  /* Spacing (4px base) */
+  --intent-spacing-0: 0;
+  --intent-spacing-1: 4px;
+  --intent-spacing-2: 8px;
+  --intent-spacing-3: 12px;
+  --intent-spacing-4: 16px;
+  --intent-spacing-5: 20px;
+  --intent-spacing-6: 24px;
+  --intent-spacing-8: 32px;
+  --intent-spacing-10: 40px;
+  --intent-spacing-12: 48px;
+  
+  /* Typography */
+  --intent-font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --intent-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  
+  --intent-font-size-xs: 0.75rem;
+  --intent-font-size-sm: 0.875rem;
+  --intent-font-size-base: 1rem;
+  --intent-font-size-lg: 1.125rem;
+  --intent-font-size-xl: 1.25rem;
+  --intent-font-size-2xl: 1.5rem;
+  --intent-font-size-3xl: 1.875rem;
+  --intent-font-size-4xl: 2.25rem;
+  
+  --intent-font-weight-normal: 400;
+  --intent-font-weight-medium: 500;
+  --intent-font-weight-semibold: 600;
+  --intent-font-weight-bold: 700;
+  
+  /* Radius */
+  --intent-radius-none: 0;
+  --intent-radius-sm: 0.25rem;
+  --intent-radius-md: 0.5rem;
+  --intent-radius-lg: 0.75rem;
+  --intent-radius-xl: 1rem;
+  --intent-radius-full: 9999px;
+  
+  /* Shadows */
+  --intent-shadow-none: none;
+  --intent-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --intent-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --intent-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --intent-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Transitions */
+  --intent-transition-fast: 150ms ease;
+  --intent-transition-normal: 200ms ease;
+  --intent-transition-slow: 300ms ease;
+}
+
+/* Dark mode */
+[data-theme='dark'] {
+  --intent-color-primary: #60a5fa;
+  --intent-color-primary-hover: #3b82f6;
+  --intent-color-primary-active: #2563eb;
+  
+  --intent-color-background: #0f172a;
+  --intent-color-surface: #1e293b;
+  --intent-color-surface-elevated: #334155;
+  --intent-color-border: #475569;
+  --intent-color-text: #f1f5f9;
+  --intent-color-text-muted: #94a3b8;
+}
+
+/* ========================================
+   Button
+   ======================================== */
+
+.intent-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--intent-spacing-2);
+  font-family: var(--intent-font-sans);
+  font-weight: var(--intent-font-weight-medium);
+  border: 1px solid transparent;
+  border-radius: var(--intent-radius-md);
+  cursor: pointer;
+  transition: all var(--intent-transition-fast);
+  text-decoration: none;
+  line-height: 1.5;
+}
+
+.intent-button:focus-visible {
+  outline: 2px solid var(--intent-color-primary);
+  outline-offset: 2px;
+}
+
+.intent-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button sizes */
+.intent-button--size-small {
+  padding: var(--intent-spacing-1) var(--intent-spacing-3);
+  font-size: var(--intent-font-size-sm);
+  height: 32px;
+}
+
+.intent-button--size-medium {
+  padding: var(--intent-spacing-2) var(--intent-spacing-4);
+  font-size: var(--intent-font-size-sm);
+  height: 40px;
+}
+
+.intent-button--size-large {
+  padding: var(--intent-spacing-2) var(--intent-spacing-5);
+  font-size: var(--intent-font-size-base);
+  height: 48px;
+}
+
+/* Button importance variants */
+.intent-button--importance-primary {
+  background: var(--intent-color-primary);
+  color: white;
+  border-color: var(--intent-color-primary);
+}
+
+.intent-button--importance-primary:hover:not(:disabled) {
+  background: var(--intent-color-primary-hover);
+  border-color: var(--intent-color-primary-hover);
+}
+
+.intent-button--importance-secondary {
+  background: var(--intent-color-surface);
+  color: var(--intent-color-text);
+  border-color: var(--intent-color-border);
+}
+
+.intent-button--importance-secondary:hover:not(:disabled) {
+  background: var(--intent-color-surface-elevated);
+  border-color: var(--intent-color-text-muted);
+}
+
+.intent-button--importance-tertiary {
+  background: transparent;
+  color: var(--intent-color-text);
+  border-color: transparent;
+}
+
+.intent-button--importance-tertiary:hover:not(:disabled) {
+  background: var(--intent-color-surface-elevated);
+}
+
+.intent-button--full-width {
+  width: 100%;
+}
+
+/* ========================================
+   Stack
+   ======================================== */
+
+.intent-stack {
+  display: flex;
+}
+
+.intent-stack--direction-column {
+  flex-direction: column;
+}
+
+.intent-stack--direction-row {
+  flex-direction: row;
+}
+
+.intent-stack--gap-compact {
+  gap: var(--intent-spacing-1);
+}
+
+.intent-stack--gap-normal {
+  gap: var(--intent-spacing-2);
+}
+
+.intent-stack--gap-relaxed {
+  gap: var(--intent-spacing-4);
+}
+
+.intent-stack--gap-loose {
+  gap: var(--intent-spacing-6);
+}
+
+.intent-stack--align-start {
+  align-items: flex-start;
+}
+
+.intent-stack--align-center {
+  align-items: center;
+}
+
+.intent-stack--align-end {
+  align-items: flex-end;
+}
+
+.intent-stack--align-stretch {
+  align-items: stretch;
+}
+
+.intent-stack--justify-start {
+  justify-content: flex-start;
+}
+
+.intent-stack--justify-center {
+  justify-content: center;
+}
+
+.intent-stack--justify-end {
+  justify-content: flex-end;
+}
+
+.intent-stack--justify-between {
+  justify-content: space-between;
+}
+
+/* ========================================
+   Input
+   ======================================== */
+
+.intent-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-family: var(--intent-font-sans);
+  font-size: var(--intent-font-size-base);
+  color: var(--intent-color-text);
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+  transition: border-color var(--intent-transition-fast), box-shadow var(--intent-transition-fast);
+}
+
+.intent-input:focus-within {
+  border-color: var(--intent-color-primary);
+  box-shadow: 0 0 0 3px var(--intent-color-primary-alpha);
+}
+
+.intent-input--size-small {
+  padding: var(--intent-spacing-1) var(--intent-spacing-3);
+  height: 32px;
+  font-size: var(--intent-font-size-sm);
+}
+
+.intent-input--size-medium {
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+  height: 40px;
+}
+
+.intent-input--size-large {
+  padding: var(--intent-spacing-2) var(--intent-spacing-4);
+  height: 48px;
+  font-size: var(--intent-font-size-lg);
+}
+
+.intent-input--validation-valid {
+  border-color: var(--intent-color-success);
+}
+
+.intent-input--validation-valid:focus-within {
+  box-shadow: 0 0 0 3px var(--intent-color-success-alpha);
+}
+
+.intent-input--validation-invalid {
+  border-color: var(--intent-color-danger);
+}
+
+.intent-input--validation-invalid:focus-within {
+  box-shadow: 0 0 0 3px var(--intent-color-danger-alpha);
+}
+
+.intent-input__field {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+}
+
+.intent-input__field::placeholder {
+  color: var(--intent-color-text-muted);
+}
+
+/* ========================================
+   Spinner
+   ======================================== */
+
+.intent-spinner {
+  display: inline-block;
+  border: 2px solid var(--intent-color-border);
+  border-top-color: var(--intent-color-primary);
+  border-radius: 50%;
+  animation: intent-spinner-spin 1s linear infinite;
+}
+
+@keyframes intent-spinner-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.intent-spinner--size-small {
+  width: 16px;
+  height: 16px;
+}
+
+.intent-spinner--size-medium {
+  width: 24px;
+  height: 24px;
+}
+
+.intent-spinner--size-large {
+  width: 32px;
+  height: 32px;
+}
+
+.intent-spinner--color-primary {
+  border-top-color: var(--intent-color-primary);
+}
+
+.intent-spinner--color-secondary {
+  border-top-color: var(--intent-color-text-muted);
+}
+
+.intent-spinner--color-muted {
+  border-top-color: var(--intent-color-border);
+}
+
+/* ========================================
+   Card
+   ======================================== */
+
+.intent-card {
+  background: var(--intent-color-surface);
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-lg);
+  transition: box-shadow var(--intent-transition-fast);
+}
+
+.intent-card--elevation-none {
+  box-shadow: none;
+}
+
+.intent-card--elevation-low {
+  box-shadow: var(--intent-shadow-sm);
+}
+
+.intent-card--elevation-medium {
+  box-shadow: var(--intent-shadow-md);
+}
+
+.intent-card--elevation-high {
+  box-shadow: var(--intent-shadow-lg);
+}
+
+.intent-card--padding-none {
+  padding: 0;
+}
+
+.intent-card--padding-compact {
+  padding: var(--intent-spacing-2);
+}
+
+.intent-card--padding-normal {
+  padding: var(--intent-spacing-4);
+}
+
+.intent-card--padding-relaxed {
+  padding: var(--intent-spacing-6);
+}
+
+.intent-card--interactive {
+  cursor: pointer;
+}
+
+.intent-card--interactive:hover {
+  box-shadow: var(--intent-shadow-lg);
+  transform: translateY(-1px);
+}
+
+/* ========================================
+   Badge
+   ======================================== */
+
+.intent-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--intent-spacing-1);
+  font-family: var(--intent-font-sans);
+  font-weight: var(--intent-font-weight-medium);
+  border-radius: var(--intent-radius-md);
+}
+
+.intent-badge--size-small {
+  padding: 2px 6px;
+  font-size: var(--intent-font-size-xs);
+}
+
+.intent-badge--size-medium {
+  padding: var(--intent-spacing-1) var(--intent-spacing-2);
+  font-size: var(--intent-font-size-xs);
+}
+
+.intent-badge--size-large {
+  padding: var(--intent-spacing-1) var(--intent-spacing-3);
+  font-size: var(--intent-font-size-sm);
+}
+
+.intent-badge--variant-default {
+  background: var(--intent-color-surface-elevated);
+  color: var(--intent-color-text);
+}
+
+.intent-badge--variant-primary {
+  background: var(--intent-color-primary-alpha);
+  color: var(--intent-color-primary);
+}
+
+.intent-badge--variant-success {
+  background: var(--intent-color-success-alpha);
+  color: var(--intent-color-success);
+}
+
+.intent-badge--variant-warning {
+  background: var(--intent-color-warning-alpha);
+  color: var(--intent-color-warning);
+}
+
+.intent-badge--variant-danger {
+  background: var(--intent-color-danger-alpha);
+  color: var(--intent-color-danger);
+}
+
+.intent-badge--pill {
+  border-radius: var(--intent-radius-full);
+}
+
+/* Badge dot */
+.intent-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ========================================
+   Text
+   ======================================== */
+
+.intent-text {
+  font-family: var(--intent-font-sans);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.intent-text--size-xs { font-size: var(--intent-font-size-xs); }
+.intent-text--size-sm { font-size: var(--intent-font-size-sm); }
+.intent-text--size-base { font-size: var(--intent-font-size-base); }
+.intent-text--size-lg { font-size: var(--intent-font-size-lg); }
+.intent-text--size-xl { font-size: var(--intent-font-size-xl); }
+.intent-text--size-2xl { font-size: var(--intent-font-size-2xl); }
+
+.intent-text--weight-normal { font-weight: var(--intent-font-weight-normal); }
+.intent-text--weight-medium { font-weight: var(--intent-font-weight-medium); }
+.intent-text--weight-semibold { font-weight: var(--intent-font-weight-semibold); }
+.intent-text--weight-bold { font-weight: var(--intent-font-weight-bold); }
+
+.intent-text--color-default { color: var(--intent-color-text); }
+.intent-text--color-muted { color: var(--intent-color-text-muted); }
+.intent-text--color-primary { color: var(--intent-color-primary); }
+.intent-text--color-success { color: var(--intent-color-success); }
+.intent-text--color-warning { color: var(--intent-color-warning); }
+.intent-text--color-danger { color: var(--intent-color-danger); }
+
+.intent-text--align-left { text-align: left; }
+.intent-text--align-center { text-align: center; }
+.intent-text--align-right { text-align: right; }
+
+.intent-text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ========================================
+   Alert
+   ======================================== */
+
+.intent-alert {
+  display: flex;
+  gap: var(--intent-spacing-3);
+  padding: var(--intent-spacing-4);
+  border-radius: var(--intent-radius-md);
+  border-left: 4px solid transparent;
+}
+
+.intent-alert--variant-info {
+  background: var(--intent-color-primary-alpha);
+  border-left-color: var(--intent-color-primary);
+}
+
+.intent-alert--variant-success {
+  background: var(--intent-color-success-alpha);
+  border-left-color: var(--intent-color-success);
+}
+
+.intent-alert--variant-warning {
+  background: var(--intent-color-warning-alpha);
+  border-left-color: var(--intent-color-warning);
+}
+
+.intent-alert--variant-danger {
+  background: var(--intent-color-danger-alpha);
+  border-left-color: var(--intent-color-danger);
+}
+
+.intent-alert__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.intent-alert__content {
+  flex: 1;
+}
+
+.intent-alert__title {
+  font-weight: var(--intent-font-weight-semibold);
+  margin-bottom: var(--intent-spacing-1);
+}
+
+/* ========================================
+   Select, Textarea, Checkbox, Radio
+   ======================================== */
+
+.intent-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.intent-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.intent-checkbox,
+.intent-radio {
+  display: flex;
+  align-items: center;
+  gap: var(--intent-spacing-2);
+  cursor: pointer;
+}
+
+.intent-checkbox__input,
+.intent-radio__input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ========================================
+   Utility classes
+   ======================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

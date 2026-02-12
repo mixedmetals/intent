@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-import { Stack, Button } from 'intent-react'
+import { Stack } from 'intent-react'
 
 # Button
 
@@ -12,17 +12,29 @@ Buttons trigger actions or navigate to different pages.
 
 The Button component is the most fundamental interactive element. It supports multiple visual styles, sizes, and states.
 
+export const Button = ({ children, importance = 'secondary', size = 'medium', fullWidth, disabled, ...props }) => (
+  <button 
+    className={`intent-button intent-button--importance-${importance} intent-button--size-${size} ${fullWidth ? 'intent-button--full-width' : ''}`}
+    disabled={disabled}
+    {...props}
+  >
+    {children}
+  </button>
+)
+
 ## Examples
 
 ### Importance Levels
 
 Use `importance` to indicate the priority of the action:
 
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Button importance="primary">Primary</Button>
-  <Button importance="secondary">Secondary</Button>
-  <Button importance="tertiary">Tertiary</Button>
-</Stack>
+<div className="intent-demo">
+  <Stack direction="row" gap="normal">
+    <Button importance="primary">Primary</Button>
+    <Button importance="secondary">Secondary</Button>
+    <Button importance="tertiary">Tertiary</Button>
+  </Stack>
+</div>
 
 ```tsx
 <Stack direction="row" gap="normal">
@@ -36,11 +48,13 @@ Use `importance` to indicate the priority of the action:
 
 Three sizes to fit different contexts:
 
-<Stack direction="row" gap="normal" align="center" style={{ marginBottom: 24 }}>
-  <Button size="small">Small</Button>
-  <Button size="medium">Medium</Button>
-  <Button size="large">Large</Button>
-</Stack>
+<div className="intent-demo">
+  <Stack direction="row" gap="normal" align="center">
+    <Button size="small">Small</Button>
+    <Button size="medium">Medium</Button>
+    <Button size="large">Large</Button>
+  </Stack>
+</div>
 
 ```tsx
 <Stack direction="row" gap="normal" align="center">
@@ -54,7 +68,7 @@ Three sizes to fit different contexts:
 
 Expand to fill the container:
 
-<div style={{ width: 300, marginBottom: 24 }}>
+<div className="intent-demo" style={{ maxWidth: 300 }}>
   <Button importance="primary" fullWidth>Full Width Button</Button>
 </div>
 
@@ -66,10 +80,12 @@ Expand to fill the container:
 
 ### Disabled State
 
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Button disabled>Disabled</Button>
-  <Button importance="primary" disabled>Disabled Primary</Button>
-</Stack>
+<div className="intent-demo">
+  <Stack direction="row" gap="normal">
+    <Button disabled>Disabled</Button>
+    <Button importance="primary" disabled>Disabled Primary</Button>
+  </Stack>
+</div>
 
 ```tsx
 <Button disabled>Disabled</Button>
@@ -121,35 +137,31 @@ Expand to fill the container:
 </Button>
 ```
 
-## Accessibility
-
-- Uses native `<button>` element
-- Respects keyboard navigation
-- Includes focus indicators
-- Supports `disabled` attribute
-
 ## CSS Output
 
 ```css
-.button {
+.intent-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--intent-radius-md);
+  gap: 8px;
   font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
   transition: all 150ms ease;
 }
 
-.button--primary {
+.intent-button--primary {
   background: var(--intent-color-primary);
   color: white;
 }
 
-.button--primary:hover:not(:disabled) {
+.intent-button--primary:hover:not(:disabled) {
   background: var(--intent-color-primary-hover);
 }
 
-.button:disabled {
+.intent-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
