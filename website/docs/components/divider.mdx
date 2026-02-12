@@ -2,35 +2,61 @@
 sidebar_position: 39
 ---
 
-import { Stack, Button, Divider, Text } from 'intent-react'
-
 # Divider
 
 Visual separator between content sections.
+
+export const Divider = ({ label, orientation = 'horizontal' }) => {
+  if (orientation === 'vertical') {
+    return <div style={{ width: '1px', height: '100%', background: 'var(--intent-color-border)', alignSelf: 'stretch' }} />
+  }
+  
+  if (label) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%' }}>
+        <div style={{ flex: 1, height: '1px', background: 'var(--intent-color-border)' }} />
+        <span style={{ fontSize: '12px', color: 'var(--intent-color-text-muted)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{label}</span>
+        <div style={{ flex: 1, height: '1px', background: 'var(--intent-color-border)' }} />
+      </div>
+    )
+  }
+  
+  return <div style={{ width: '100%', height: '1px', background: 'var(--intent-color-border)' }} />
+}
+
+export const Stack = ({ children, direction = 'column', gap = 'normal' }) => (
+  <div className={`intent-stack intent-stack--direction-${direction} intent-stack--gap-${gap}`}>
+    {children}
+  </div>
+)
 
 ## Examples
 
 ### Horizontal Divider
 
-<div style={{ marginBottom: 24 }}>
-  <Text>Content above</Text>
-  <Divider style={{ margin: '16px 0' }} />
-  <Text>Content below</Text>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <div>Content above</div>
+    <Divider />
+    <div>Content below</div>
+  </Stack>
 </div>
 
 ```tsx
-<Text>Content above</Text>
+<div>Content above</div>
 <Divider />
-<Text>Content below</Text>
+<div>Content below</div>
 ```
 
 ### With Label
 
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Button fullWidth importance="primary">Sign in with Email</Button>
-  <Divider label="OR" />
-  <Button fullWidth>Sign in with Google</Button>
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <button className="intent-button intent-button--importance-primary intent-button--size-medium" style={{ width: '100%' }}>Sign in with Email</button>
+    <Divider label="OR" />
+    <button className="intent-button intent-button--importance-secondary intent-button--size-medium" style={{ width: '100%' }}>Sign in with Google</button>
+  </Stack>
+</div>
 
 ```tsx
 <Button>Sign in with Email</Button>
@@ -40,11 +66,13 @@ Visual separator between content sections.
 
 ### Vertical
 
-<Stack direction="row" gap="normal" align="center" style={{ height: 60, marginBottom: 24 }}>
-  <Text>Left</Text>
-  <Divider orientation="vertical" />
-  <Text>Right</Text>
-</Stack>
+<div className="intent-demo">
+  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', height: '60px' }}>
+    <span>Left</span>
+    <Divider orientation="vertical" />
+    <span>Right</span>
+  </div>
+</div>
 
 ```tsx
 <Stack direction="row">
@@ -54,72 +82,35 @@ Visual separator between content sections.
 </Stack>
 ```
 
-### Different Styles
-
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Text>Solid (default)</Text>
-  <Divider variant="solid" />
-  <Text>Dashed</Text>
-  <Divider variant="dashed" />
-  <Text>Dotted</Text>
-  <Divider variant="dotted" />
-</Stack>
-
-```tsx
-<Divider variant="solid" />
-<Divider variant="dashed" />
-<Divider variant="dotted" />
-```
-
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `orientation` | `'horizontal'` \| `'vertical'` | `'horizontal'` | Divider direction |
-| `variant` | `'solid'` \| `'dashed'` \| `'dotted'` | `'solid'` | Line style |
 | `label` | `string` | - | Center label text |
-| `spacing` | `'compact'` \| `'normal'` \| `'relaxed'` | `'normal'` | Space around divider |
 
 ## CSS Output
 
 ```css
-.divider {
+.intent-divider {
   border: 0;
   margin: 0;
 }
 
-.divider--horizontal {
+.intent-divider--horizontal {
   width: 100%;
   border-top: 1px solid var(--intent-color-border);
 }
 
-.divider--horizontal.divider--dashed {
-  border-top-style: dashed;
-}
-
-.divider--vertical {
+.intent-divider--vertical {
+  width: 1px;
   height: 100%;
   border-left: 1px solid var(--intent-color-border);
-  align-self: stretch;
 }
 
-.divider--with-label {
-  display: flex;
-  align-items: center;
-  gap: var(--intent-spacing-3);
-}
-
-.divider__label {
-  font-size: var(--intent-font-size-xs);
+.intent-divider__label {
+  font-size: 12px;
   color: var(--intent-color-text-muted);
   text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.divider--with-label::before,
-.divider--with-label::after {
-  content: '';
-  flex: 1;
-  border-top: 1px solid var(--intent-color-border);
 }
 ```

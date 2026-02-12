@@ -2,17 +2,37 @@
 sidebar_position: 6
 ---
 
-import { Stack, Card, Text, Button } from 'intent-react'
-
 # Card
 
 Content container with elevation and padding options.
+
+export const Card = ({ children, elevation = 'medium', padding = 'normal', interactive, onClick }) => (
+  <div 
+    className={`intent-card intent-card--elevation-${elevation} intent-card--padding-${padding} ${interactive ? 'intent-card--interactive' : ''}`}
+    onClick={onClick}
+    style={interactive ? { cursor: 'pointer' } : {}}
+  >
+    {children}
+  </div>
+)
+
+export const Stack = ({ children, direction = 'column', gap = 'normal' }) => (
+  <div className={`intent-stack intent-stack--direction-${direction} intent-stack--gap-${gap}`}>
+    {children}
+  </div>
+)
+
+export const Text = ({ children, weight, size = 'base' }) => (
+  <span className={`intent-text intent-text--size-${size} ${weight ? `intent-text--weight-${weight}` : ''}`}>
+    {children}
+  </span>
+)
 
 ## Examples
 
 ### Basic Card
 
-<div style={{ marginBottom: 24 }}>
+<div className="intent-demo">
   <Card padding="normal">
     <Text>Card content goes here. Use cards to group related information.</Text>
   </Card>
@@ -26,24 +46,26 @@ Content container with elevation and padding options.
 
 ### Elevation Levels
 
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Card elevation="none" padding="normal">
-    <Text weight="bold">No Elevation</Text>
-    <Text size="sm" color="muted">Flat card with border</Text>
-  </Card>
-  <Card elevation="low" padding="normal">
-    <Text weight="bold">Low Elevation</Text>
-    <Text size="sm" color="muted">Subtle shadow for grouping</Text>
-  </Card>
-  <Card elevation="medium" padding="normal">
-    <Text weight="bold">Medium Elevation</Text>
-    <Text size="sm" color="muted">Default for most cards</Text>
-  </Card>
-  <Card elevation="high" padding="normal">
-    <Text weight="bold">High Elevation</Text>
-    <Text size="sm" color="muted">For modals and popovers</Text>
-  </Card>
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Card elevation="none" padding="normal">
+      <Text weight="semibold">No Elevation</Text>
+      <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>Flat card with border</Text>
+    </Card>
+    <Card elevation="low" padding="normal">
+      <Text weight="semibold">Low Elevation</Text>
+      <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>Subtle shadow for grouping</Text>
+    </Card>
+    <Card elevation="medium" padding="normal">
+      <Text weight="semibold">Medium Elevation</Text>
+      <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>Default for most cards</Text>
+    </Card>
+    <Card elevation="high" padding="normal">
+      <Text weight="semibold">High Elevation</Text>
+      <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>For modals and popovers</Text>
+    </Card>
+  </Stack>
+</div>
 
 ```tsx
 <Card elevation="none" padding="normal">...</Card>
@@ -54,17 +76,19 @@ Content container with elevation and padding options.
 
 ### Padding Sizes
 
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Card elevation="medium" padding="compact">
-    <Text size="sm">Compact</Text>
-  </Card>
-  <Card elevation="medium" padding="normal">
-    <Text>Normal</Text>
-  </Card>
-  <Card elevation="medium" padding="relaxed">
-    <Text>Relaxed</Text>
-  </Card>
-</Stack>
+<div className="intent-demo">
+  <Stack direction="row" gap="normal">
+    <Card elevation="medium" padding="compact">
+      <Text size="sm">Compact</Text>
+    </Card>
+    <Card elevation="medium" padding="normal">
+      <Text>Normal</Text>
+    </Card>
+    <Card elevation="medium" padding="relaxed">
+      <Text>Relaxed</Text>
+    </Card>
+  </Stack>
+</div>
 
 ```tsx
 <Card padding="compact">...</Card>
@@ -74,27 +98,17 @@ Content container with elevation and padding options.
 
 ### Interactive Card
 
-<div style={{ marginBottom: 24 }}>
-  <Card 
-    elevation="low" 
-    padding="normal" 
-    interactive
-    onClick={() => alert('Card clicked!')}
-  >
-    <Text weight="bold">Clickable Card</Text>
-    <Text size="sm" color="muted">This card responds to clicks and hover states.</Text>
+<div className="intent-demo">
+  <Card elevation="low" padding="normal" interactive onClick={() => alert('Card clicked!')}>
+    <Text weight="semibold">Clickable Card</Text>
+    <Text size="sm" style={{ color: 'var(--intent-color-text-muted)' }}>This card responds to clicks and hover states.</Text>
   </Card>
 </div>
 
 ```tsx
-<Card 
-  elevation="low" 
-  padding="normal" 
-  interactive
-  onClick={handleClick}
->
-  <Text weight="bold">Clickable Card</Text>
-  <Text size="sm" color="muted">This card responds to clicks.</Text>
+<Card elevation="low" padding="normal" interactive onClick={handleClick}>
+  <Text weight="semibold">Clickable Card</Text>
+  <Text size="sm">This card responds to clicks.</Text>
 </Card>
 ```
 
@@ -110,21 +124,18 @@ Content container with elevation and padding options.
 ## CSS Output
 
 ```css
-.card {
+.intent-card {
   background: var(--intent-color-surface);
-  border-radius: var(--intent-radius-lg);
   border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-lg);
+  transition: box-shadow 150ms ease;
 }
 
-.card--elevation-low {
-  box-shadow: var(--intent-shadow-sm);
-}
-
-.card--elevation-medium {
+.intent-card--elevation-medium {
   box-shadow: var(--intent-shadow-md);
 }
 
-.card--interactive:hover {
+.intent-card--interactive:hover {
   box-shadow: var(--intent-shadow-lg);
   transform: translateY(-1px);
 }

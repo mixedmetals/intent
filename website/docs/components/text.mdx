@@ -2,24 +2,43 @@
 sidebar_position: 7
 ---
 
-import { Stack, Text } from 'intent-react'
-
 # Text
 
 Typography component for consistent text styling.
+
+export const Text = ({ children, size = 'base', weight, color = 'default', align, truncate }) => {
+  const className = [
+    'intent-text',
+    `intent-text--size-${size}`,
+    `intent-text--color-${color}`,
+    weight && `intent-text--weight-${weight}`,
+    align && `intent-text--align-${align}`,
+    truncate && 'intent-text--truncate'
+  ].filter(Boolean).join(' ')
+  
+  return <span className={className}>{children}</span>
+}
+
+export const Stack = ({ children, gap = 'normal' }) => (
+  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`}>
+    {children}
+  </div>
+)
 
 ## Examples
 
 ### Sizes
 
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Text size="xs">Extra Small - Fine print, captions</Text>
-  <Text size="sm">Small - Secondary information</Text>
-  <Text size="base">Base - Body text (default)</Text>
-  <Text size="lg">Large - Lead paragraphs</Text>
-  <Text size="xl">Extra Large - Subheadings</Text>
-  <Text size="2xl">2XL - Section titles</Text>
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Text size="xs">Extra Small - Fine print, captions</Text>
+    <Text size="sm">Small - Secondary information</Text>
+    <Text size="base">Base - Body text (default)</Text>
+    <Text size="lg">Large - Lead paragraphs</Text>
+    <Text size="xl">Extra Large - Subheadings</Text>
+    <Text size="2xl">2XL - Section titles</Text>
+  </Stack>
+</div>
 
 ```tsx
 <Text size="xs">Extra Small</Text>
@@ -32,12 +51,14 @@ Typography component for consistent text styling.
 
 ### Weights
 
-<Stack direction="row" gap="relaxed" style={{ marginBottom: 24 }}>
-  <Text weight="normal">Normal</Text>
-  <Text weight="medium">Medium</Text>
-  <Text weight="semibold">Semibold</Text>
-  <Text weight="bold">Bold</Text>
-</Stack>
+<div className="intent-demo">
+  <Stack direction="row" gap="relaxed">
+    <Text weight="normal">Normal</Text>
+    <Text weight="medium">Medium</Text>
+    <Text weight="semibold">Semibold</Text>
+    <Text weight="bold">Bold</Text>
+  </Stack>
+</div>
 
 ```tsx
 <Text weight="normal">Normal</Text>
@@ -48,14 +69,16 @@ Typography component for consistent text styling.
 
 ### Colors
 
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Text color="default">Default text color</Text>
-  <Text color="muted">Muted text for secondary content</Text>
-  <Text color="primary">Primary brand color</Text>
-  <Text color="success">Success state</Text>
-  <Text color="warning">Warning state</Text>
-  <Text color="danger">Danger/error state</Text>
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Text color="default">Default text color</Text>
+    <Text color="muted">Muted text for secondary content</Text>
+    <Text color="primary">Primary brand color</Text>
+    <Text color="success">Success state</Text>
+    <Text color="warning">Warning state</Text>
+    <Text color="danger">Danger/error state</Text>
+  </Stack>
+</div>
 
 ```tsx
 <Text color="default">Default</Text>
@@ -68,11 +91,13 @@ Typography component for consistent text styling.
 
 ### Alignment
 
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Text align="left">Left aligned (default)</Text>
-  <Text align="center">Center aligned</Text>
-  <Text align="right">Right aligned</Text>
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Text align="left">Left aligned (default)</Text>
+    <Text align="center">Center aligned</Text>
+    <Text align="right">Right aligned</Text>
+  </Stack>
+</div>
 
 ```tsx
 <Text align="left">Left aligned</Text>
@@ -82,7 +107,7 @@ Typography component for consistent text styling.
 
 ### Truncate
 
-<div style={{ width: 300, marginBottom: 24 }}>
+<div className="intent-demo" style={{ width: 300 }}>
   <Text truncate>
     This is a very long text that will be truncated with an ellipsis when it exceeds the container width.
   </Text>
@@ -108,24 +133,24 @@ Typography component for consistent text styling.
 ## CSS Output
 
 ```css
-.text {
+.intent-text {
   font-family: var(--intent-font-sans);
   line-height: 1.5;
 }
 
-.text--size-base {
+.intent-text--size-base {
   font-size: var(--intent-font-size-base);
 }
 
-.text--weight-medium {
+.intent-text--weight-medium {
   font-weight: 500;
 }
 
-.text--color-muted {
+.intent-text--color-muted {
   color: var(--intent-color-text-muted);
 }
 
-.text--truncate {
+.intent-text--truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

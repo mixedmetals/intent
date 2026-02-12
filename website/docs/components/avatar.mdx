@@ -2,21 +2,54 @@
 sidebar_position: 19
 ---
 
-import { Stack, Avatar } from 'intent-react'
-
 # Avatar
 
 User profile image with fallback initials.
 
+export const Avatar = ({ src, initials, size = 'md' }) => {
+  const sizes = { xs: 24, sm: 32, md: 40, lg: 48, xl: 56, '2xl': 64 }
+  const dimension = sizes[size] || 40
+  
+  return (
+    <div style={{
+      width: dimension,
+      height: dimension,
+      borderRadius: '50%',
+      background: src ? 'transparent' : 'var(--intent-color-primary)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+      fontSize: dimension * 0.4,
+      fontWeight: 600,
+      color: 'white'
+    }}>
+      {src ? (
+        <img src={src} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      ) : (
+        initials?.slice(0, 2).toUpperCase()
+      )}
+    </div>
+  )
+}
+
+export const Stack = ({ children, direction = 'row', gap = 'normal', align }) => (
+  <div className={`intent-stack intent-stack--direction-${direction} intent-stack--gap-${gap} ${align ? `intent-stack--align-${align}` : ''}`}>
+    {children}
+  </div>
+)
+
 ## Examples
 
-### Basic Avatar
+### With Image
 
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Felix" />
-  <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" alt="Aneka" />
-  <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=Zack" alt="Zack" />
-</Stack>
+<div className="intent-demo">
+  <Stack direction="row" gap="normal">
+    <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" />
+    <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" />
+    <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=Zack" />
+  </Stack>
+</div>
 
 ```tsx
 <Avatar src="/avatar.jpg" alt="User name" />
@@ -24,72 +57,34 @@ User profile image with fallback initials.
 
 ### Sizes
 
-<Stack direction="row" gap="normal" align="center" style={{ marginBottom: 24 }}>
-  <Avatar size="xs" src="https://api.dicebear.com/7.x/avataaars/svg?seed=1" alt="XS" />
-  <Avatar size="sm" src="https://api.dicebear.com/7.x/avataaars/svg?seed=2" alt="SM" />
-  <Avatar size="md" src="https://api.dicebear.com/7.x/avataaars/svg?seed=3" alt="MD" />
-  <Avatar size="lg" src="https://api.dicebear.com/7.x/avataaars/svg?seed=4" alt="LG" />
-  <Avatar size="xl" src="https://api.dicebear.com/7.x/avataaars/svg?seed=5" alt="XL" />
-  <Avatar size="2xl" src="https://api.dicebear.com/7.x/avataaars/svg?seed=6" alt="2XL" />
-</Stack>
+<div className="intent-demo">
+  <Stack direction="row" gap="normal" align="center">
+    <Avatar size="xs" initials="XS" />
+    <Avatar size="sm" initials="SM" />
+    <Avatar size="md" initials="MD" />
+    <Avatar size="lg" initials="LG" />
+    <Avatar size="xl" initials="XL" />
+    <Avatar size="2xl" initials="2X" />
+  </Stack>
+</div>
 
 ```tsx
-<Avatar size="xs" src="..." />
-<Avatar size="sm" src="..." />
-<Avatar size="md" src="..." />
-<Avatar size="lg" src="..." />
-<Avatar size="xl" src="..." />
-<Avatar size="2xl" src="..." />
+<Avatar size="xs" initials="JD" />
+<Avatar size="sm" initials="JD" />
+<Avatar size="md" initials="JD" />
+<Avatar size="lg" initials="JD" />
+<Avatar size="xl" initials="JD" />
+<Avatar size="2xl" initials="JD" />
 ```
 
 ### Fallback Initials
 
-<div style={{ marginBottom: 24 }}>
-  <Avatar initials="JD" alt="John Doe" />
+<div className="intent-demo">
+  <Avatar initials="JD" size="lg" />
 </div>
 
 ```tsx
 <Avatar initials="JD" alt="John Doe" />
-```
-
-### Fallback Icon
-
-<div style={{ marginBottom: 24 }}>
-  <Avatar icon="user" alt="User" />
-</div>
-
-```tsx
-<Avatar icon="user" alt="User" />
-```
-
-### Shapes
-
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Avatar shape="circle" src="https://api.dicebear.com/7.x/avataaars/svg?seed=circle" alt="Circle" />
-  <Avatar shape="square" src="https://api.dicebear.com/7.x/avataaars/svg?seed=square" alt="Square" />
-  <Avatar shape="rounded" src="https://api.dicebear.com/7.x/avataaars/svg?seed=rounded" alt="Rounded" />
-</Stack>
-
-```tsx
-<Avatar shape="circle" src="..." />
-<Avatar shape="square" src="..." />
-<Avatar shape="rounded" src="..." />
-```
-
-### With Status
-
-<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
-  <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=online" status="online" />
-  <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=away" status="away" />
-  <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=offline" status="offline" />
-  <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=busy" status="busy" />
-</Stack>
-
-```tsx
-<Avatar src="..." status="online" />
-<Avatar src="..." status="away" />
-<Avatar src="..." status="offline" />
-<Avatar src="..." status="busy" />
 ```
 
 ## Props
@@ -97,12 +92,9 @@ User profile image with fallback initials.
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `src` | `string` | - | Image URL |
-| `alt` | `string` | - | Alt text for accessibility |
+| `alt` | `string` | - | Alt text |
 | `initials` | `string` | - | Fallback initials (2 chars max) |
-| `icon` | `string` | - | Fallback icon name |
 | `size` | `'xs'` \| `'sm'` \| `'md'` \| `'lg'` \| `'xl'` \| `'2xl'` | `'md'` | Avatar size |
-| `shape` | `'circle'` \| `'square'` \| `'rounded'` | `'circle'` | Avatar shape |
-| `status` | `'online'` \| `'away'` \| `'offline'` \| `'busy'` | - | Status indicator |
 
 ## Size Reference
 
@@ -118,45 +110,24 @@ User profile image with fallback initials.
 ## CSS Output
 
 ```css
-.avatar {
+.intent-avatar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  background: var(--intent-color-primary);
+  color: white;
   overflow: hidden;
-  background: var(--intent-color-surface-elevated);
 }
 
-.avatar--size-md {
+.intent-avatar--size-md {
   width: 40px;
   height: 40px;
 }
 
-.avatar--shape-circle {
-  border-radius: 50%;
-}
-
-.avatar__image {
+.intent-avatar__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.avatar__fallback {
-  font-weight: 500;
-  color: var(--intent-color-text-muted);
-}
-
-.avatar__status {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 2px solid white;
-}
-
-.avatar__status--online {
-  background: var(--intent-color-success);
 }
 ```

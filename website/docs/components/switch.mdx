@@ -1,47 +1,78 @@
 ---
-sidebar_position: 14
+sidebar_position: 15
 ---
-
-import { Stack, Switch } from 'intent-react'
 
 # Switch
 
 Toggle switch for binary on/off states.
 
+export const Switch = ({ label, description, checked, disabled }) => (
+  <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1 }}>
+    <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+      <input 
+        type="checkbox"
+        style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: disabled ? 'not-allowed' : 'pointer' }}
+        checked={checked}
+        disabled={disabled}
+      />
+      <div style={{
+        width: '44px',
+        height: '24px',
+        background: checked ? 'var(--intent-color-primary)' : 'var(--intent-color-border)',
+        borderRadius: '9999px',
+        position: 'relative',
+        transition: 'background 150ms ease'
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: '2px',
+          left: checked ? '22px' : '2px',
+          width: '20px',
+          height: '20px',
+          background: 'white',
+          borderRadius: '50%',
+          transition: 'transform 150ms ease',
+          boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
+        }} />
+      </div>
+    </div>
+    <div>
+      <div style={{ fontWeight: 500 }}>{label}</div>
+      {description && <div style={{ fontSize: '14px', color: 'var(--intent-color-text-muted)', marginTop: '2px' }}>{description}</div>}
+    </div>
+  </label>
+)
+
+export const Stack = ({ children, gap = 'normal' }) => (
+  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`}>
+    {children}
+  </div>
+)
+
 ## Examples
 
 ### Basic Switch
 
-<Stack direction="row" gap="relaxed" style={{ marginBottom: 24 }}>
-  <Switch label="Airplane mode" />
-  <Switch label="Notifications" defaultChecked />
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Switch label="Airplane mode" />
+    <Switch label="Notifications" checked />
+  </Stack>
+</div>
 
 ```tsx
 <Switch label="Airplane mode" />
 <Switch label="Notifications" defaultChecked />
 ```
 
-### Sizes
-
-<Stack direction="row" gap="relaxed" align="center" style={{ marginBottom: 24 }}>
-  <Switch size="small" label="Small" />
-  <Switch size="medium" label="Medium" />
-  <Switch size="large" label="Large" />
-</Stack>
-
-```tsx
-<Switch size="small" label="Small" />
-<Switch size="medium" label="Medium" />
-<Switch size="large" label="Large" />
-```
-
 ### Disabled
 
-<Stack direction="row" gap="relaxed" style={{ marginBottom: 24 }}>
-  <Switch disabled label="Disabled off" />
-  <Switch disabled checked label="Disabled on" />
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Switch disabled label="Disabled off" />
+    <Switch disabled checked label="Disabled on" />
+  </Stack>
+</div>
 
 ```tsx
 <Switch disabled label="Disabled off" />
@@ -50,17 +81,19 @@ Toggle switch for binary on/off states.
 
 ### With Description
 
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Switch 
-    label="Public profile"
-    description="Make your profile visible to everyone"
-  />
-  <Switch 
-    label="Two-factor authentication"
-    description="Add an extra layer of security"
-    defaultChecked
-  />
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Switch 
+      label="Public profile"
+      description="Make your profile visible to everyone"
+    />
+    <Switch 
+      label="Two-factor authentication"
+      description="Add an extra layer of security"
+      checked
+    />
+  </Stack>
+</div>
 
 ```tsx
 <Switch 
@@ -69,70 +102,15 @@ Toggle switch for binary on/off states.
 />
 ```
 
-### Loading State
-
-<div style={{ marginBottom: 24 }}>
-  <Switch 
-    loading
-    label="Syncing..."
-  />
-</div>
-
-```tsx
-<Switch loading label="Syncing..." />
-```
-
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `label` | `string` | - | Switch label |
 | `description` | `string` | - | Helper text |
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Switch size |
 | `checked` | `boolean` | - | Controlled state |
-| `defaultChecked` | `boolean` | `false` | Initial state |
 | `disabled` | `boolean` | `false` | Disable switch |
-| `loading` | `boolean` | `false` | Loading state |
 | `onChange` | `(checked: boolean) => void` | - | Change handler |
-
-## CSS Output
-
-```css
-.switch {
-  display: flex;
-  align-items: center;
-  gap: var(--intent-spacing-3);
-  cursor: pointer;
-}
-
-.switch__track {
-  width: 2.75rem;
-  height: 1.5rem;
-  background: var(--intent-color-border);
-  border-radius: 9999px;
-  position: relative;
-  transition: background 150ms ease;
-}
-
-.switch__track--checked {
-  background: var(--intent-color-primary);
-}
-
-.switch__thumb {
-  width: 1.25rem;
-  height: 1.25rem;
-  background: white;
-  border-radius: 50%;
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  transition: transform 150ms ease;
-}
-
-.switch__track--checked .switch__thumb {
-  transform: translateX(1.25rem);
-}
-```
 
 ## When to Use
 
@@ -145,3 +123,27 @@ Use **Checkbox** for:
 - Form submissions
 - Multiple selections
 - Terms acceptance
+
+## CSS Output
+
+```css
+.switch__track {
+  width: 44px;
+  height: 24px;
+  background: var(--intent-color-border);
+  border-radius: 9999px;
+  transition: background 150ms ease;
+}
+
+.switch__track--checked {
+  background: var(--intent-color-primary);
+}
+
+.switch__thumb {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 150ms ease;
+}
+```

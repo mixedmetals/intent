@@ -1,113 +1,73 @@
 ---
-sidebar_position: 22
+sidebar_position: 14
 ---
-
-import { useState } from 'react'
-import { Stack, Radio, Field } from 'intent-react'
-
-export function RadioDemo() {
-  const [selected, setSelected] = useState('starter')
-  
-  return (
-    <Field label="Select a plan" style={{ marginBottom: 24 }}>
-      <Stack gap="normal">
-        <Radio 
-          name="plan"
-          value="starter"
-          checked={selected === 'starter'}
-          onChange={(e) => setSelected(e.target.value)}
-          label="Starter - $9/month"
-        />
-        <Radio 
-          name="plan"
-          value="pro"
-          checked={selected === 'pro'}
-          onChange={(e) => setSelected(e.target.value)}
-          label="Pro - $29/month"
-        />
-        <Radio 
-          name="plan"
-          value="enterprise"
-          checked={selected === 'enterprise'}
-          onChange={(e) => setSelected(e.target.value)}
-          label="Enterprise - $99/month"
-        />
-      </Stack>
-    </Field>
-  )
-}
 
 # Radio
 
 Single-selection from a group of options.
 
-## Example
+export const Radio = ({ label, description, name, value, checked, disabled }) => (
+  <label className="intent-radio">
+    <input 
+      type="radio"
+      name={name}
+      value={value}
+      className="intent-radio__input"
+      checked={checked}
+      disabled={disabled}
+    />
+    <div>
+      <div className="intent-radio__label">{label}</div>
+      {description && <div style={{ fontSize: '14px', color: 'var(--intent-color-text-muted)', marginTop: '2px' }}>{description}</div>}
+    </div>
+  </label>
+)
 
-<RadioDemo />
+export const Stack = ({ children, gap = 'normal' }) => (
+  <div className={`intent-stack intent-stack--direction-column intent-stack--gap-${gap}`}>
+    {children}
+  </div>
+)
 
-```tsx
-import { useState } from 'react'
-import { Radio, Stack, Field } from 'intent-react'
+## Examples
 
-function Example() {
-  const [plan, setPlan] = useState('starter')
-  
-  return (
-    <Field label="Select a plan">
-      <Stack gap="normal">
-        <Radio 
-          name="plan"
-          value="starter"
-          checked={plan === 'starter'}
-          onChange={(e) => setPlan(e.target.value)}
-          label="Starter - $9/month"
-        />
-        <Radio 
-          name="plan"
-          value="pro"
-          checked={plan === 'pro'}
-          onChange={(e) => setPlan(e.target.value)}
-          label="Pro - $29/month"
-        />
-      </Stack>
-    </Field>
-  )
-}
-```
+### Basic Radio
 
-## Sizes
-
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Radio size="small" name="size" label="Small radio" />
-  <Radio size="medium" name="size" label="Medium radio" />
-  <Radio size="large" name="size" label="Large radio" />
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Radio name="plan" label="Starter - $9/month" value="starter" checked />
+    <Radio name="plan" label="Pro - $29/month" value="pro" />
+    <Radio name="plan" label="Enterprise - $99/month" value="enterprise" />
+  </Stack>
+</div>
 
 ```tsx
-<Radio size="small" label="Small radio" />
-<Radio size="medium" label="Medium radio" />
-<Radio size="large" label="Large radio" />
+<Radio name="plan" label="Starter - $9/month" value="starter" />
+<Radio name="plan" label="Pro - $29/month" value="pro" />
+<Radio name="plan" label="Enterprise - $99/month" value="enterprise" />
 ```
 
 ### Disabled
 
-<Stack gap="normal" style={{ marginBottom: 24 }}>
-  <Radio disabled name="disabled" label="Disabled unchecked" />
-  <Radio disabled checked name="disabled" label="Disabled checked" />
-</Stack>
+<div className="intent-demo">
+  <Stack gap="normal">
+    <Radio disabled label="Disabled unchecked" />
+    <Radio disabled checked label="Disabled checked" />
+  </Stack>
+</div>
 
 ```tsx
 <Radio disabled label="Disabled unchecked" />
 <Radio disabled checked label="Disabled checked" />
 ```
 
-### Description
+### With Description
 
-<div style={{ marginBottom: 24 }}>
+<div className="intent-demo">
   <Radio 
-    name="notification"
     label="Email notifications"
     description="Receive updates via email"
+    name="notifications"
   />
 </div>
 
@@ -126,7 +86,6 @@ function Example() {
 | `value` | `string` | - | Radio value |
 | `label` | `string` | - | Radio label |
 | `description` | `string` | - | Helper text |
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Radio size |
 | `checked` | `boolean` | - | Controlled checked state |
 | `disabled` | `boolean` | `false` | Disable radio |
 | `onChange` | `(e: ChangeEvent) => void` | - | Change handler |
@@ -143,47 +102,24 @@ Use **Checkbox** when:
 - Options are independent
 - Toggle a single on/off state
 
-Use **Select** when:
-- Space is limited
-- Many options exist (5+)
-- Options are familiar to users
-
 ## CSS Output
 
 ```css
-.radio {
+.intent-radio {
   display: flex;
   align-items: flex-start;
-  gap: var(--intent-spacing-2);
+  gap: 8px;
   cursor: pointer;
 }
 
-.radio__input {
-  width: 1rem;
-  height: 1rem;
-  border: 1px solid var(--intent-color-border);
-  border-radius: 50%;
-  appearance: none;
+.intent-radio__input {
+  width: 16px;
+  height: 16px;
   cursor: pointer;
+  margin-top: 2px;
 }
 
-.radio__input:checked {
-  border-color: var(--intent-color-primary);
-  background: var(--intent-color-primary);
-  box-shadow: inset 0 0 0 3px white;
-}
-
-.radio__input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.radio__label {
+.intent-radio__label {
   font-weight: 500;
-}
-
-.radio__description {
-  font-size: var(--intent-font-size-sm);
-  color: var(--intent-color-text-muted);
 }
 ```

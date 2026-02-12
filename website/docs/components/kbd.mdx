@@ -6,11 +6,39 @@ sidebar_position: 61
 
 Keyboard key indicator for shortcuts.
 
-## Example
+export const Kbd = ({ children, size = 'md' }) => {
+  const padding = size === 'sm' ? '2px 6px' : '4px 10px'
+  const fontSize = size === 'sm' ? '12px' : '14px'
+  
+  return (
+    <kbd style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: 'var(--intent-font-mono)',
+      fontWeight: 500,
+      fontSize,
+      padding,
+      border: '1px solid var(--intent-color-border)',
+      borderRadius: '6px',
+      background: 'var(--intent-color-surface-elevated)',
+      boxShadow: '0 2px 0 var(--intent-color-border)',
+      lineHeight: 1
+    }}>
+      {children}
+    </kbd>
+  )
+}
+
+## Examples
+
+### Basic Kbd
+
+<div className="intent-demo">
+  <p>Press <Kbd>Cmd</Kbd> + <Kbd>K</Kbd> to open command palette</p>
+</div>
 
 ```tsx
-import { Kbd, Text } from 'intent-react'
-
 <Text>
   Press <Kbd>Cmd</Kbd> + <Kbd>K</Kbd> to open command palette
 </Text>
@@ -18,9 +46,33 @@ import { Kbd, Text } from 'intent-react'
 
 ### Common Shortcuts
 
+<div className="intent-demo">
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div><Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> to copy</div>
+    <div><Kbd>Ctrl</Kbd> + <Kbd>V</Kbd> to paste</div>
+    <div><Kbd>Ctrl</Kbd> + <Kbd>Z</Kbd> to undo</div>
+    <div><Kbd>Ctrl</Kbd> + <Kbd>S</Kbd> to save</div>
+  </div>
+</div>
+
 ```tsx
 <Text><Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> to copy</Text>
 <Text><Kbd>Ctrl</Kbd> + <Kbd>V</Kbd> to paste</Text>
+<Text><Kbd>Ctrl</Kbd> + <Kbd>Z</Kbd> to undo</Text>
+```
+
+### Sizes
+
+<div className="intent-demo">
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div><Kbd size="sm">Small</Kbd> keyboard key</div>
+    <div><Kbd size="md">Medium</Kbd> keyboard key</div>
+  </div>
+</div>
+
+```tsx
+<Kbd size="sm">Small</Kbd>
+<Kbd size="md">Medium</Kbd>
 ```
 
 ## Props
@@ -33,17 +85,17 @@ import { Kbd, Text } from 'intent-react'
 ## CSS Output
 
 ```css
-.kbd {
+.intent-kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-family: var(--intent-font-mono);
   font-weight: 500;
   border: 1px solid var(--intent-color-border);
-  border-radius: var(--intent-radius-sm);
+  border-radius: 6px;
   background: var(--intent-color-surface-elevated);
   box-shadow: 0 2px 0 var(--intent-color-border);
-  padding: 4px 8px;
-  font-size: var(--intent-font-size-sm);
+  padding: 4px 10px;
+  font-size: 14px;
 }
 ```
