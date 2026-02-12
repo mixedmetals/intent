@@ -91,6 +91,25 @@ export {
   useFormField,
 } from './components/form/index.js';
 
+// Feedback Components
+export {
+  Alert,
+  Progress,
+  Spinner,
+  Skeleton,
+  SkeletonText,
+} from './components/feedback/index.js';
+
+// Overlay Components
+export {
+  Modal,
+  Drawer,
+  Tooltip,
+  Popover,
+  Menu,
+  MenuItem,
+} from './components/overlay/index.js';
+
 // Types
 export type {
   IntentComponentProps,
@@ -144,6 +163,26 @@ export type {
   FormProps,
   FormContextValue,
 } from './components/form/index.js';
+
+// Feedback Types
+export type {
+  AlertProps,
+  ProgressProps,
+  SpinnerProps,
+  SkeletonProps,
+  SkeletonTextProps,
+} from './components/feedback/index.js';
+
+// Overlay Types
+export type {
+  ModalProps,
+  DrawerProps,
+  TooltipProps,
+  PopoverProps,
+  MenuProps,
+  MenuItemProps,
+  MenuItemData,
+} from './components/overlay/index.js';
 
 // Utils
 export {
