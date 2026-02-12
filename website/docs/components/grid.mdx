@@ -2,102 +2,94 @@
 sidebar_position: 30
 ---
 
-import { Grid, Card, Text } from 'intent-react'
-
 # Grid
 
 Two-dimensional layout system for complex arrangements.
+
+export const Grid = ({ children, columns = 3, gap = 'normal', style }) => {
+  const gapMap = { compact: '4px', normal: '8px', relaxed: '16px', loose: '24px' }
+  return (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: `repeat(${columns}, 1fr)`,
+      gap: gapMap[gap] || '8px',
+      ...style
+    }}>
+      {children}
+    </div>
+  )
+}
+
+export const Card = ({ children, style }) => (
+  <div className="intent-card intent-card--padding-normal intent-card--elevation-low" style={style}>
+    {children}
+  </div>
+)
+
+export const Text = ({ children }) => (
+  <span className="intent-text">{children}</span>
+)
 
 ## Examples
 
 ### Basic Grid
 
-<Grid columns={3} gap="normal" style={{ marginBottom: 24 }}>
-  <Card padding="normal"><Text>Item 1</Text></Card>
-  <Card padding="normal"><Text>Item 2</Text></Card>
-  <Card padding="normal"><Text>Item 3</Text></Card>
-  <Card padding="normal"><Text>Item 4</Text></Card>
-  <Card padding="normal"><Text>Item 5</Text></Card>
-  <Card padding="normal"><Text>Item 6</Text></Card>
-</Grid>
+<div className="intent-demo">
+  <Grid columns={3} gap="normal">
+    <Card><Text>Item 1</Text></Card>
+    <Card><Text>Item 2</Text></Card>
+    <Card><Text>Item 3</Text></Card>
+    <Card><Text>Item 4</Text></Card>
+    <Card><Text>Item 5</Text></Card>
+    <Card><Text>Item 6</Text></Card>
+  </Grid>
+</div>
 
 ```tsx
 <Grid columns={3} gap="normal">
-  <Card padding="normal"><Text>Item 1</Text></Card>
-  <Card padding="normal"><Text>Item 2</Text></Card>
+  <Card><Text>Item 1</Text></Card>
+  <Card><Text>Item 2</Text></Card>
   ...
 </Grid>
 ```
 
 ### Column Span
 
-<Grid columns={3} gap="normal" style={{ marginBottom: 24 }}>
-  <Card padding="normal" style={{ gridColumn: 'span 2' }}>
-    <Text>Span 2 columns</Text>
-  </Card>
-  <Card padding="normal"><Text>Item</Text></Card>
-  <Card padding="normal"><Text>Item</Text></Card>
-  <Card padding="normal" style={{ gridColumn: 'span 3' }}>
-    <Text>Span all 3 columns</Text>
-  </Card>
-</Grid>
+<div className="intent-demo">
+  <Grid columns={3} gap="normal">
+    <Card style={{ gridColumn: 'span 2' }}><Text>Span 2 columns</Text></Card>
+    <Card><Text>Item</Text></Card>
+    <Card><Text>Item</Text></Card>
+    <Card style={{ gridColumn: 'span 3' }}><Text>Span all 3 columns</Text></Card>
+  </Grid>
+</div>
 
 ```tsx
 <Grid columns={3} gap="normal">
   <Card style={{ gridColumn: 'span 2' }}>...</Card>
-  <Card>...</Card>
   <Card style={{ gridColumn: 'span 3' }}>...</Card>
-</Grid>
-```
-
-### Responsive Columns
-
-<Grid columns={{ sm: 1, md: 2, lg: 4 }} gap="normal" style={{ marginBottom: 24 }}>
-  <Card padding="normal"><Text>1</Text></Card>
-  <Card padding="normal"><Text>2</Text></Card>
-  <Card padding="normal"><Text>3</Text></Card>
-  <Card padding="normal"><Text>4</Text></Card>
-</Grid>
-
-```tsx
-<Grid columns={{ sm: 1, md: 2, lg: 4 }} gap="normal">
-  <Card padding="normal">...</Card>
-  ...
-</Grid>
-```
-
-### Auto-fit Grid
-
-<Grid columns="auto-fit" minColumnWidth={200} gap="normal" style={{ marginBottom: 24 }}>
-  <Card padding="normal"><Text>Flexible width</Text></Card>
-  <Card padding="normal"><Text>Flexible width</Text></Card>
-  <Card padding="normal"><Text>Flexible width</Text></Card>
-  <Card padding="normal"><Text>Flexible width</Text></Card>
-</Grid>
-
-```tsx
-<Grid columns="auto-fit" minColumnWidth={200} gap="normal">
-  ...
 </Grid>
 ```
 
 ### Gap Sizes
 
-<Grid columns={3} gap="compact" style={{ marginBottom: 8 }}>
-  <Card padding="compact" style={{ background: 'var(--ifm-color-primary-lightest)' }}><Text>Compact</Text></Card>
-  <Card padding="compact" style={{ background: 'var(--ifm-color-primary-lightest)' }}><Text>Gap</Text></Card>
-  <Card padding="compact" style={{ background: 'var(--ifm-color-primary-lightest)' }}><Text>4px</Text></Card>
-</Grid>
-<Grid columns={3} gap="normal" style={{ marginBottom: 8 }}>
-  <Card padding="compact" style={{ background: 'var(--ifm-color-primary-lightest)' }}><Text>Normal</Text></Card>
-  <Card padding="compact" style={{ background: 'var(--ifm-color-primary-lightest)' }}><Text>Gap</Text></Card>
-  <Card padding="compact" style={{ background: 'var(--ifm-color-primary-lightest)' }}><Text>8px</Text></Card>
-</Grid>
-<Grid columns={3} gap="relaxed" style={{ marginBottom: 24 }}>
-  <Card padding="compact" style={{ background: 'var(--ifm-color-primary-lightest)' }}><Text>Relaxed</Text></Card>
-  <Card padding="compact" style={{ background: 'var(--ifm-color-primary-lightest)' }}><Text>Gap</Text></Card>
-  <Card padding="compact" style={{ background: 'var(--ifm-color-primary-lightest)' }}><Text>16px</Text></Card>
-</Grid>
+<div className="intent-demo">
+  <Grid columns={3} gap="compact" style={{ marginBottom: '8px' }}>
+    <Card><Text>Compact</Text></Card>
+    <Card><Text>Gap</Text></Card>
+    <Card><Text>4px</Text></Card>
+  </Grid>
+  <Grid columns={3} gap="normal" style={{ marginBottom: '8px' }}>
+    <Card><Text>Normal</Text></Card>
+    <Card><Text>Gap</Text></Card>
+    <Card><Text>8px</Text></Card>
+  </Grid>
+  <Grid columns={3} gap="relaxed">
+    <Card><Text>Relaxed</Text></Card>
+    <Card><Text>Gap</Text></Card>
+    <Card><Text>16px</Text></Card>
+  </Grid>
+</div>
 
 ```tsx
 <Grid columns={3} gap="compact">...</Grid>
@@ -109,59 +101,15 @@ Two-dimensional layout system for complex arrangements.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `columns` | `number` \| `object` \| `'auto-fit'` | `3` | Number of columns |
+| `columns` | `number` | `3` | Number of columns |
 | `gap` | `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'normal'` | Grid gap |
-| `minColumnWidth` | `number` | `250` | Min width for auto-fit |
-| `alignItems` | `'start'` \| `'center'` \| `'end'` \| `'stretch'` | `'stretch'` | Vertical alignment |
-| `justifyItems` | `'start'` \| `'center'` \| `'end'` \| `'stretch'` | `'stretch'` | Horizontal alignment |
-
-## Responsive Columns Object
-
-```tsx
-<Grid columns={{ 
-  sm: 1,   // < 640px
-  md: 2,   // 640px - 768px
-  lg: 3,   // 768px - 1024px
-  xl: 4    // > 1024px
-}}>
-  ...
-</Grid>
-```
 
 ## CSS Output
 
 ```css
-.grid {
+.intent-grid {
   display: grid;
-}
-
-.grid--columns-3 {
   grid-template-columns: repeat(3, 1fr);
-}
-
-.grid--columns-auto-fit {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-.grid--gap-normal {
   gap: var(--intent-spacing-normal);
 }
-
-@media (max-width: 640px) {
-  .grid--columns-sm-1 {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
 ```
-
-## Grid vs Stack
-
-Use **Grid** when:
-- You need two-dimensional layout
-- Items should align in rows and columns
-- You want responsive column counts
-
-Use **Stack** when:
-- One-dimensional layout (row or column)
-- Simple spacing between items
-- Easier composition

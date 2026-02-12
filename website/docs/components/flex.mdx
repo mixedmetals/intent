@@ -2,37 +2,82 @@
 sidebar_position: 40
 ---
 
-import { Stack, Card, Text } from 'intent-react'
-
 # Flex
 
 Flexible box container with alignment options.
+
+export const Flex = ({ children, direction = 'row', gap = 'normal', justify, align, wrap, style }) => {
+  const gapMap = { compact: '4px', normal: '8px', relaxed: '16px', loose: '24px' }
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: direction,
+      gap: gapMap[gap] || '8px',
+      justifyContent: justify,
+      alignItems: align,
+      flexWrap: wrap ? 'wrap' : 'nowrap',
+      ...style
+    }}>
+      {children}
+    </div>
+  )
+}
+
+export const Card = ({ children }) => (
+  <div className="intent-card intent-card--padding-normal intent-card--elevation-low">{children}</div>
+)
+
+export const Button = ({ children, importance = 'secondary' }) => (
+  <button className={`intent-button intent-button--importance-${importance} intent-button--size-medium`}>{children}</button>
+)
 
 ## Examples
 
 ### Basic Flex
 
-```tsx
-import { Flex, Card, Text } from 'intent-react'
+<div className="intent-demo">
+  <Flex gap="normal">
+    <Card>Item 1</Card>
+    <Card>Item 2</Card>
+    <Card>Item 3</Card>
+  </Flex>
+</div>
 
+```tsx
 <Flex gap="normal">
-  <Card padding="normal"><Text>Item 1</Text></Card>
-  <Card padding="normal"><Text>Item 2</Text></Card>
-  <Card padding="normal"><Text>Item 3</Text></Card>
+  <Card>Item 1</Card>
+  <Card>Item 2</Card>
+  <Card>Item 3</Card>
 </Flex>
 ```
 
 ### Justify Content
 
+<div className="intent-demo">
+  <Flex justify="between" gap="normal">
+    <Card>Left</Card>
+    <Card>Center</Card>
+    <Card>Right</Card>
+  </Flex>
+</div>
+
 ```tsx
 <Flex justify="between" gap="normal">
-  <Card padding="normal"><Text>Left</Text></Card>
-  <Card padding="normal"><Text>Center</Text></Card>
-  <Card padding="normal"><Text>Right</Text></Card>
+  <Card>Left</Card>
+  <Card>Center</Card>
+  <Card>Right</Card>
 </Flex>
 ```
 
 ### Align Items
+
+<div className="intent-demo">
+  <Flex align="center" gap="normal" style={{ height: '100px', background: '#f8fafc', borderRadius: '8px', padding: '16px' }}>
+    <Card style={{ padding: '8px' }}>Small</Card>
+    <Card>Medium</Card>
+    <Card style={{ padding: '24px' }}>Large</Card>
+  </Flex>
+</div>
 
 ```tsx
 <Flex align="center" gap="normal">
@@ -42,25 +87,21 @@ import { Flex, Card, Text } from 'intent-react'
 </Flex>
 ```
 
-### Wrap
-
-```tsx
-<Flex wrap gap="normal">
-  <Card padding="normal" style={{ width: 150 }}>Item 1</Card>
-  <Card padding="normal" style={{ width: 150 }}>Item 2</Card>
-  <Card padding="normal" style={{ width: 150 }}>Item 3</Card>
-  <Card padding="normal" style={{ width: 150 }}>Item 4</Card>
-  <Card padding="normal" style={{ width: 150 }}>Item 5</Card>
-</Flex>
-```
-
 ### Column Direction
+
+<div className="intent-demo">
+  <Flex direction="column" gap="normal">
+    <Button>First</Button>
+    <Button>Second</Button>
+    <Button>Third</Button>
+  </Flex>
+</div>
 
 ```tsx
 <Flex direction="column" gap="normal">
-  <Card padding="normal">First</Card>
-  <Card padding="normal">Second</Card>
-  <Card padding="normal">Third</Card>
+  <Button>First</Button>
+  <Button>Second</Button>
+  <Button>Third</Button>
 </Flex>
 ```
 
@@ -70,51 +111,26 @@ import { Flex, Card, Text } from 'intent-react'
 |------|------|---------|-------------|
 | `direction` | `'row'` \| `'column'` | `'row'` | Flex direction |
 | `gap` | `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'normal'` | Gap between items |
-| `justify` | `'start'` \| `'center'` \| `'end'` \| `'between'` \| `'around'` \| `'evenly'` | `'start'` | Justify content |
-| `align` | `'start'` \| `'center'` \| `'end'` \| `'stretch'` \| `'baseline'` | `'stretch'` | Align items |
-| `wrap` | `boolean` \| `'wrap'` \| `'nowrap'` \| `'wrap-reverse'` | `'nowrap'` | Flex wrap |
-| `inline` | `boolean` | `false` | Use inline-flex |
+| `justify` | `'start'` \| `'center'` \| `'end'` \| `'between'` \| `'around'` | - | Justify content |
+| `align` | `'start'` \| `'center'` \| `'end'` \| `'stretch'` | - | Align items |
+| `wrap` | `boolean` | `false` | Wrap items |
 
 ## CSS Output
 
 ```css
-.flex {
+.intent-flex {
   display: flex;
 }
 
-.flex--inline {
-  display: inline-flex;
-}
-
-.flex--direction-column {
+.intent-flex--direction-column {
   flex-direction: column;
 }
 
-.flex--gap-normal {
+.intent-flex--gap-normal {
   gap: var(--intent-spacing-normal);
 }
 
-.flex--justify-between {
+.intent-flex--justify-between {
   justify-content: space-between;
 }
-
-.flex--align-center {
-  align-items: center;
-}
-
-.flex--wrap {
-  flex-wrap: wrap;
-}
 ```
-
-## Flex vs Stack
-
-Use **Flex** when:
-- You need full flexbox control (justify, align, wrap)
-- More complex layouts
-- Alignment is important
-
-Use **Stack** when:
-- Simple one-dimensional spacing
-- Consistent gap sizes
-- Quick layouts without thinking about flexbox
