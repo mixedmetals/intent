@@ -10,7 +10,7 @@ Buttons trigger actions or navigate to different pages.
 
 ## Overview
 
-The Button component is the most fundamental interactive element. It supports multiple visual styles, sizes, and states.
+The Button component uses the **Milled** archetype with radial gradient backgrounds, light-catcher borders, and inset shadows for a tactile, pressed-metal aesthetic.
 
 export const Button = ({ children, importance = 'secondary', size = 'medium', fullWidth, disabled, ...props }) => (
   <button 
@@ -26,14 +26,14 @@ export const Button = ({ children, importance = 'secondary', size = 'medium', fu
 
 ### Importance Levels
 
-Use `importance` to indicate the priority of the action:
+Three visual weights for different hierarchy needs:
 
 <div className="intent-demo">
-  <Stack direction="row" gap="normal">
+  <div className="intent-stack intent-stack--direction-row intent-stack--gap-normal">
     <Button importance="primary">Primary</Button>
     <Button importance="secondary">Secondary</Button>
     <Button importance="tertiary">Tertiary</Button>
-  </Stack>
+  </div>
 </div>
 
 ```tsx
@@ -49,11 +49,11 @@ Use `importance` to indicate the priority of the action:
 Three sizes to fit different contexts:
 
 <div className="intent-demo">
-  <Stack direction="row" gap="normal" align="center">
+  <div className="intent-stack intent-stack--direction-row intent-stack--gap-normal intent-stack--align-center">
     <Button size="small">Small</Button>
     <Button size="medium">Medium</Button>
     <Button size="large">Large</Button>
-  </Stack>
+  </div>
 </div>
 
 ```tsx
@@ -68,7 +68,7 @@ Three sizes to fit different contexts:
 
 Expand to fill the container:
 
-<div className="intent-demo" style={{ maxWidth: 300 }}>
+<div className="intent-demo" style={{ maxWidth: 320 }}>
   <Button importance="primary" fullWidth>Full Width Button</Button>
 </div>
 
@@ -80,11 +80,13 @@ Expand to fill the container:
 
 ### Disabled State
 
+Disabled buttons reduce opacity and saturation:
+
 <div className="intent-demo">
-  <Stack direction="row" gap="normal">
+  <div className="intent-stack intent-stack--direction-row intent-stack--gap-normal">
     <Button disabled>Disabled</Button>
     <Button importance="primary" disabled>Disabled Primary</Button>
-  </Stack>
+  </div>
 </div>
 
 ```tsx
@@ -98,71 +100,18 @@ Expand to fill the container:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `importance` | `'primary'` \| `'secondary'` \| `'tertiary'` | `'secondary'` | Visual priority |
-| `size` | `'small'` \| `'medium'` \| `'large'` | `'medium'` | Button size |
-| `fullWidth` | `boolean` | `false` | Expand to fill container |
-| `disabled` | `boolean` | `false` | Disable interactions |
-| `onClick` | `() => void` | - | Click handler |
+| `importance` | `'primary' \| 'secondary' \| 'tertiary'` | `'secondary'` | Visual weight of the button |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the button |
+| `fullWidth` | `boolean` | `false` | Whether to expand to full width |
+| `disabled` | `boolean` | `false` | Whether the button is disabled |
 
-## Usage Guidelines
+## Design Tokens
 
-### Choosing Importance
+Buttons use the **Milled** surface archetype:
 
-- **Primary** - The main action on a page or section
-- **Secondary** - Alternative or supporting actions
-- **Tertiary** - Low-priority actions, often paired with other buttons
-
-### Common Patterns
-
-**Dialog actions:**
-```tsx
-<Stack direction="row" gap="normal" justify="end">
-  <Button importance="tertiary" onClick={onCancel}>
-    Cancel
-  </Button>
-  <Button importance="primary" onClick={onConfirm}>
-    Confirm
-  </Button>
-</Stack>
-```
-
-**Form submission:**
-```tsx
-<Button 
-  importance="primary" 
-  fullWidth 
-  disabled={isSubmitting}
->
-  {isSubmitting ? <Spinner size="small" /> : 'Submit'}
-</Button>
-```
-
-## CSS Output
-
-```css
-.intent-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-weight: 500;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 150ms ease;
-}
-
-.intent-button--primary {
-  background: var(--intent-color-primary);
-  color: white;
-}
-
-.intent-button--primary:hover:not(:disabled) {
-  background: var(--intent-color-primary-hover);
-}
-
-.intent-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-```
+| Token | Value | Purpose |
+|-------|-------|---------|
+| Background | `radial-gradient(120% 80% at 50% 0%, oklch(100% 0 0 / 0.12), transparent 70%), oklch(25% 0.01 260)` | Radial gradient surface |
+| Border | `oklch(100% 0 0 / 0.12)` top, `oklch(0% 0 0 / 0.3)` bottom | Light-catcher effect |
+| Shadow | `inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.15)` | Inset highlight + drop shadow |
+| Border Radius | `8px` (`--intent-radius-md`) | Rounded corners |
