@@ -32,6 +32,8 @@ const sidebars: SidebarsConfig = {
           label: 'Layout',
           items: [
             'components/stack',
+            'components/grid',
+            'components/box',
             'components/container',
           ],
         },
@@ -64,7 +66,9 @@ const sidebars: SidebarsConfig = {
           label: 'Overlay',
           items: [
             'components/modal',
+            'components/dialog',
             'components/drawer',
+            'components/sheet',
             'components/popover',
             'components/tooltip',
             'components/dropdown',
@@ -74,9 +78,12 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'Navigation',
           items: [
+            'components/navbar',
+            'components/sidebar',
             'components/tabs',
             'components/breadcrumbs',
             'components/pagination',
+            'components/stepper',
           ],
         },
         {
@@ -85,6 +92,8 @@ const sidebars: SidebarsConfig = {
           items: [
             'components/accordion',
             'components/table',
+            'components/timeline',
+            'components/list',
           ],
         },
       ],

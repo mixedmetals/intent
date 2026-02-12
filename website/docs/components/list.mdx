@@ -1,0 +1,284 @@
+---
+sidebar_position: 38
+---
+
+import { List, Badge, Avatar } from 'intent-react'
+
+# List
+
+Vertical list of items with various styles.
+
+## Example
+
+<List 
+  items={[
+    { id: 1, title: 'Inbox', badge: 12, icon: 'inbox' },
+    { id: 2, title: 'Starred', icon: 'star' },
+    { id: 3, title: 'Sent', icon: 'send' },
+    { id: 4, title: 'Drafts', badge: 3, icon: 'file' },
+    { id: 5, title: 'Trash', icon: 'trash' },
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+import { List } from 'intent-react'
+
+<List 
+  items={[
+    { id: 1, title: 'Inbox', badge: 12, icon: 'inbox' },
+    { id: 2, title: 'Starred', icon: 'star' },
+    ...
+  ]}
+/>
+```
+
+## With Subtitle
+
+<List 
+  items={[
+    { 
+      id: 1, 
+      title: 'Team Meeting', 
+      subtitle: 'Today at 2:00 PM',
+      icon: 'calendar'
+    },
+    { 
+      id: 2, 
+      title: 'Project Review', 
+      subtitle: 'Tomorrow at 10:00 AM',
+      icon: 'clipboard'
+    },
+    { 
+      id: 3, 
+      title: 'Client Call', 
+      subtitle: 'Friday at 3:00 PM',
+      icon: 'phone'
+    },
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+<List 
+  items={[
+    { id: 1, title: 'Team Meeting', subtitle: 'Today at 2:00 PM', icon: 'calendar' },
+    ...
+  ]}
+/>
+```
+
+## With Avatars
+
+<List 
+  items={[
+    { 
+      id: 1, 
+      title: 'John Doe', 
+      subtitle: 'john@example.com',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=john'
+    },
+    { 
+      id: 2, 
+      title: 'Jane Smith', 
+      subtitle: 'jane@example.com',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=jane'
+    },
+    { 
+      id: 3, 
+      title: 'Bob Johnson', 
+      subtitle: 'bob@example.com',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=bob'
+    },
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+<List 
+  items={[
+    { id: 1, title: 'John Doe', subtitle: 'john@example.com', avatar: '...' },
+    ...
+  ]}
+/>
+```
+
+## Bordered
+
+<List 
+  variant="bordered"
+  items={[
+    { id: 1, title: 'Item 1' },
+    { id: 2, title: 'Item 2' },
+    { id: 3, title: 'Item 3' },
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+<List variant="bordered" items={[...]} />
+```
+
+## Divided
+
+<List 
+  variant="divided"
+  items={[
+    { id: 1, title: 'First Item' },
+    { id: 2, title: 'Second Item' },
+    { id: 3, title: 'Third Item' },
+  ]}
+  style={{ marginBottom: 24 }}
+/>
+
+```tsx
+<List variant="divided" items={[...]} />
+```
+
+## Selectable
+
+```tsx
+const [selectedId, setSelectedId] = useState(null)
+
+<List 
+  selectable
+  selectedId={selectedId}
+  onSelect={setSelectedId}
+  items={[
+    { id: 1, title: 'Option 1' },
+    { id: 2, title: 'Option 2' },
+    { id: 3, title: 'Option 3' },
+  ]}
+/>
+```
+
+## With Actions
+
+```tsx
+<List 
+  items={[
+    { 
+      id: 1, 
+      title: 'Document.pdf', 
+      subtitle: '2.5 MB',
+      icon: 'file-text',
+      actions: [
+        { icon: 'download', onClick: () => download(1) },
+        { icon: 'trash', danger: true, onClick: () => delete(1) },
+      ]
+    },
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `ListItem[]` | required | List items |
+| `variant` | `'default'` \| `'bordered'` \| `'divided'` | `'default'` | List style |
+| `selectable` | `boolean` | `false` | Allow selection |
+| `selectedId` | `string` \| `number` | - | Selected item ID |
+| `onSelect` | `(id: string \| number) => void` | - | Select callback |
+| `emptyMessage` | `string` | `'No items'` | Empty state message |
+
+### ListItem Type
+
+```typescript
+interface ListItem {
+  id: string | number
+  title: string
+  subtitle?: string
+  icon?: string
+  avatar?: string
+  badge?: string | number
+  actions?: Action[]
+  disabled?: boolean
+}
+
+interface Action {
+  icon: string
+  onClick: () => void
+  danger?: boolean
+}
+```
+
+## CSS Output
+
+```css
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--intent-spacing-3);
+  padding: var(--intent-spacing-3);
+  border-radius: var(--intent-radius-md);
+}
+
+.list__item:hover:not(.list__item--disabled) {
+  background: var(--intent-color-surface-elevated);
+}
+
+.list__item--selected {
+  background: var(--intent-color-primary-alpha);
+}
+
+.list__item--disabled {
+  opacity: 0.5;
+}
+
+.list--bordered {
+  border: 1px solid var(--intent-color-border);
+  border-radius: var(--intent-radius-md);
+}
+
+.list--bordered .list__item {
+  border-bottom: 1px solid var(--intent-color-border);
+  border-radius: 0;
+}
+
+.list--bordered .list__item:last-child {
+  border-bottom: none;
+}
+
+.list--divided .list__item {
+  border-bottom: 1px solid var(--intent-color-border);
+  border-radius: 0;
+}
+
+.list--divided .list__item:last-child {
+  border-bottom: none;
+}
+
+.list__icon {
+  color: var(--intent-color-text-muted);
+}
+
+.list__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.list__title {
+  font-weight: 500;
+  color: var(--intent-color-text);
+}
+
+.list__subtitle {
+  font-size: var(--intent-font-size-sm);
+  color: var(--intent-color-text-muted);
+}
+
+.list__badge {
+  margin-left: auto;
+}
+
+.list__actions {
+  display: flex;
+  gap: var(--intent-spacing-1);
+}
+```

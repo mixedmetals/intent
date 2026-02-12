@@ -1,0 +1,155 @@
+---
+sidebar_position: 31
+---
+
+import { Box, Text } from 'intent-react'
+
+# Box
+
+Single element wrapper for spacing, borders, and backgrounds.
+
+## Examples
+
+### Basic Box
+
+<Box padding="normal" style={{ marginBottom: 24 }}>
+  <Text>Box provides a simple container with padding.</Text>
+</Box>
+
+```tsx
+<Box padding="normal">
+  <Text>Content goes here</Text>
+</Box>
+```
+
+### With Background
+
+<Box 
+  padding="relaxed" 
+  background="surface-elevated"
+  style={{ marginBottom: 24 }}
+>
+  <Text>Surface elevated background</Text>
+</Box>
+
+```tsx
+<Box padding="relaxed" background="surface-elevated">
+  <Text>Surface elevated background</Text>
+</Box>
+```
+
+### With Border
+
+<Box 
+  padding="normal" 
+  border
+  borderRadius="lg"
+  style={{ marginBottom: 24 }}
+>
+  <Text>Box with border and large border radius</Text>
+</Box>
+
+```tsx
+<Box padding="normal" border borderRadius="lg">
+  <Text>Box with border and large border radius</Text>
+</Box>
+```
+
+### Padding Sizes
+
+<Box padding="compact" border style={{ marginBottom: 8 }}>
+  <Text size="sm">Compact padding (4px)</Text>
+</Box>
+<Box padding="normal" border style={{ marginBottom: 8 }}>
+  <Text size="sm">Normal padding (8px)</Text>
+</Box>
+<Box padding="relaxed" border style={{ marginBottom: 8 }}>
+  <Text size="sm">Relaxed padding (16px)</Text>
+</Box>
+<Box padding="loose" border style={{ marginBottom: 24 }}>
+  <Text size="sm">Loose padding (24px)</Text>
+</Box>
+
+```tsx
+<Box padding="compact" border>...</Box>
+<Box padding="normal" border>...</Box>
+<Box padding="relaxed" border>...</Box>
+<Box padding="loose" border>...</Box>
+```
+
+### Margins
+
+<Box padding="normal" border marginBottom="normal" style={{ background: 'var(--ifm-color-emphasis-100)' }}>
+  <Box padding="normal" background="surface" marginBottom="normal">
+    <Text>Margin bottom normal</Text>
+  </Box>
+  <Box padding="normal" background="surface" marginLeft="relaxed">
+    <Text>Margin left relaxed</Text>
+  </Box>
+</Box>
+
+```tsx
+<Box marginBottom="normal">...</Box>
+<Box marginLeft="relaxed">...</Box>
+<Box marginTop="loose" marginRight="compact">...</Box>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `padding` | `'none'` \| `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'none'` | Inner padding |
+| `margin` | `'none'` \| `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'none'` | All margins |
+| `marginTop` | `'none'` \| `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'none'` | Top margin |
+| `marginRight` | `'none'` \| `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'none'` | Right margin |
+| `marginBottom` | `'none'` \| `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'none'` | Bottom margin |
+| `marginLeft` | `'none'` \| `'compact'` \| `'normal'` \| `'relaxed'` \| `'loose'` | `'none'` | Left margin |
+| `background` | `'surface'` \| `'surface-elevated'` \| `'transparent'` | `'transparent'` | Background color |
+| `border` | `boolean` | `false` | Show border |
+| `borderRadius` | `'none'` \| `'sm'` \| `'md'` \| `'lg'` | `'none'` | Border radius |
+| `width` | `'full'` \| `'auto'` | `'auto'` | Width |
+| `height` | `'full'` \| `'auto'` | `'auto'` | Height |
+
+## CSS Output
+
+```css
+.box {
+  box-sizing: border-box;
+}
+
+.box--padding-normal {
+  padding: var(--intent-spacing-normal);
+}
+
+.box--margin-bottom-normal {
+  margin-bottom: var(--intent-spacing-normal);
+}
+
+.box--background-surface {
+  background: var(--intent-color-surface);
+}
+
+.box--border {
+  border: 1px solid var(--intent-color-border);
+}
+
+.box--border-radius-lg {
+  border-radius: var(--intent-radius-lg);
+}
+
+.box--width-full {
+  width: 100%;
+}
+```
+
+## When to Use
+
+Use **Box** for:
+- Simple containers that need padding/margins
+- Building block for custom layouts
+- Consistent spacing without extra divs
+
+Use **Card** when:
+- You need elevation (shadows)
+- Visual grouping is important
+- Interactive states (hover, etc.)

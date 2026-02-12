@@ -1,0 +1,183 @@
+---
+sidebar_position: 36
+---
+
+import { Stack, Stepper, Button } from 'intent-react'
+
+# Stepper
+
+Visual indicator for multi-step processes.
+
+## Example
+
+```tsx
+import { useState } from 'react'
+import { Stepper, Button, Stack } from 'intent-react'
+
+function Checkout() {
+  const [currentStep, setCurrentStep] = useState(1)
+  
+  const steps = [
+    { id: 1, title: 'Shipping', description: 'Delivery address' },
+    { id: 2, title: 'Payment', description: 'Billing method' },
+    { id: 3, title: 'Review', description: 'Confirm order' },
+  ]
+  
+  return (
+    <Stack gap="relaxed">
+      <Stepper steps={steps} currentStep={currentStep} />
+      
+      {/* Step content */}
+      {currentStep === 1 && <ShippingForm />}
+      {currentStep === 2 && <PaymentForm />}
+      {currentStep === 3 && <ReviewOrder />}
+      
+      {/* Navigation */}
+      <Stack direction="row" gap="normal">
+        <Button 
+          disabled={currentStep === 1}
+          onClick={() => setCurrentStep(s => s - 1)}
+        >
+          Back
+        </Button>
+        <Button 
+          importance="primary"
+          onClick={() => setCurrentStep(s => s + 1)}
+        >
+          {currentStep === steps.length ? 'Complete' : 'Continue'}
+        </Button>
+      </Stack>
+    </Stack>
+  )
+}
+```
+
+## Variants
+
+### Horizontal (Default)
+
+```tsx
+<Stepper steps={steps} currentStep={2} />
+```
+
+### Vertical
+
+```tsx
+<Stepper variant="vertical" steps={steps} currentStep={2} />
+```
+
+### Simple (No Descriptions)
+
+```tsx
+<Stepper variant="simple" steps={steps} currentStep={2} />
+```
+
+## With Clickable Steps
+
+```tsx
+<Stepper 
+  steps={steps}
+  currentStep={currentStep}
+  clickable
+  onStepClick={(stepId) => {
+    // Only allow clicking completed steps
+    if (stepId < currentStep) {
+      setCurrentStep(stepId)
+    }
+  }}
+/>
+```
+
+## Error State
+
+```tsx
+<Stepper 
+  steps={[
+    { id: 1, title: 'Account', status: 'complete' },
+    { id: 2, title: 'Personal', status: 'error', error: 'Invalid email' },
+    { id: 3, title: 'Payment', status: 'pending' },
+  ]}
+  currentStep={2}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `steps` | `Step[]` | required | Array of steps |
+| `currentStep` | `number` | `1` | Active step ID |
+| `variant` | `'horizontal'` \| `'vertical'` \| `'simple'` | `'horizontal'` | Stepper style |
+| `clickable` | `boolean` | `false` | Allow step clicking |
+| `onStepClick` | `(stepId: number) => void` | - | Step click handler |
+
+### Step Type
+
+```typescript
+interface Step {
+  id: number
+  title: string
+  description?: string
+  status?: 'pending' | 'active' | 'complete' | 'error'
+  error?: string
+}
+```
+
+## CSS Output
+
+```css
+.stepper {
+  display: flex;
+  gap: var(--intent-spacing-2);
+}
+
+.stepper--vertical {
+  flex-direction: column;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--intent-spacing-3);
+  flex: 1;
+}
+
+.step__indicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--intent-color-surface-elevated);
+  border: 2px solid var(--intent-color-border);
+  font-weight: 600;
+  font-size: var(--intent-font-size-sm);
+}
+
+.step--active .step__indicator {
+  border-color: var(--intent-color-primary);
+  color: var(--intent-color-primary);
+}
+
+.step--complete .step__indicator {
+  background: var(--intent-color-primary);
+  border-color: var(--intent-color-primary);
+  color: white;
+}
+
+.step--error .step__indicator {
+  border-color: var(--intent-color-danger);
+  color: var(--intent-color-danger);
+}
+
+.step__title {
+  font-weight: 500;
+  color: var(--intent-color-text);
+}
+
+.step__description {
+  font-size: var(--intent-font-size-sm);
+  color: var(--intent-color-text-muted);
+}
+```
