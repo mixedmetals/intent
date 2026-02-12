@@ -1,0 +1,150 @@
+---
+sidebar_position: 17
+---
+
+import { Stack, Button, Tooltip } from 'intent-react'
+
+# Tooltip
+
+Hover-activated information popup.
+
+## Examples
+
+### Basic Tooltip
+
+Hover over the button:
+
+<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
+  <Tooltip content="Click to save your changes">
+    <Button>Hover Me</Button>
+  </Tooltip>
+</Stack>
+
+```tsx
+<Tooltip content="Click to save your changes">
+  <Button>Hover Me</Button>
+</Tooltip>
+```
+
+### Positions
+
+<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
+  <Tooltip content="Top position" position="top">
+    <Button size="small">Top</Button>
+  </Tooltip>
+  <Tooltip content="Right position" position="right">
+    <Button size="small">Right</Button>
+  </Tooltip>
+  <Tooltip content="Bottom position" position="bottom">
+    <Button size="small">Bottom</Button>
+  </Tooltip>
+  <Tooltip content="Left position" position="left">
+    <Button size="small">Left</Button>
+  </Tooltip>
+</Stack>
+
+```tsx
+<Tooltip content="Top" position="top">...</Tooltip>
+<Tooltip content="Right" position="right">...</Tooltip>
+<Tooltip content="Bottom" position="bottom">...</Tooltip>
+<Tooltip content="Left" position="left">...</Tooltip>
+```
+
+### With Icons
+
+<Stack direction="row" gap="relaxed" style={{ marginBottom: 24 }}>
+  <Tooltip content="Add to favorites">
+    <Button importance="tertiary" icon="heart">Like</Button>
+  </Tooltip>
+  <Tooltip content="Share this page">
+    <Button importance="tertiary" icon="share">Share</Button>
+  </Tooltip>
+  <Tooltip content="More options">
+    <Button importance="tertiary" icon="more-horizontal">Menu</Button>
+  </Tooltip>
+</Stack>
+
+```tsx
+<Tooltip content="Add to favorites">
+  <Button icon="heart">Like</Button>
+</Tooltip>
+```
+
+### Delay
+
+<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
+  <Tooltip content="Appears immediately" delay={0}>
+    <Button size="small">No Delay</Button>
+  </Tooltip>
+  <Tooltip content="Appears after 500ms" delay={500}>
+    <Button size="small">500ms Delay</Button>
+  </Tooltip>
+</Stack>
+
+```tsx
+<Tooltip content="Quick" delay={0}>...</Tooltip>
+<Tooltip content="Slow" delay={500}>...</Tooltip>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `content` | `string` \| `ReactNode` | - | Tooltip content |
+| `position` | `'top'` \| `'right'` \| `'bottom'` \| `'left'` | `'top'` | Tooltip position |
+| `delay` | `number` | `200` | Show delay in ms |
+| `disabled` | `boolean` | `false` | Disable tooltip |
+
+## Accessibility
+
+- Uses `aria-describedby` to associate with trigger
+- Trigger element must be focusable
+- Keyboard accessible (shows on focus)
+
+## CSS Output
+
+```css
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip__content {
+  position: absolute;
+  padding: var(--intent-spacing-2) var(--intent-spacing-3);
+  background: var(--intent-color-text);
+  color: var(--intent-color-background);
+  border-radius: var(--intent-radius-md);
+  font-size: var(--intent-font-size-sm);
+  white-space: nowrap;
+  z-index: 50;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms ease;
+}
+
+.tooltip:hover .tooltip__content,
+.tooltip:focus-within .tooltip__content {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip__content--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--intent-spacing-2);
+}
+```
+
+## When to Use
+
+**Use Tooltips for:**
+- Icon button labels
+- Abbreviation explanations
+- Additional context that isn't critical
+
+**Don't use for:**
+- Critical information (use Alert)
+- Content that needs to be copied (use Popover)
+- Mobile (tooltips don't work well on touch)

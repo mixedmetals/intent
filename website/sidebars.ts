@@ -52,6 +52,7 @@ const sidebars: SidebarsConfig = {
             'components/alert',
             'components/spinner',
             'components/progress',
+            'components/toast',
           ],
         },
         {
@@ -59,6 +60,14 @@ const sidebars: SidebarsConfig = {
           label: 'Overlay',
           items: [
             'components/modal',
+            'components/tooltip',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Navigation',
+          items: [
+            'components/tabs',
           ],
         },
       ],

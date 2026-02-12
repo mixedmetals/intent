@@ -1,0 +1,117 @@
+---
+sidebar_position: 18
+---
+
+import { Stack, Tabs, Card, Text } from 'intent-react'
+
+# Tabs
+
+Organize content into tabbed sections.
+
+## Example
+
+```tsx
+import { useState } from 'react'
+import { Tabs } from 'intent-react'
+
+function Example() {
+  const [activeTab, setActiveTab] = useState('account')
+  
+  return (
+    <Tabs value={activeTab} onChange={setActiveTab}>
+      <Tabs.List>
+        <Tabs.Trigger value="account">Account</Tabs.Trigger>
+        <Tabs.Trigger value="password">Password</Tabs.Trigger>
+        <Tabs.Trigger value="notifications">Notifications</Tabs.Trigger>
+      </Tabs.List>
+      
+      <Tabs.Content value="account">
+        <Text>Manage your account settings...</Text>
+      </Tabs.Content>
+      <Tabs.Content value="password">
+        <Text>Change your password...</Text>
+      </Tabs.Content>
+      <Tabs.Content value="notifications">
+        <Text>Configure notifications...</Text>
+      </Tabs.Content>
+    </Tabs>
+  )
+}
+```
+
+## Uncontrolled Example
+
+```tsx
+<Tabs defaultValue="tab1">
+  <Tabs.List>
+    <Tabs.Trigger value="tab1">First Tab</Tabs.Trigger>
+    <Tabs.Trigger value="tab2">Second Tab</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="tab1">
+    Content for the first tab.
+  </Tabs.Content>
+  <Tabs.Content value="tab2">
+    Content for the second tab.
+  </Tabs.Content>
+</Tabs>
+```
+
+## Pills Variant
+
+```tsx
+<Tabs variant="pills" defaultValue="tab1">
+  <Tabs.List>
+    <Tabs.Trigger value="tab1">Overview</Tabs.Trigger>
+    <Tabs.Trigger value="tab2">Details</Tabs.Trigger>
+    <Tabs.Trigger value="tab3">Settings</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="tab1">...</Tabs.Content>
+  <Tabs.Content value="tab2">...</Tabs.Content>
+  <Tabs.Content value="tab3">...</Tabs.Content>
+</Tabs>
+```
+
+## Props
+
+### Tabs
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Controlled active tab |
+| `defaultValue` | `string` | - | Initial active tab |
+| `onChange` | `(value: string) => void` | - | Tab change callback |
+| `variant` | `'default'` \| `'pills'` | `'default'` | Tab style |
+
+### Tabs.Trigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | required | Tab identifier |
+| `disabled` | `boolean` | `false` | Disable tab |
+
+## CSS Output
+
+```css
+.tabs__list {
+  display: flex;
+  gap: var(--intent-spacing-1);
+  border-bottom: 1px solid var(--intent-color-border);
+  margin-bottom: var(--intent-spacing-4);
+}
+
+.tabs__trigger {
+  padding: var(--intent-spacing-2) var(--intent-spacing-4);
+  color: var(--intent-color-text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tabs__trigger--active {
+  color: var(--intent-color-primary);
+  border-color: var(--intent-color-primary);
+}
+
+.tabs__content {
+  padding: var(--intent-spacing-2) 0;
+}
+```
