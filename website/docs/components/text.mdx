@@ -1,0 +1,133 @@
+---
+sidebar_position: 7
+---
+
+import { Stack, Text } from 'intent-react'
+
+# Text
+
+Typography component for consistent text styling.
+
+## Examples
+
+### Sizes
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Text size="xs">Extra Small - Fine print, captions</Text>
+  <Text size="sm">Small - Secondary information</Text>
+  <Text size="base">Base - Body text (default)</Text>
+  <Text size="lg">Large - Lead paragraphs</Text>
+  <Text size="xl">Extra Large - Subheadings</Text>
+  <Text size="2xl">2XL - Section titles</Text>
+</Stack>
+
+```tsx
+<Text size="xs">Extra Small</Text>
+<Text size="sm">Small</Text>
+<Text size="base">Base (default)</Text>
+<Text size="lg">Large</Text>
+<Text size="xl">Extra Large</Text>
+<Text size="2xl">2XL</Text>
+```
+
+### Weights
+
+<Stack direction="row" gap="relaxed" style={{ marginBottom: 24 }}>
+  <Text weight="normal">Normal</Text>
+  <Text weight="medium">Medium</Text>
+  <Text weight="semibold">Semibold</Text>
+  <Text weight="bold">Bold</Text>
+</Stack>
+
+```tsx
+<Text weight="normal">Normal</Text>
+<Text weight="medium">Medium</Text>
+<Text weight="semibold">Semibold</Text>
+<Text weight="bold">Bold</Text>
+```
+
+### Colors
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Text color="default">Default text color</Text>
+  <Text color="muted">Muted text for secondary content</Text>
+  <Text color="primary">Primary brand color</Text>
+  <Text color="success">Success state</Text>
+  <Text color="warning">Warning state</Text>
+  <Text color="danger">Danger/error state</Text>
+</Stack>
+
+```tsx
+<Text color="default">Default</Text>
+<Text color="muted">Muted</Text>
+<Text color="primary">Primary</Text>
+<Text color="success">Success</Text>
+<Text color="warning">Warning</Text>
+<Text color="danger">Danger</Text>
+```
+
+### Alignment
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Text align="left">Left aligned (default)</Text>
+  <Text align="center">Center aligned</Text>
+  <Text align="right">Right aligned</Text>
+</Stack>
+
+```tsx
+<Text align="left">Left aligned</Text>
+<Text align="center">Center aligned</Text>
+<Text align="right">Right aligned</Text>
+```
+
+### Truncate
+
+<div style={{ width: 300, marginBottom: 24 }}>
+  <Text truncate>
+    This is a very long text that will be truncated with an ellipsis when it exceeds the container width.
+  </Text>
+</div>
+
+```tsx
+<Text truncate>
+  This is a very long text that will be truncated...
+</Text>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `'xs'` \| `'sm'` \| `'base'` \| `'lg'` \| `'xl'` \| `'2xl'` \| `'3xl'` \| `'4xl'` | `'base'` | Font size |
+| `weight` | `'normal'` \| `'medium'` \| `'semibold'` \| `'bold'` | `'normal'` | Font weight |
+| `color` | `'default'` \| `'muted'` \| `'primary'` \| `'success'` \| `'warning'` \| `'danger'` | `'default'` | Text color |
+| `align` | `'left'` \| `'center'` \| `'right'` | `'left'` | Text alignment |
+| `truncate` | `boolean` | `false` | Single line with ellipsis |
+| `as` | `'p'` \| `'span'` \| `'div'` \| `'label'` | `'span'` | HTML element |
+
+## CSS Output
+
+```css
+.text {
+  font-family: var(--intent-font-sans);
+  line-height: 1.5;
+}
+
+.text--size-base {
+  font-size: var(--intent-font-size-base);
+}
+
+.text--weight-medium {
+  font-weight: 500;
+}
+
+.text--color-muted {
+  color: var(--intent-color-text-muted);
+}
+
+.text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```

@@ -1,0 +1,131 @@
+---
+sidebar_position: 6
+---
+
+import { Stack, Card, Text, Button } from 'intent-react'
+
+# Card
+
+Content container with elevation and padding options.
+
+## Examples
+
+### Basic Card
+
+<div style={{ marginBottom: 24 }}>
+  <Card padding="normal">
+    <Text>Card content goes here. Use cards to group related information.</Text>
+  </Card>
+</div>
+
+```tsx
+<Card padding="normal">
+  <Text>Card content goes here.</Text>
+</Card>
+```
+
+### Elevation Levels
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Card elevation="none" padding="normal">
+    <Text weight="bold">No Elevation</Text>
+    <Text size="sm" color="muted">Flat card with border</Text>
+  </Card>
+  <Card elevation="low" padding="normal">
+    <Text weight="bold">Low Elevation</Text>
+    <Text size="sm" color="muted">Subtle shadow for grouping</Text>
+  </Card>
+  <Card elevation="medium" padding="normal">
+    <Text weight="bold">Medium Elevation</Text>
+    <Text size="sm" color="muted">Default for most cards</Text>
+  </Card>
+  <Card elevation="high" padding="normal">
+    <Text weight="bold">High Elevation</Text>
+    <Text size="sm" color="muted">For modals and popovers</Text>
+  </Card>
+</Stack>
+
+```tsx
+<Card elevation="none" padding="normal">...</Card>
+<Card elevation="low" padding="normal">...</Card>
+<Card elevation="medium" padding="normal">...</Card>
+<Card elevation="high" padding="normal">...</Card>
+```
+
+### Padding Sizes
+
+<Stack direction="row" gap="normal" style={{ marginBottom: 24 }}>
+  <Card elevation="medium" padding="compact">
+    <Text size="sm">Compact</Text>
+  </Card>
+  <Card elevation="medium" padding="normal">
+    <Text>Normal</Text>
+  </Card>
+  <Card elevation="medium" padding="relaxed">
+    <Text>Relaxed</Text>
+  </Card>
+</Stack>
+
+```tsx
+<Card padding="compact">...</Card>
+<Card padding="normal">...</Card>
+<Card padding="relaxed">...</Card>
+```
+
+### Interactive Card
+
+<div style={{ marginBottom: 24 }}>
+  <Card 
+    elevation="low" 
+    padding="normal" 
+    interactive
+    onClick={() => alert('Card clicked!')}
+  >
+    <Text weight="bold">Clickable Card</Text>
+    <Text size="sm" color="muted">This card responds to clicks and hover states.</Text>
+  </Card>
+</div>
+
+```tsx
+<Card 
+  elevation="low" 
+  padding="normal" 
+  interactive
+  onClick={handleClick}
+>
+  <Text weight="bold">Clickable Card</Text>
+  <Text size="sm" color="muted">This card responds to clicks.</Text>
+</Card>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `elevation` | `'none'` \| `'low'` \| `'medium'` \| `'high'` | `'medium'` | Shadow depth |
+| `padding` | `'none'` \| `'compact'` \| `'normal'` \| `'relaxed'` | `'normal'` | Inner padding |
+| `interactive` | `boolean` | `false` | Enable hover/focus states |
+| `onClick` | `() => void` | - | Click handler |
+
+## CSS Output
+
+```css
+.card {
+  background: var(--intent-color-surface);
+  border-radius: var(--intent-radius-lg);
+  border: 1px solid var(--intent-color-border);
+}
+
+.card--elevation-low {
+  box-shadow: var(--intent-shadow-sm);
+}
+
+.card--elevation-medium {
+  box-shadow: var(--intent-shadow-md);
+}
+
+.card--interactive:hover {
+  box-shadow: var(--intent-shadow-lg);
+  transform: translateY(-1px);
+}
+```

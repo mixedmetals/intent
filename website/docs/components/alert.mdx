@@ -1,0 +1,140 @@
+---
+sidebar_position: 9
+---
+
+import { Stack, Alert } from 'intent-react'
+
+# Alert
+
+Important messages that attract user attention.
+
+## Examples
+
+### Variants
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Alert variant="info" title="Did you know?">
+    Alerts can contain helpful information about your application.
+  </Alert>
+  <Alert variant="success" title="Success!">
+    Your changes have been saved successfully.
+  </Alert>
+  <Alert variant="warning" title="Heads up">
+    Your subscription expires in 3 days.
+  </Alert>
+  <Alert variant="danger" title="Error">
+    Unable to save changes. Please try again.
+  </Alert>
+</Stack>
+
+```tsx
+<Alert variant="info" title="Did you know?">
+  Alerts can contain helpful information.
+</Alert>
+<Alert variant="success" title="Success!">
+  Your changes have been saved.
+</Alert>
+<Alert variant="warning" title="Heads up">
+  Your subscription expires soon.
+</Alert>
+<Alert variant="danger" title="Error">
+  Unable to save changes.
+</Alert>
+```
+
+### Without Title
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Alert variant="info">
+    This is a simple alert without a title.
+  </Alert>
+</Stack>
+
+```tsx
+<Alert variant="info">
+  This is a simple alert without a title.
+</Alert>
+```
+
+### Dismissible
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Alert 
+    variant="success" 
+    title="Dismissible"
+    dismissible
+    onDismiss={() => console.log('Dismissed')}
+  >
+    Click the X to dismiss this alert.
+  </Alert>
+</Stack>
+
+```tsx
+<Alert 
+  variant="success" 
+  title="Dismissible"
+  dismissible
+  onDismiss={handleDismiss}
+>
+  Click the X to dismiss this alert.
+</Alert>
+```
+
+### Compact
+
+<Stack gap="normal" style={{ marginBottom: 24 }}>
+  <Alert variant="info" compact>
+    Compact alert for dense UIs
+  </Alert>
+  <Alert variant="success" compact>
+    Changes saved
+  </Alert>
+</Stack>
+
+```tsx
+<Alert variant="info" compact>
+  Compact alert for dense UIs
+</Alert>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'info'` \| `'success'` \| `'warning'` \| `'danger'` | `'info'` | Alert style |
+| `title` | `string` | - | Alert heading |
+| `dismissible` | `boolean` | `false` | Show close button |
+| `compact` | `boolean` | `false` | Reduced padding |
+| `onDismiss` | `() => void` | - | Dismiss callback |
+| `icon` | `string` \| `false` | - | Custom icon or hide |
+
+## When to Use
+
+| Variant | Use Case |
+|---------|----------|
+| **Info** | General information, tips |
+| **Success** | Completed actions, confirmations |
+| **Warning** | Attention needed, non-blocking issues |
+| **Danger** | Errors, blocking issues |
+
+## CSS Output
+
+```css
+.alert {
+  display: flex;
+  gap: var(--intent-spacing-3);
+  padding: var(--intent-spacing-4);
+  border-radius: var(--intent-radius-md);
+  border-left: 4px solid;
+}
+
+.alert--info {
+  background: var(--intent-color-info-alpha);
+  border-color: var(--intent-color-info);
+}
+
+.alert--success {
+  background: var(--intent-color-success-alpha);
+  border-color: var(--intent-color-success);
+}
+```

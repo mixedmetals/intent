@@ -1,0 +1,110 @@
+---
+sidebar_position: 8
+---
+
+import { Container, Card, Text } from 'intent-react'
+
+# Container
+
+Centered, max-width wrapper for page content.
+
+## Examples
+
+### Sizes
+
+Containers constrain width and center content:
+
+<Container size="small" style={{ marginBottom: 16 }}>
+  <Card padding="normal">
+    <Text align="center">Small (640px)</Text>
+  </Card>
+</Container>
+
+<Container size="medium" style={{ marginBottom: 16 }}>
+  <Card padding="normal">
+    <Text align="center">Medium (768px)</Text>
+  </Card>
+</Container>
+
+<Container size="large" style={{ marginBottom: 16 }}>
+  <Card padding="normal">
+    <Text align="center">Large (1024px)</Text>
+  </Card>
+</Container>
+
+<Container size="xl" style={{ marginBottom: 24 }}>
+  <Card padding="normal">
+    <Text align="center">Extra Large (1280px)</Text>
+  </Card>
+</Container>
+
+```tsx
+<Container size="small">...</Container>
+<Container size="medium">...</Container>
+<Container size="large">...</Container>
+<Container size="xl">...</Container>
+```
+
+### Fluid
+
+Full width with padding:
+
+<Container fluid style={{ marginBottom: 24 }}>
+  <Card padding="normal">
+    <Text align="center">Fluid container with padding</Text>
+  </Card>
+</Container>
+
+```tsx
+<Container fluid>...</Container>
+```
+
+### With Padding
+
+<Container size="medium" padding="relaxed" style={{ marginBottom: 24 }}>
+  <Card padding="normal">
+    <Text align="center">Container with relaxed padding</Text>
+  </Card>
+</Container>
+
+```tsx
+<Container size="medium" padding="relaxed">
+  ...
+</Container>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `'small'` \| `'medium'` \| `'large'` \| `'xl'` \| `'fluid'` | `'medium'` | Max width constraint |
+| `padding` | `'none'` \| `'compact'` \| `'normal'` \| `'relaxed'` | `'normal'` | Horizontal padding |
+
+## Size Breakpoints
+
+| Size | Max Width | Use Case |
+|------|-----------|----------|
+| `small` | 640px | Forms, focused content |
+| `medium` | 768px | Articles, reading content |
+| `large` | 1024px | Dashboards, tables |
+| `xl` | 1280px | Full layouts |
+| `fluid` | 100% | Edge-to-edge with padding |
+
+## CSS Output
+
+```css
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.container--size-medium {
+  max-width: 768px;
+}
+
+.container--padding-normal {
+  padding-left: var(--intent-spacing-4);
+  padding-right: var(--intent-spacing-4);
+}
+```

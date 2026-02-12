@@ -21,6 +21,9 @@ const sidebars: SidebarsConfig = {
           label: 'Foundation',
           items: [
             'components/button',
+            'components/badge',
+            'components/card',
+            'components/text',
           ],
         },
         {
@@ -28,6 +31,7 @@ const sidebars: SidebarsConfig = {
           label: 'Layout',
           items: [
             'components/stack',
+            'components/container',
           ],
         },
         {
@@ -41,7 +45,15 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'Feedback',
           items: [
+            'components/alert',
             'components/spinner',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Overlay',
+          items: [
+            'components/modal',
           ],
         },
       ],

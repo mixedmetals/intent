@@ -1,0 +1,183 @@
+---
+sidebar_position: 10
+---
+
+import { useState } from 'react'
+import { Stack, Button, Modal, Text } from 'intent-react'
+
+export function ModalDemo() {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <Button importance="primary" onClick={() => setOpen(true)}>
+        Open Modal
+      </Button>
+      <Modal open={open} onOpenChange={setOpen} title="Example Modal">
+        <Stack gap="normal">
+          <Text>This is a modal dialog.</Text>
+          <Text size="sm" color="muted">
+            Modals are great for confirming actions or displaying focused content.
+          </Text>
+          <Stack direction="row" gap="normal" justify="end">
+            <Button importance="tertiary" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button importance="primary" onClick={() => setOpen(false)}>
+              Confirm
+            </Button>
+          </Stack>
+        </Stack>
+      </Modal>
+    </>
+  )
+}
+
+# Modal
+
+Dialog window for focused interactions.
+
+## Example
+
+<ModalDemo />
+
+```tsx
+import { useState } from 'react'
+import { Button, Modal, Text, Stack } from 'intent-react'
+
+function Example() {
+  const [open, setOpen] = useState(false)
+  
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>
+        Open Modal
+      </Button>
+      
+      <Modal 
+        open={open} 
+        onOpenChange={setOpen}
+        title="Example Modal"
+      >
+        <Text>Modal content goes here.</Text>
+      </Modal>
+    </>
+  )
+}
+```
+
+## Sizes
+
+Modals support different widths:
+
+| Size | Width | Use Case |
+|------|-------|----------|
+| `small` | 400px | Confirmations, simple forms |
+| `medium` | 500px | Default, most content |
+| `large` | 700px | Complex forms, detail views |
+| `fullscreen` | 100% | Immersive experiences |
+
+```tsx
+<Modal size="large" open={open} onOpenChange={setOpen}>
+  ...
+</Modal>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | State change callback |
+| `title` | `string` | - | Modal header title |
+| `size` | `'small'` \| `'medium'` \| `'large'` \| `'fullscreen'` | `'medium'` | Modal width |
+| `showClose` | `boolean` | `true` | Show close button |
+| `closeOnOverlay` | `boolean` | `true` | Close when clicking backdrop |
+
+## Accessibility
+
+- Traps focus within modal when open
+- Returns focus to trigger on close
+- Supports Escape key to close
+- ARIA dialog role
+- aria-modal="true"
+
+## Pattern: Confirmation Dialog
+
+```tsx
+function DeleteConfirm({ item, onConfirm }) {
+  const [open, setOpen] = useState(false)
+  
+  return (
+    <>
+      <Button importance="tertiary" onClick={() => setOpen(true)}>
+        Delete
+      </Button>
+      
+      <Modal
+        open={open}
+        onOpenChange={setOpen}
+        title="Confirm Delete"
+        size="small"
+      >
+        <Stack gap="relaxed">
+          <Text>
+            Are you sure you want to delete <strong>{item.name}</strong>?
+          </Text>
+          <Text size="sm" color="muted">
+            This action cannot be undone.
+          </Text>
+          <Stack direction="row" gap="normal" justify="end">
+            <Button importance="tertiary" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              importance="danger" 
+              onClick={() => {
+                onConfirm(item)
+                setOpen(false)
+              }}
+            >
+              Delete
+            </Button>
+          </Stack>
+        </Stack>
+      </Modal>
+    </>
+  )
+}
+```
+
+## Pattern: Form Modal
+
+```tsx
+function EditModal({ user }) {
+  const [open, setOpen] = useState(false)
+  
+  return (
+    <Modal
+      open={open}
+      onOpenChange={setOpen}
+      title="Edit User"
+    >
+      <Form onSubmit={handleSubmit}>
+        <Stack gap="normal">
+          <Field label="Name">
+            <Input defaultValue={user.name} />
+          </Field>
+          <Field label="Email">
+            <Input type="email" defaultValue={user.email} />
+          </Field>
+          <Stack direction="row" gap="normal" justify="end">
+            <Button importance="tertiary" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button importance="primary" type="submit">
+              Save Changes
+            </Button>
+          </Stack>
+        </Stack>
+      </Form>
+    </Modal>
+  )
+}
+```
