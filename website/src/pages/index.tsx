@@ -6,13 +6,32 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 
 import styles from './index.module.css';
 
+function ArrowRight() {
+  return (
+    <svg 
+      className={styles.buttonArrow}
+      viewBox="0 0 16 16" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path 
+        d="M3 8h10M9 4l4 4-4 4" 
+        stroke="currentColor" 
+        strokeWidth="1.5" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <header className={styles.heroBanner}>
       <div className="container">
         <div className={styles.versionBadge}>
-          v2.0.0 <span>•</span> Now with Tactility v2
+          v2.0.0 <span>•</span> Tactility v2
         </div>
         <h1>{siteConfig.title}</h1>
         <p>{siteConfig.tagline}</p>
@@ -21,6 +40,7 @@ function HomepageHeader() {
             className={styles.buttonPrimary}
             to="/docs/getting-started/what-is-intent">
             Get Started
+            <ArrowRight />
           </Link>
           <Link
             className={styles.buttonSecondary}
