@@ -1,16 +1,17 @@
 import type {ReactNode} from 'react';
 import clsx from 'clsx';
-import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
   description: ReactNode;
+  icon: string;
 };
 
 const FeatureList: FeatureItem[] = [
   {
     title: 'Schema-First',
+    icon: '📐',
     description: (
       <>
         Define components with schemas that specify properties, constraints, and 
@@ -21,6 +22,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'AI-Native',
+    icon: '🤖',
     description: (
       <>
         Intent's schema format is designed for LLMs. Structured, constrained, 
@@ -31,6 +33,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Type-Safe',
+    icon: '🔒',
     description: (
       <>
         Full TypeScript support with autocomplete for all component props. 
@@ -41,6 +44,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Zero Runtime',
+    icon: '⚡',
     description: (
       <>
         Intent generates static CSS at build time. No runtime overhead, 
@@ -50,6 +54,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: '72 Components',
+    icon: '🧩',
     description: (
       <>
         Production-ready components covering everything from basic buttons to 
@@ -60,6 +65,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Themeable',
+    icon: '🎨',
     description: (
       <>
         Customize every aspect of your design system with theme tokens. 
@@ -70,11 +76,12 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({title, description}: FeatureItem) {
+function Feature({title, description, icon}: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className={styles.featureCard}>
-        <Heading as="h3">{title}</Heading>
+        <div className={styles.featureIcon}>{icon}</div>
+        <h3>{title}</h3>
         <p>{description}</p>
       </div>
     </div>
